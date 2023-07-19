@@ -154,9 +154,10 @@ function createPromotion() {
         endDate: endDate,
         discount: discount,
         type: type,
-        participants: type === 1 ? selectedCategory : selectedProducts,
+        participants: type === '1' ? selectedCategory : selectedProducts,
     };
 
+    console.log(data);
     // Отправка запроса на сервер
     $.ajax({
         url: '/admin/create-stock', // URL вашего серверного маршрута для создания акции

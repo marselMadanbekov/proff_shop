@@ -5,6 +5,7 @@ import com.profi_shop.model.Product;
 import com.profi_shop.model.requests.StockRequest;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
+import com.profi_shop.services.StockService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -22,9 +22,12 @@ public class StocksController {
     private final CategoryService categoryService;
     private final ProductService productService;
 
-    public StocksController(CategoryService categoryService, ProductService productService) {
+    private final StockService stockService;
+
+    public StocksController(CategoryService categoryService, ProductService productService, StockService stockService) {
         this.categoryService = categoryService;
         this.productService = productService;
+        this.stockService = stockService;
     }
 
     @GetMapping("/stocks")
@@ -44,11 +47,16 @@ public class StocksController {
     }
 
     @PostMapping("/create-stock")
-    public ResponseEntity<String> createStock(@RequestBody StockRequest createStock){
-        System.out.println(createStock.getStartDate());
-        System.out.println(createStock.getEndDate());
-        System.out.println(createStock.getDiscount());
-        System.out.println(createStock.getType());
-        return new ResponseEntity<>("successfully",HttpStatus.OK);
+    public ResponseEntity<String> createStock(@RequestBody StockRequest createStock) {
+        try {
+            System.out.println(createStock.getType());
+            for(Long id : createStock.getParticipants().keySet()){
+                System.out.println(id);
+            }
+            stockService.createStock(createStock);
+            return new ResponseEntity<>("successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+        }
     }
 }

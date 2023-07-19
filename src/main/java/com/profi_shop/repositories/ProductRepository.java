@@ -1,5 +1,6 @@
 package com.profi_shop.repositories;
 
+import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,4 +11,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findAllBySku(String sku);
     List<Product> findAllByName(String name);
+
+    List<Product> findAllByCategory(Category category);
 }

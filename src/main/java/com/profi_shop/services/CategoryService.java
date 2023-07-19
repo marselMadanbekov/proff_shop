@@ -37,4 +37,9 @@ public class CategoryService {
         Pageable pageable = PageRequest.of(page, size);
         return categoryRepository.findAll(pageable);
     }
+
+    public Category getCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId).orElse(null);
+    }
+
 }

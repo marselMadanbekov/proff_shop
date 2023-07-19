@@ -6,7 +6,7 @@ import com.profi_shop.model.requests.ProductCreateRequest;
 import com.profi_shop.model.Store;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
-import com.profi_shop.services.StockService;
+import com.profi_shop.services.StoreHouseService;
 import com.profi_shop.services.StoreService;
 import com.profi_shop.settings.Templates;
 import org.springframework.cache.annotation.CacheEvict;
@@ -26,10 +26,10 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    private final StockService stockService;
+    private final StoreHouseService stockService;
     private final StoreService storeService;
 
-    public ProductController(ProductService productService, CategoryService categoryService, StockService stockService, StoreService storeService) {
+    public ProductController(ProductService productService, CategoryService categoryService, StoreHouseService stockService, StoreService storeService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.stockService = stockService;
