@@ -1,7 +1,7 @@
-package com.example.academia1_1.domain.exceptions;
+package com.profi_shop.exceptions;
 
 
-import com.example.academia1_1.infrastructure.settings.Text;
+import com.profi_shop.settings.Text;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -24,20 +24,14 @@ public class ExistException extends RuntimeException{
     }
 
     public String getMessage(){
-        switch (code){
-            case 1:
-                return Text.get("ERROR_USER_EXISTS");
-            case 2:
-                return Text.get("ERROR_SUBJECT_EXISTS");
-            case 3:
-                return Text.get("ERROR_GROUP_EXISTS");
-            case 4:
-                return Text.get("ERROR_ADDITIONAL_EXISTS");
-            case 5:
-                return Text.get("ERROR_TIMETABLE_EXISTS");
-            case 6:
-                return Text.get("ERROR_GROUP_CONTAINS_USER");
-        }
-        return "";
+        return switch (code) {
+            case 1 -> Text.get("ERROR_USER_EXISTS");
+            case 2 -> Text.get("ERROR_SUBJECT_EXISTS");
+            case 3 -> Text.get("ERROR_GROUP_EXISTS");
+            case 4 -> Text.get("ERROR_ADDITIONAL_EXISTS");
+            case 5 -> Text.get("ERROR_TIMETABLE_EXISTS");
+            case 6 -> Text.get("ERROR_GROUP_CONTAINS_USER");
+            default -> "";
+        };
     }
 }

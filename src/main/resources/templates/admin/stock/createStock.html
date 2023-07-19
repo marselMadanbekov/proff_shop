@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>RoyalUI Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/static/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="/static/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/static/css1/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/static/images/favicon.png"/>
+</head>
+
+<body>
+<div class="container-scroller">
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="/static/images/logo.svg" class="mr-2"
+                                                                           alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/static/images/logo-mini.svg"
+                                                                           alt="logo"/></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="ti-view-list"></span>
+            </button>
+            <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item dropdown mr-1">
+                    <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
+                       id="messageDropdown" href="#" data-toggle="dropdown">
+                        <i class="ti-email mx-0"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="messageDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <img src="/static/images/faces/face4.jpg" alt="image" class="profile-pic">
+                            </div>
+                            <div class="item-content flex-grow">
+                                <h6 class="ellipsis font-weight-normal">David Grey
+                                </h6>
+                                <p class="font-weight-light small-text text-muted mb-0">
+                                    The meeting is cancelled
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <img src="/static/images/faces/face2.jpg" alt="image" class="profile-pic">
+                            </div>
+                            <div class="item-content flex-grow">
+                                <h6 class="ellipsis font-weight-normal">Tim Cook
+                                </h6>
+                                <p class="font-weight-light small-text text-muted mb-0">
+                                    New product launch
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <img src="/static/images/faces/face3.jpg" alt="image" class="profile-pic">
+                            </div>
+                            <div class="item-content flex-grow">
+                                <h6 class="ellipsis font-weight-normal"> Johnson
+                                </h6>
+                                <p class="font-weight-light small-text text-muted mb-0">
+                                    Upcoming board meeting
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                       data-toggle="dropdown">
+                        <i class="ti-bell mx-0"></i>
+                        <span class="count"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="notificationDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <div class="item-icon bg-success">
+                                    <i class="ti-info-alt mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                <h6 class="font-weight-normal">Application Error</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    Just now
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <div class="item-icon bg-warning">
+                                    <i class="ti-settings mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                <h6 class="font-weight-normal">Settings</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    Private message
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <div class="item-icon bg-info">
+                                    <i class="ti-user mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                <h6 class="font-weight-normal">New user registration</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    2 days ago
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                        <img src="/static/images/faces/face28.jpg" alt="profile"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="profileDropdown">
+                        <a class="dropdown-item">
+                            <i class="ti-settings text-primary"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item">
+                            <i class="ti-power-off text-primary"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-toggle="offcanvas">
+                <span class="ti-view-list"></span>
+            </button>
+        </div>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dashboard">
+                        <i class="ti-shield menu-icon"></i>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="ti-palette menu-icon"></i>
+                        <span class="menu-title">Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/categories">
+                        <i class="ti-layout-list-post menu-icon"></i>
+                        <span class="menu-title">Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/orders">
+                        <i class="ti-pie-chart menu-icon"></i>
+                        <span class="menu-title">Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/stores">
+                        <i class="ti-home menu-icon"></i>
+                        <span class="menu-title">Stores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/stocks">
+                        <i class="ti-gift menu-icon"></i>
+                        <span class="menu-title">Stocks</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="font-weight-bold mb-0">Создать новую акцию</h4>
+                        </div>
+                        <di>
+                            <button class="btn btn-primary btn-rounded" onclick="createPromotion()">Сохранить</button>
+                        </di>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Начало</p>
+                            <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <div class="coc-form">
+                                    <div class="coc-block-row">
+                                        <div class="coc-block">
+                                            <input class="coc-input" type="date" name="startDate"
+                                                   id="startDate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0 mt-2 text-danger"><small>выберите начальную дату</small></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Посещения</p>
+                            <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <div class="coc-form">
+                                    <div class="coc-block-row">
+                                        <div class="coc-block">
+                                            <input class="coc-input" type="date" name="endDate"
+                                                   id="endDate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0 mt-2 text-danger"><small>выберите конечную дату</small></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Тип</p>
+                            <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <div class="coc-form">
+                                    <div class="coc-block-row">
+                                        <div class="coc-block">
+                                            <select id="selectType">
+                                                <option value="1" selected>Категория</option>
+                                                <option value="2">Выборочно</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0 mt-2 text-success"><small>выберите тип акции</small></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Скидка</p>
+                            <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <div class="coc-form">
+                                    <div class="coc-block-row">
+                                        <div class="coc-block">
+                                            <input type="number" max="100" min="1" id="discount"> %
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0 mt-2 text-success"><small>Процент скидки</small></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 grid-margin stretch-card" id="productsCard" style="display: none">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <p class="card-title mb-0" style="margin-top: 10px;">All Products</p>
+                                <ul class="navbar-nav mr-lg-2">
+                                    <li class="nav-item nav-search d-lg-block">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend hover-cursor" id="navbar-search-icon"
+                                                 onclick="searchProducts()">
+                                      <span class="input-group-text" id="search">
+                                        <i class="ti-search"></i>
+                                      </span>
+                                            </div>
+                                            <input type="text" class="form-control" id="navbar-search-input"
+                                                   placeholder="Search now"
+                                                   aria-label="search" aria-describedby="search">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="productTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Фото</th>
+                                        <th>Продукт</th>
+                                        <th>Стоимость</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product : ${products.getContent()}">
+                                        <td>
+                                            <img th:if="${not #lists.isEmpty(product.photos)}"
+                                                 th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"/>
+                                        </td>
+                                        <td th:text="${product.name}"
+                                            th:data-product-id="${product.id}"
+                                            onclick="showSelectedProductInfo(this.getAttribute('data-product-id'))"
+                                        ></td>
+                                        <td>
+                                            <span th:text="${product.price}"></span>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   th:data-product-id="${product.id}"
+                                                   onclick="handleProductSelection(this)">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination" id="productPagination">
+                                <a href="#" class="page-link prev-page-link" th:data-page="${products.number - 1}"
+                                   th:if="${products.number > 0}">&laquo;</a>
+
+                                <span th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}">
+  <a href="#" class="page-link" th:class="${products.number == i} ? 'active' : ''" th:data-page="${i}"
+     th:text="${i + 1}"></a>
+</span>
+
+                                <a href="#" class="page-link next-page-link" th:data-page="${products.number + 1}"
+                                   th:if="${products.number < products.totalPages - 1}">&raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 grid-margin stretch-card" id="categoriesCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title">Все категории</p>
+                            <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="categoryTable">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Категория</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="category, index : ${categories}">
+                                        <td th:text="${index.index + 1}"></td>
+                                        <td th:text="${category.name}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="pagination" id="categoryPagination">
+                                    <a href="#" class="page-link prev-page-link" th:data-page="${categories.number - 1}"
+                                       th:if="${categories.number > 0}">&laquo;</a>
+
+                                    <span th:each="i : ${#numbers.sequence(0, categories.totalPages - 1)}">
+  <a href="#" class="page-link" th:class="${categories.number == i} ? 'active' : ''" th:data-page="${i}"
+     th:text="${i + 1}"></a>
+</span>
+
+                                    <a href="#" class="page-link next-page-link" th:data-page="${categories.number + 1}"
+                                       th:if="${categories.number < categories.totalPages - 1}">&raquo;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- container-scroller -->
+<script src="/static/vendors/base/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<script src="/static/vendors/chart.js/Chart.min.js"></script>
+<!-- End plugin js for this page-->
+<!-- inject:js -->
+<script src="/static/js/off-canvas.js"></script>
+<script src="/static/js/hoverable-collapse.js"></script>
+<script src="/static/js/template.js"></script>
+<script src="/static/js/stocks/stocks.js"></script>
+<script src="/static/js/stocks/createStock.js"></script>
+
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="/static/js/dashboard.js"></script>
+<!-- End custom js for this page-->
+</body>

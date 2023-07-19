@@ -1,13 +1,15 @@
 package com.profi_shop;
 
+import com.profi_shop.settings.Text;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ProfiShopApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProfiShopApplication.class, args);
-	}
+    public static void main(String[] args) {
+        Text.init();
+        SpringApplication.run(ProfiShopApplication.class, args);
+    }
 
 }

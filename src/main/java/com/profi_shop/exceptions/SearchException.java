@@ -1,21 +1,21 @@
-package com.example.academia1_1.domain.exceptions;
+package com.profi_shop.exceptions;
 
 
-import com.example.academia1_1.infrastructure.settings.Text;
+import com.profi_shop.settings.Text;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class SearchException extends RuntimeException{
     public static final int USER_NOT_FOUND = 1;
-    public static final int SUBJECT_NOT_FOUND = 2;
-    public static final int GROUP_NOT_FOUND = 3;
-    public static final int BRANCH_NOT_FOUND = 4;
-    public static final int TIMETABLE_NOT_FOUND = 5;
+    public static final int STORE_NOT_FOUND = 2;
+    public static final int PRODUCT_NOT_FOUND = 3;
+    public static final int ORDER_NOT_FOUND = 4;
+    public static final int CATEGORY_NOT_FOUND = 5;
 
-    public static final int TASK_NOT_FOUND = 6;
+    public static final int CONSUMPTION_NOT_FOUND = 6;
+    public static final int STOCK_NOT_FOUND = 7;
 
-    public static final int LESSON_NOT_FOUND = 7;
 
     private final int code;
 
@@ -26,22 +26,15 @@ public class SearchException extends RuntimeException{
 
 
     public String getMessage(){
-        switch (code){
-            case 1:
-                return Text.get("ERROR_USER_NOT_FOUND");
-            case 2:
-                return Text.get("ERROR_SUBJECT_NOT_FOUND");
-            case 3:
-                return Text.get("ERROR_GROUP_NOT_FOUND");
-            case 4:
-                return Text.get("ERROR_BRANCH_NOT_FOUND");
-            case 5:
-                return Text.get("ERROR_TIMETABLE_NOT_FOUND");
-            case 6:
-                return Text.get("ERROR_TASK_NOT_FOUND");
-            case 7:
-                return Text.get("ERROR_LESSON_NOT_FOUND");
-        }
-        return "";
+        return switch (code) {
+            case 1 -> Text.get("ERROR_USER_NOT_FOUND");
+            case 2 -> Text.get("ERROR_STORE_NOT_FOUND");
+            case 3 -> Text.get("ERROR_PRODUCT_NOT_FOUND");
+            case 4 -> Text.get("ERROR_ORDER_NOT_FOUND");
+            case 5 -> Text.get("ERROR_CATEGORY_NOT_FOUND");
+            case 6 -> Text.get("ERROR_CONSUMPTION_NOT_FOUND");
+            case 7 -> Text.get("ERROR_STOCK_NOT_FOUND");
+            default -> "";
+        };
     }
 }

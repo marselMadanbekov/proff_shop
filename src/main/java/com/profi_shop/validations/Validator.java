@@ -1,7 +1,8 @@
-package com.example.academia1_1.infrastructure.validations;
+package com.profi_shop.validations;
 
-import com.example.academia1_1.domain.exceptions.InvalidDataException;
-import com.example.academia1_1.infrastructure.settings.Templates;
+
+import com.profi_shop.exceptions.InvalidDataException;
+import com.profi_shop.settings.Templates;
 import org.springframework.stereotype.Service;
 
 @Service

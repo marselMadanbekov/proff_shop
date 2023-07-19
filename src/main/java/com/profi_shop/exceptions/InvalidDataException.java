@@ -1,6 +1,7 @@
-package com.example.academia1_1.domain.exceptions;
+package com.profi_shop.exceptions;
 
-import com.example.academia1_1.infrastructure.settings.Text;
+
+import com.profi_shop.settings.Text;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -14,6 +15,8 @@ public class InvalidDataException extends Exception{
     public static final int TARGET_USER_NOT_EQUAL_REQUESTER = 6;
     public static final int PASSWORDS_DONT_MATCH = 7;
     public static final int INVALID_PASSWORD = 8;
+
+    public static final int INVALID_PHOTO = 9;
 
     private final int code;
     public InvalidDataException(int code){
@@ -29,6 +32,7 @@ public class InvalidDataException extends Exception{
             case 6 -> Text.get("ERROR_TARGET_USER_NOT_EQUAL_REQUESTER");
             case 7 -> Text.get("ERROR_PASSWORD_DONT_MATCH");
             case 8 -> Text.get("ERROR_INVALID_PASSWORD");
+            case 9 -> Text.get("ERROR_INVALID_PHOTO");
             default -> null;
         };
     }

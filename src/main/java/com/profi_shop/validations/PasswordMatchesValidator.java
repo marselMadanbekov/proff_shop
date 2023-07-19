@@ -1,8 +1,8 @@
-package com.example.academia1_1.infrastructure.validations;
+package com.profi_shop.validations;
 
 
-import com.example.academia1_1.domain.payload.request.CreateUserRequest;
-import com.example.academia1_1.infrastructure.validations.annotations.PasswordMatches;
+import com.profi_shop.auth.requests.AbstractUser;
+import com.profi_shop.validations.annotations.PasswordMatches;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -13,7 +13,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     }
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
-        CreateUserRequest signUpRequest = (CreateUserRequest) o;
+        AbstractUser signUpRequest = (AbstractUser) o;
         return signUpRequest.getPassword().equals(signUpRequest.getConfirm_password());
     }
 }

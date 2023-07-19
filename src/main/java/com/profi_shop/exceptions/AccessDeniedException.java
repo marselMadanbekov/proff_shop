@@ -1,6 +1,7 @@
-package com.example.academia1_1.domain.exceptions;
+package com.profi_shop.exceptions;
 
-import com.example.academia1_1.infrastructure.settings.Text;
+
+import com.profi_shop.settings.Text;
 
 public class AccessDeniedException extends RuntimeException{
     public static final int FOREIGN_BRANCH = 1;

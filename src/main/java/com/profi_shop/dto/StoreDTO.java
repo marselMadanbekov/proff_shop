@@ -9,4 +9,6 @@ public class StoreDTO {
     private String town;
     private String phone_number;
     private UserDTO admin;
+    private String address;
+    private String email;
 }

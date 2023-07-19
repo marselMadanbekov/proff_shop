@@ -1,7 +1,7 @@
-package com.example.academia1_1.infrastructure.validations.annotations;
+package com.profi_shop.validations.annotations;
 
 
-import com.example.academia1_1.infrastructure.validations.PasswordMatchesValidator;
+import com.profi_shop.validations.PasswordMatchesValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

@@ -1,4 +1,4 @@
-package com.example.academia1_1.infrastructure.validations;
+package com.profi_shop.validations;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

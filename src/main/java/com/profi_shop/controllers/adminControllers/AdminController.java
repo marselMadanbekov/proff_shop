@@ -1,4 +1,4 @@
-package com.profi_shop.controllers;
+package com.profi_shop.controllers.adminControllers;
 
 
 import com.profi_shop.dto.StoreDTO;
@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminController {
     private final ProductService productService;
     private final PhotoService photoService;
-
     private final StoreService storeService;
 
     @Autowired
@@ -28,98 +27,10 @@ public class AdminController {
         this.storeService = storeService;
     }
 
-    @PostMapping("/create-product")
-    public String createProduct(@RequestParam("name") String name,
-                                @RequestParam("sku") String sku,
-                                @RequestParam("price") String price,
-                                @RequestParam("category") String category,
-                                @RequestParam("photo") MultipartFile photo,
-                                @RequestParam("description") String description) {
-        try {
-            System.out.println("hello world " + name);
-            photoService.savePhoto(photo);
-            return "shop/index";
-        } catch (Exception e) {
-            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
-        }
 
-    }
-
-    @PostMapping("/create-store")
-    public String createStore(@RequestParam("name") String name,
-                              @RequestParam("town") String town,
-                              @RequestParam("address") String address,
-                              @RequestParam("phone_number") String phone_number) {
-        try {
-            StoreDTO storeDTO = new StoreDTO();
-            storeDTO.setTown(town);
-            storeDTO.setName(name);
-            storeDTO.setPhone_number(phone_number);
-            storeService.createStore(storeDTO);
-            return "shop/index";
-        } catch (Exception e) {
-            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
-        }
-
-    }
-
-    @PostMapping("/create-category")
-    public String createCategory(@RequestParam("name") String name) {
-        try {
-            StoreDTO storeDTO = new StoreDTO();
-            storeDTO.setTown(town);
-            storeDTO.setName(name);
-            storeDTO.setPhone_number(phone_number);
-            storeService.createStore(storeDTO);
-            return "shop/index";
-        } catch (Exception e) {
-            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
-        }
-
-    }
 
     @GetMapping("/dashboard")
     public String admin() {
         return "admin/dashboard";
-    }
-
-    @GetMapping("/orders")
-    public String orders() {
-        return "admin/orders";
-    }
-
-    @GetMapping("/products")
-    public String products() {
-        return "admin/products";
-    }
-
-    @GetMapping("/categories")
-    public String categories() {
-        return "admin/categories";
-    }
-
-    @GetMapping("/storeDetails")
-    public String storeDetails() {
-        return "admin/storeDetails";
-    }
-
-    @GetMapping("/stores")
-    public String stores() {
-        return "admin/stores";
-    }
-
-    @GetMapping("/productDetails")
-    public String productDetails() {
-        return "admin/productDetails";
-    }
-
-    @GetMapping("/createStore")
-    public String createStore() {
-        return "admin/createStore";
-    }
-
-    @GetMapping("/createProduct")
-    public String createProduct() {
-        return "admin/createProduct";
     }
 }
