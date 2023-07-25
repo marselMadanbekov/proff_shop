@@ -1,8 +1,8 @@
 package com.profi_shop.model;
 
+import com.profi_shop.model.enums.ProductSize;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,20 @@ public class Product {
     private int prime_cost;
     private int price;
     private String sku;
+    private String color;
+    private ProductSize size;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "product_id"))
     private List<String> photos = new ArrayList<>();
     private String description;
     @ManyToOne
     private Category category;
+
+    public void addPhoto(String photo) {
+        photos.add(photo);
+    }
+
+    public void removePhoto(String photo) {
+        photos.remove(photo);
+    }
 }

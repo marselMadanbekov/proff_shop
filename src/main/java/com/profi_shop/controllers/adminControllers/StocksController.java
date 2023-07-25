@@ -56,7 +56,7 @@ public class StocksController {
             stockService.createStock(createStock);
             return new ResponseEntity<>("successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

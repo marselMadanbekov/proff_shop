@@ -17,9 +17,9 @@ public class Stock {
     private StockType type;
     private int discount;
     @OneToMany
-    private Set<Category> categories = new HashSet<>();
+    private List<Category> categories = new ArrayList<>();
     @OneToMany
-    private Set<Product> participants = new HashSet<>();
+    private List<Product> participants = new ArrayList<>();
 
 
     public void addCategory(Category category){

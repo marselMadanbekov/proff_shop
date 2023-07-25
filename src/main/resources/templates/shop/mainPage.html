@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -10,7 +10,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
 
-    <!-- CSS
+    <!-- CSS 
     ========================= -->
     <!--bootstrap min css-->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
@@ -57,7 +57,6 @@
                     <div class="canvas_close">
                         <a href="javascript:void(0)"><i class="icon-x"></i></a>
                     </div>
-
                     <div class="search_container">
                         <form action="#">
                             <div class="hover_category">
@@ -65,8 +64,6 @@
                                     <option selected value="1">All Categories</option>
                                     <option value="2">Accessories</option>
                                     <option value="3">Accessories & More</option>
-                                    <option value="4">Butters & Eggs</option>
-                                    <option value="5">Camera & Video </option>
                                 </select>
                             </div>
                             <div class="search_box">
@@ -76,26 +73,15 @@
                         </form>
                     </div>
                     <div class="call-support">
-                        <p>Служба поддержки: <a href="tel:0123456789">0123456789</a></p>
+                        <p>Тех. поддержка: <a href="tel:0123456789">0123456789</a></p>
                     </div>
                     <div id="menu" class="text-left ">
                         <ul class="offcanvas_main_menu">
                             <li class="menu-item-has-children">
-                                <a href="shop-right-sidebar.html">Shop</a>
+                                <a href="proff_shop.html">Shop</a>
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="blog.html">blog</a>
-                            </li>
-                            <li class="menu-item-has-children">
-                                <a href="#">pages </a>
-                                <ul class="sub-menu">
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="services.html">services</a></li>
-                                    <li><a href="faq.html">Frequently Questions</a></li>
-                                    <li><a href="contact.html">contact</a></li>
-                                    <li><a href="login.html">login</a></li>
-                                    <li><a href="404.html">Error 404</a></li>
-                                </ul>
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="my-account.html">my account</a>
@@ -105,6 +91,9 @@
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="contact.html"> Contact Us</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="login.html">Войти</a>
                             </li>
                         </ul>
                     </div>
@@ -133,7 +122,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-4">
                         <div class="logo">
-                            <a href="mainPage.html"><img src="/static/img/logo/logo.png" alt=""></a>
+                            <a href="index.html"><img src="/static/img/logo/proff_shop_logo.png" alt=""></a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-6 col-6">
@@ -142,11 +131,8 @@
                                 <form action="#">
                                     <div class="hover_category">
                                         <select class="select_option" name="select" id="categori1">
-                                            <option selected value="1">All Categories</option>
-                                            <option value="2">Accessories</option>
-                                            <option value="3">Accessories & More</option>
-                                            <option value="4">Butters & Eggs</option>
-                                            <option value="5">Camera & Video </option>
+                                            <option selected value="0">All Categories</option>
+                                            <option th:each="category: ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                                         </select>
                                     </div>
                                     <div class="search_box">
@@ -157,13 +143,8 @@
                             </div>
                             <div class="header_account_area">
                                 <div class="header_account-list top_links">
-                                    <a href="#"><i class="icon-users"></i></a>
-                                    <ul class="dropdown_links">
-                                        <li><a href="checkout.html">Checkout </a></li>
-                                        <li><a href="my-account.html">My Account </a></li>
-                                        <li><a href="cart.html">Shopping Cart</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                    </ul>
+                                    <a href="my-account.html"><i class="icon-users"></i></a>
+
                                 </div>
                                 <div class="header_account-list header_wishlist">
                                     <a href="wishlist.html"><i class="icon-heart"></i></a>
@@ -251,67 +232,7 @@
                             </div>
                             <div class="categories_menu_toggle">
                                 <ul>
-                                    <li class="menu_item_children"><a href="#">Brake Parts <i
-                                            class="fa fa-angle-right"></i></a>
-                                        <ul class="categories_mega_menu">
-                                            <li class="menu_item_children"><a href="#">Dresses</a>
-                                                <ul class="categorie_sub_menu">
-                                                    <li><a href="">Sweater</a></li>
-                                                    <li><a href="">Evening</a></li>
-                                                    <li><a href="">Day</a></li>
-                                                    <li><a href="">Sports</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu_item_children"><a href="#"> Wheels & Tires <i
-                                            class="fa fa-angle-right"></i></a>
-                                        <ul class="categories_mega_menu column_3">
-                                            <li class="menu_item_children"><a href="#">Chair</a>
-                                                <ul class="categorie_sub_menu">
-                                                    <li><a href="">Dining room</a></li>
-                                                    <li><a href="">bedroom</a></li>
-                                                    <li><a href=""> Home & Office</a></li>
-                                                    <li><a href="">living room</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu_item_children"><a href="#"> Furnitured & Decor <i
-                                            class="fa fa-angle-right"></i></a>
-                                        <ul class="categories_mega_menu column_2">
-                                            <li class="menu_item_children"><a href="#">Brake Tools</a>
-                                                <ul class="categorie_sub_menu">
-                                                    <li><a href="">Driveshafts</a></li>
-                                                    <li><a href="">Spools</a></li>
-                                                    <li><a href="">Diesel </a></li>
-                                                    <li><a href="">Gasoline</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu_item_children"><a href="#"> Turbo System <i
-                                            class="fa fa-angle-right"></i></a>
-                                        <ul class="categories_mega_menu column_2">
-                                            <li class="menu_item_children"><a href="#">Check Trousers</a>
-                                                <ul class="categorie_sub_menu">
-                                                    <li><a href="">Building</a></li>
-                                                    <li><a href="">Electronics</a></li>
-                                                    <li><a href="">action figures </a></li>
-                                                    <li><a href="">specialty & boutique toy</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#"> Lighting</a></li>
-                                    <li><a href="#"> Accessories</a></li>
-                                    <li><a href="#">Body Parts</a></li>
-                                    <li><a href="#">Perfomance Filters</a></li>
-                                    <li><a href="#"> Engine Parts</a></li>
-                                    <li class="hidden"><a href="shop-left-sidebar.html">New Sofas</a></li>
-                                    <li class="hidden"><a href="shop-left-sidebar.html">Sleight Sofas</a></li>
-                                    <li><a href="#" id="more-btn"><i class="fa fa-plus" aria-hidden="true"></i> More
-                                        Categories</a></li>
+                                    <li th:each="category: ${categories}"><a href="#" th:text="${category.name}"> Lighting</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -321,18 +242,13 @@
                         <div class="main_menu menu_position">
                             <nav>
                                 <ul>
-                                    <li class="mega_items"><a href="shop-right-sidebar.html">shop</a></li>
-                                    <li><a href="blog.html">blog</a>
+                                    <li class="mega_items"><a class="active" href="mainPage.html">home</i></a>
                                     </li>
-                                    <li><a href="#">pages <i class="fa fa-angle-down"></i></a>
-                                        <ul class="sub_menu pages">
-                                            <li><a href="about.html">About Us</a></li>
-                                            <li><a href="services.html">services</a></li>
-                                            <li><a href="faq.html">Frequently Questions</a></li>
-                                            <li><a href="contact.html">contact</a></li>
-                                            <li><a href="login.html">login</a></li>
-                                            <li><a href="404.html">Error 404</a></li>
-                                        </ul>
+                                    <li class="mega_items"><a href="proff_shop.html">shop</i></a>
+                                    </li>
+                                    <li><a href="blog.html">blog</i></a>
+                                    </li>
+                                    <li><a href="about.html">About Us</i></a>
                                     </li>
                                     <li><a href="contact.html"> Contact Us</a></li>
                                 </ul>
@@ -342,7 +258,7 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="call-support">
-                            <p>Служба поддержки: <a href="tel:0123456789">0123456789</a></p>
+                            <p>Call Support: <a href="tel:0123456789">0123456789</a></p>
                         </div>
                     </div>
                 </div>
@@ -483,28 +399,6 @@
                     <div class="section_title">
                         <h2>Наши товары</h2>
                     </div>
-                    <div class="product_tab_btn">
-                        <ul class="nav" role="tablist">
-                            <li>
-                                <a class="active" data-toggle="tab" href="#plant1" role="tab" aria-controls="plant1"
-                                   aria-selected="true">
-                                    Plant Stands & Movers
-                                </a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#plant2" role="tab" aria-controls="plant2"
-                                   aria-selected="false">
-                                    Plant families
-                                </a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#plant3" role="tab" aria-controls="plant3"
-                                   aria-selected="false">
-                                    Outdoor Plant Pots
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -512,1362 +406,55 @@
             <div class="tab-pane fade show active" id="plant1" role="tabpanel">
                 <div class="row">
                     <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" th:each="product : ${products.getContent()}">
                             <div class="product_items">
                                 <article class="single_product">
                                     <figure>
                                         <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product1.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-7%</span>
+                                            <a class="primary_img" th:href="'/productDetails?productId=' + ${product.id}"><img
+                                                    th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"
+                                                    alt=""></a>
+                                            <div class="label_product" th:if="${product.discount > 0}">
+                                                <span class="label_sale" th:text="'-' + ${product.discount} + '%'"></span>
                                             </div>
                                             <div class="action_links">
                                                 <ul>
                                                     <li class="add_to_cart"><a href="cart.html"
                                                                                title="Add to cart"><i
                                                             class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
                                                     <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
+                                                                            title="Add to Wishlist"><i
+                                                            class="icon-heart"></i></a>
                                                     </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
+                                                    <li class="quick_button">
+                                                        <a href="#" data-toggle="modal"
+                                                           th:data-product="${product}"
+                                                           onclick="updateModalData(this.getAttribute('data-product'))"
+                                                           data-target="#modal_box"
+                                                           title="quick view">
+                                                            <i class="icon-eye"></i>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
                                         <figcaption class="product_content">
                                             <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
+                                                <ul >
+                                                    <li><a href="#"><i class="icon-star2"></i></a></li>
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
                                                 </ul>
                                             </div>
-                                            <h4 class="product_name"><a href="product-details.html">commodo augue
+                                            <h4 class="product_name"><a href="product-details.html"
+                                                                        th:text="${product.name}">
                                                 nisi</a></h4>
                                             <div class="price_box">
-                                                <span class="current_price">£69.00</span>
-                                                <span class="old_price">£74.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product2.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">eget
-                                                sagittis</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£65.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product3.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-6%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">fringilla
-                                                augue</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£68.00</span>
-                                                <span class="old_price">£75.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product4.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-5%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">massa massa</a>
-                                            </h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£75.00</span>
-                                                <span class="old_price">£80.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product5.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-8%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">placerat
-                                                vestibulum</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£65.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product6.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">Porro Cook</a>
-                                            </h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£62.00</span>
-                                                <span class="old_price">£68.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product7.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-4%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">sapien
-                                                libero</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£69.00</span>
-                                                <span class="old_price">£74.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product8.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-6%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">vulputate
-                                                rutrum</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£64.00</span>
-                                                <span class="old_price">£72.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product9.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-8%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">adipiscing
-                                                cursus</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£60.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product10.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">Donec eu
-                                                cook</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£67.00</span>
-                                                <span class="old_price">£77.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="plant2" role="tabpanel">
-                <div class="row">
-                    <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product7.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-4%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">sapien
-                                                libero</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£69.00</span>
-                                                <span class="old_price">£74.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product8.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-6%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">vulputate
-                                                rutrum</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£64.00</span>
-                                                <span class="old_price">£72.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product9.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-8%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">adipiscing
-                                                cursus</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£60.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product10.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">Donec eu
-                                                cook</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£67.00</span>
-                                                <span class="old_price">£77.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product1.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-7%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">commodo augue
-                                                nisi</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£69.00</span>
-                                                <span class="old_price">£74.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product2.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">eget
-                                                sagittis</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£65.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product3.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-6%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">fringilla
-                                                augue</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£68.00</span>
-                                                <span class="old_price">£75.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product4.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-5%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">massa massa</a>
-                                            </h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£75.00</span>
-                                                <span class="old_price">£80.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product5.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-8%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">placerat
-                                                vestibulum</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£65.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product6.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">Porro Cook</a>
-                                            </h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£62.00</span>
-                                                <span class="old_price">£68.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="plant3" role="tabpanel">
-                <div class="row">
-                    <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product3.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-6%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">fringilla
-                                                augue</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£68.00</span>
-                                                <span class="old_price">£75.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product4.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-5%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">massa massa</a>
-                                            </h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£75.00</span>
-                                                <span class="old_price">£80.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product5.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-8%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">placerat
-                                                vestibulum</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£65.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product6.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">Porro Cook</a>
-                                            </h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£62.00</span>
-                                                <span class="old_price">£68.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product7.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-4%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">sapien
-                                                libero</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£69.00</span>
-                                                <span class="old_price">£74.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product8.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-6%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">vulputate
-                                                rutrum</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£64.00</span>
-                                                <span class="old_price">£72.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product1.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-7%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">commodo augue
-                                                nisi</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£69.00</span>
-                                                <span class="old_price">£74.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product2.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">eget
-                                                sagittis</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£65.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product_items">
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product9.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-8%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">adipiscing
-                                                cursus</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£60.00</span>
-                                                <span class="old_price">£70.00</span>
-                                            </div>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                                <article class="single_product">
-                                    <figure>
-                                        <div class="product_thumb">
-                                            <a class="primary_img" href="product-details.html"><img
-                                                    src="/static/img/product/product10.jpg" alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-9%</span>
-                                            </div>
-                                            <div class="action_links">
-                                                <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
-                                                                               title="Add to cart"><i
-                                                            class="icon-shopping-bag"></i></a></li>
-                                                    <li class="compare"><a href="#" title="Add to Compare"><i
-                                                            class="icon-sliders"></i></a></li>
-                                                    <li class="wishlist"><a href="wishlist.html"
-                                                                            title="Add to Wishlist"><i class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button"><a href="#" data-toggle="modal"
-                                                                                data-target="#modal_box" title="quick view"> <i
-                                                            class="icon-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <figcaption class="product_content">
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4 class="product_name"><a href="product-details.html">Donec eu
-                                                cook</a></h4>
-                                            <div class="price_box">
-                                                <span class="current_price">£67.00</span>
-                                                <span class="old_price">£77.00</span>
+                                                <span class="current_price" th:if="${product.discount > 0}" th:text="${product.newPrice}">£70.00</span>
+                                                <span class="current_price" th:if="${not (product.discount > 0)}" th:text="${product.oldPrice}">£70.00</span>
+                                                <span class="old_price" th:if="${product.discount > 0}" th:text="${product.oldPrice}">£80.00</span>
                                             </div>
                                         </figcaption>
                                     </figure>
@@ -1906,7 +493,7 @@
                                         <span class="label_sale">-5%</span>
                                     </div>
                                     <div class="product_timing">
-                                        <div data-countdown="2023/12/15"></div>
+                                        <div data-countdown="2020/12/15"></div>
                                     </div>
                                 </div>
                                 <figcaption class="product_content">
@@ -2155,7 +742,7 @@
                 <div class="newsletter_container">
                     <div class="subscribe_form">
                         <form id="mc-form" class="mc-form footer-newsletter">
-                            <input id="mc-email" type="email" autocomplete="off" placeholder="Enter you email" />
+                            <input id="mc-email" type="email" autocomplete="off" placeholder="Enter you email"/>
                             <button id="mc-submit">Subscribe</button>
                             <div class="email_icon">
                                 <i class="icon-mail"></i>
@@ -2273,7 +860,7 @@
                     <div class="copyright_area">
                         <p class="copyright-text">&copy; 2021 <a href="index.html">Lukani</a>. Made with <i
                                 class="fa fa-heart text-danger"></i> by <a href="https://hasthemes.com/"
-                                                                           target="_blank">HasThemes</a> </p>
+                                                                           target="_blank">HasThemes</a></p>
 
                     </div>
                 </div>
@@ -2351,40 +938,22 @@
                         </div>
                         <div class="col-lg-7 col-md-7 col-sm-12">
                             <div class="modal_right">
+                                <input hidden id="productId">
                                 <div class="modal_title mb-10">
-                                    <h2>Donec Ac Tempus</h2>
+                                    <h2 id="quickViewTitle">Donec Ac Tempus</h2>
                                 </div>
                                 <div class="modal_price mb-10">
-                                    <span class="new_price">$64.99</span>
-                                    <span class="old_price">$78.99</span>
+                                    <span class="new_price" id="quickViewNewPrice">$64.99</span>
+                                    <span class="old_price" id="quickViewOldPrice">$78.99</span>
                                 </div>
                                 <div class="modal_description mb-15">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste
+                                    <p id="quickViewDescription">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                        elit. Mollitia iste
                                         laborum ad impedit pariatur esse optio tempora sint ullam autem deleniti nam
                                         in quos qui nemo ipsum numquam, reiciendis maiores quidem aperiam, rerum vel
                                         recusandae </p>
                                 </div>
                                 <div class="variants_selects">
-                                    <div class="variants_size">
-                                        <h2>size</h2>
-                                        <select class="select_option">
-                                            <option selected value="1">s</option>
-                                            <option value="1">m</option>
-                                            <option value="1">l</option>
-                                            <option value="1">xl</option>
-                                            <option value="1">xxl</option>
-                                        </select>
-                                    </div>
-                                    <div class="variants_color">
-                                        <h2>color</h2>
-                                        <select class="select_option">
-                                            <option selected value="1">purple</option>
-                                            <option value="1">violet</option>
-                                            <option value="1">black</option>
-                                            <option value="1">pink</option>
-                                            <option value="1">orange</option>
-                                        </select>
-                                    </div>
                                     <div class="modal_add_to_cart">
                                         <form action="#">
                                             <input min="1" max="100" step="2" value="1" type="number">
@@ -2413,48 +982,6 @@
 </div>
 <!-- modal area end-->
 
-<!--news letter popup start-->
-<div class="newletter-popup">
-    <div id="boxes" class="newletter-container">
-        <div id="dialog" class="window">
-            <div id="popup2">
-                <span class="b-close"><span>close</span></span>
-            </div>
-            <div class="box">
-                <div class="newletter-title">
-                    <h2>Newsletter</h2>
-                </div>
-                <div class="box-content newleter-content">
-                    <label class="newletter-label">Enter your email address to subscribe our notification of our new
-                        post &amp; features by email.</label>
-                    <div id="frm_subscribe">
-                        <form name="subscribe" id="subscribe_popup">
-                            <!-- <span class="required">*</span><span>Enter you email address here...</span>-->
-                            <input type="text" value="" name="subscribe_pemail" id="subscribe_pemail"
-                                   placeholder="Enter you email address here...">
-                            <input type="hidden" value="" name="subscribe_pname" id="subscribe_pname">
-                            <div id="notification"></div>
-                            <a class="theme-btn-outlined"
-                               onclick="email_subscribepopup()"><span>Subscribe</span></a>
-                        </form>
-                        <div class="subscribe-bottom">
-                            <input type="checkbox" id="newsletter_popup_dont_show_again">
-                            <label for="newsletter_popup_dont_show_again">Don't show this popup again</label>
-                        </div>
-                    </div>
-                    <!-- /#frm_subscribe -->
-                </div>
-                <!-- /.box-content -->
-            </div>
-        </div>
-
-    </div>
-    <!-- /.box -->
-</div>
-<!--news letter popup start-->
-
-
-
 <!-- JS
 ============================================ -->
 <!--jquery min js-->
@@ -2462,31 +989,31 @@
 <!--popper min js-->
 <script src="/static/js/popper.js"></script>
 <!--bootstrap min js-->
-<script src="/js/jquery/bootstrap.min.js"></script>
+<script src="/static/js/jquery/bootstrap.min.js"></script>
 <!--owl carousel min js-->
 <script src="/static/js/owl.carousel.min.js"></script>
 <!--slick min js-->
 <script src="/static/js/slick.min.js"></script>
 <!--magnific popup min js-->
-<script src="/js/jquery/jquery.magnific-popup.min.js"></script>
+<script src="/static/js/jquery/jquery.magnific-popup.min.js"></script>
 <!--counterup min js-->
-<script src="/js/jquery/jquery.counterup.min.js"></script>
+<script src="/static/js/jquery/jquery.counterup.min.js"></script>
 <!--jquery countdown min js-->
-<script src="/js/jquery/jquery.countdown.js"></script>
+<script src="/static/js/jquery/jquery.countdown.js"></script>
 <!--jquery ui min js-->
-<script src="/js/jquery/jquery.ui.js"></script>
+<script src="/static/js/jquery/jquery.ui.js"></script>
 <!--jquery elevatezoom min js-->
-<script src="/js/jquery/jquery.elevatezoom.js"></script>
+<script src="/static/js/jquery/jquery.elevatezoom.js"></script>
 <!--isotope packaged min js-->
-<script src="/js/jquery/isotope.pkgd.min.js"></script>
+<script src="/static/js/jquery/isotope.pkgd.min.js"></script>
 <!--slinky menu js-->
 <script src="/static/js/slinky.menu.js"></script>
 <!-- Plugins JS -->
-<script src="/js/jquery/plugins.js"></script>
+<script src="/static/js/jquery/plugins.js"></script>
+<script src="/static/js/quickView.js"></script>
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>
-
 
 
 </body>

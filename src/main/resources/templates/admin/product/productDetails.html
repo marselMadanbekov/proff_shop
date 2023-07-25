@@ -447,25 +447,41 @@
                             <div class="gallery">
                                 <div class="main-photo mb-3"
                                      style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-                                    <img src="/images/faces/face1.jpg" alt="Photo 1">
+                                    <img th:if="${not #lists.isEmpty(product.photos)}"
+                                         th:photo="${product.getPhotos().get(0)}"
+                                         th:productId="${product.id}"
+                                         th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"/>
                                     <div>
                                         <button class="btn btn-sm btn-success btn-rounded" id="delete-button">Удалить
                                         </button>
                                     </div>
                                 </div>
                                 <div class="thumbnails">
-                                    <img src="/images/faces/face1.jpg" alt="Photo 1" data-src="/static/images/faces/face1.jpg"
-                                         class="thumbnail active">
-                                    <img src="/images/faces/face2.jpg" alt="Photo 2" data-src="/static/images/faces/face2.jpg"
-                                         class="thumbnail">
-                                    <img src="/images/faces/face3.jpg" alt="Photo 3" data-src="/static/images/faces/face3.jpg"
-                                         class="thumbnail">
-                                    <!-- Добавьте дополнительные изображения, если необходимо -->
+                                    <img class="thumbnail"
+                                         th:each="photo:${product.getPhotos()}"
+                                         th:data-src="@{'/static/uploads/' + ${photo}}"
+                                         th:photo="${photo}"
+                                         th:src="@{'/static/uploads/' + ${photo}}">
                                 </div>
 
                                 <hr>
-                                <label for="upload-input">New photo</label>
-                                <input type="file" id="upload-input" accept="image/*">
+                                <form>
+                                    <div class="form-group">
+                                        <label>Photo</label>
+                                        <input type="file" name="photo" class="file-upload-default">
+                                        <div class="input-group col-xs-12">
+                                            <input type="text" class="form-control file-upload-info" disabled
+                                                   placeholder="Upload Image">
+                                            <span class="input-group-append">
+                                                <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="productId" th:value="${product.id}">
+                                    <div>
+                                        <button class="btn btn-primary" type="submit" id="savePhoto">Save</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -550,6 +566,8 @@
 <script src="/static/js/template.js"></script>
 <script src="/static/js/todolist.js"></script>
 <script src="/static/js/gallery.js"></script>
+<script src="/static/js/products/addPhotoToProduct.js"></script>
+
 <!-- endinject -->
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>

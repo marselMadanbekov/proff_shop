@@ -46,4 +46,8 @@ public class StockService {
         }
         stockRepository.save(stock);
     }
+
+    public Stock getStockByProduct(Product product){
+        return stockRepository.findByParticipants(product).orElse(null);
+    }
 }

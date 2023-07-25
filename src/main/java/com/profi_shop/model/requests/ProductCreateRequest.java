@@ -11,6 +11,8 @@ public class ProductCreateRequest {
     private int prime_cost;
     private int price;
     private String sku;
+    private String color;
+    private int size;
     private MultipartFile photo;
     private String description;
     private Category category;

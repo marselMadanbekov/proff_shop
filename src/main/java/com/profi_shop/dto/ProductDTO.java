@@ -1,19 +1,29 @@
 package com.profi_shop.dto;
 
 import com.profi_shop.model.Category;
-import lombok.AllArgsConstructor;
+import com.profi_shop.model.enums.ProductSize;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
 public class ProductDTO {
     private Long id;
     private String name;
-    private int prime_cost;
-    private int price;
-    private String sku;
+
+    private List<String> photos;
+    private int discount;
+
+    private int newPrice;
+    private int oldPrice;
+
+    private String color;
+    private ProductSize size;
+    private int averageReview;
+
+    private boolean inCart;
+    private boolean inWishlist;
+
     private String description;
     private Category category;
-
-    public ProductDTO(){};
 }

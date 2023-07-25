@@ -6512,6 +6512,15 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 .star_rating ul li a {
   color: #79a206;
 }
+.stretch-card {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+  -webkit-justify-content: stretch;
+  justify-content: stretch;
+}
+
 
 .reviews_comment_box {
   display: flex;

@@ -166,11 +166,11 @@ function createPromotion() {
         data: JSON.stringify(data),
         success: function (response) {
             // Успешное создание акции
-            console.log('Акция успешно создана:', response);
+            alert('Акция успешно создана:' + response);
         },
         error: function (xhr, status, error) {
             // Ошибка при создании акции
-            console.error('Ошибка при создании акции:', error);
+            alert('Ошибка при создании акции:' + error);
         }
     });
 }

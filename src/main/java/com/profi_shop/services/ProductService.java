@@ -2,6 +2,7 @@ package com.profi_shop.services;
 
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Product;
+import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.model.requests.ProductCreateRequest;
 import com.profi_shop.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -34,11 +35,16 @@ public class ProductService {
         product.setDescription(productToCreate.getDescription());
         product.setCategory(productToCreate.getCategory());
 
+        if(!productToCreate.getColor().equals("none")) product.setColor(productToCreate.getColor());
+        else product.setColor(null);
+
+        product.setSize(ProductSize.values()[productToCreate.getSize()]);
+
         try {
             String firstPhoto = photoService.savePhoto(productToCreate.getPhoto());
             product.getPhotos().add(firstPhoto);
         }catch (IOException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
 
@@ -63,5 +69,19 @@ public class ProductService {
         List<Product> products = productRepository.findAllBySku(request);
         products.addAll(productRepository.findAllByName(request));
         return products;
+    }
+
+    public Product addPhotoToProductById(Long productId, MultipartFile photo) throws IOException {
+        Product product = getProductById(productId);
+        String newPhoto = photoService.savePhoto(photo);
+        product.addPhoto(newPhoto);
+        return productRepository.save(product);
+    }
+
+    public void deletePhotoByProductId(String photo, Long productId) throws IOException {
+        Product product = getProductById(productId);
+        product.removePhoto(photo);
+        photoService.deletePhoto(photo);
+        productRepository.save(product);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,23 +39,22 @@ public class ProductController {
 
 
     @PostMapping("/create-product")
-    public String createProduct(@ModelAttribute ProductCreateRequest product) {
+    public ResponseEntity<String> createProduct(@ModelAttribute ProductCreateRequest product) {
         try {
             Product createdProduct = productService.createProduct(product);
             stockService.createStocksProduct(createdProduct);
-            return "admin/product/products";
+            return new ResponseEntity<>("Successfully", HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
+            return new ResponseEntity<>("Error " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @CacheEvict
     @GetMapping("/products")
-    public String products(@RequestParam(value = "page",required = false) Optional<Integer> page,
+    public String products(@RequestParam(value = "page", required = false) Optional<Integer> page,
                            Model model) {
         List<Store> stores = storeService.getAllStores();
-        Page<Product> products = productService.getPagedProducts(page.orElse(0),8);
+        Page<Product> products = productService.getPagedProducts(page.orElse(0), 8);
 
         for (Product product : products) {
             System.out.println(product.getName() + product.getPrice());
@@ -79,11 +79,33 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/addPhoto")
+    public String addPhoto(@RequestParam("photo") MultipartFile photo,
+                           @RequestParam("productId") Long productId) {
+        try {
+            Product product = productService.addPhotoToProductById(productId, photo);
+            return "redirect:/admin/productDetails?productId="+product.getId();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @GetMapping("/deletePhoto")
+    public String deletePhoto(@RequestParam("photo") String photo,
+                              @RequestParam("productId") Long productId){
+        try {
+            productService.deletePhotoByProductId(photo,productId);
+            return "redirect:/productDetails?productId="+productId;
+        }catch (Exception e){
+            return e.getMessage();
+        }
+
+    }
+
     @GetMapping("/productDetails")
-    public String productDetails(@RequestParam("productId")Long productId,Model model)
-    {
+    public String productDetails(@RequestParam("productId") Long productId, Model model) {
         Product product = productService.getProductById(productId);
-        model.addAttribute("product",product);
+        model.addAttribute("product", product);
         return "admin/product/productDetails";
     }
 
@@ -95,13 +117,14 @@ public class ProductController {
     }
 
     @PostMapping("/products/search")
-    public ResponseEntity<List<Product>> searchProduct(@RequestBody String request){
+    public ResponseEntity<List<Product>> searchProduct(@RequestBody String request) {
         List<Product> products = productService.search(request);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
     @GetMapping("/productsByPage")
-    public ResponseEntity<Page<Product>> productPage(@RequestParam("page") Integer page){
-        Page<Product> products = productService.getPagedProducts(page,10);
+    public ResponseEntity<Page<Product>> productPage(@RequestParam("page") Integer page) {
+        Page<Product> products = productService.getPagedProducts(page, 10);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
