@@ -371,15 +371,17 @@
                                 <label>quantity</label>
                                 <input min="1" max="100" value="1" type="number">
                                 <button class="button" type="submit">add to cart</button>
-
                             </div>
                             <div class=" product_d_action">
                                 <ul>
                                     <li><a href="#" title="Add to wishlist">+ Add to Wishlist</a></li>
                                 </ul>
                             </div>
-                            <div class="product_meta">
+                            <div class="product_meta" th:if="${product.category != null}">
                                 <span>Category: <a href="#" th:text="${product.category.name}"></a></span>
+                            </div>
+                            <div class="product_meta">
+                                <span>Count on store: <a th:each="storeHouse: ${product.getStoreHouses()}" href="#" th:text="${storeHouse.store.town} + ':' + ${storeHouse.quantity} + ','"></a></span>
                             </div>
                         </form>
                     </div>

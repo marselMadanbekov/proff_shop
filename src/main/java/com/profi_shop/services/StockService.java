@@ -50,4 +50,21 @@ public class StockService {
     public Stock getStockByProduct(Product product){
         return stockRepository.findByParticipants(product).orElse(null);
     }
+
+    public List<Stock> getAllStocks() {
+        return stockRepository.findAll();
+    }
+
+    public Stock getTodayDeals(){
+        return stockRepository.findStockWithMaxDiscount().orElse(null);
+    }
+
+    public void deleteStockById(Long stockId) {
+        Stock stock = getStockById(stockId);
+        stockRepository.delete(stock);
+    }
+
+    private Stock getStockById(Long stockId) {
+        return stockRepository.findById(stockId).orElseThrow(() -> new SearchException(SearchException.STOCK_NOT_FOUND));
+    }
 }

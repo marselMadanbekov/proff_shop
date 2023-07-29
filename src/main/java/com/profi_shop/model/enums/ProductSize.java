@@ -1,7 +1,7 @@
 package com.profi_shop.model.enums;
 
 public enum ProductSize {
-    NONE,
+    ALL,
     S,
     M,
     L,

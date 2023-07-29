@@ -360,7 +360,7 @@
     });
     
     /*--- niceSelect---*/
-     $('.select_option').niceSelect();
+    $('.select_option').niceSelect();
     
     /*---  Accordion---*/
     $(".faequently-accordion").collapse({
@@ -391,8 +391,7 @@
 		$this.html(event.strftime('<div class="countdown_area"><div class="single_countdown"><div class="countdown_number">%D</div><div class="countdown_title">days</div></div><div class="single_countdown"><div class="countdown_number">%H</div><div class="countdown_title">hours</div></div><div class="single_countdown"><div class="countdown_number">%M</div><div class="countdown_title">mins</div></div><div class="single_countdown"><div class="countdown_number">%S</div><div class="countdown_title">secs</div></div></div>'));     
                
        });
-	});	
-    
+	});
     /*---slider-range here---*/
     $( "#slider-range" ).slider({
         range: true,
@@ -589,10 +588,10 @@
     
     
     /*---search box slideToggle---*/
-    $(".search_box > a").on("click", function() {
-        $(this).toggleClass('active');
-        $('.search_widget').slideToggle('medium');
-    }); 
+    // $(".search_box > a").on("click", function() {
+    //     $(this).toggleClass('active');
+    //     $('.search_widget').slideToggle('medium');
+    // });
     
     
     /*---header account slideToggle---*/
@@ -709,6 +708,4 @@
         	$this.toggleClass('menu-open');
         }
     });
-    
-    
 })(jQuery);	

@@ -2,6 +2,7 @@ package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
+import com.profi_shop.model.Stock;
 import com.profi_shop.model.requests.StockRequest;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,7 +23,6 @@ public class StocksController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
-
     private final StockService stockService;
 
     public StocksController(CategoryService categoryService, ProductService productService, StockService stockService) {
@@ -31,7 +32,9 @@ public class StocksController {
     }
 
     @GetMapping("/stocks")
-    public String stocks() {
+    public String stocks(Model model) {
+        List<Stock> stocks = stockService.getAllStocks();
+        model.addAttribute("stocks",stocks);
         return "admin/stock/stocksPage";
     }
 
@@ -57,6 +60,17 @@ public class StocksController {
             return new ResponseEntity<>("successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/stock/delete")
+    public ResponseEntity<String> deleteStock(@RequestParam("stockId") Long stockId){
+        try{
+            System.out.println("hello deleting stock " + stockId);
+            stockService.deleteStockById(stockId);
+            return new ResponseEntity<>("successfully",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

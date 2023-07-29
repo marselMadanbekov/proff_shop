@@ -44,6 +44,10 @@ public class StoreHouseService {
         storeHouseRepository.save(storeHouse);
     }
 
+    public List<StoreHouse> getStoreHousesByProduct(Product product){
+        return storeHouseRepository.findStoreHouseByProduct(product);
+    }
+
     public StoreHouse getStoreHouseByProductAndStore(Product product, Store store){
         return storeHouseRepository.findByProductAndStore(product, store).orElseThrow(() -> new SearchException(SearchException.STOCK_NOT_FOUND));
     }

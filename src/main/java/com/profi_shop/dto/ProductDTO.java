@@ -1,6 +1,7 @@
 package com.profi_shop.dto;
 
 import com.profi_shop.model.Category;
+import com.profi_shop.model.StoreHouse;
 import com.profi_shop.model.enums.ProductSize;
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class ProductDTO {
 
     private boolean inCart;
     private boolean inWishlist;
+    private List<StoreHouse> storeHouses;
 
     private String description;
     private Category category;

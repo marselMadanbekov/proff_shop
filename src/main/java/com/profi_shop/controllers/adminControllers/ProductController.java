@@ -117,8 +117,9 @@ public class ProductController {
     }
 
     @PostMapping("/products/search")
-    public ResponseEntity<List<Product>> searchProduct(@RequestBody String request) {
-        List<Product> products = productService.search(request);
+    public ResponseEntity<Page<Product>> searchProduct(@RequestParam(value = "page",required = false) Optional<Integer> page,
+                                                       @RequestBody String request) {
+        Page<Product> products = productService.search(request,page.orElse(0));
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

@@ -3458,6 +3458,20 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   display: block;
   border-radius: 2px;
 }
+.label_product span.label_sale1 {
+  top: 11px;
+  right: 11px;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #DC0F0F;
+  font-size: 14px;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 14px;
+  text-align: center;
+  display: block;
+  border-radius: 2px;
+}
 .label_product span.label_new {
   top: 20px;
   right: 20px;
@@ -5259,8 +5273,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   background: #dbdbdb;
   border: none;
   width: 92%;
-  margin: 0 auto;
-  margin-bottom: 22px;
+  margin: 0 auto 22px;
 }
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
@@ -5277,6 +5290,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   overflow: hidden;
   margin-bottom: 30px;
 }
+
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .widget_list.widget_filter {
     margin-bottom: 73px;
@@ -5532,7 +5546,10 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 .pagination ul li.next {
   width: 40px;
 }
-
+ul li.current {
+  background: #79a206;
+  color: #ffffff;
+}
 .shop_toolbar.t_bottom {
   justify-content: center;
   margin-bottom: 0;
@@ -5930,6 +5947,9 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 .shop_wrapper .label_product {
   bottom: 40px;
+}
+.shop_wrapper .label_product1 {
+  bottom: 10px;
 }
 .shop_wrapper.grid_4 .action_links ul li a {
   line-height: 50px;

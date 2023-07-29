@@ -27,7 +27,7 @@ public class CategoryController {
     public String createCategory(@RequestParam("name") String name) {
         try {
             categoryService.createCategory(name);
-            return "shop/index";
+            return "redirect:/admin/categories";
         } catch (Exception e) {
             return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
         }

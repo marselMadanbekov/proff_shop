@@ -4,6 +4,8 @@ import com.profi_shop.model.enums.ProductSize;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class Product {
     private String sku;
     private String color;
     private ProductSize size;
+    private Date create_date;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "product_id"))
     private List<String> photos = new ArrayList<>();
@@ -27,6 +30,10 @@ public class Product {
     @ManyToOne
     private Category category;
 
+    @PrePersist
+    private void creating(){
+        this.create_date = Date.valueOf(LocalDate.now());
+    }
     public void addPhoto(String photo) {
         photos.add(photo);
     }

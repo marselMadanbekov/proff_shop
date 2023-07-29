@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -200,6 +200,9 @@
                         <div>
                             <h4 class="font-weight-bold mb-0">Действующие акции</h4>
                         </div>
+                        <div>
+                            <a class="nav-link btn btn-primary btn-rounded" href="/admin/createStock">Создать</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -236,44 +239,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1121</td>
-                                        <td>Категория</td>
-                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                        <td>12.12.2001</td>
-                                        <td>12.12.2002</td>
+                                    <tr th:each="stock: ${stocks}">
+                                        <td th:text="${stock.id}"></td>
+                                        <td th:text="${stock.type}"></td>
+                                        <td class="text-danger" th:text="${stock.discount}"><i class="ti-arrow-down"></i></td>
+                                        <td th:text="${stock.startDate}"></td>
+                                        <td th:text="${stock.endDate}"></td>
                                         <td>
-                                            <button class="btn btn-sm btn-danger">деактивировать</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1121</td>
-                                        <td>Категория</td>
-                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                        <td>12.12.2001</td>
-                                        <td>12.12.2002</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger">деактивировать</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1121</td>
-                                        <td>Категория</td>
-                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                        <td>12.12.2001</td>
-                                        <td>12.12.2002</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger">деактивировать</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1121</td>
-                                        <td>Категория</td>
-                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                        <td>12.12.2001</td>
-                                        <td>12.12.2002</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger">деактивировать</button>
+                                            <button class="btn btn-sm btn-danger"
+                                                    type="button"
+                                                    th:data-stock-id="${stock.id}"
+                                                    onclick="deleteStock(this.getAttribute('data-stock-id'))">деактивировать</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -308,8 +284,9 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/redirectOrder.js"></script>
 <script src="/static/js/stocks/stocks.js"></script>
+<script src="/static/js/stocks/deleteStock.js"></script>
+
 
 <!-- endinject -->
 <!-- Custom js for this page-->

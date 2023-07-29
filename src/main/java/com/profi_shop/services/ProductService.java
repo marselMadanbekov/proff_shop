@@ -1,6 +1,7 @@
 package com.profi_shop.services;
 
 import com.profi_shop.exceptions.SearchException;
+import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.model.requests.ProductCreateRequest;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +21,15 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final PhotoService photoService;
+    private final CategoryService categoryService;
+    private final StockService stockService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, PhotoService photoService) {
+    public ProductService(ProductRepository productRepository, PhotoService photoService, CategoryService categoryService, StockService stockService) {
         this.productRepository = productRepository;
         this.photoService = photoService;
+        this.categoryService = categoryService;
+        this.stockService = stockService;
     }
 
     public Product createProduct(ProductCreateRequest productToCreate) throws Exception {
@@ -51,6 +57,26 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public Page<Product> productsFilteredPage(int page, Long categoryId, int size, String color, int minPrice, int maxPrice, int sort){
+        Pageable pageable = null;
+        if(sort != 0){
+            if(sort == 1)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"create_date"));
+            else if(sort == 2)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.ASC,"price"));
+            else if(sort == 3)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"price"));
+            else   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"name"));
+        }
+        else{
+            pageable = PageRequest.of(page,9);
+        }
+        Category category = (categoryId == 0) ? null: categoryService.getCategoryById(categoryId);
+        ProductSize targetSize = (size == 0) ? null : ProductSize.values()[size];
+        String targetColor = (color.equals("")) ? null : color;
+        Integer targetMinPrice = (minPrice == maxPrice) ? null: minPrice;
+        Integer targetMaxPrice = (maxPrice == minPrice) ? null: maxPrice;
+
+        return productRepository.findAllByFilters(category,targetColor,targetSize,targetMinPrice,targetMaxPrice,pageable);
+    }
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -65,10 +91,11 @@ public class ProductService {
     }
 
 
-    public List<Product> search(String request) {
-        List<Product> products = productRepository.findAllBySku(request);
-        products.addAll(productRepository.findAllByName(request));
-        return products;
+    public Page<Product> search(String request, int page) {
+        if(request.equals("")){
+            return productRepository.findAll(PageRequest.of(page,9));
+        }
+        return productRepository.findAllByName(request,PageRequest.of(page,9));
     }
 
     public Product addPhotoToProductById(Long productId, MultipartFile photo) throws IOException {
