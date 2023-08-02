@@ -2,6 +2,7 @@ package com.profi_shop.services;
 
 import com.profi_shop.auth.requests.AdminCreateRequest;
 import com.profi_shop.auth.requests.SignUpRequest;
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Store;
 import com.profi_shop.model.User;
@@ -45,20 +46,24 @@ public class UserService {
         return user;
     }
 
-    public User createAdmin(AdminCreateRequest adminCreate){
-        User user = new User();
-        user.setFirstname(adminCreate.getFirstname());
-        user.setLastname(adminCreate.getLastname());
-        user.setRole(Role.ROLE_ADMIN);
-        user.setEmail(adminCreate.getEmail());
-        user.setUsername(adminCreate.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(adminCreate.getPassword()));
-        user.setActive(true);
-        Store store = getStoreById(adminCreate.getId());
+    public void createAdmin(AdminCreateRequest adminCreate) {
+        try {
+            User user = new User();
+            user.setFirstname(adminCreate.getFirstname());
+            user.setLastname(adminCreate.getLastname());
+            user.setRole(Role.ROLE_ADMIN);
+            user.setEmail(adminCreate.getEmail());
+            user.setUsername(adminCreate.getUsername());
+            user.setPassword(bCryptPasswordEncoder.encode(adminCreate.getPassword()));
+            user.setActive(true);
+            Store store = getStoreById(adminCreate.getStoreId());
 
-        store.setAdmin(user);
-        storeRepository.save(store);
-        return userRepository.save(user);
+            userRepository.save(user);
+            store.setAdmin(user);
+            storeRepository.save(store);
+        }catch (Exception e){
+            throw new ExistException(ExistException.USER_EXISTS);
+        }
     }
 
 

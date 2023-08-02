@@ -72,7 +72,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .exceptionHandling(httpSecurityHttpBasicConfigurer ->
                         httpSecurityHttpBasicConfigurer
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                                .accessDeniedPage("/error1/error?message=accessDenied")
+                                .accessDeniedPage("/error1/error?message=accessDenied")
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
