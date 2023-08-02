@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Lukani - my account</title>
+    <title>Lukani - cart page</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -37,10 +37,10 @@
     <!--modernizr min js here-->
     <script src="/static/js/vendor/modernizr-3.7.1.min.js"></script>
 
-
 </head>
 
 <body>
+
 
     <!--header area start-->
 
@@ -80,7 +80,7 @@
                         <div id="menu" class="text-left ">
                             <ul class="offcanvas_main_menu">
                                 <li class="menu-item-has-children">
-                                    <a href="proff_shop.html">Shop</a>
+                                    <a href="shop.html">Shop</a>
                                 </li>
                                 <li class="menu-item-has-children">
                                     <a href="blog.html">blog</a>
@@ -252,13 +252,13 @@
                             <div class="main_menu menu_position">
                                 <nav>
                                     <ul>
-                                        <li class="mega_items"><a href="mainPage.html">home</i></a>
+                                        <li class="mega_items"><a class="active" href="mainPage.html">home</i></a>
                                         </li>
-                                        <li class="mega_items"><a class="active" href="proff_shop.html">shop</i></a>
+                                        <li class="mega_items"><a href="shop.html">shop</i></a>
                                         </li>
                                         <li><a href="blog.html">blog</i></a>
                                         </li>
-                                        <li><a href="proff_about.html">About Us</i></a>
+                                        <li><a href="about.html">About Us</i></a>
                                         </li>
                                         <li><a href="contact.html"> Contact Us</a></li>
                                     </ul>
@@ -278,17 +278,16 @@
     </header>
     <!--header area end-->
 
-
     <!--breadcrumbs area start-->
     <div class="breadcrumbs_area">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="breadcrumb_content">
-                        <h3>My Account</h3>
+                        <h3>Cart</h3>
                         <ul>
                             <li><a href="index.html">home</a></li>
-                            <li>My account</li>
+                            <li>Shopping Cart</li>
                         </ul>
                     </div>
                 </div>
@@ -297,163 +296,120 @@
     </div>
     <!--breadcrumbs area end-->
 
-    <!-- my account start  -->
-    <section class="main_content_area">
+    <!--shopping cart area start -->
+    <div class="shopping_cart_area mt-100">
         <div class="container">
-            <div class="account_dashboard">
+            <form action="#">
                 <div class="row">
-                    <div class="col-sm-12 col-md-3 col-lg-3">
-                        <!-- Nav tabs -->
-                        <div class="dashboard_tab_button">
-                            <ul role="tablist" class="nav flex-column dashboard-list">
-                                <li><a href="#dashboard" data-toggle="tab" class="nav-link active">Dashboard</a></li>
-                                <li> <a href="#orders" data-toggle="tab" class="nav-link">Orders</a></li>
-                                <li><a href="#downloads" data-toggle="tab" class="nav-link">Downloads</a></li>
-                                <li><a href="#address" data-toggle="tab" class="nav-link">Addresses</a></li>
-                                <li><a href="#account-details" data-toggle="tab" class="nav-link">Account details</a>
-                                </li>
-                                <li><a href="login.html" class="nav-link">logout</a></li>
-                            </ul>
+                    <div class="col-12">
+                        <div class="table_desc">
+                            <div class="cart_page table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="product_remove">Delete</th>
+                                            <th class="product_thumb">Image</th>
+                                            <th class="product_name">Product</th>
+                                            <th class="product-price">Price</th>
+                                            <th class="product_quantity">Quantity</th>
+                                            <th class="product_total">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                            <td class="product_thumb"><a href="#"><img
+                                                        src="/static/img/s-product/product.jpg" alt=""></a></td>
+                                            <td class="product_name"><a href="#">Handbag fringilla</a></td>
+                                            <td class="product-price">£65.00</td>
+                                            <td class="product_quantity"><label>Quantity</label> <input min="1"
+                                                    max="100" value="1" type="number"></td>
+                                            <td class="product_total">£130.00</td>
+
+
+                                        </tr>
+
+                                        <tr>
+                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                            <td class="product_thumb"><a href="#"><img
+                                                        src="/static/img/s-product/product2.jpg" alt=""></a></td>
+                                            <td class="product_name"><a href="#">Handbags justo</a></td>
+                                            <td class="product-price">£90.00</td>
+                                            <td class="product_quantity"><label>Quantity</label> <input min="1"
+                                                    max="100" value="1" type="number"></td>
+                                            <td class="product_total">£180.00</td>
+
+
+                                        </tr>
+                                        <tr>
+                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
+                                            </td>
+                                            <td class="product_thumb"><a href="#"><img
+                                                        src="/static/img/s-product/product3.jpg" alt=""></a></td>
+                                            <td class="product_name"><a href="#">Handbag elit</a></td>
+                                            <td class="product-price">£80.00</td>
+                                            <td class="product_quantity"><label>Quantity</label> <input min="1"
+                                                    max="100" value="1" type="number"></td>
+                                            <td class="product_total">£160.00</td>
+
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cart_submit">
+                                <button type="submit">update cart</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-9 col-lg-9">
-                        <!-- Tab panes -->
-                        <div class="tab-content dashboard_content">
-                            <div class="tab-pane fade show active" id="dashboard">
-                                <h3>Dashboard </h3>
-                                <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent
-                                        orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a
-                                        href="#">Edit your password and account details.</a></p>
-                            </div>
-                            <div class="tab-pane fade" id="orders">
-                                <h3>Orders</h3>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Order</th>
-                                                <th>Date</th>
-                                                <th>Status</th>
-                                                <th>Total</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>May 10, 2018</td>
-                                                <td><span class="success">Completed</span></td>
-                                                <td>$25.00 for 1 item </td>
-                                                <td><a href="cart.html" class="view">view</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>May 10, 2018</td>
-                                                <td>Processing</td>
-                                                <td>$17.00 for 1 item </td>
-                                                <td><a href="cart.html" class="view">view</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                </div>
+                <!--coupon code area start-->
+                <div class="coupon_area">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="coupon_code left">
+                                <h3>Coupon</h3>
+                                <div class="coupon_inner">
+                                    <p>Enter your coupon code if you have one.</p>
+                                    <input placeholder="Coupon code" type="text">
+                                    <button type="submit">Apply coupon</button>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="downloads">
-                                <h3>Downloads</h3>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Product</th>
-                                                <th>Downloads</th>
-                                                <th>Expires</th>
-                                                <th>Download</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Shopnovilla - Free Real Estate PSD Template</td>
-                                                <td>May 10, 2018</td>
-                                                <td><span class="danger">Expired</span></td>
-                                                <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Organic - ecommerce html template</td>
-                                                <td>Sep 11, 2018</td>
-                                                <td>Never</td>
-                                                <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="address">
-                                <p>The following addresses will be used on the checkout page by default.</p>
-                                <h4 class="billing-address">Billing address</h4>
-                                <a href="#" class="view">Edit</a>
-                                <p><strong>Bobby Jackson</strong></p>
-                                <address>
-                                    <span><strong>City:</strong> Seattle</span>,
-                                    <br>
-                                    <span><strong>State:</strong> Washington(WA)</span>,
-                                    <br>
-                                    <span><strong>ZIP:</strong> 98101</span>,
-                                    <br>
-                                    <span><strong>Country:</strong> USA</span>
-                                </address>
-                            </div>
-                            <div class="tab-pane fade" id="account-details">
-                                <h3>Account details </h3>
-                                <div class="login">
-                                    <div class="login_form_container">
-                                        <div class="account_login_form">
-                                            <form action="#">
-                                                <p>Already have an account? <a href="#">Log in instead!</a></p>
-                                                <div class="input-radio">
-                                                    <span class="custom-radio"><input type="radio" value="1"
-                                                            name="id_gender"> Mr.</span>
-                                                    <span class="custom-radio"><input type="radio" value="1"
-                                                            name="id_gender"> Mrs.</span>
-                                                </div> <br>
-                                                <label>First Name</label>
-                                                <input type="text" name="first-name">
-                                                <label>Last Name</label>
-                                                <input type="text" name="last-name">
-                                                <label>Email</label>
-                                                <input type="text" name="email-name">
-                                                <label>Password</label>
-                                                <input type="password" name="user-password">
-                                                <label>Birthdate</label>
-                                                <input type="text" placeholder="MM/DD/YYYY" value="" name="birthday">
-                                                <span class="example">
-                                                    (E.g.: 05/31/1970)
-                                                </span>
-                                                <br>
-                                                <span class="custom_checkbox">
-                                                    <input type="checkbox" value="1" name="optin">
-                                                    <label>Receive offers from our partners</label>
-                                                </span>
-                                                <br>
-                                                <span class="custom_checkbox">
-                                                    <input type="checkbox" value="1" name="newsletter">
-                                                    <label>Sign up for our newsletter<br><em>You may unsubscribe at any
-                                                            moment. For that purpose, please find our contact info in
-                                                            the legal notice.</em></label>
-                                                </span>
-                                                <div class="save_button primary_btn default_button">
-                                                    <button type="submit">Save</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="coupon_code right">
+                                <h3>Cart Totals</h3>
+                                <div class="coupon_inner">
+                                    <div class="cart_subtotal">
+                                        <p>Subtotal</p>
+                                        <p class="cart_amount">£215.00</p>
+                                    </div>
+                                    <div class="cart_subtotal ">
+                                        <p>Shipping</p>
+                                        <p class="cart_amount"><span>Flat Rate:</span> £255.00</p>
+                                    </div>
+                                    <a href="#">Calculate shipping</a>
+
+                                    <div class="cart_subtotal">
+                                        <p>Total</p>
+                                        <p class="cart_amount">£215.00</p>
+                                    </div>
+                                    <div class="checkout_btn">
+                                        <a href="#">Proceed to Checkout</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <!--coupon code area end-->
+            </form>
         </div>
-    </section>
-    <!-- my account end   -->
+    </div>
+    <!--shopping cart area end -->
 
     <!--brand area start-->
     <div class="brand_area">
@@ -633,7 +589,6 @@
 
     <!-- Main JS -->
     <script src="/static/js/main.js"></script>
-
 
 
 

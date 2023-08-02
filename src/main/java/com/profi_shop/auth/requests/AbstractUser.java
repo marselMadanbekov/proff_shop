@@ -11,7 +11,6 @@ public abstract class AbstractUser {
     private String confirm_password;
     private String email;
     private String phone_number;
-    private Role role;
 
     public Long getId() {
         return id;
@@ -77,11 +76,4 @@ public abstract class AbstractUser {
         this.phone_number = phone_number;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

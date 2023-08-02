@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ExistException extends RuntimeException{
     public static final int USER_EXISTS = 1;
-    public static final int SUBJECT_EXISTS = 2;
+    public static final int SHIPMENT_EXISTS = 2;
     public static final int GROUP_EXISTS = 3;
     public static final int ADDITIONAL_EXISTS = 4;
     public static final int TIMETABLE_EXISTS = 5;
@@ -26,7 +26,7 @@ public class ExistException extends RuntimeException{
     public String getMessage(){
         return switch (code) {
             case 1 -> Text.get("ERROR_USER_EXISTS");
-            case 2 -> Text.get("ERROR_SUBJECT_EXISTS");
+            case 2 -> Text.get("ERROR_SHIPMENT_EXISTS");
             case 3 -> Text.get("ERROR_GROUP_EXISTS");
             case 4 -> Text.get("ERROR_ADDITIONAL_EXISTS");
             case 5 -> Text.get("ERROR_TIMETABLE_EXISTS");

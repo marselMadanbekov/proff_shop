@@ -1,6 +1,7 @@
 package com.profi_shop.services;
 
 import com.profi_shop.dto.StoreDTO;
+import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Store;
 import com.profi_shop.repositories.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +38,7 @@ public class StoreService {
         return storeRepository.findAll(pageable);
     }
 
+    public Store getStoreById(Long storeId) {
+        return storeRepository.findById(storeId).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
+    }
 }

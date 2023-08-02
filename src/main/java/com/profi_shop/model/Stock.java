@@ -16,9 +16,9 @@ public class Stock {
     private Date endDate;
     private StockType type;
     private int discount;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Product> participants = new ArrayList<>();
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -35,9 +35,9 @@
                 <li class="nav-item nav-search d-none d-lg-block">
                     <div class="input-group">
                         <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                <span class="input-group-text" id="search">
-                  <i class="ti-search"></i>
-                </span>
+                                <span class="input-group-text" id="search">
+                                    <i class="ti-search"></i>
+                                </span>
                         </div>
                         <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
                                aria-label="search" aria-describedby="search">
@@ -50,7 +50,8 @@
                        id="messageDropdown" href="#" data-toggle="dropdown">
                         <i class="ti-email mx-0"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="messageDropdown">
                         <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
                         <a class="dropdown-item">
                             <div class="item-thumbnail">
@@ -144,7 +145,8 @@
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
                         <img src="/static/images/faces/face28.jpg" alt="profile"/>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="profileDropdown">
                         <a class="dropdown-item">
                             <i class="ti-settings text-primary"></i>
                             Settings
@@ -215,219 +217,88 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">RoyalUI Dashboard</h4>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-primary btn-icon-text btn-rounded">
-                                <i class="ti-clipboard btn-icon-prepend"></i>Report
-                            </button>
+                            <h4 class="font-weight-bold mb-0">Доставка</h4>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 grid-margin stretch-card">
+                <div class="col-md-8 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Продажи</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">34040</h3>
-                                <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-danger">0.12% <span
-                                    class="text-black ml-1"><small>(30 days)</small></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Посещения</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">47033</h3>
-                                <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-danger">0.47% <span
-                                    class="text-black ml-1"><small>(30 days)</small></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Заказы</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">40016</h3>
-                                <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-success">64.00%<span
-                                    class="text-black ml-1"><small>(30 days)</small></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Филиалы</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
-                                <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-success">23.00%<span
-                                    class="text-black ml-1"><small>(30 days)</small></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title">Sales details</p>
-                            <p class="text-muted font-weight-light">Received overcame oh sensible so at an. Formed do
-                                change merely
-                                to county it. Am separate contempt domestic to to oh. On relation my so addition
-                                branched.</p>
+                            <p class="card-title">Все доставки</p>
                             <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
-                            <canvas id="sales-chart"></canvas>
-                        </div>
-                        <div class="card border-right-0 border-left-0 border-bottom-0">
-                            <div class="d-flex justify-content-center justify-content-md-end">
-                                <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                                    <button class="btn btn-lg btn-outline-light dropdown-toggle rounded-0 border-top-0 border-bottom-0"
-                                            type="button" id="dropdownMenuDate2" data-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="true">
-                                        Today
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                                        <a class="dropdown-item" href="#">January - March</a>
-                                        <a class="dropdown-item" href="#">March - June</a>
-                                        <a class="dropdown-item" href="#">June - August</a>
-                                        <a class="dropdown-item" href="#">August - November</a>
-                                    </div>
-                                </div>
-                                <button class="btn btn-lg btn-outline-light text-primary rounded-0 border-0 d-none d-md-block"
-                                        type="button"> View all
-                                </button>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Область</th>
+                                        <th>Город</th>
+                                        <th>Стоимость</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="shipment : ${shipments.getContent()}">
+                                        <td th:text="${shipment.state}"></td>
+                                        <td th:text="${shipment.town}"></td>
+                                        <td th:text="${shipment.cost}"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                    th:data-shipmentId="${shipment.id}"
+                                                    onclick="deleteShipment(this.getAttribute('data-shipmentId'))">
+                                                Удалить
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 grid-margin stretch-card">
-                    <div class="card border-bottom-0">
-                        <div class="card-body pb-0">
-                            <p class="card-title">Purchases</p>
-                            <p class="text-muted font-weight-light">The argument in favor of using filler text goes
-                                something like
-                                this: If you use real content in the design process, anytime you reach a review</p>
-                            <div class="d-flex flex-wrap mb-5">
-                                <div class="mr-5 mt-3">
-                                    <p class="text-muted">Total users</p>
-                                    <h3>362</h3>
-                                </div>
-                                <div class="mr-5 mt-3">
-                                    <p class="text-muted">New users</p>
-                                    <h3>187</h3>
-                                </div>
-                                <div class="mt-3">
-                                    <p class="text-muted">Feedbacks</p>
-                                    <h3>509</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <canvas id="order-chart" class="w-100"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 grid-margin stretch-card">
+                <div class="col-md-4 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">To Do Lists</h4>
-                            <div class="list-wrapper pt-2">
-                                <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                                    <li>
-                                        <div class="form-check form-check-flat">
-                                            <label class="form-check-label">
-                                                <input class="checkbox" type="checkbox">
-                                                Become A Travel Pro In One Easy Lesson
-                                            </label>
-                                        </div>
-                                        <i class="remove ti-trash"></i>
-                                    </li>
-                                    <li class="completed">
-                                        <div class="form-check form-check-flat">
-                                            <label class="form-check-label">
-                                                <input class="checkbox" type="checkbox" checked>
-                                                See The Unmatched Beauty Of The Great Lakes
-                                            </label>
-                                        </div>
-                                        <i class="remove ti-trash"></i>
-                                    </li>
-                                    <li>
-                                        <div class="form-check form-check-flat">
-                                            <label class="form-check-label">
-                                                <input class="checkbox" type="checkbox">
-                                                Copper Canyon
-                                            </label>
-                                        </div>
-                                        <i class="remove ti-trash"></i>
-                                    </li>
-                                    <li class="completed">
-                                        <div class="form-check form-check-flat">
-                                            <label class="form-check-label">
-                                                <input class="checkbox" type="checkbox" checked>
-                                                Top Things To See During A Holiday In Hong Kong
-                                            </label>
-                                        </div>
-                                        <i class="remove ti-trash"></i>
-                                    </li>
-                                    <li>
-                                        <div class="form-check form-check-flat">
-                                            <label class="form-check-label">
-                                                <input class="checkbox" type="checkbox">
-                                                Travelagent India
-                                            </label>
-                                        </div>
-                                        <i class="remove ti-trash"></i>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="add-items d-flex mb-0 mt-4">
-                                <input type="text" class="form-control todo-list-input mr-2" placeholder="Add new task">
-                                <button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i
-                                        class="ti-location-arrow"></i></button>
+                            <h4 class="card-title">Новая доставка</h4>
+                            <form class="forms-sample">
+                                <div class="form-group">
+                                    <label for="state">Область</label>
+                                    <input type="text" name="state" class="form-control" id="state">
+                                </div>
+                                <div class="form-group">
+                                    <label for="town">Город</label>
+                                    <input type="text" name="town" class="form-control" id="town">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cost">Стоимость</label>
+                                    <input type="number" name="cost" class="form-control" id="cost">
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <button class="btn btn-light">Cancel</button>
+                            </form>
+                            <div id="progressModal" class="modal">
+                                <div class="modal-content">
+                                    <div class="progress-spinner"></div>
+                                    <p>Sending...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
 <!-- container-scroller -->
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- plugins:js -->
 <script src="/static/vendors/base/vendor.bundle.base.js"></script>
-<!-- endinject -->
 <!-- Plugin js for this page-->
-<script src="/static/vendors/chart.js/Chart.min.js"></script>
-<!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/todolist.js"></script>
-<!-- endinject -->
+<script src="/static/js/shipments/shipment.js"></script>
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->

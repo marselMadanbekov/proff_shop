@@ -1,7 +1,7 @@
 package com.profi_shop.model.enums;
 
 public enum Role {
-    SUPER_ADMIN,
-    ADMIN,
-    CUSTOMER
+    ROLE_SUPER_ADMIN,
+    ROLE_ADMIN,
+    ROLE_CUSTOMER
 }

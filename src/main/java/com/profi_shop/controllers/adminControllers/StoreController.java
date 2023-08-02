@@ -32,7 +32,10 @@ public class StoreController {
     }
 
     @GetMapping("/storeDetails")
-    public String storeDetails() {
+    public String storeDetails(@RequestParam("storeId") Long storeId,
+                               Model model) {
+        Store store = storeService.getStoreById(storeId);
+        model.addAttribute("store", store);
         return "admin/store/storeDetails";
     }
     @GetMapping("/stores")

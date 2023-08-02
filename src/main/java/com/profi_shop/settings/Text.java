@@ -53,10 +53,13 @@ public class Text {
         data.put("ERROR_CATEGORY_NOT_FOUND","Категория не найдена");
         data.put("ERROR_CONSUMPTION_NOT_FOUND","Расход не найден");
         data.put("ERROR_STOCK_NOT_FOUND","Склад не найден");
+        data.put("ERROR_SHIPMENT_NOT_FOUND","Доставка не найдена");
 
+        data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 
 
         data.put("ERROR_USER_EXISTS","Пользователь с таким логином уже существует!");
+        data.put("ERROR_SHIPMENT_EXISTS","Доставка уже существует!");
 
         data.put("ERROR_NAME_EMPTY","Поле имени не может быть пустым!");
         data.put("ERROR_PASSWORD_EMPTY","Пароль не должен быть пустым!");
