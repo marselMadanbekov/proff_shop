@@ -60,17 +60,17 @@
                             <a href="javascript:void(0)"><i class="icon-x"></i></a>
                         </div>
                         <div class="search_container">
-                            <form action="#">
+                            <form id="search-form1">
                                 <div class="hover_category">
-                                    <select class="select_option" name="select" id="categori2">
-                                        <option selected value="1">All Categories</option>
-                                        <option value="2">Accessories</option>
-                                        <option value="3">Accessories & More</option>
+                                    <select class="select_option" name="select" id="search-category1">
+                                        <option selected value="0">All Categories</option>
+                                        <option th:each="category:${categories}" th:value="${category.id}"
+                                                th:text="${category.name}"></option>
                                     </select>
                                 </div>
                                 <div class="search_box">
-                                    <input placeholder="Search product..." type="text">
-                                    <button type="submit"><i class="icon-search"></i></button>
+                                    <input placeholder="Search product..." type="text" id="search-text1" th:value="${query}">
+                                    <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -80,13 +80,13 @@
                         <div id="menu" class="text-left ">
                             <ul class="offcanvas_main_menu">
                                 <li class="menu-item-has-children">
-                                    <a href="proff_/shop">Shop</a>
+                                    <a href="/shop">Shop</a>
                                 </li>
                                 <li class="menu-item-has-children">
                                     <a href="blog.html">blog</a>
                                 </li>
                                 <li class="menu-item-has-children">
-                                    <a href="my-account.html">my account</a>
+                                    <a href="/account">my account</a>
                                 </li>
                                 <li class="menu-item-has-children">
                                     <a href="about.html">about Us</a>
@@ -95,7 +95,7 @@
                                     <a href="contact.html"> Contact Us</a>
                                 </li>
                                 <li class="menu-item-has-children">
-                                    <a href="/login">Войти</a>
+                                    <a href="/auth/login">Войти</a>
                                 </li>
                             </ul>
                         </div>
@@ -124,29 +124,30 @@
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-3 col-4">
                             <div class="logo">
-                                <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
+                                <a href="/home"><img src="/static/img/logo/proff_shop_logo.png" alt=""></a>
                             </div>
                         </div>
                         <div class="col-lg-9 col-md-6 col-6">
                             <div class="header_right_info">
                                 <div class="search_container">
-                                    <form action="#">
+                                    <form id="search-form">
                                         <div class="hover_category">
-                                            <select class="select_option" name="select" id="categori1">
-                                                <option selected value="1">All Categories</option>
-                                                <option value="2">Accessories</option>
+                                            <select class="select_option" name="select" id="search-category">
+                                                <option selected value="0">All Categories</option>
+                                                <option th:each="category:${categories}" th:value="${category.id}"
+                                                        th:text="${category.name}"></option>
                                             </select>
                                         </div>
                                         <div class="search_box">
-                                            <input placeholder="Search product..." type="text">
-                                            <button type="submit"><i class="icon-search"></i></button>
+                                            <input placeholder="Search product..." type="text" id="search-text" th:value="${query}">
+                                            <button type="submit" id="search-button"><i class="icon-search"></i></button>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="header_account_area">
                                     <div class="header_account-list top_links">
-                                        <a href="my-account.html"><i class="icon-users"></i></a>
-                                        
+                                        <a href="/account"><i class="icon-users"></i></a>
+
                                     </div>
                                     <div class="header_account-list header_wishlist">
                                         <a href="wishlist.html"><i class="icon-heart"></i></a>
@@ -168,7 +169,7 @@
                                                 <div class="cart_item">
                                                     <div class="cart_img">
                                                         <a href="#"><img src="/static/img/s-product/product.jpg"
-                                                                alt=""></a>
+                                                                         alt=""></a>
                                                     </div>
                                                     <div class="cart_info">
                                                         <a href="#">Primis In Faucibus</a>
@@ -181,7 +182,7 @@
                                                 <div class="cart_item">
                                                     <div class="cart_img">
                                                         <a href="#"><img src="/static/img/s-product/product2.jpg"
-                                                                alt=""></a>
+                                                                         alt=""></a>
                                                     </div>
                                                     <div class="cart_info">
                                                         <a href="#">Letraset Sheets</a>
@@ -234,15 +235,10 @@
                                 </div>
                                 <div class="categories_menu_toggle">
                                     <ul>
-                                        <li><a href="#"> Lighting</a></li>
-                                        <li><a href="#"> Accessories</a></li>
-                                        <li><a href="#">Body Parts</a></li>
-                                        <li><a href="#">Perfomance Filters</a></li>
-                                        <li><a href="#"> Engine Parts</a></li>
-                                        <li class="hidden"><a href="shop-left-sidebar.html">New Sofas</a></li>
-                                        <li class="hidden"><a href="shop-left-sidebar.html">Sleight Sofas</a></li>
-                                        <li><a href="#" id="more-btn"><i class="fa fa-plus" aria-hidden="true"></i> More
-                                                Categories</a></li>
+                                        <li th:each="category:${categories}"><a
+                                                th:href="'/shop?categoryId=' + ${category.id}"
+                                                th:text="${category.name}"></a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -252,9 +248,9 @@
                             <div class="main_menu menu_position">
                                 <nav>
                                     <ul>
-                                        <li class="mega_items"><a href="/home">home</i></a>
+                                        <li class="mega_items"><a class="active" href="/home">home</i></a>
                                         </li>
-                                        <li class="mega_items"><a class="active" href="/shop">shop</i></a>
+                                        <li class="mega_items"><a href="/shop">shop</i></a>
                                         </li>
                                         <li><a href="blog.html">blog</i></a>
                                         </li>
@@ -312,6 +308,7 @@
                                 <li><a href="#account-details" data-toggle="tab" class="nav-link">Account details</a>
                                 </li>
                                 <li><a href="/login" class="nav-link">logout</a></li>
+                                <li th:if="${!user.role.toString().equals('ROLE_CUSTOMER')}"><a href="/admin/dashboard" class="nav-link">Админ панель</a></li>
                             </ul>
                         </div>
                     </div>

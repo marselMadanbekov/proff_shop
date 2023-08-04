@@ -23,11 +23,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         String redirectPage;
         if (authException instanceof BadCredentialsException) {
             // Обработка ошибки неверных учетных данных (логин/пароль)
-            redirectPage = "/error1/error?message=badCredentials"; // Направляем на страницу с URL "/error1"
+            redirectPage = "/auth/login?message=Неправильные данные"; // Направляем на страницу с URL "/error1"
         }
         else {
             // Обработка других ошибок аутентификации
-            redirectPage = "/error1/error?message=unAuthenticate"; // Направляем на общую страницу ошибки
+            redirectPage = "/auth/login"; // Направляем на общую страницу ошибки
         }
         response.sendRedirect(redirectPage);
     }

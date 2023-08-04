@@ -288,16 +288,18 @@
                     <div class="col-lg-5 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div class="d-flex flex-wrap justify-content-between">
                                     <div>
-                                        <h4 class="card-title" style="margin-top: 10px;">Администратор</h4>
+                                        <h4 class="card-title mt-1">Администратор</h4>
+                                    </div>
+                                    <div>
+                                        <h3 class="card-title mt-1" th:if="${store.admin == null}">Администратор не назначен</h3>
                                     </div>
                                 </div>
-
-                                <div class="table-responsive">
+                                <div class="table-responsive" th:if="${store.admin != null}">
                                     <table class="table table-striped">
                                         <tbody>
-                                            <tr th:if="${store.admin != null}">
+                                            <tr >
                                                 <td>
                                                     Name
                                                 </td>
@@ -327,7 +329,7 @@
                                     </table>
                                 </div>
                                 <div>
-                                    <button class="btn btn-success btn-rounded"><a th:href="@{${'/admin/superAdmin/create-admin?storeId=' + store.id}}">New admin</a></button>
+                                    <a class="btn btn-sm btn-success btn-rounded" th:href="@{${'/admin/superAdmin/create-admin?storeId=' + store.id}}">New admin</a>
                                 </div>
                             </div>
                         </div>

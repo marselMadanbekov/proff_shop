@@ -56,6 +56,11 @@ public class ProductFacade {
 
         return new PageImpl<>(productDTOList, productPage.getPageable(), productPage.getTotalElements());
     }
+    public List<ProductDTO> mapToProductDTOList(List<Product> productPage) {
+        return productPage.stream()
+                .map(this::productToProductDTO)
+                .collect(Collectors.toList());
+    }
 
     private int getDiscountByProduct(Product product) {
         Stock stock = stockService.getStockByProduct(product);

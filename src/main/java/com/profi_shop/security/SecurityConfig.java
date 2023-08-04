@@ -4,6 +4,7 @@ import com.profi_shop.model.enums.Role;
 import com.profi_shop.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebMvc
@@ -43,6 +45,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
                 .setCachePeriod(0)
+                .setCacheControl(CacheControl.noCache()).setCacheControl(CacheControl.maxAge(0, TimeUnit.MILLISECONDS));
         ;
     }
 
@@ -72,7 +75,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .exceptionHandling(httpSecurityHttpBasicConfigurer ->
                         httpSecurityHttpBasicConfigurer
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                                .accessDeniedPage("/error1/error?message=accessDenied")
+                                .accessDeniedPage("/auth/login?message=Доступ запрещён")
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

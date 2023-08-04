@@ -59,17 +59,17 @@
                         <a href="javascript:void(0)"><i class="icon-x"></i></a>
                     </div>
                     <div class="search_container">
-                        <form action="#">
+                        <form id="search-form1">
                             <div class="hover_category">
-                                <select class="select_option" name="select" id="categori2">
-                                    <option selected value="1">All Categories</option>
-                                    <option value="2">Accessories</option>
-                                    <option value="3">Accessories & More</option>
+                                <select class="select_option" name="select" id="search-category1">
+                                    <option selected value="0">All Categories</option>
+                                    <option th:each="category:${categories}" th:value="${category.id}"
+                                            th:text="${category.name}"></option>
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Search product..." type="text">
-                                <button type="submit"><i class="icon-search"></i></button>
+                                <input placeholder="Search product..." type="text" id="search-text1" th:value="${query}">
+                                <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
                     </div>
@@ -79,7 +79,7 @@
                     <div id="menu" class="text-left ">
                         <ul class="offcanvas_main_menu">
                             <li class="menu-item-has-children">
-                                <a href="proff_/shop">Shop</a>
+                                <a href="/shop">Shop</a>
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="blog.html">blog</a>
@@ -94,7 +94,7 @@
                                 <a href="contact.html"> Contact Us</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="login.html">Войти</a>
+                                <a href="/auth/login">Войти</a>
                             </li>
                         </ul>
                     </div>
@@ -123,22 +123,23 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-4">
                         <div class="logo">
-                            <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
+                            <a href="/home"><img src="/static/img/logo/proff_shop_logo.png" alt=""></a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-6 col-6">
                         <div class="header_right_info">
                             <div class="search_container">
-                                <form action="#">
+                                <form id="search-form">
                                     <div class="hover_category">
-                                        <select class="select_option" name="select" id="categori1">
-                                            <option selected value="1">All Categories</option>
-                                            <option value="2">Accessories</option>
+                                        <select class="select_option" name="select" id="search-category">
+                                            <option selected value="0">All Categories</option>
+                                            <option th:each="category:${categories}" th:value="${category.id}"
+                                                    th:text="${category.name}"></option>
                                         </select>
                                     </div>
                                     <div class="search_box">
-                                        <input placeholder="Search product..." type="text">
-                                        <button type="submit"><i class="icon-search"></i></button>
+                                        <input placeholder="Search product..." type="text" id="search-text" th:value="${query}">
+                                        <button type="submit" id="search-button"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
                             </div>
@@ -246,9 +247,9 @@
                         <div class="main_menu menu_position">
                             <nav>
                                 <ul>
-                                    <li class="mega_items"><a href="/">home</i></a>
+                                    <li class="mega_items"><a class="active" href="/home">home</i></a>
                                     </li>
-                                    <li class="mega_items"><a class="active" href="/shop">shop</i></a>
+                                    <li class="mega_items"><a href="/shop">shop</i></a>
                                     </li>
                                     <li><a href="blog.html">blog</i></a>
                                     </li>
