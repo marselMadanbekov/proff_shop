@@ -11,5 +11,6 @@ public class StockRequest {
     private Date endDate;
     private Integer discount;
     private Integer type;
+    private Boolean authenticated;
     private Map<Long, Boolean> participants;
 }

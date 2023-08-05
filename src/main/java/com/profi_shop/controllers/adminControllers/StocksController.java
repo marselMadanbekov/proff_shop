@@ -1,12 +1,13 @@
 package com.profi_shop.controllers.adminControllers;
 
+import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.Category;
-import com.profi_shop.model.Product;
 import com.profi_shop.model.Stock;
 import com.profi_shop.model.requests.StockRequest;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
 import com.profi_shop.services.StockService;
+import com.profi_shop.services.facade.ProductFacade;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -23,11 +23,14 @@ public class StocksController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
+
+    private final ProductFacade productFacade;
     private final StockService stockService;
 
-    public StocksController(CategoryService categoryService, ProductService productService, StockService stockService) {
+    public StocksController(CategoryService categoryService, ProductService productService, ProductFacade productFacade, StockService stockService) {
         this.categoryService = categoryService;
         this.productService = productService;
+        this.productFacade = productFacade;
         this.stockService = stockService;
     }
 
@@ -43,7 +46,7 @@ public class StocksController {
     public String createStock(@RequestParam("productPage") Optional<Integer> productPage,
                               @RequestParam("categoryPage") Optional<Integer> categoryPage,
                               Model model) {
-        Page<Product> products = productService.getPagedProducts(productPage.orElse(0), 10);
+        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.getPagedProducts(productPage.orElse(0), 10));
         Page<Category> categories = categoryService.getPagedCategories(categoryPage.orElse(0));
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);

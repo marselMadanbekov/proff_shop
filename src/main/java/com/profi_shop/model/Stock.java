@@ -17,6 +17,7 @@ public class Stock {
     private StockType type;
     private boolean for_authenticated;
     private int discount;
+    private boolean active;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER)

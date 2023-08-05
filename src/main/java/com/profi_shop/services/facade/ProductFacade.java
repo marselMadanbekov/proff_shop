@@ -3,8 +3,6 @@ package com.profi_shop.services.facade;
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.Stock;
-import com.profi_shop.model.Store;
-import com.profi_shop.model.StoreHouse;
 import com.profi_shop.services.ReviewService;
 import com.profi_shop.services.StockService;
 import com.profi_shop.services.StoreHouseService;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

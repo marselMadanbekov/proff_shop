@@ -16,16 +16,21 @@ function updateProductsTable(data) {
     data.forEach(function (product) {
         const isChecked = selectedProducts[product.id] ? 'checked' : ''; // Проверяем, выбран ли продукт
         const photoUrl = product.photos.length > 0 ? `/products/${product.photos[0]}` : ''; // Получаем URL первого фото, если оно существует
+        const busy = product.discount > 0;
+        console.log(product.discount)
         const row = `
     <tr>
+      <td class="justify-content-center">
+        <input style="width: 10px" type="checkbox" data-product-id="${product.id}" onclick="handleProductSelection(this)" ${isChecked}>
+      </td>
+      <td class="justify-content-center">
+        <input style="width: 10px" type="checkbox" ${product.discount > 0 ? 'checked' : ''} disabled>
+      </td>
       <td>
         ${photoUrl ? `<img src="${photoUrl}">` : ''}
       </td>
       <td>${product.name}</td>
-      <td>${product.price}</td>
-      <td>
-        <input type="checkbox" data-product-id="${product.id}" onclick="handleProductSelection(this)" ${isChecked}>
-      </td>
+      <td>${product.oldPrice}</td>
     </tr>
   `;
         tableBody.append(row); // Добавляем сгенерированную строку в tbody
@@ -216,12 +221,14 @@ function createPromotion() {
     const endDate = $('#endDate').val(); // Значение конечной даты из элемента с id "end-date"
     const discount = $('#discount').val(); // Значение суммы скидки из элемента с id "discount-amount"
     const type = $('#selectType').val()
+    const authenticated = $('#authenticatedFlag').prop('checked');
     // Создание объекта данных для отправки на сервер
     const data = {
         startDate: startDate,
         endDate: endDate,
         discount: discount,
         type: type,
+        authenticated: authenticated,
         participants: type === 1 ? selectedCategory : selectedProducts,
         participants: type === '1' ? selectedCategory : selectedProducts,
     };
@@ -239,7 +246,7 @@ function createPromotion() {
         },
         error: function (xhr, status, error) {
             // Ошибка при создании акции
-            console.error('Ошибка при создании акции:', error);
+            console.error('Ошибка при создании акции:' + error);
         }
     });
 }

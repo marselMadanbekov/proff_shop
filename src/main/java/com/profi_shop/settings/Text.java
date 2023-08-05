@@ -54,6 +54,7 @@ public class Text {
         data.put("ERROR_CONSUMPTION_NOT_FOUND","Расход не найден");
         data.put("ERROR_STOCK_NOT_FOUND","Склад не найден");
         data.put("ERROR_SHIPMENT_NOT_FOUND","Доставка не найдена");
+        data.put("ERROR_COUPON_TEMPLATE_NOT_FOUND","Шаблон купона не найден");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 

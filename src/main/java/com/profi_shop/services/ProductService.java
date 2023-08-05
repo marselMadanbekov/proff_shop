@@ -60,7 +60,7 @@ public class ProductService {
     public Page<Product> productsFilteredPage(int page, Long categoryId, int size, String query, int minPrice, int maxPrice, int sort){
         Pageable pageable = null;
         if(sort != 0){
-            if(sort == 1)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.ASC,"create_date"));
+            if(sort == 1)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"create_date"));
             else if(sort == 2)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.ASC,"price"));
             else if(sort == 3)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"price"));
             else   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"name"));

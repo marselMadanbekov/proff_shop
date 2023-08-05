@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Templates {
 
+    public static final String COUPON_PREFIX = "PROFFSHOP-";
     public static final String numberBody = "nnn nnn nnn";
     public static List<String> numberPrefixes = new ArrayList<>();
     public static final String timeTemplate = "HH:MM";

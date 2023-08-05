@@ -11,8 +11,11 @@ import com.profi_shop.repositories.StockRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,6 +36,7 @@ public class StockService {
         stock.setStartDate(request.getStartDate());
         stock.setEndDate(request.getEndDate());
         stock.setDiscount(request.getDiscount());
+        stock.setFor_authenticated(request.getAuthenticated());
         stock.setType(request.getType() == 1 ? StockType.CATEGORY : StockType.SELECT);
         if(request.getType() == 1){
             for(Long categoryId : request.getParticipants().keySet()){
@@ -47,7 +51,28 @@ public class StockService {
                 stock.addProduct(product);
             }
         }
+
+        boolean isActive = request.getStartDate().before(Date.valueOf(LocalDate.now())) && request.getEndDate().after(Date.valueOf(LocalDate.now()));
+        stock.setActive(isActive);
         stockRepository.save(stock);
+    }
+
+
+    @Scheduled(fixedDelay = 86400000)
+    public void updateStockStatus(){
+        List<Stock> toDisActivate = stockRepository.findDisActiveStocks(LocalDate.now());
+        for(Stock stock : toDisActivate){
+            stock.setActive(false);
+            stockRepository.save(stock);
+        }
+        List<Stock> toActivate = stockRepository.findToActiveStocks(LocalDate.now());
+        for(Stock stock : toDisActivate){
+            stock.setActive(true);
+            stockRepository.save(stock);
+        }
+    }
+    public List<Stock> getActiveStocks() {
+        return stockRepository.findActiveStocks(LocalDate.now());
     }
 
     public Stock getStockByProduct(Product product){

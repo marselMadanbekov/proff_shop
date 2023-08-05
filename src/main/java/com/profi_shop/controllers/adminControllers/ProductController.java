@@ -156,7 +156,7 @@ public class ProductController {
                                                   @RequestParam(value = "sort", required = false) Optional<Integer> sort) {
         try {
 
-            Page<Product> products = productService.productsFilteredPage(page.orElse(0), 0L, size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0));
+            Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), 0L, size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
             return new ResponseEntity<>(products, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);

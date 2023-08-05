@@ -162,7 +162,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
-                        <i class="ti-palette menu-icon"></i>
+                        <i class="ti-shopping-cart-full menu-icon"></i>
                         <span class="menu-title">Products</span>
                     </a>
                 </li>
@@ -196,6 +196,12 @@
                         <span class="menu-title">Shipments</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/coupons">
+                        <i class="ti-medall menu-icon"></i>
+                        <span class="menu-title">Coupons</span>
+                    </a>
+                </li>
             </ul>
         </nav>
 
@@ -204,11 +210,19 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">Создать новую акцию</h4>
+                            <div>
+                                <h4 class="font-weight-bold mb-0">Создать новую акцию</h4>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" id="authenticatedFlag">
+                                        Только для зарегистрированных
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <di>
+                        <div>
                             <button class="btn btn-primary btn-rounded" onclick="createPromotion()">Сохранить</button>
-                        </di>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -354,6 +368,8 @@
                                 <table class="table table-hover" id="productTable">
                                     <thead>
                                     <tr>
+                                        <th><i style="width: 10px" class="ti-check"></i></th>
+                                        <th><i style="width: 10px" class="ti-na"></i></th>
                                         <th>Фото</th>
                                         <th>Продукт</th>
                                         <th>Стоимость</th>
@@ -370,7 +386,14 @@
                                             onclick="showSelectedProductInfo(this.getAttribute('data-product-id'))"
                                         ></td>
                                         <td>
-                                            <span th:text="${product.price}"></span>
+                                            <span th:text="${product.oldPrice}"></span>
+                                        </td>
+                                        <td>
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" th:checked="${product.discount > 0}" disabled>
+                                                </label>
+                                            </div>
                                         </td>
                                         <td>
                                             <input type="checkbox"
