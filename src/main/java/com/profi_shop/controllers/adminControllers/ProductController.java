@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -57,23 +58,23 @@ public class ProductController {
 
     @GetMapping("/products")
     public String products(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
-                           @RequestParam(value = "size",required = false) Optional<Integer> size,
-                           @RequestParam(value = "minPrice",required = false) Optional<Integer> minPrice,
-                           @RequestParam(value = "maxPrice",required = false) Optional<Integer> maxPrice,
+                           @RequestParam(value = "size", required = false) Optional<Integer> size,
+                           @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
+                           @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
                            @RequestParam(value = "query", required = false) Optional<String> query,
                            @RequestParam(value = "page", required = false) Optional<Integer> page,
                            @RequestParam(value = "sort", required = false) Optional<Integer> sort,
                            Model model) {
         List<Store> stores = storeService.getAllStores();
         List<Category> categories = categoryService.getAllCategories();
-        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L),size.orElse(0),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
+        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L), size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
 
 
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
         model.addAttribute("stores", stores);
 
-        model.addAttribute("sortType",sort.orElse(0));
+        model.addAttribute("sortType", sort.orElse(0));
         model.addAttribute("minPrice", minPrice.orElse(0));
         model.addAttribute("maxPrice", maxPrice.orElse(0));
         model.addAttribute("selectedCategory", categoryId.orElse(0L));
@@ -101,7 +102,7 @@ public class ProductController {
                            @RequestParam("productId") Long productId) {
         try {
             Product product = productService.addPhotoToProductById(productId, photo);
-            return "redirect:/admin/productDetails?productId="+product.getId();
+            return "redirect:/admin/productDetails?productId=" + product.getId();
         } catch (Exception e) {
             return e.getMessage();
         }
@@ -109,11 +110,11 @@ public class ProductController {
 
     @GetMapping("/deletePhoto")
     public String deletePhoto(@RequestParam("photo") String photo,
-                              @RequestParam("productId") Long productId){
+                              @RequestParam("productId") Long productId) {
         try {
-            productService.deletePhotoByProductId(photo,productId);
-            return "redirect:/productDetails?productId="+productId;
-        }catch (Exception e){
+            productService.deletePhotoByProductId(photo, productId);
+            return "redirect:/productDetails?productId=" + productId;
+        } catch (Exception e) {
             return e.getMessage();
         }
 
@@ -133,10 +134,10 @@ public class ProductController {
         return "admin/product/createProduct";
     }
 
-    @PostMapping("/products/search")
-    public ResponseEntity<Page<Product>> searchProduct(@RequestParam(value = "page",required = false) Optional<Integer> page,
-                                                       @RequestBody String request) {
-        Page<Product> products = productService.search(request,page.orElse(0));
+    @GetMapping("/products/search")
+    public ResponseEntity<Page<Product>> searchProduct(@RequestParam(value = "page", required = false) Optional<Integer> page,
+                                                       @RequestParam("query") String query) {
+        Page<Product> products = productService.search(query, page.orElse(0));
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -144,5 +145,21 @@ public class ProductController {
     public ResponseEntity<Page<Product>> productPage(@RequestParam("page") Integer page) {
         Page<Product> products = productService.getPagedProducts(page, 10);
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Object> filterProducts(@RequestParam(value = "size", required = false) Optional<Integer> size,
+                                                  @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
+                                                  @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
+                                                  @RequestParam(value = "query", required = false) Optional<String> query,
+                                                  @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                                  @RequestParam(value = "sort", required = false) Optional<Integer> sort) {
+        try {
+
+            Page<Product> products = productService.productsFilteredPage(page.orElse(0), 0L, size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0));
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
+        }
     }
 }

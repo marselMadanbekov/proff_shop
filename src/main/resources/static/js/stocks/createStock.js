@@ -1,6 +1,13 @@
 const selectedProducts = {};
 const selectedCategory = {};
 
+
+let size = document.getElementById('sizeSelect').value;
+let searchQuery = document.getElementById('searchQuery').value;
+let minPrice = 0;
+let maxPrice = 0;
+let sort = document.getElementById('sortSelect').value;
+
 function updateProductsTable(data) {
     const tableBody = $('#productTable tbody'); // Выбираем tbody таблицы
     tableBody.empty(); // Очищаем содержимое tbody
@@ -8,7 +15,7 @@ function updateProductsTable(data) {
     // Генерируем HTML для новых строк таблицы на основе полученных данных
     data.forEach(function (product) {
         const isChecked = selectedProducts[product.id] ? 'checked' : ''; // Проверяем, выбран ли продукт
-        const photoUrl = product.photos.length > 0 ? `/static/uploads/${product.photos[0]}` : ''; // Получаем URL первого фото, если оно существует
+        const photoUrl = product.photos.length > 0 ? `/products/${product.photos[0]}` : ''; // Получаем URL первого фото, если оно существует
         const row = `
     <tr>
       <td>
@@ -45,39 +52,90 @@ function updateCategoriesTable(data) {
 }
 
 function updateProductsPagination(data) {
-    const pagination = $('#productPagination'); // Выбираем элемент пагинации
-
-    // Создаем HTML-код для новой пагинации
-    let paginationHtml = '';
+    const pagination = document.getElementById('productPagination');
 
     // Генерируем ссылки для каждой страницы
-    for (let i = 0; i < data.totalPages; i++) {
-        const pageLinkClass = data.number === i ? 'active' : ''; // Определяем класс активной страницы
-        paginationHtml += `<a href="#" class="page-link ${pageLinkClass}" data-page="${i}">${i + 1}</a>`;
+    let paginationHtml = '';
+
+    if (data.number > 0) {
+        paginationHtml += `<li>
+                                <a href="#" class="page-link prev-page-link" data-page="${0}">&laquo;</a>
+                           </li>`;
+    }
+
+
+    if(data.number > 1){
+        paginationHtml += `<li>
+                                <a href="#" class="page-link prev-page-link" data-page="${data.number - 1}">${data.number}</a>
+                           </li>`;
+    }
+
+    paginationHtml +=  `<li class="current">
+                                <a href="#" >${data.number + 1}</a>
+                           </li>`;
+
+    if (data.number + 1 < data.totalPages) {
+        paginationHtml += `<li>
+                                <a href="#" class="page-link next-page-link" data-page="${data.number + 1}">${data.number + 2}</a>
+                           </li>`;
+        paginationHtml += `<li>
+                                <a href="#" class="page-link next-page-link" data-page="${data.totalPages - 1}">&raquo;</a>
+                           </li>`;
     }
 
     // Добавляем ссылки в пагинацию
-    pagination.html(paginationHtml);
+    pagination.querySelector('ul').innerHTML = paginationHtml;
 }
 function updateCategoryPagination(data) {
-    const pagination = $('#categoryPagination'); // Выбираем элемент пагинации
-
-    // Создаем HTML-код для новой пагинации
-    let paginationHtml = '';
+    const pagination = document.getElementById('categoryPagination');
 
     // Генерируем ссылки для каждой страницы
-    for (let i = 0; i < data.totalPages; i++) {
-        const pageLinkClass = data.number === i ? 'active' : ''; // Определяем класс активной страницы
-        paginationHtml += `<a href="#" class="page-link ${pageLinkClass}" data-page="${i}">${i + 1}</a>`;
+    let paginationHtml = '';
+
+    if (data.number > 0) {
+        paginationHtml += `<li>
+                                <a href="#" class="page-link prev-page-link" data-page="${0}">&laquo;</a>
+                           </li>`;
+    }
+
+
+    if(data.number > 1){
+        paginationHtml += `<li>
+                                <a href="#" class="page-link prev-page-link" data-page="${data.number - 1}">${data.number}</a>
+                           </li>`;
+    }
+
+    paginationHtml +=  `<li class="current">
+                                <a href="#" >${data.number + 1}</a>
+                           </li>`;
+
+    if (data.number + 1 < data.totalPages) {
+        paginationHtml += `<li>
+                                <a href="#" class="page-link next-page-link" data-page="${data.number + 1}">${data.number + 2}</a>
+                           </li>`;
+        paginationHtml += `<li>
+                                <a href="#" class="page-link next-page-link" data-page="${data.totalPages - 1}">&raquo;</a>
+                           </li>`;
     }
 
     // Добавляем ссылки в пагинацию
-    pagination.html(paginationHtml);
+    pagination.querySelector('ul').innerHTML = paginationHtml;
 }
 
 function loadNewProducts(pageNumber) {
+    let baseURL = '/admin/filter?';
+    let queryParams = '';
+
+    queryParams += 'size=' + encodeURIComponent(size) + '&';
+    queryParams += 'page=' + encodeURIComponent(pageNumber);
+    queryParams += '&minPrice=' + encodeURIComponent(minPrice);
+    queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
+    queryParams += '&sort=' + encodeURIComponent(sort);
+    if (searchQuery !== null)
+        queryParams += '&query=' + encodeURIComponent(searchQuery);
+
     $.ajax({
-        url: `/admin/productsByPage?page=${pageNumber}`,
+        url: baseURL + queryParams,
         method: "GET",
         dataType: "json",
         success: function (data) {
@@ -137,6 +195,16 @@ $(document).on("click", "#categoryPagination a", function (e) {
     const pageNumber = $(this).attr("data-page");
     loadNewCategories(pageNumber);
 });
+$(document).on("click", "#filter", function (e) {
+    e.preventDefault();
+
+    size = document.getElementById('sizeSelect').value;
+    searchQuery = document.getElementById('searchQuery').value;
+    minPrice = document.getElementById('minPrice').value;
+    maxPrice = document.getElementById('maxPrice').value;
+    sort = document.getElementById('sortSelect').value;
+    loadNewProducts(0);
+});
 
 loadNewProducts(0);
 loadNewCategories(0);
@@ -180,17 +248,16 @@ function searchProducts() {
     // Получение значения поискового запроса
     const searchQuery = $('#navbar-search-input').val();
 
-    // Создание объекта данных для отправки на сервер
-
     // Отправка запроса на сервер
     $.ajax({
-        url: '/admin/products/search', // URL вашего серверного маршрута для выполнения поиска продуктов
-        method: 'POST',
+        url: '/admin/products/search?query=' + searchQuery, // URL вашего серверного маршрута для выполнения поиска продуктов
+        method: 'GET',
         contentType: 'application/json',
-        data: searchQuery,
+        dataType: "json",
         success: function (response) {
             // Обновление таблицы с продуктами
-            updateProductsTable(response);
+            updateProductsTable(response.getContent());
+            updateProductsPagination(response);
         },
         error: function (xhr, status, error) {
             console.error('Ошибка при выполнении поиска:', error);

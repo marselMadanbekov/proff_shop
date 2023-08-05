@@ -1,15 +1,5 @@
 (function ($) {
     "use strict";
-    window.showSelectedProductInfo = function (productId, productName, productPrice, productSKU, productCategory, productDescription) {
-        // Обновить данные в таблице "Selected product"
-        $('#selectedProductId').text(productId);
-        $('#selectedProductName').text(productName);
-        $('#selectedProductPrice').text(productPrice);
-        $('#selectedProductSKU').text(productSKU);
-        $('#selectedProductCategory').text(productCategory);
-        $('#selectedProductDescription').text(productDescription);
-        // Остальные столбцы товара
-    }
 
     const filterButton = document.getElementById('filter');
     const cancelButton = document.getElementById('cancel');
