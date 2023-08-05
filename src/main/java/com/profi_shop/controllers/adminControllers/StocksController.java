@@ -32,8 +32,9 @@ public class StocksController {
     }
 
     @GetMapping("/stocks")
-    public String stocks(Model model) {
-        List<Stock> stocks = stockService.getAllStocks();
+    public String stocks(@RequestParam(value = "page",required = false) Optional<Integer> page,
+                         Model model) {
+        Page<Stock> stocks = stockService.getPagedStocks(page.orElse(0));
         model.addAttribute("stocks",stocks);
         return "admin/stock/stocksPage";
     }
@@ -43,7 +44,7 @@ public class StocksController {
                               @RequestParam("categoryPage") Optional<Integer> categoryPage,
                               Model model) {
         Page<Product> products = productService.getPagedProducts(productPage.orElse(0), 10);
-        Page<Category> categories = categoryService.getPagedCategories(categoryPage.orElse(0), 10);
+        Page<Category> categories = categoryService.getPagedCategories(categoryPage.orElse(0));
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
         return "admin/stock/createStock";

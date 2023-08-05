@@ -228,7 +228,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-7 grid-margin stretch-card">
+                <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div style="display: flex; justify-content: space-between;">
@@ -241,6 +241,9 @@
                                         <th>Название</th>
                                         <th>Город</th>
                                         <th>Адрес</th>
+                                        <th>Номер телефона</th>
+                                        <th>в кассе</th>
+                                        <th>Админ</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -251,95 +254,35 @@
                                         <td><a th:href="@{${'/admin/storeDetails?storeId=' + store.id}}"
                                                th:text="${store.town}">
                                         </a></td>
-                                        <td><a th:href="@{${'/admin/storeDetails?storeId=' + store.id}}"
-                                               th:text="${store.address}">
-                                        </a></td>
+                                        <td th:text="${store.address}"></td>
+                                        <td th:text="${store.phone_number}"></td>
+                                        <td>18000</td>
+                                        <td th:if="${store.admin != null}" th:text="${store.admin.firstname}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pagination">
-                                <a th:href="@{${'/admin/stores?page=' + (stores.number - 1)}}"
-                                   th:if="${stores.number > 0}">&laquo;</a>
-
-                                <span th:each="i : ${#numbers.sequence(0, stores.totalPages - 1)}">
-        <a th:href="@{${'/admin/stores?page=' + i}}" th:class="${stores.number == i} ? 'active' : ''"
-           th:text="${i + 1}"></a>
-    </span>
-
-                                <a th:href="@{${'/admin/stores?page=' + (stores.number + 1)}}"
-                                   th:if="${stores.number < stores.totalPages - 1}">&raquo;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-
-                            <div style="display: flex; justify-content: space-between;">
-                                <h4 class="card-title">Store name</h4>
-                                <h4 class="card-title">Town</h4>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            в кассе
-                                        </td>
-                                        <td>
-                                            18000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Остатлось товаров на
-                                        </td>
-                                        <td>
-                                            1 000 000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Магазин
-                                        </td>
-                                        <td>
-                                            Jalal-Abad
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Phone number
-                                        </td>
-                                        <td>
-                                            098431345
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <hr>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Админ</th>
-                                            <th>Номер</th>
-                                            <th>Просмотр</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>Асема</td>
-                                            <td>+996 999 999 999</td>
-                                            <td> more <i class="ti-arrow-down"></i></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="mt-3" style="display:flex; justify-content: space-between;">
-                                        <a href="/admin/storeDetails"
-                                           class="nav-link btn btn-success btn-rounded">more</a>
-                                    </div>
+                            <div class="pagination-container">
+                                <div class="pagination">
+                                    <input hidden id="page" th:value="${stores.number}">
+                                    <ul>
+                                        <li th:if="${stores.number > 0}" class="pagination-link" th:attr="page=${0}">
+                                            <a><<</a>
+                                        </li>
+                                        <li th:if="${stores.number > 0}" class="pagination-link"
+                                            th:attr="page=${stores.number - 1}"><a th:text="${stores.number}"></a>
+                                        </li>
+                                        <li class="current"><a th:text="${stores.number + 1}"></a></li>
+                                        <li th:if="${stores.number + 1 < stores.totalPages}" class="pagination-link"
+                                            th:attr="page=${stores.number + 1}"><a th:text="${stores.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${stores.number + 2 < stores.totalPages}" class="pagination-link"
+                                            th:attr="page=${stores.number + 2}"><a th:text="${stores.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${stores.number + 1< stores.totalPages}" class="pagination-link"
+                                            th:attr="page=${stores.totalPages - 1}"><a >>></a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

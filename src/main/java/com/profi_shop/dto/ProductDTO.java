@@ -11,6 +11,7 @@ import java.util.List;
 public class ProductDTO {
     private Long id;
     private String name;
+    private String sku;
 
     private List<String> photos;
     private int discount;

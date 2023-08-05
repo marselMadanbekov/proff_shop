@@ -57,10 +57,10 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Page<Product> productsFilteredPage(int page, Long categoryId, int size, String color,String query, int minPrice, int maxPrice, int sort){
+    public Page<Product> productsFilteredPage(int page, Long categoryId, int size, String query, int minPrice, int maxPrice, int sort){
         Pageable pageable = null;
         if(sort != 0){
-            if(sort == 1)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"create_date"));
+            if(sort == 1)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.ASC,"create_date"));
             else if(sort == 2)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.ASC,"price"));
             else if(sort == 3)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"price"));
             else   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"name"));
@@ -70,13 +70,12 @@ public class ProductService {
         }
         Category category = (categoryId == 0) ? null: categoryService.getCategoryById(categoryId);
         ProductSize targetSize = (size == 0) ? null : ProductSize.values()[size];
-        String targetColor = (color.equals("")) ? null : color;
         String targetQuery = (query.equals("")) ? null : query;
 
         Integer targetMinPrice = (minPrice == maxPrice) ? null: minPrice;
         Integer targetMaxPrice = (maxPrice == minPrice) ? null: maxPrice;
 
-        return productRepository.findAllByFilters(category,targetColor,targetQuery,targetSize,targetMinPrice,targetMaxPrice,pageable);
+        return productRepository.findAllByFilters(category,targetQuery,targetSize,targetMinPrice,targetMaxPrice,pageable);
     }
 
     public List<Product> getAllProducts() {

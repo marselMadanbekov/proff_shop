@@ -34,6 +34,7 @@ public class ProductFacade {
     public ProductDTO productToProductDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName(product.getName());
+        productDTO.setSku(product.getSku());
         productDTO.setPhotos(product.getPhotos());
         productDTO.setCategory(product.getCategory());
         productDTO.setColor(product.getColor());

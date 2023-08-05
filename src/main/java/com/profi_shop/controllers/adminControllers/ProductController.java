@@ -1,5 +1,6 @@
 package com.profi_shop.controllers.adminControllers;
 
+import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.requests.ProductCreateRequest;
@@ -8,7 +9,8 @@ import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
 import com.profi_shop.services.StoreHouseService;
 import com.profi_shop.services.StoreService;
-import com.profi_shop.settings.Templates;
+import com.profi_shop.services.facade.ProductFacade;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,15 +26,19 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin")
 public class ProductController {
+    @Value("${uploads_path}")
+    private String uploadDir;
     private final ProductService productService;
     private final CategoryService categoryService;
 
+    private final ProductFacade productFacade;
     private final StoreHouseService stockService;
     private final StoreService storeService;
 
-    public ProductController(ProductService productService, CategoryService categoryService, StoreHouseService stockService, StoreService storeService) {
+    public ProductController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, StoreHouseService stockService, StoreService storeService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.productFacade = productFacade;
         this.stockService = stockService;
         this.storeService = storeService;
     }
@@ -49,19 +55,30 @@ public class ProductController {
         }
     }
 
-    @CacheEvict
     @GetMapping("/products")
-    public String products(@RequestParam(value = "page", required = false) Optional<Integer> page,
+    public String products(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
+                           @RequestParam(value = "size",required = false) Optional<Integer> size,
+                           @RequestParam(value = "minPrice",required = false) Optional<Integer> minPrice,
+                           @RequestParam(value = "maxPrice",required = false) Optional<Integer> maxPrice,
+                           @RequestParam(value = "query", required = false) Optional<String> query,
+                           @RequestParam(value = "page", required = false) Optional<Integer> page,
+                           @RequestParam(value = "sort", required = false) Optional<Integer> sort,
                            Model model) {
         List<Store> stores = storeService.getAllStores();
-        Page<Product> products = productService.getPagedProducts(page.orElse(0), 8);
+        List<Category> categories = categoryService.getAllCategories();
+        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L),size.orElse(0),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
 
-        for (Product product : products) {
-            System.out.println(product.getName() + product.getPrice());
-        }
+
         model.addAttribute("products", products);
+        model.addAttribute("categories", categories);
         model.addAttribute("stores", stores);
-        model.addAttribute("uploadDir", Templates.uploadDir);
+
+        model.addAttribute("sortType",sort.orElse(0));
+        model.addAttribute("minPrice", minPrice.orElse(0));
+        model.addAttribute("maxPrice", maxPrice.orElse(0));
+        model.addAttribute("selectedCategory", categoryId.orElse(0L));
+        model.addAttribute("selectedSize", size.orElse(0));
+        model.addAttribute("query", query.orElse(""));
         return "admin/product/products";
     }
 

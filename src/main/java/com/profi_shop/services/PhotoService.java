@@ -3,6 +3,7 @@ package com.profi_shop.services;
 import com.profi_shop.settings.Templates;
 import net.coobird.thumbnailator.Thumbnails;
 import org.imgscalr.Scalr;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,7 +26,9 @@ import java.util.UUID;
 @Service
 public class PhotoService {
     // Установите путь к директории, где будут храниться фотографии
-    private static final String uploadDir = Templates.uploadDir;
+
+    @Value("${uploads_path}")
+    private String uploadDir;
 
     public String savePhoto(MultipartFile file) throws IOException {
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -32,6 +36,10 @@ public class PhotoService {
         String filename = UUID.randomUUID().toString() + "_" + originalFilename;
         Path filePath = Paths.get(uploadDir, filename);
 
+        File uploadDire = new File(uploadDir);
+        if(!uploadDire.exists()){
+            uploadDire.mkdirs();
+        }
         // Получение загруженного изображения
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
 

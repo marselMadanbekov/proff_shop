@@ -154,6 +154,7 @@ function createPromotion() {
         endDate: endDate,
         discount: discount,
         type: type,
+        participants: type === 1 ? selectedCategory : selectedProducts,
         participants: type === '1' ? selectedCategory : selectedProducts,
     };
 
@@ -166,11 +167,11 @@ function createPromotion() {
         data: JSON.stringify(data),
         success: function (response) {
             // Успешное создание акции
-            alert('Акция успешно создана:' + response);
+            console.log('Акция успешно создана:', response);
         },
         error: function (xhr, status, error) {
             // Ошибка при создании акции
-            alert('Ошибка при создании акции:' + error);
+            console.error('Ошибка при создании акции:', error);
         }
     });
 }
@@ -196,4 +197,3 @@ function searchProducts() {
         }
     });
 }
-

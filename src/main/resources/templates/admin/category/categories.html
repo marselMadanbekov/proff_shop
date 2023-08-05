@@ -251,6 +251,28 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="pagination-container" th:if="${categories != null}">
+                                <div class="pagination">
+                                    <ul>
+                                        <li th:if="${categories.number > 0}" class="pagination-link" th:attr="page=${0}">
+                                            <a th:href="'/admin/categories?page=0'"><<</a>
+                                        </li>
+                                        <li th:if="${categories.number > 0}" class="pagination-link"
+                                            th:attr="page=${categories.number - 1}"><a th:href="'/admin/categories?page=' + ${categories.number - 1}" th:text="${categories.number}"></a>
+                                        </li>
+                                        <li class="current"><a th:text="${categories.number + 1}"></a></li>
+                                        <li th:if="${categories.number + 1 < categories.totalPages}" class="pagination-link"
+                                            th:attr="page=${categories.number + 1}"><a th:href="'/admin/categories?page=' + ${categories.number + 1}" th:text="${categories.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${categories.number + 2 < categories.totalPages}" class="pagination-link"
+                                            th:attr="page=${categories.number + 2}"><a th:href="'/admin/categories?page=' + ${categories.number + 2}" th:text="${categories.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${categories.number + 1< categories.totalPages}" class="pagination-link"
+                                            th:attr="page=${categories.totalPages - 1}"><a th:href="'/admin/categories?page=' + ${categories.totalPages - 1}">>></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

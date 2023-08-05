@@ -253,6 +253,29 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="pagination-container">
+                                <div class="pagination">
+                                    <input hidden id="page" th:value="${shipments.number}">
+                                    <ul>
+                                        <li th:if="${shipments.number > 0}" class="pagination-link" th:attr="page=${0}">
+                                            <a><<</a>
+                                        </li>
+                                        <li th:if="${shipments.number > 0}" class="pagination-link"
+                                            th:attr="page=${shipments.number - 1}"><a th:text="${shipments.number}"></a>
+                                        </li>
+                                        <li class="current"><a th:text="${shipments.number + 1}"></a></li>
+                                        <li th:if="${shipments.number + 1 < shipments.totalPages}" class="pagination-link"
+                                            th:attr="page=${shipments.number + 1}"><a th:text="${shipments.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${shipments.number + 2 < shipments.totalPages}" class="pagination-link"
+                                            th:attr="page=${shipments.number + 2}"><a th:text="${shipments.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${shipments.number + 1< shipments.totalPages}" class="pagination-link"
+                                            th:attr="page=${shipments.totalPages - 1}"><a >>></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

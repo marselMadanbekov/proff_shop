@@ -9255,28 +9255,46 @@ input {
   padding-left: 8px;
 }
 
-.pagination {
-  margin-top: 10px;
-  display: inline-block;
+/* Стили для списка */
+.pagination ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
   justify-content: center;
+  align-items: center;
 }
 
+/* Стили для элементов списка */
+.pagination li {
+  margin: 0 5px;
+}
+
+/* Стили для активного элемента */
+.pagination .current a {
+  font-weight: bold;
+  color: #fff;
+  background-color: #4CAF50; /* Здесь используется зеленый цвет */
+}
+
+/* Стили для ссылок */
 .pagination a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
   text-decoration: none;
+  color: #4CAF50; /* Здесь используется зеленый цвет */
+  padding: 5px 10px;
+  border: 1px solid #4CAF50; /* Здесь используется зеленый цвет */
+  border-radius: 3px;
 }
 
-.pagination a.active {
-  background-color: #4CAF50;
-  color: white;
-  border-radius: 5px;
+/* Стили для ссылок при наведении */
+.pagination a:hover {
+  background-color: #4CAF50; /* Здесь используется зеленый цвет при наведении */
+  color: #fff; /* Текст станет белым при наведении */
 }
 
-.pagination a:hover:not(.active) {
-  background-color: #ddd;
-  border-radius: 5px;
+/* Стили для скрытого инпута */
+.pagination input[type="hidden"] {
+  display: none;
 }
 .gallery {
 
@@ -13269,6 +13287,12 @@ input[type="button"].btn-block {
 
 .breadcrumb-item.active {
   color: #6c757d;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px; /* При необходимости можно настроить отступ сверху */
 }
 
 .pagination {

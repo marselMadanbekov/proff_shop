@@ -272,7 +272,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-7 grid-margin stretch-card">
+                <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
@@ -298,37 +298,27 @@
                                     <tr>
                                         <th>Фото</th>
                                         <th>Продукт</th>
+                                        <th>Категория</th>
                                         <th>Стоимость</th>
+                                        <th>SKU</th>
+                                        <th>Скидка</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="product : ${products.getContent()}">
                                         <td>
                                             <img th:if="${not #lists.isEmpty(product.photos)}"
-                                                 th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"/>
+                                                 th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
                                         </td>
-                                        <td th:text="${product.name}"
-                                            th:data-product-id="${product.id}"
-                                            th:data-product-name="${product.name}"
-                                            th:data-product-price="${product.price}"
-                                            th:data-product-sku="${product.sku}"
-                                            th:data-product-category="${product.category != null ? product.category.name:''}"
-                                            th:data-product-description="${product.description}"
-                                            onclick="showSelectedProductInfo(
-                                                this.getAttribute('data-product-id'),
-                                                this.getAttribute('data-product-name'),
-                                                this.getAttribute('data-product-price'),
-                                                this.getAttribute('data-product-sku'),
-                                                this.getAttribute('data-product-category'),
-                                                this.getAttribute('data-product-description'))"
-                                        ></td>
-                                        <td th:class="${product.price < product.prime_cost} ? 'text-danger' : 'text-success'">
-                                            <span th:text="${product.price}"></span>
-                                            <span th:if="${product.price < product.prime_cost}"><i
-                                                    class="ti-arrow-down"></i></span>
-                                            <span th:if="${product.price > product.prime_cost}"><i
-                                                    class="ti-arrow-up"></i></span>
+                                        <td>
+                                            <a th:href="@{'/admin/productDetails?productId=' + ${product.id}}">
+                                                <span th:text="${product.name}"></span>
+                                            </a>
                                         </td>
+                                        <td th:text="${product.category.name}"></td>
+                                        <td th:text="${product.oldPrice}"></td>
+                                        <td th:text="${product.sku}"></td>
+                                        <td th:text="${product.discount}"></td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-primary receive-button"
                                                     th:data-product-id="${product.id}">
@@ -379,84 +369,97 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pagination">
-                                <a th:href="@{${'/admin/products?page=' + (products.number - 1)}}"
-                                   th:if="${products.number > 0}">&laquo;</a>
-
-                                <span th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}">
-                                <a th:href="@{${'/admin/products?page=' + i}}"
-                                   th:class="${products.number == i} ? 'active' : ''"
-                                   th:text="${i + 1}"></a></span>
-
-                                <a th:href="@{${'/admin/products?page=' + (products.number + 1)}}"
-                                   th:if="${products.number < products.totalPages - 1}">&raquo;</a>
+                            <div class="pagination-container">
+                                <div class="pagination">
+                                    <input hidden id="page" th:value="${products.number}">
+                                    <ul>
+                                        <li th:if="${products.number > 0}" class="pagination-link" th:attr="page=${0}">
+                                            <a
+                                                    href="#"><<</a>
+                                        </li>
+                                        <li th:if="${products.number > 0}" class="pagination-link"
+                                            th:attr="page=${products.number - 1}"><a href="#"
+                                                                                     th:text="${products.number}"></a>
+                                        </li>
+                                        <li class="current"><a href="#" th:text="${products.number + 1}"></a></li>
+                                        <li th:if="${products.number + 1 < products.totalPages}" class="pagination-link"
+                                            th:attr="page=${products.number + 1}"><a href="#"
+                                                                                     th:text="${products.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${products.number + 2 < products.totalPages}" class="pagination-link"
+                                            th:attr="page=${products.number + 2}"><a href="#"
+                                                                                     th:text="${products.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${products.number + 1< products.totalPages}" class="pagination-link"
+                                            th:attr="page=${products.totalPages - 1}"><a href="#">>></a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5 grid-margin stretch-card">
+            </div>
+            <div class="row">
+                <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                <div>
-                                    <h4 class="card-title" style="margin-top: 10px;" id="selectedProductName">Selected
-                                        product</h4>
-                                </div>
-                                <img style="width: 70px;height: 80px;" src="/static/images/auth/login-bg.jpg">
+                            <h4 class="card-title">Фильтры</h4>
+                            <p class="card-description">Выберите параметры товаров</p>
+                            <div class="form-group">
+                                <label for="searchQuery">Имя или штрихкод</label>
+                                <input class="form-control" id="searchQuery" type="text" th:value="${query}">
                             </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <tbody>
-                                    <tr hidden>
-                                        <td id="selectedProductId"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Price
-                                        </td>
-                                        <td id="selectedProductPrice">
-                                            $245.30
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            SKU
-                                        </td>
-                                        <td id="selectedProductSKU">
-                                            098431345
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Discount
-                                        </td>
-                                        <td>
-                                            50%
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Category
-                                        </td>
-                                        <td id="selectedProductCategory">
-                                            beauty
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Description
-                                        </td>
-                                        <td id="selectedProductDescription">
-                                            hello world
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="mt-3" style="display:flex; justify-content: right;">
-                                    <a class="nav-link btn btn-success btn-rounded" id="moreProductInfo">More</a>
+                            <div class="form-group">
+                                <label for="categorySelect">Выберите категорию</label>
+                                <select class="form-control form-control-sm" id="categorySelect">
+                                    <option value="0" th:selected="${selectedCategory == 0}">Все</option>
+                                    <option th:each="category: ${categories}"
+                                            th:value="${category.id}"
+                                            th:selected="${selectedCategory == category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sizeSelect">Выберите размер</label>
+                                <select class="form-control form-control-sm" id="sizeSelect">
+                                    <option value="0" th:selected="${selectedSize == 0}">Все</option>
+                                    <option value="1" th:selected="${selectedSize == 1}">S</option>
+                                    <option value="2" th:selected="${selectedSize == 2}">M</option>
+                                    <option value="3" th:selected="${selectedSize == 3}">L</option>
+                                    <option value="4" th:selected="${selectedSize == 4}">XL</option>
+                                    <option value="5" th:selected="${selectedSize == 5}">XXL</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Диапазон цен</label>
+                                <div class="d-flex justify-content-between" id="price">
+                                    <input id="minPrice" class="form-control form-control-sm" style="width: 40%"
+                                           type="number" min="0" th:value="${minPrice}">
+                                    <input id="maxPrice" class="form-control form-control-sm" style="width: 40%"
+                                           type="number" min="0" th:value="${maxPrice}">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="sortSelect">Выберите способ сортировки</label>
+                                <select class="form-control form-control-sm" id="sortSelect">
+                                    <option value="0" th:selected="${sortType == 0}">
+                                        None sort
+                                    </option>
+                                    <option value="1" th:selected="${sortType == 1}">
+                                        sort by newness
+                                    <option value="2" th:selected="${sortType == 2}">
+                                        Sort by price: low to high
+                                    <option value="3" th:selected="${sortType == 3}">
+                                        Sort by price: high to low
+                                    </option>
+                                    <option value="4" th:selected="${sortType == 4}">
+                                        Product Name: Z
+                                    </option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary mr-2" id="filter">Применить</button>
+                            <button class="btn btn-light" id="cancel">Сброс</button>
                         </div>
                     </div>
                 </div>

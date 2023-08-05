@@ -415,7 +415,7 @@
                             <figure>
                                 <div class="product_thumb">
                                     <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
-                                            th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"
+                                            th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                             alt=""></a>
                                     <div class="label_product" th:if="${product.discount > 0}">
                                         <span class="label_sale" th:text="'-' + ${product.discount} + '%'"></span>

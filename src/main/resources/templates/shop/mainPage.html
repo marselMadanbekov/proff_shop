@@ -416,7 +416,7 @@
                                     <figure>
                                         <div class="product_thumb">
                                             <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
-                                                    th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"
+                                                    th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                                     alt=""></a>
                                             <div class="label_product" th:if="${product.discount > 0}">
                                                 <span class="label_sale" th:text="'-' + ${product.discount} + '%'"></span>
@@ -484,14 +484,14 @@
             </div>
         </div>
         <div class="product_deals_container">
-            <div class="row">
+            <div class="row" th:if="todayDeals != null">
                 <div class="product_carousel product_column5 owl-carousel">
                     <div class="col-lg-3" th:each="product: ${todayDeals.getParticipants()}">
                         <article class="single_product">
                             <figure>
                                 <div class="product_thumb">
                                     <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
-                                            th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"
+                                            th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                             alt=""></a>
                                     <div class="label_product" th:if="${todayDeals.discount > 0}">
                                         <span class="label_sale" th:text="'-' + ${todayDeals.discount} + '%'"></span>

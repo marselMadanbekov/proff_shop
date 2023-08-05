@@ -23,14 +23,12 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query("SELECT p FROM Product p " +
             "WHERE (:category IS NULL OR p.category = :category) " +
-            "AND (:color IS NULL OR p.color = :color) " +
-            "AND (:query IS NULL OR p.name = :query) " +
+            "AND (:query IS NULL OR (p.name = :query OR p.sku = :query)) " +
             "AND (:productSize IS NULL OR p.size = :productSize) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
             "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
     Page<Product> findAllByFilters(
             Category category,
-            String color,
             String query,
             ProductSize productSize,
             Integer minPrice,

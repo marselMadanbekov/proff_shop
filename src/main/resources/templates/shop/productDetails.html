@@ -297,8 +297,8 @@
             <div class="col-lg-6 col-md-6">
                 <div class="product-details-tab">
                     <div id="img-1" class="zoomWrapper single-zoom">
-                        <a href="#" th:data-zoom-image="@{'/static/uploads/' + ${product.getPhotos().get(0)}}">
-                            <img id="zoom1" th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"
+                        <a href="#" th:data-zoom-image="@{'/products/' + ${product.getPhotos().get(0)}}">
+                            <img id="zoom1" th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                  alt="big-1">
                         </a>
                     </div>
@@ -306,9 +306,9 @@
                         <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
                             <li th:each="photo:${product.getPhotos()}">
                                 <a href="#" class="elevatezoom-gallery active" data-update=""
-                                   th:data-image="@{'/static/uploads/' + ${photo}}"
-                                   th:data-zoom-image="@{'/static/uploads/' + ${photo}}">
-                                    <img th:src="@{'/static/uploads/' + ${photo}}" alt="zo-th-1"/>
+                                   th:data-image="@{'/products/' + ${photo}}"
+                                   th:data-zoom-image="@{'/products/' + ${photo}}">
+                                    <img th:src="@{'/products/' + ${photo}}" alt="zo-th-1"/>
                                 </a>
                             </li>
                         </ul>
@@ -331,7 +331,7 @@
 
                         </div>
                         <div class="price_box">
-                            <span class="current_price" th:if="${product.discount > 0}" th:text="${product.newPrice}">£70.00</span>
+                            <span class="current_price" th:if="${product.discount > 0}" th:text="${product.newPrice}"></span>
                             <span class="current_price" th:if="${not (product.discount > 0)}"
                                   th:text="${product.oldPrice}">£70.00</span>
                             <span class="old_price" th:if="${product.discount > 0}"

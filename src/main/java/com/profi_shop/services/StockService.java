@@ -8,6 +8,9 @@ import com.profi_shop.model.enums.StockType;
 import com.profi_shop.model.requests.StockRequest;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.StockRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,5 +69,10 @@ public class StockService {
 
     private Stock getStockById(Long stockId) {
         return stockRepository.findById(stockId).orElseThrow(() -> new SearchException(SearchException.STOCK_NOT_FOUND));
+    }
+
+    public Page<Stock> getPagedStocks(int page) {
+        Pageable pageable = PageRequest.of(page,15);
+        return stockRepository.findAll(pageable);
     }
 }

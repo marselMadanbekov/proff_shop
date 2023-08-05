@@ -15,6 +15,7 @@ public class StockFacade {
     }
 
     public StockDTO stockToStockDTO(Stock stock){
+        if(stock == null)   return null;
         StockDTO stockDTO = new StockDTO();
         stockDTO.setId(stock.getId());
         stockDTO.setType(stock.getType());

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -34,14 +35,22 @@ public class CategoryController {
     }
 
     @GetMapping("/categoriesByPage")
-    public ResponseEntity<Page<Category>> getCategoriesByPage(@RequestParam("page") Integer page){
-        Page<Category> categories = categoryService.getPagedCategories(page,10);
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+    public ResponseEntity<Page<Category>> getCategoriesByPage(@RequestParam("page") Integer page) {
+        try {
+            System.out.println("hello pagination");
+            Page<Category> categories = categoryService.getPagedCategories(page);
+            return new ResponseEntity<>(categories, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
+
     @GetMapping("/categories")
-    public String categories(Model model) {
-        List<Category> categories = categoryService.getAllCategories();
-        for(Category category: categories){
+    public String categories(@RequestParam(value = "page", required = false) Optional<Integer> page,
+                             Model model) {
+
+        Page<Category> categories = categoryService.getPagedCategories(page.orElse(0));
+        for (Category category : categories) {
             System.out.println(category.getId());
             System.out.println(category.getName());
         }
@@ -50,7 +59,7 @@ public class CategoryController {
     }
 
     @PostMapping("/categories/delete/{categoryId}")
-    public String deleteCategory(@PathVariable("categoryId")Long categoryId){
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return "admin/category/categories";
     }

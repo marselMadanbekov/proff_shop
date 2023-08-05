@@ -15,6 +15,7 @@ public class Stock {
     private Date startDate;
     private Date endDate;
     private StockType type;
+    private boolean for_authenticated;
     private int discount;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();

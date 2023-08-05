@@ -456,7 +456,7 @@
                                     <img th:if="${not #lists.isEmpty(product.photos)}"
                                          th:photo="${product.getPhotos().get(0)}"
                                          th:productId="${product.id}"
-                                         th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"/>
+                                         th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
                                     <div>
                                         <button class="btn btn-sm btn-success btn-rounded" id="delete-button">Удалить
                                         </button>
@@ -465,9 +465,9 @@
                                 <div class="thumbnails">
                                     <img class="thumbnail"
                                          th:each="photo:${product.getPhotos()}"
-                                         th:data-src="@{'/static/uploads/' + ${photo}}"
+                                         th:data-src="@{'/products/' + ${photo}}"
                                          th:photo="${photo}"
-                                         th:src="@{'/static/uploads/' + ${photo}}">
+                                         th:src="@{'/products/' + ${photo}}">
                                 </div>
 
                                 <hr>

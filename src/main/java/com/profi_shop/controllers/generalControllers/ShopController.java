@@ -42,7 +42,7 @@ public class ShopController {
                            @RequestParam(value = "sort", required = false) Optional<Integer> sort,
                            Model model){
 
-        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0),categoryId.orElse(0L),size.orElse(0),color.orElse(""),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
+        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0),categoryId.orElse(0L),size.orElse(0),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
         List<Category> categories = categoryService.getAllCategories();
 
 

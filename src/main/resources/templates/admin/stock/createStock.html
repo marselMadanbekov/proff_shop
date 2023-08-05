@@ -326,7 +326,7 @@
                                     <tr th:each="product : ${products.getContent()}">
                                         <td>
                                             <img th:if="${not #lists.isEmpty(product.photos)}"
-                                                 th:src="@{'/static/uploads/' + ${product.getPhotos().get(0)}}"/>
+                                                 th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
                                         </td>
                                         <td th:text="${product.name}"
                                             th:data-product-id="${product.id}"
