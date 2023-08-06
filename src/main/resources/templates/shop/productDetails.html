@@ -68,7 +68,8 @@
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Search product..." type="text" id="search-text1" th:value="${query}">
+                                <input placeholder="Search product..." type="text" id="search-text1"
+                                       th:value="${query}">
                                 <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
@@ -138,7 +139,8 @@
                                         </select>
                                     </div>
                                     <div class="search_box">
-                                        <input placeholder="Search product..." type="text" id="search-text" th:value="${query}">
+                                        <input placeholder="Search product..." type="text" id="search-text"
+                                               th:value="${query}">
                                         <button type="submit" id="search-button"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
@@ -331,7 +333,8 @@
 
                         </div>
                         <div class="price_box">
-                            <span class="current_price" th:if="${product.discount > 0}" th:text="${product.newPrice}"></span>
+                            <span class="current_price" th:if="${product.discount > 0}"
+                                  th:text="${product.newPrice}"></span>
                             <span class="current_price" th:if="${not (product.discount > 0)}"
                                   th:text="${product.oldPrice}">£70.00</span>
                             <span class="old_price" th:if="${product.discount > 0}"
@@ -339,11 +342,7 @@
 
                         </div>
                         <div class="product_desc">
-                            <p th:text="${product.description}">eget velit. Donec ac tempus ante. Fusce ultricies massa
-                                massa. Fusce aliquam, purus
-                                eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non
-                                neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et
-                                placerat vestibulum, metus nisi posuere nisl, in </p>
+                            <p th:text="${product.description}"></p>
                         </div>
                         <div class="product_variant color">
                             <h3>Available Options</h3>
@@ -377,7 +376,9 @@
                         </div>
                     </form>
                     <div>
-                        <a class="nav-link btn btn-sm btn-dark" th:href="@{'/shop?categoryId=' + ${product.category == null ? 0 : product.category.id} + '&query=' + ${product.name}}">Другие варианты</a>
+                        <a class="nav-link btn btn-sm btn-dark"
+                           th:href="@{'/shop?categoryId=' + ${product.category == null ? 0 : product.category.id} + '&query=' + ${product.name}}">Другие
+                            варианты</a>
                     </div>
                 </div>
             </div>
@@ -479,15 +480,14 @@
                                             <span>roadthemes</span>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="comment_title">
-                                    <h2>Add a review </h2>
-                                    <p>Your email address will not be published. Required fields are marked </p>
+                                    <h2>Add a review</h2>
+                                    <p>Your email address will not be published. Required fields are marked</p>
                                 </div>
                                 <div class="product_ratting mb-10">
                                     <h3>Your rating</h3>
-                                    <ul>
+                                    <ul class="rating_stars">
                                         <li><a href="#"><i class="icon-star"></i></a></li>
                                         <li><a href="#"><i class="icon-star"></i></a></li>
                                         <li><a href="#"><i class="icon-star"></i></a></li>
@@ -496,23 +496,16 @@
                                     </ul>
                                 </div>
                                 <div class="product_review_form">
-                                    <form action="#">
+                                    <form id="review_form" action="#">
                                         <div class="row">
                                             <div class="col-12">
-                                                <label for="review_comment">Your review </label>
+                                                <label for="review_comment">Your review</label>
                                                 <textarea name="comment" id="review_comment"></textarea>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <label for="author">Name</label>
-                                                <input id="author" type="text">
-
-                                            </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <label for="email">Email </label>
-                                                <input id="email" type="text">
-                                            </div>
+                                            <input th:value="${product.id}" hidden id="productId">
                                         </div>
-                                        <button type="submit">Submit</button>
+                                        <button type="submit" th:if="${authenticated}">Submit</button>
+                                        <label th:if="${!authenticated}">Only registered</label>
                                     </form>
                                 </div>
                             </div>
@@ -1366,6 +1359,7 @@
 <script src="/static/js/slinky.menu.js"></script>
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
+<script src="/static/js/products/productReview.js"></script>
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>

@@ -52,9 +52,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/products/**")
-                .addResourceLocations("file://" + uploadDir + "/")
-                .setCachePeriod(0)
-                .setCacheControl(CacheControl.noCache()).setCacheControl(CacheControl.maxAge(0, TimeUnit.MILLISECONDS));
+                .addResourceLocations("file://" + uploadDir + "/");
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }

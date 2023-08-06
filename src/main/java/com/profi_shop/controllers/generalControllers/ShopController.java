@@ -2,17 +2,23 @@ package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.Category;
+import com.profi_shop.model.requests.ReviewRequest;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
+import com.profi_shop.services.ReviewService;
 import com.profi_shop.services.StockService;
 import com.profi_shop.services.facade.ProductFacade;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +28,14 @@ public class ShopController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final ProductFacade productFacade;
+    private final ReviewService reviewService;
     private final StockService stockService;
 
-    public ShopController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, StockService stockService) {
+    public ShopController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, ReviewService reviewService, StockService stockService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.productFacade = productFacade;
+        this.reviewService = reviewService;
         this.stockService = stockService;
     }
 
@@ -82,11 +90,24 @@ public class ShopController {
 
     @GetMapping("/productDetails")
     public String productDetails(@RequestParam("productId") Long productId,
+                                 Principal principal,
                                  Model model){
         ProductDTO product = productFacade.productToProductDTO(productService.getProductById(productId));
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories",categories);
+        model.addAttribute("authenticated", principal != null);
         model.addAttribute("product", product);
         return "shop/productDetails";
+    }
+
+    @PostMapping("/productReview")
+    public ResponseEntity<String> productReview(ReviewRequest request,
+                                                Principal principal){
+        try{
+            reviewService.createReview(request, principal);
+            return new ResponseEntity<>("Отзыв сохранен", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

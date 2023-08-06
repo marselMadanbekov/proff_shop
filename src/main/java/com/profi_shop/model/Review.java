@@ -12,6 +12,6 @@ public class Review {
     @ManyToOne
     private Product product;
     private int mark;
-    private String userEmail;
+    private String username;
     private String text;
 }

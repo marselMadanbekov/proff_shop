@@ -8,6 +8,8 @@ import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.ReviewRepository;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
@@ -18,12 +20,12 @@ public class ReviewService {
         this.productRepository = productRepository;
     }
 
-    public void createReview(ReviewRequest request){
+    public void createReview(ReviewRequest request, Principal principal){
         Review review = new Review();
         Product product = getProductById(request.getProductId());
-        review.setText(request.getText());
-        review.setUserEmail(request.getUserEmail());
-        review.setMark(request.getMark());
+        review.setText(request.getReview());
+        review.setUsername(principal.getName());
+        review.setMark(request.getRating());
         review.setProduct(product);
         reviewRepository.save(review);
     }

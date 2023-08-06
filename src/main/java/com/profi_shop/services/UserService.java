@@ -4,11 +4,15 @@ import com.profi_shop.auth.requests.AdminCreateRequest;
 import com.profi_shop.auth.requests.SignUpRequest;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
+import com.profi_shop.model.Cart;
 import com.profi_shop.model.Store;
 import com.profi_shop.model.User;
+import com.profi_shop.model.Wishlist;
 import com.profi_shop.model.enums.Role;
+import com.profi_shop.repositories.CartRepository;
 import com.profi_shop.repositories.StoreRepository;
 import com.profi_shop.repositories.UserRepository;
+import com.profi_shop.repositories.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,13 +25,17 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final WishlistRepository wishlistRepository;
+    private final CartRepository cartRepository;
 
     private final StoreRepository storeRepository;
 
     private final PasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    public UserService(UserRepository userRepository, StoreRepository storeRepository, PasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.wishlistRepository = wishlistRepository;
+        this.cartRepository = cartRepository;
         this.storeRepository = storeRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -43,6 +51,14 @@ public class UserService {
         user.setActive(true);
 
         userRepository.save(user);
+
+        Wishlist wishlist = new Wishlist();
+        wishlist.setCustomer(user);
+        wishlistRepository.save(wishlist);
+
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cartRepository.save(cart);
         return user;
     }
 
@@ -61,6 +77,14 @@ public class UserService {
             userRepository.save(user);
             store.setAdmin(user);
             storeRepository.save(store);
+
+            Wishlist wishlist = new Wishlist();
+            wishlist.setCustomer(user);
+            wishlistRepository.save(wishlist);
+
+            Cart cart = new Cart();
+            cart.setUser(user);
+            cartRepository.save(cart);
         }catch (Exception e){
             throw new ExistException(ExistException.USER_EXISTS);
         }
