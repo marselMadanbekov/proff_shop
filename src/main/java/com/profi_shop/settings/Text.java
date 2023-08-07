@@ -42,6 +42,7 @@ public class Text {
         data.put("OCTOBER","Октябрь");
         data.put("NOVEMBER","Ноябрь");
         data.put("DECEMBER","Декабрь");
+        data.put("MESSAGE_PASSWORD_RESET","Ваш пароль на сайте SITE_NAME, был обновлен на - NEW_PASSWORD. Вы можете изменить пароль в личном кабинете.");
 
         data.put("ERROR_TITLE_EMPTY","Вы не ввели название!");
         data.put("ERROR_DATE_FORMAT","Неправильный формат даты!");

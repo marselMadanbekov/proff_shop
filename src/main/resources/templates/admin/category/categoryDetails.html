@@ -223,7 +223,7 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">Categories</h4>
+                            <h4 class="font-weight-bold mb-0" th:text="'Категория : ' + ${category.name}"></h4>
                         </div>
                     </div>
                 </div>
@@ -232,9 +232,9 @@
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <p class="card-title">Все категории</p>
-                            <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
-                            <div class="table-responsive">
+                            <p class="card-title">Все подкатегории</p>
+                            <small th:if="${category.subCategories.size() == 0}">Подкатегорий нет</small>
+                            <div class="table-responsive" th:if="${category.subCategories.size() > 0}">
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
@@ -243,12 +243,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="category, index : ${categories}">
-                                        <td th:text="${index.index + 1}"></td>
-                                        <td><a th:text="${category.name}" th:href="@{'/admin/categoryDetails?categoryId=' + ${category.id}}"></a></td>
+                                    <tr th:each="cat : ${category.subCategories}">
+                                        <td th:text="${cat.name}"></td>
                                         <td>
                                             <button type="button" class="btn btn-danger btn-sm"
-                                                    th:data-category-id="${category.id}"
+                                                    th:data-category-id="${cat.id}"
                                                     onclick="deleteCategory(this.getAttribute('data-category-id'))">
                                                 Удалить
                                             </button>
@@ -257,38 +256,17 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pagination-container" th:if="${categories != null}">
-                                <div class="pagination">
-                                    <ul>
-                                        <li th:if="${categories.number > 0}" class="pagination-link" th:attr="page=${0}">
-                                            <a th:href="'/admin/categories?page=0'"><<</a>
-                                        </li>
-                                        <li th:if="${categories.number > 0}" class="pagination-link"
-                                            th:attr="page=${categories.number - 1}"><a th:href="'/admin/categories?page=' + ${categories.number - 1}" th:text="${categories.number}"></a>
-                                        </li>
-                                        <li class="current"><a th:text="${categories.number + 1}"></a></li>
-                                        <li th:if="${categories.number + 1 < categories.totalPages}" class="pagination-link"
-                                            th:attr="page=${categories.number + 1}"><a th:href="'/admin/categories?page=' + ${categories.number + 1}" th:text="${categories.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${categories.number + 2 < categories.totalPages}" class="pagination-link"
-                                            th:attr="page=${categories.number + 2}"><a th:href="'/admin/categories?page=' + ${categories.number + 2}" th:text="${categories.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${categories.number + 1< categories.totalPages}" class="pagination-link"
-                                            th:attr="page=${categories.totalPages - 1}"><a th:href="'/admin/categories?page=' + ${categories.totalPages - 1}">>></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 grid-margin">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Создать новую категорию</h4>
+                            <h4 class="card-title">Создать подкатегорию</h4>
                             <form class="form-inline">
                                 <label class="sr-only" for="inlineFormInputName2">Name</label>
-                                <input type="text" name="name" class="form-control mb-2 mr-sm-2"
+                                <input hidden name="superCategory" th:value="${category.id}">
+                                <input type="text" name="subcategoryName" class="form-control mb-2 mr-sm-2"
                                        id="inlineFormInputName2"
                                        placeholder="Category" required>
                                 <button type="submit" class="btn btn-primary mb-2">Создать</button>
@@ -315,7 +293,7 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/categories/categories.js"></script>
+<script src="/static/js/categories/categoryDetails.js"></script>
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->

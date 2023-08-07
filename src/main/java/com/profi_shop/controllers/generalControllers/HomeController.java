@@ -40,7 +40,7 @@ public class HomeController {
     @GetMapping("")
     public String mainPage(Model model){
         Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.getPagedProducts(0, 10));
-        List<Category> categories = categoryService.getAllCategories();
+        List<Category> categories = categoryService.getMainCategories();
         StockDTO todayDeals = stockFacade.stockToStockDTO(stockService.getTodayDeals());
 
         model.addAttribute("categories",categories);

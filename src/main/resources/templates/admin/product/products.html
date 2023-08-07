@@ -307,7 +307,7 @@
                                                 <span th:text="${product.name}"></span>
                                             </a>
                                         </td>
-                                        <td th:text="${product.category.name}"></td>
+                                        <td th:text="${product.category == null ? '': product.category.name}"></td>
                                         <td th:text="${product.oldPrice}"></td>
                                         <td th:text="${product.sku}"></td>
                                         <td th:text="${product.discount}"></td>

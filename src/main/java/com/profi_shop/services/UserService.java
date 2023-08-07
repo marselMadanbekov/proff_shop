@@ -13,6 +13,7 @@ import com.profi_shop.repositories.CartRepository;
 import com.profi_shop.repositories.StoreRepository;
 import com.profi_shop.repositories.UserRepository;
 import com.profi_shop.repositories.WishlistRepository;
+import com.profi_shop.services.email.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -29,14 +32,15 @@ public class UserService {
     private final CartRepository cartRepository;
 
     private final StoreRepository storeRepository;
-
+    private final EmailServiceImpl emailService;
     private final PasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, PasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.wishlistRepository = wishlistRepository;
         this.cartRepository = cartRepository;
         this.storeRepository = storeRepository;
+        this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -113,5 +117,31 @@ public class UserService {
             return userRepository.findUserByFirstname(search,pageable);
         }
         return userRepository.findAll(pageable);
+    }
+
+    public void resetPassword(String username) {
+        User user = getUserByUsername(username);
+        String password = generatePassword(user);
+
+        emailService.sendPasswordResetMail(user.getEmail(), password);
+
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    private String generatePassword(User user){
+        int length = 10; // Длина нового пароля
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()"; // Допустимые символы для пароля
+        StringBuilder password = new StringBuilder();
+
+        Random random = new Random();
+
+        // Генерируем случайные символы для создания пароля
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            password.append(characters.charAt(index));
+        }
+
+        return password.toString();
     }
 }

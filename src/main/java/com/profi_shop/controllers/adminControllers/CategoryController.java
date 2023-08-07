@@ -33,6 +33,24 @@ public class CategoryController {
             return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
         }
     }
+    @PostMapping("/create-subcategory")
+    public String createSubCategory(@RequestParam("superCategory") Long superCategory,
+                                    @RequestParam("subcategoryName") String subcategoryName) {
+        try {
+            categoryService.createSubcategory(superCategory,subcategoryName);
+            return "redirect:/admin/categories";
+        } catch (Exception e) {
+            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
+        }
+    }
+
+    @GetMapping("/categoryDetails")
+    public String categoryDetails(@RequestParam("categoryId") Long categoryId,
+                                  Model model){
+        Category category = categoryService.getCategoryById(categoryId);
+        model.addAttribute("category", category);
+        return "admin/category/categoryDetails";
+    }
 
     @GetMapping("/categoriesByPage")
     public ResponseEntity<Page<Category>> getCategoriesByPage(@RequestParam("page") Integer page) {
@@ -51,16 +69,24 @@ public class CategoryController {
 
         Page<Category> categories = categoryService.getPagedCategories(page.orElse(0));
         for (Category category : categories) {
-            System.out.println(category.getId());
             System.out.println(category.getName());
+            for (Category sub : category.getSubCategories()){
+                System.out.println(" -> " + sub.getName());
+            }
         }
         model.addAttribute("categories", categories);
         return "admin/category/categories";
     }
 
-    @PostMapping("/categories/delete/{categoryId}")
-    public String deleteCategory(@PathVariable("categoryId") Long categoryId) {
-        categoryService.deleteCategory(categoryId);
-        return "admin/category/categories";
+    @PostMapping("/categories/delete")
+    public String deleteCategory(@RequestParam("categoryId") Long categoryId) {
+        try {
+            System.out.println("deleting category " + categoryId);
+            categoryService.deleteCategory(categoryId);
+            return "admin/category/categories";
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return "admin/category/categories";
+        }
     }
 }

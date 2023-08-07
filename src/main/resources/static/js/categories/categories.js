@@ -4,9 +4,10 @@
     // Обработчик события для удаления категории
     window.deleteCategory = function (categoryId) {
         if (confirm('Вы уверены, что хотите удалить категорию?')) {
+            // console.log('deleting category')
             // Выполнение AJAX-запроса на удаление категории с использованием jQuery
             $.ajax({
-                url: '/admin/categories/delete/' + categoryId,
+                url: '/admin/categories/delete?categoryId=' + categoryId,
                 type: 'POST',
                 success: function (response) {
                     // Обработка успешного удаления
@@ -17,7 +18,6 @@
                 error: function (xhr, status, error) {
                     // Обработка ошибки удаления
                     alert('Ошибка при удалении категории');
-
                 }
             });
         }

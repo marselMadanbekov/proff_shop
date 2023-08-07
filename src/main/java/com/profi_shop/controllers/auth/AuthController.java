@@ -10,8 +10,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,6 +54,11 @@ public class AuthController {
         return "shop/register";
     }
 
+    @GetMapping("/passwordReset")
+    public String passwordReset(){
+        return "shop/passwordReset";
+    }
+
 
     @PostMapping("/signIn")
     public String authenticateUser(@Valid LoginRequest loginRequest,
@@ -73,9 +79,9 @@ public class AuthController {
             ));
         } catch (Exception e) {
             if (e instanceof DisabledException) {
-                return "shop/error";
+                return "redirect:/shop/error?message=Ваш аккаунт заблокирован!";
             }
-            return "shop/error";
+            return "redirect:/shop/error?message=Неправильные учетные данные";
         }
 
         User user = userService.getUserByUsername(loginRequest.getUsername());
@@ -90,7 +96,6 @@ public class AuthController {
         if(user.getRole() != Role.ROLE_CUSTOMER){
             return "redirect:/admin/dashboard";
         }
-        System.out.println("cookie set");
         return "redirect:/account";
     }
 
@@ -104,4 +109,16 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword(@RequestParam String username) {
+        try {
+            System.out.println("request to reset password of user " + username);
+            userService.resetPassword(username);
+            System.out.println("password is reset");
+            return new ResponseEntity<>("Success",HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>("ERROR",HttpStatus.BAD_REQUEST);
+        }
+    }
 }

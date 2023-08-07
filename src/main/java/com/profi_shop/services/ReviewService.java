@@ -6,6 +6,9 @@ import com.profi_shop.model.Review;
 import com.profi_shop.model.requests.ReviewRequest;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.ReviewRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -20,14 +23,26 @@ public class ReviewService {
         this.productRepository = productRepository;
     }
 
-    public void createReview(ReviewRequest request, Principal principal){
-        Review review = new Review();
-        Product product = getProductById(request.getProductId());
-        review.setText(request.getReview());
-        review.setUsername(principal.getName());
-        review.setMark(request.getRating());
-        review.setProduct(product);
-        reviewRepository.save(review);
+    public void createReview(ReviewRequest request, Principal principal) {
+        System.out.println(request.getReview() + " review");
+        System.out.println(request.getRating() + " rate");
+        System.out.println(request.getProductId() + "productId");
+        try {
+            Review review = new Review();
+            Product product = getProductById(request.getProductId());
+            review.setText(request.getReview());
+            review.setUsername(principal.getName());
+            review.setMark(request.getRating());
+            review.setProduct(product);
+            reviewRepository.save(review);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Page<Review> lastReviewsByProductId(Long productId){
+        Pageable pageable = PageRequest.of(0,9);
+        return reviewRepository.getReviewByProduct(getProductById(productId),pageable);
     }
 
     public int getAverageReviewByProduct(Product product){

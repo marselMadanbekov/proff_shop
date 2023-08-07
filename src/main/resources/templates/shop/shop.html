@@ -304,16 +304,19 @@
                     <div class="widget_inner">
                         <div class="widget_list widget_categories">
                             <h3>Categories</h3>
+                            <small th:text="${selectedCategoryId}"></small>
+                            <input hidden id="currentCategory" th:value="${selectedCategoryId}" >
                             <ul>
-                                <input hidden id="currentCategory" th:value="${selectedCategoryId}">
-                                <li class="category-item" th:attr="categoryId=${0}"
-                                    th:classappend="${selectedCategoryId == 0} ? 'current':''"
-                                ><a>All</a></li>
-                                <li th:each="category: ${categories}"
-                                    class="category-item"
-                                    th:classappend="${category.id == selectedCategoryId} ? 'current' : ''"
-                                    th:attr="categoryId=${category.id}"
-                                ><a th:text="${category.name}"></a></li>
+                                <a href="javascript:void(0)" class="category-item" th:attr="categoryId=${0}">Все</a>
+                                <li th:class="'widget_sub_categories sub_categories' + ${index.index+1}" th:each="category,index : ${categories}">
+                                    <a href="javascript:void(0)" th:text="${category.name}" class="main-category" th:if="${category.subCategories.size() > 0}"></a>
+                                    <ul th:class="'widget_dropdown_categories dropdown_categories' + ${index.index+1}" th:if="${category.subCategories}">
+                                        <li th:each="subCategory : ${category.subCategories}">
+                                            <a class="category-item" th:style="${selectedCategoryId == subCategory.id ? 'color: red': ''}" th:text="${subCategory.name}" th:attr="categoryId=${category.id}"></a>
+                                        </li>
+                                    </ul>
+                                    <p style="margin-left: 20px" th:if="${category.subCategories.size() == 0}" class="category-item" th:text="${category.name}" th:attr="categoryId=${category.id}"></p>
+                                </li>
                             </ul>
                         </div>
                         <div class="widget_list widget_filter">
@@ -414,7 +417,8 @@
                         <article class="single_product">
                             <figure>
                                 <div class="product_thumb">
-                                    <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
+                                    <a class="primary_img"
+                                       th:href="'/shop/productDetails?productId=' + ${product.id}"><img
                                             th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                             alt=""></a>
                                     <div class="label_product" th:if="${product.discount > 0}">
@@ -470,8 +474,9 @@
                                             <li><a href="#"><i class="icon-star"></i></a></li>
                                         </ul>
                                     </div>
-                                    <h4 class="product_name"><a th:href="'/shop/productDetails?productId=' + ${product.id}"
-                                                                th:text="${product.name}"></a>
+                                    <h4 class="product_name"><a
+                                            th:href="'/shop/productDetails?productId=' + ${product.id}"
+                                            th:text="${product.name}"></a>
                                     </h4>
                                     <div class="price_box">
                                         <span class="current_price" th:if="${product.discount > 0}"
@@ -779,7 +784,6 @@
 <script src="/static/js/searchProduct.js"></script>
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>
-
 
 
 </body>

@@ -232,9 +232,16 @@
                             </div>
                             <div class="categories_menu_toggle">
                                 <ul>
-                                    <li th:each="category:${categories}"><a
-                                            th:href="'/shop?categoryId=' + ${category.id}"
-                                            th:text="${category.name}"></a>
+                                    <!-- Итерируем по списку категорий -->
+                                    <li class="menu_item_children" th:each="category : ${categories}">
+                                        <a th:href="${'/shop?categoryId=' + category.id}" th:text="${category.name}"><i class="fa fa-angle-right"></i></a>
+                                        <!-- Проверяем, есть ли у категории подкатегории -->
+                                        <ul class="categories_mega_menu" th:if="${(category.subCategories.size() > 0)}">
+                                            <!-- Итерируем по списку подкатегорий -->
+                                            <li class="menu_item_children" th:each="subCategory : ${category.subCategories}">
+                                                <a th:href="${'/shop?categoryId=' + subCategory.id}" th:text="${subCategory.name}"></a>
+                                            </li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </div>
@@ -428,15 +435,6 @@
                                                     <li class="wishlist"><a href="wishlist.html"
                                                                             title="Add to Wishlist"><i
                                                             class="icon-heart"></i></a>
-                                                    </li>
-                                                    <li class="quick_button">
-                                                        <a href="#" data-toggle="modal"
-                                                           th:data-product="${product}"
-                                                           onclick="updateModalData(this.getAttribute('data-product'))"
-                                                           data-target="#modal_box"
-                                                           title="quick view">
-                                                            <i class="icon-eye"></i>
-                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>

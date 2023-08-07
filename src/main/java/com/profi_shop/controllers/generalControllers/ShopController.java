@@ -2,6 +2,7 @@ package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.Category;
+import com.profi_shop.model.Review;
 import com.profi_shop.model.requests.ReviewRequest;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
@@ -13,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -51,7 +49,7 @@ public class ShopController {
                            Model model){
 
         Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0),categoryId.orElse(0L),size.orElse(0),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
-        List<Category> categories = categoryService.getAllCategories();
+        List<Category> categories = categoryService.getMainCategories();
 
 
         model.addAttribute("products",products);
@@ -93,21 +91,24 @@ public class ShopController {
                                  Principal principal,
                                  Model model){
         ProductDTO product = productFacade.productToProductDTO(productService.getProductById(productId));
+        Page<Review> reviews = reviewService.lastReviewsByProductId(productId);
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories",categories);
+        model.addAttribute("reviews", reviews);
         model.addAttribute("authenticated", principal != null);
         model.addAttribute("product", product);
         return "shop/productDetails";
     }
 
     @PostMapping("/productReview")
-    public ResponseEntity<String> productReview(ReviewRequest request,
+    public ResponseEntity<String> productReview(@RequestBody ReviewRequest request,
                                                 Principal principal){
         try{
+            System.out.println("Review is come " + principal.getName());
             reviewService.createReview(request, principal);
             return new ResponseEntity<>("Отзыв сохранен", HttpStatus.OK);
         }catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( "Error", HttpStatus.BAD_REQUEST);
         }
     }
 }

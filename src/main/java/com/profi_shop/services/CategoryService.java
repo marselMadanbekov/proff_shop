@@ -20,10 +20,10 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void createCategory(String name) {
+    public Category createCategory(String name) {
         Category category = new Category();
         category.setName(name);
-        categoryRepository.save(category);
+        return categoryRepository.save(category);
     }
 
     public List<Category> getAllCategories(){
@@ -31,16 +31,31 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long categoryId) {
-        categoryRepository.deleteById(categoryId);
+        Category category = getCategoryById(categoryId);
+        System.out.println("deleting category" + category.getName());
+        categoryRepository.delete(category);
     }
 
     public Page<Category> getPagedCategories(Integer page) {
         Pageable pageable = PageRequest.of(page, 15, Sort.by(Sort.Direction.ASC,"name"));
-        return categoryRepository.findAll(pageable);
+        return categoryRepository.findByParentIsNull(pageable);
     }
 
     public Category getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId).orElse(null);
     }
 
+    public void createSubcategory(Long superCat, String subcategoryName) {
+        Category superCategory = getCategoryById(superCat);
+        Category sub = createCategory(subcategoryName);
+
+        sub.setParent(superCategory);
+        superCategory.addSubCategory(sub);
+        categoryRepository.save(sub);
+        categoryRepository.save(superCategory);
+    }
+
+    public List<Category> getMainCategories() {
+        return categoryRepository.findByParentIsNull();
+    }
 }
