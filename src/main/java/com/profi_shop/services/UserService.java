@@ -3,6 +3,7 @@ package com.profi_shop.services;
 import com.profi_shop.auth.requests.AdminCreateRequest;
 import com.profi_shop.auth.requests.SignUpRequest;
 import com.profi_shop.exceptions.ExistException;
+import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Cart;
 import com.profi_shop.model.Store;
@@ -14,7 +15,9 @@ import com.profi_shop.repositories.StoreRepository;
 import com.profi_shop.repositories.UserRepository;
 import com.profi_shop.repositories.WishlistRepository;
 import com.profi_shop.services.email.EmailServiceImpl;
+import com.profi_shop.validations.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Random;
 
 @Service
@@ -34,6 +38,7 @@ public class UserService {
     private final StoreRepository storeRepository;
     private final EmailServiceImpl emailService;
     private final PasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
@@ -89,13 +94,13 @@ public class UserService {
             Cart cart = new Cart();
             cart.setUser(user);
             cartRepository.save(cart);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ExistException(ExistException.USER_EXISTS);
         }
     }
 
 
-    private Store getStoreById(Long id){
+    private Store getStoreById(Long id) {
         return storeRepository.findById(id).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
     }
 
@@ -105,16 +110,15 @@ public class UserService {
 
     public Page<User> getUsersFilteredPage(Integer page, String search, Integer sort) {
         Pageable pageable = null;
-        if(sort != 0){
-            if(sort == 1)   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.DESC,"create_date"));
-            else   pageable = PageRequest.of(page,9, Sort.by(Sort.Direction.ASC,"name"));
-        }
-        else{
-            pageable = PageRequest.of(page,9);
+        if (sort != 0) {
+            if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
+            else pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "name"));
+        } else {
+            pageable = PageRequest.of(page, 9);
         }
 
-        if(search != null && !search.equals("")){
-            return userRepository.findUserByFirstname(search,pageable);
+        if (search != null && !search.equals("")) {
+            return userRepository.findUserByFirstname(search, pageable);
         }
         return userRepository.findAll(pageable);
     }
@@ -129,7 +133,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private String generatePassword(User user){
+    private String generatePassword(User user) {
         int length = 10; // Длина нового пароля
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()"; // Допустимые символы для пароля
         StringBuilder password = new StringBuilder();
@@ -143,5 +147,23 @@ public class UserService {
         }
 
         return password.toString();
+    }
+
+    public void editUser(Principal principal, SignUpRequest edit) {
+        User user = getUserByUsername(principal.getName());
+        try {
+            if (edit.getEmail() != null && !edit.getEmail().isEmpty()) user.setEmail(edit.getEmail());
+            if (edit.getFirstname() != null && !edit.getFirstname().isEmpty()) user.setFirstname(Validator.validFirstname(edit.getFirstname()));
+            if (edit.getLastname() != null && !edit.getLastname().isEmpty()) user.setLastname(Validator.validLastname(edit.getLastname()));
+            if (edit.getPhone_number() != null && !edit.getPhone_number().isEmpty())
+                user.setPhone_number(Validator.validNumber(edit.getPhone_number()));
+            if (edit.getPassword() != null && !edit.getPassword().isEmpty())
+                user.setPassword(bCryptPasswordEncoder.encode(edit.getPassword()));
+
+            userRepository.save(user);
+        } catch (InvalidDataException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

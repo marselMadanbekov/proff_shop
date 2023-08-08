@@ -295,34 +295,38 @@
         <div class="row">
             <div class="col-lg-12 col-md-6">
                 <div class="account_form register">
-                    <h2>Register</h2>
+                    <h2>Регистрация</h2>
                     <form action="/auth/signUp" method="post">
                         <p>
-                            <label>Email address <span>*</span></label>
+                            <label>Адрес электронной почты (Email)<span>*</span></label>
                             <input name="email" type="text" required>
                         </p>
                         <p>
-                            <label>Username<span>*</span></label>
+                            <label>Логин<span>*</span></label>
                             <input name="username" type="text" required>
                         </p>
                         <p>
-                            <label>Firstname<span>*</span></label>
+                            <label>Имя<span>*</span></label>
                             <input name="firstname" type="text" required>
                         </p>
                         <p>
-                            <label>Lastname<span>*</span></label>
+                            <label>Фамилия<span>*</span></label>
                             <input name="lastname" type="text" required>
                         </p>
                         <p>
-                            <label>Password <span>*</span></label>
+                            <label>Номер телефона<span>*</span></label>
+                            <input name="phone_number" type="text" required>
+                        </p>
+                        <p>
+                            <label>Пароль<span>*</span></label>
                             <input name="password" type="password" required>
                         </p>
                         <p>
-                            <label>Password <span>*</span></label>
+                            <label>Повторите пароль<span>*</span></label>
                             <input name="confirm_password" type="password" required>
                         </p>
                         <div class="login_submit">
-                            <button type="submit">Register</button>
+                            <button type="submit">зарегистрироваться</button>
                         </div>
                     </form>
                 </div>

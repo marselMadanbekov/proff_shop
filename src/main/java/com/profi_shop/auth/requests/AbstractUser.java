@@ -1,6 +1,7 @@
 package com.profi_shop.auth.requests;
 
 import com.profi_shop.model.enums.Role;
+import lombok.Data;
 
 public abstract class AbstractUser {
     private Long id;
