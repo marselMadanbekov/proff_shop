@@ -323,22 +323,21 @@
                         <h1><a href="#" th:text="${product.name}"></a></h1>
                         <div class="product_ratting">
                             <ul>
-                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                <li class="review"><a href="#"> (customer review ) </a></li>
+                                <li><a href="#"><i th:class="${product.averageRating > 0 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                <li><a href="#"><i th:class="${product.averageRating > 1 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                <li><a href="#"><i th:class="${product.averageRating > 2 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                <li><a href="#"><i th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                <li><a href="#"><i th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a></li>
                             </ul>
 
                         </div>
                         <div class="price_box">
                             <span class="current_price" th:if="${product.discount > 0}"
-                                  th:text="${product.newPrice}"></span>
+                                  th:text="${product.newPrice + 'сом'}"></span>
                             <span class="current_price" th:if="${not (product.discount > 0)}"
-                                  th:text="${product.oldPrice}">£70.00</span>
+                                  th:text="${product.oldPrice + 'сом'}"></span>
                             <span class="old_price" th:if="${product.discount > 0}"
-                                  th:text="${product.oldPrice}">£80.00</span>
+                                  th:text="${product.oldPrice + 'сом'}"></span>
 
                         </div>
                         <div class="product_desc">
@@ -362,10 +361,19 @@
                             <input min="1" max="100" value="1" type="number">
                             <button class="button" type="submit">add to cart</button>
                         </div>
-                        <div class=" product_d_action">
+                        <div class="product_d_action">
                             <ul>
-                                <li><a href="#" title="Add to wishlist">+ Add to Wishlist</a></li>
+                                <li><a href="javascript:void(0)" id="addToWishlist" title="Add to wishlist">+ Добавить в избранное</a></li>
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner" id="spinner"></div>
+                                </div>
                             </ul>
+                        </div>
+                        <div id="modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeModal">&times;</span>
+                                <p id="modalMessage"></p>
+                            </div>
                         </div>
                         <div class="product_meta" th:if="${product.category != null}">
                             <span>Category: <a href="#" th:text="${product.category.name}"></a></span>
@@ -1361,6 +1369,7 @@
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
 <script src="/static/js/products/productReview.js"></script>
+<script src="/static/js/products/shopProductDetails.js"></script>
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>

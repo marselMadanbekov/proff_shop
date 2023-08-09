@@ -1895,7 +1895,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 .categories_menu_toggle > ul > li ul.categories_mega_menu {
   position: absolute;
   left: 120%;
-  width: 500px;
+  width: 200px;
   background: #ffffff;
   padding: 25px 20px 23px;
   overflow: hidden;

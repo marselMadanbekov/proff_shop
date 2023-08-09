@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -67,7 +67,8 @@
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Search product..." type="text" id="search-text1" th:value="${query}">
+                                <input placeholder="Search product..." type="text" id="search-text1"
+                                       th:value="${query}">
                                 <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
@@ -137,7 +138,8 @@
                                         </select>
                                     </div>
                                     <div class="search_box">
-                                        <input placeholder="Search product..." type="text" id="search-text" th:value="${query}">
+                                        <input placeholder="Search product..." type="text" id="search-text"
+                                               th:value="${query}">
                                         <button type="submit" id="search-button"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
@@ -147,7 +149,7 @@
                                     <a href="/account"><i class="icon-users"></i></a>
                                 </div>
                                 <div class="header_account-list header_wishlist">
-                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
+                                    <a href="/wishlist"><i class="icon-heart"></i></a>
                                 </div>
                                 <div class="header_account-list  mini_cart_wrapper">
                                     <a href="javascript:void(0)"><i class="icon-shopping-bag"></i><span
@@ -234,13 +236,17 @@
                                 <ul>
                                     <!-- Итерируем по списку категорий -->
                                     <li class="menu_item_children" th:each="category : ${categories}">
-                                        <a th:href="${'/shop?categoryId=' + category.id}" th:text="${category.name}"><i class="fa fa-angle-right"></i></a>
+                                        <a th:href="${'/shop?categoryId=' + category.id}" th:text="${category.name}"><i
+                                                class="fa fa-angle-right"></i></a>
                                         <!-- Проверяем, есть ли у категории подкатегории -->
                                         <ul class="categories_mega_menu" th:if="${(category.subCategories.size() > 0)}">
                                             <!-- Итерируем по списку подкатегорий -->
-                                            <li class="menu_item_children" th:each="subCategory : ${category.subCategories}">
-                                                <a th:href="${'/shop?categoryId=' + subCategory.id}" th:text="${subCategory.name}"></a>
-                                            </li>
+                                            <ul>
+                                                <li th:each="subCategory : ${category.subCategories}">
+                                                    <a th:href="${'/shop?categoryId=' + subCategory.id}"
+                                                       th:text="${subCategory.name}"></a>
+                                                </li>
+                                            </ul>
                                         </ul>
                                     </li>
                                 </ul>
@@ -412,6 +418,15 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex justify-content-center">
+            <div class="spinner" id="spinner"></div>
+        </div>
+        <div id="modal1" class="modal1">
+            <div class="modal-content1">
+                <span class="close" id="closeModal">&times;</span>
+                <p id="modalMessage"></p>
+            </div>
+        </div>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="plant1" role="tabpanel">
                 <div class="row">
@@ -421,15 +436,18 @@
                                 <article class="single_product">
                                     <figure>
                                         <div class="product_thumb">
-                                            <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
+                                            <a class="primary_img"
+                                               th:href="'/shop/productDetails?productId=' + ${product.id}"><img
                                                     th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                                     alt=""></a>
                                             <div class="label_product" th:if="${product.discount > 0}">
-                                                <span class="label_sale" th:text="'-' + ${product.discount} + '%'"></span>
+                                                <span class="label_sale"
+                                                      th:text="'-' + ${product.discount} + '%'"></span>
                                             </div>
                                             <div class="action_links">
                                                 <ul>
-                                                    <li class="add_to_cart"><a href="cart.html"
+                                                    <li class="add_to_cart"><a th:attr="productId=${product.id}"
+                                                                               class="add_toCart"
                                                                                title="Add to cart"><i
                                                             class="icon-shopping-bag"></i></a></li>
                                                     <li class="wishlist"><a href="wishlist.html"
@@ -441,7 +459,7 @@
                                         </div>
                                         <figcaption class="product_content">
                                             <div class="product_rating">
-                                                <ul >
+                                                <ul>
                                                     <li><a href="#"><i class="icon-star2"></i></a></li>
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
@@ -449,13 +467,15 @@
                                                     <li><a href="#"><i class="icon-star"></i></a></li>
                                                 </ul>
                                             </div>
-                                            <h4 class="product_name"><a href="product-details.html"
-                                                                        th:text="${product.name}">
-                                                nisi</a></h4>
+                                            <h4 class="product_name"><a th:href="'/shop/productDetails?productId=' + ${product.id}"
+                                                                        th:text="${product.name}"></a></h4>
                                             <div class="price_box">
-                                                <span class="current_price" th:if="${product.discount > 0}" th:text="${product.newPrice + ' сом'}"></span>
-                                                <span class="current_price" th:if="${not (product.discount > 0)}" th:text="${product.oldPrice + ' сом'}"></span>
-                                                <span class="old_price" th:if="${product.discount > 0}" th:text="${product.oldPrice + ' сом'}"></span>
+                                                <span class="current_price" th:if="${product.discount > 0}"
+                                                      th:text="${product.newPrice + ' сом'}"></span>
+                                                <span class="current_price" th:if="${not (product.discount > 0)}"
+                                                      th:text="${product.oldPrice + ' сом'}"></span>
+                                                <span class="old_price" th:if="${product.discount > 0}"
+                                                      th:text="${product.oldPrice + ' сом'}"></span>
                                             </div>
                                         </figcaption>
                                     </figure>
@@ -487,7 +507,8 @@
                         <article class="single_product">
                             <figure>
                                 <div class="product_thumb">
-                                    <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
+                                    <a class="primary_img"
+                                       th:href="'/shop/productDetails?productId=' + ${product.id}"><img
                                             th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
                                             alt=""></a>
                                     <div class="label_product" th:if="${todayDeals.discount > 0}">
@@ -507,11 +528,16 @@
                                             <li><a href="#"><i class="icon-star"></i></a></li>
                                         </ul>
                                     </div>
-                                    <h4 class="product_name"><a th:href="'/shop/productDetails?productId=' + ${product.id}" th:text="${product.name}"></a></h4>
+                                    <h4 class="product_name"><a
+                                            th:href="'/shop/productDetails?productId=' + ${product.id}"
+                                            th:text="${product.name}"></a></h4>
                                     <div class="price_box">
-                                        <span class="current_price" th:if="${product.discount > 0}" th:text="${product.newPrice + ' сом'}"></span>
-                                        <span class="current_price" th:if="${not (product.discount > 0)}" th:text="${product.oldPrice + ' сом'}"></span>
-                                        <span class="old_price" th:if="${product.discount > 0}" th:text="${product.oldPrice + ' сом'}"></span>
+                                        <span class="current_price" th:if="${product.discount > 0}"
+                                              th:text="${product.newPrice + ' сом'}"></span>
+                                        <span class="current_price" th:if="${not (product.discount > 0)}"
+                                              th:text="${product.oldPrice + ' сом'}"></span>
+                                        <span class="old_price" th:if="${product.discount > 0}"
+                                              th:text="${product.oldPrice + ' сом'}"></span>
                                     </div>
                                 </figcaption>
                             </figure>
@@ -979,9 +1005,8 @@
 <script src="/static/js/slinky.menu.js"></script>
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
-<script src="/static/js/quickView.js"></script>
 <script src="/static/js/searchProduct.js"></script>
-
+<script src="/static/js/cart/cart.js"></script>
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>

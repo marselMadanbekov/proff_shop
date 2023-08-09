@@ -21,7 +21,7 @@ public class ProductDTO {
 
     private String color;
     private ProductSize size;
-    private int averageReview;
+    private int averageRating;
 
     private boolean inCart;
     private boolean inWishlist;

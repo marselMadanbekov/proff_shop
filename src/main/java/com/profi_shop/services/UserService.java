@@ -5,19 +5,12 @@ import com.profi_shop.auth.requests.SignUpRequest;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
-import com.profi_shop.model.Cart;
-import com.profi_shop.model.Store;
-import com.profi_shop.model.User;
-import com.profi_shop.model.Wishlist;
+import com.profi_shop.model.*;
 import com.profi_shop.model.enums.Role;
-import com.profi_shop.repositories.CartRepository;
-import com.profi_shop.repositories.StoreRepository;
-import com.profi_shop.repositories.UserRepository;
-import com.profi_shop.repositories.WishlistRepository;
+import com.profi_shop.repositories.*;
 import com.profi_shop.services.email.EmailServiceImpl;
 import com.profi_shop.validations.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,16 +27,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final WishlistRepository wishlistRepository;
     private final CartRepository cartRepository;
-
+    private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
     private final EmailServiceImpl emailService;
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, ProductRepository productRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.wishlistRepository = wishlistRepository;
         this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -165,5 +159,17 @@ public class UserService {
             System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public void addProductToWishlist(Long productId, Principal principal) {
+        Product product = getProductById(productId);
+        User user = getUserByUsername(principal.getName());
+        Wishlist wishlist = wishlistRepository.findByCustomer(user).orElse(new Wishlist(user));
+        wishlist.addProduct(product);
+        wishlistRepository.save(wishlist);
+    }
+
+    private Product getProductById(Long productId){
+        return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 }

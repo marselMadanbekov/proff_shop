@@ -146,7 +146,7 @@
 
                                 </div>
                                 <div class="header_account-list header_wishlist">
-                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
+                                    <a href="/wishlist"><i class="icon-heart"></i></a>
                                 </div>
                                 <div class="header_account-list  mini_cart_wrapper">
                                     <a href="javascript:void(0)"><i class="icon-shopping-bag"></i><span
@@ -301,18 +301,14 @@
                     <form action="/auth/signIn" method="post">
                         <p>
                             <label>Username <span>*</span></label>
-                            <input name="username" type="text">
+                            <input name="username" type="text" required>
                         </p>
                         <p>
                             <label>Password <span>*</span></label>
-                            <input name="password" type="password">
+                            <input name="password" type="password" required>
                         </p>
                         <div class="login_submit">
                             <a href="/auth/passwordReset">Lost your password?</a>
-                            <label for="remember">
-                                <input id="remember" type="checkbox">
-                                Remember me
-                            </label>
                             <button type="submit">login</button>
                         </div>
                     </form>
@@ -386,7 +382,7 @@
                                 <li><a href="checkout.html">Checkout</a></li>
                                 <li><a href="contact.html">Contact</a></li>
                                 <li><a href="faq.html">Frequently Questions</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="/wishlist">Wishlist</a></li>
                             </ul>
                         </div>
                     </div>

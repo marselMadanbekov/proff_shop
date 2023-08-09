@@ -46,7 +46,7 @@ public class ReviewService {
     }
 
     public int getAverageReviewByProduct(Product product){
-        return (int) Math.ceil(reviewRepository.findAverageMarkByProduct(product).orElse(0.0));
+        return (int) Math.ceil(reviewRepository.findAverageMarkByProduct(product).orElse(5.0));
     }
 
     private Product getProductById(Long productId){

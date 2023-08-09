@@ -4,10 +4,7 @@ import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Review;
 import com.profi_shop.model.requests.ReviewRequest;
-import com.profi_shop.services.CategoryService;
-import com.profi_shop.services.ProductService;
-import com.profi_shop.services.ReviewService;
-import com.profi_shop.services.StockService;
+import com.profi_shop.services.*;
 import com.profi_shop.services.facade.ProductFacade;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -17,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -27,13 +26,15 @@ public class ShopController {
     private final CategoryService categoryService;
     private final ProductFacade productFacade;
     private final ReviewService reviewService;
+    private final UserService userService;
     private final StockService stockService;
 
-    public ShopController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, ReviewService reviewService, StockService stockService) {
+    public ShopController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, ReviewService reviewService, UserService userService, StockService stockService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.productFacade = productFacade;
         this.reviewService = reviewService;
+        this.userService = userService;
         this.stockService = stockService;
     }
 
@@ -111,4 +112,6 @@ public class ShopController {
             return new ResponseEntity<>( "Error", HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }

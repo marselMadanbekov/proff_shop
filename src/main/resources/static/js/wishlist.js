@@ -1,28 +1,20 @@
-(function ($) {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function() {
+    const productRemovers = document.querySelectorAll('.wishlist_remover');
 
-    $(document).ready(function () {
-        $("#passwordResetForm").submit(function (event) {
+    productRemovers.forEach(function(item) {
+        item.addEventListener('click', function(event) {
             event.preventDefault();
-
-            // Показываем прогресс-спиннер при отправке запроса
+            let selectedProductId = item.getAttribute("productId");
             $("#spinner").show();
-
-            const formElement = event.target;
-            const formData = new FormData(formElement);
-
             $.ajax({
-                url: "/auth/resetPassword",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
+                url: "/wishlist/remove?productId=" + selectedProductId,
+                type: "GET",
                 success: function (data) {
                     // Скрываем прогресс-спиннер после получения ответа
                     $("#spinner").hide();
 
                     // Показываем модальное окно с сообщением об успешном сбросе пароля
-                    showModal('Password Reset', data.message);
+                    showModal('Удаление продукта', data.message);
                 },
                 error: function (xhr,status,error) {
                     $("#spinner").hide();
@@ -39,10 +31,12 @@
                     }
                 }
             });
+
         });
     });
 
-// Функция для показа модального окна
+
+
     function showModal(title, message) {
         const modal = document.getElementById('modal');
         const modalMessage = document.getElementById('modalMessage');
@@ -63,4 +57,4 @@
             }
         });
     }
-})(jQuery);
+});

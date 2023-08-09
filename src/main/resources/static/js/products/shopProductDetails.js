@@ -2,31 +2,29 @@
     'use strict';
 
     $(document).ready(function () {
-        $("#passwordResetForm").submit(function (event) {
+        $("#addToWishlist").click(function (event) {
             event.preventDefault();
 
+            let productId = document.getElementById("productId").value;
             // Показываем прогресс-спиннер при отправке запроса
             $("#spinner").show();
 
-            const formElement = event.target;
-            const formData = new FormData(formElement);
 
             $.ajax({
-                url: "/auth/resetPassword",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
+                url: "/wishlist/addToWishlist?productId=" + productId,
+                type: "GET",
                 success: function (data) {
                     // Скрываем прогресс-спиннер после получения ответа
                     $("#spinner").hide();
 
-                    // Показываем модальное окно с сообщением об успешном сбросе пароля
-                    showModal('Password Reset', data.message);
+                    // Показываем модальное окно с сообщением из JSON-ответа
+                    showModal('Success', data.message);
                 },
-                error: function (xhr,status,error) {
+                error: function (xhr, status, error) {
+                    // Скрываем прогресс-спиннер при ошибке
                     $("#spinner").hide();
 
+                    // Показываем модальное окно с сообщением об ошибке
                     try {
                         const errorData = JSON.parse(xhr.responseText);
                         if (errorData.hasOwnProperty("error")) {
