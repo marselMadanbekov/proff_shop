@@ -1,9 +1,7 @@
 package com.profi_shop.services.facade;
 
 import com.profi_shop.dto.CouponTemplateDTO;
-import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.model.CouponTemplate;
-import com.profi_shop.model.Product;
 import com.profi_shop.repositories.CouponRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

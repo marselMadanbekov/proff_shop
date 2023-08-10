@@ -1,30 +1,24 @@
-(function ($) {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function() {
+    const productRemovers = document.querySelectorAll('.wishlist_remover');
 
-    $(document).ready(function () {
-        $("#addToWishlist").click(function (event) {
+    productRemovers.forEach(function(item) {
+        item.addEventListener('click', function(event) {
             event.preventDefault();
-
-            let productId = document.getElementById("productId").value;
-            // Показываем прогресс-спиннер при отправке запроса
+            let selectedProductId = item.getAttribute("productId");
             $("#spinner").show();
-
-
             $.ajax({
-                url: "/wishlist/add?productId=" + productId,
+                url: "/wishlist/remove?productId=" + selectedProductId,
                 type: "GET",
                 success: function (data) {
                     // Скрываем прогресс-спиннер после получения ответа
                     $("#spinner").hide();
 
-                    // Показываем модальное окно с сообщением из JSON-ответа
-                    showModal('Success', data.message);
+                    // Показываем модальное окно с сообщением об успешном сбросе пароля
+                    showModal('Удаление продукта', data.message);
                 },
-                error: function (xhr, status, error) {
-                    // Скрываем прогресс-спиннер при ошибке
+                error: function (xhr,status,error) {
                     $("#spinner").hide();
 
-                    // Показываем модальное окно с сообщением об ошибке
                     try {
                         const errorData = JSON.parse(xhr.responseText);
                         if (errorData.hasOwnProperty("error")) {
@@ -37,10 +31,12 @@
                     }
                 }
             });
+
         });
     });
 
-// Функция для показа модального окна
+
+
     function showModal(title, message) {
         const modal = document.getElementById('modal');
         const modalMessage = document.getElementById('modalMessage');
@@ -52,13 +48,15 @@
         // Закрытие модального окна при клике на крестик
         document.getElementById('closeModal').addEventListener('click', function() {
             modal.style.display = 'none';
+            window.location.reload();
         });
 
         // Закрытие модального окна при клике вне его области
         window.addEventListener('click', function(event) {
             if (event.target === modal) {
                 modal.style.display = 'none';
+                window.location.reload();
             }
         });
     }
-})(jQuery);
+});

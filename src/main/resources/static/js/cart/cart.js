@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const addToCart = document.querySelectorAll('.add_toCart');
+    const addToCart = document.querySelectorAll('.add_to_cart');
 
 
     addToCart.forEach(function(item) {
@@ -20,6 +20,4 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-
 });

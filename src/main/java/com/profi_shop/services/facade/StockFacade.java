@@ -21,7 +21,7 @@ public class StockFacade {
         stockDTO.setType(stock.getType());
         stockDTO.setEndDate(stock.getEndDate());
         stockDTO.setStartDate(stock.getStartDate());
-        stockDTO.setParticipants(productFacade.mapToProductDTOList(stock.getParticipants()));
+        stockDTO.setParticipants(productFacade.mapToProductDetailsDTOList(stock.getParticipants()));
         stockDTO.setDiscount(stock.getDiscount());
         return stockDTO;
     }

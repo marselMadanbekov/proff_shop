@@ -2,9 +2,11 @@ package com.profi_shop.controllers.auth;
 
 import com.profi_shop.auth.requests.LoginRequest;
 import com.profi_shop.auth.requests.SignUpRequest;
+import com.profi_shop.model.Category;
 import com.profi_shop.model.User;
 import com.profi_shop.model.enums.Role;
 import com.profi_shop.security.JwtTokenProvider;
+import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,27 +38,36 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
+    private final CategoryService categoryService;
+
     @Autowired
-    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, CategoryService categoryService) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "message",required = false) Optional<String> message,
                         Model model){
+        List<Category> categories = categoryService.getMainCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("errorMessage",message.orElse(null));
         return "shop/login";
     }
 
     @GetMapping("/register")
-    public String register(){
+    public String register(Model model){
+        List<Category> categories = categoryService.getMainCategories();
+        model.addAttribute("categories", categories);
         return "shop/register";
     }
 
     @GetMapping("/passwordReset")
-    public String passwordReset(){
+    public String passwordReset(Model model){
+        List<Category> categories = categoryService.getMainCategories();
+        model.addAttribute("categories", categories);
         return "shop/passwordReset";
     }
 

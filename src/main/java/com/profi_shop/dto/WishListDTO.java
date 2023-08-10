@@ -9,5 +9,5 @@ import java.util.List;
 public class WishListDTO {
     private Long id;
     private User user;
-    private List<ProductDTO> products;
+    private List<ProductDetailsDTO> products;
 }

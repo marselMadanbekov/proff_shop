@@ -1,9 +1,8 @@
 package com.profi_shop.controllers.generalControllers;
 
-import com.profi_shop.dto.ProductDTO;
+import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.dto.StockDTO;
 import com.profi_shop.model.Category;
-import com.profi_shop.model.Stock;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
 import com.profi_shop.services.StockService;
@@ -39,7 +38,7 @@ public class HomeController {
 
     @GetMapping("")
     public String mainPage(Model model){
-        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.getPagedProducts(0, 10));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.getPagedProducts(0, 10));
         List<Category> categories = categoryService.getMainCategories();
         StockDTO todayDeals = stockFacade.stockToStockDTO(stockService.getTodayDeals());
 

@@ -1,41 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const productRemovers = document.querySelectorAll('.wishlist_remover');
+    const addToWishlist = document.querySelectorAll('.add_to_wishlist');
 
-    productRemovers.forEach(function(item) {
+    addToWishlist.forEach(function(item) {
         item.addEventListener('click', function(event) {
             event.preventDefault();
             let selectedProductId = item.getAttribute("productId");
             $("#spinner").show();
             $.ajax({
-                url: "/wishlist/remove?productId=" + selectedProductId,
+                url: "/wishlist/add?productId=" + selectedProductId,
                 type: "GET",
                 success: function (data) {
-                    // Скрываем прогресс-спиннер после получения ответа
                     $("#spinner").hide();
-
-                    // Показываем модальное окно с сообщением об успешном сбросе пароля
-                    showModal('Удаление продукта', data.message);
+                    showModal("Adding to wishlist", data.message)
                 },
                 error: function (xhr,status,error) {
                     $("#spinner").hide();
-
-                    try {
-                        const errorData = JSON.parse(xhr.responseText);
-                        if (errorData.hasOwnProperty("error")) {
-                            showModal('Error', errorData.error);
-                        } else {
-                            showModal('Error', 'An error occurred while processing the request.');
-                        }
-                    } catch (e) {
-                        showModal('Error', 'An error occurred while processing the request.');
-                    }
+                    showModal('Adding to wishlist', xhr.error);
                 }
             });
-
         });
     });
-
-
 
     function showModal(title, message) {
         const modal = document.getElementById('modal');

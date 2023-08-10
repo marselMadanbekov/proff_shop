@@ -26,9 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault(); // Предотвращаем стандартное поведение отправки формы
         let selectedCategory = categorySelect.value;
         let searchQuery = searchText.value;
-        let baseURL = '/shop/search';
+        let baseURL = '/shop';
         let queryParams = '';
-        console.log('hello ' + searchQuery);
 
         queryParams += 'categoryId=' + encodeURIComponent(selectedCategory) + '&';
         queryParams += 'query=' + encodeURIComponent(searchQuery);
@@ -39,9 +38,8 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault(); // Предотвращаем стандартное поведение отправки формы
         let selectedCategory = categorySelect1.value;
         let searchQuery = searchText1.value;
-        let baseURL = '/shop/search';
+        let baseURL = '/shop';
         let queryParams = '';
-        console.log('hello ' + searchQuery);
 
         queryParams += 'categoryId=' + encodeURIComponent(selectedCategory) + '&';
         queryParams += 'query=' + encodeURIComponent(searchQuery);

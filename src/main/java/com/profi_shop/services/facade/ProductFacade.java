@@ -1,6 +1,7 @@
 package com.profi_shop.services.facade;
 
 import com.profi_shop.dto.ProductDTO;
+import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.Stock;
 import com.profi_shop.services.ReviewService;
@@ -18,22 +19,24 @@ import java.util.stream.Collectors;
 public class ProductFacade {
     private final StockService stockService;
     private final ReviewService reviewService;
+    private final CategoryFacade categoryFacade;
 
     private final StoreHouseService storeHouseService;
 
     @Autowired
-    public ProductFacade(StockService stockService, ReviewService reviewService, StoreHouseService storeHouseService) {
+    public ProductFacade(StockService stockService, ReviewService reviewService, CategoryFacade categoryFacade, StoreHouseService storeHouseService) {
         this.stockService = stockService;
         this.reviewService = reviewService;
+        this.categoryFacade = categoryFacade;
         this.storeHouseService = storeHouseService;
     }
 
-    public ProductDTO productToProductDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO();
+    public ProductDetailsDTO productToProductDetailsDTO(Product product) {
+        ProductDetailsDTO productDTO = new ProductDetailsDTO();
         productDTO.setName(product.getName());
         productDTO.setSku(product.getSku());
         productDTO.setPhotos(product.getPhotos());
-        productDTO.setCategory(product.getCategory());
+        productDTO.setCategory(categoryFacade.categoryToCategoryDTO(product.getCategory()));
         productDTO.setColor(product.getColor());
         productDTO.setSize(product.getSize());
         productDTO.setDescription(product.getDescription());
@@ -46,6 +49,24 @@ public class ProductFacade {
         return productDTO;
     }
 
+    public ProductDTO productToProductDTO(Product product){
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setName(product.getName());
+        productDTO.setPhotos(product.getPhotos());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setDiscount(getDiscountByProduct(product));
+        return productDTO;
+    }
+
+    public Page<ProductDetailsDTO> mapToProductDetailsDTOPage(Page<Product> productPage) {
+        List<ProductDetailsDTO> productDTOList = productPage.getContent()
+                .stream()
+                .map(this::productToProductDetailsDTO)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(productDTOList, productPage.getPageable(), productPage.getTotalElements());
+    }
     public Page<ProductDTO> mapToProductDTOPage(Page<Product> productPage) {
         List<ProductDTO> productDTOList = productPage.getContent()
                 .stream()
@@ -54,9 +75,9 @@ public class ProductFacade {
 
         return new PageImpl<>(productDTOList, productPage.getPageable(), productPage.getTotalElements());
     }
-    public List<ProductDTO> mapToProductDTOList(List<Product> productPage) {
+    public List<ProductDetailsDTO> mapToProductDetailsDTOList(List<Product> productPage) {
         return productPage.stream()
-                .map(this::productToProductDTO)
+                .map(this::productToProductDetailsDTO)
                 .collect(Collectors.toList());
     }
 

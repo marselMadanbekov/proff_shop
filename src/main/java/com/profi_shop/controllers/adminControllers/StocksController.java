@@ -1,6 +1,6 @@
 package com.profi_shop.controllers.adminControllers;
 
-import com.profi_shop.dto.ProductDTO;
+import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Stock;
 import com.profi_shop.model.requests.StockRequest;
@@ -46,7 +46,7 @@ public class StocksController {
     public String createStock(@RequestParam("productPage") Optional<Integer> productPage,
                               @RequestParam("categoryPage") Optional<Integer> categoryPage,
                               Model model) {
-        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.getPagedProducts(productPage.orElse(0), 10));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.getPagedProducts(productPage.orElse(0), 10));
         Page<Category> categories = categoryService.getPagedCategories(categoryPage.orElse(0));
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);

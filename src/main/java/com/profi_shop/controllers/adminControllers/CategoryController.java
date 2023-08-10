@@ -1,7 +1,9 @@
 package com.profi_shop.controllers.adminControllers;
 
+import com.profi_shop.dto.CategoryDTO;
 import com.profi_shop.model.Category;
 import com.profi_shop.services.CategoryService;
+import com.profi_shop.services.facade.CategoryFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -19,9 +20,11 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    private final CategoryFacade categoryFacade;
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, CategoryFacade categoryFacade) {
         this.categoryService = categoryService;
+        this.categoryFacade = categoryFacade;
     }
 
     @PostMapping("/create-category")
@@ -53,10 +56,10 @@ public class CategoryController {
     }
 
     @GetMapping("/categoriesByPage")
-    public ResponseEntity<Page<Category>> getCategoriesByPage(@RequestParam("page") Integer page) {
+    public ResponseEntity<Page<CategoryDTO>> getCategoriesByPage(@RequestParam("page") Integer page) {
         try {
             System.out.println("hello pagination");
-            Page<Category> categories = categoryService.getPagedCategories(page);
+            Page<CategoryDTO> categories = categoryFacade.mapToProductDTOPage(categoryService.getPagedCategories(page));
             return new ResponseEntity<>(categories, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

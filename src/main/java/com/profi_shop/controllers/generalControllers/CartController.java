@@ -1,8 +1,10 @@
 package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.model.Cart;
+import com.profi_shop.model.Category;
 import com.profi_shop.model.requests.CartUpdateRequest;
 import com.profi_shop.services.CartService;
+import com.profi_shop.services.CategoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,12 @@ import java.util.Map;
 public class CartController {
 
     private final CartService cartService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, CategoryService categoryService) {
         this.cartService = cartService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
@@ -40,6 +44,8 @@ public class CartController {
         } else {
             cart = cartService.getCartByUsername(principal.getName());
         }
+        List<Category> categories = categoryService.getMainCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("cart", cart);
         return "shop/cart";
     }

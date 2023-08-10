@@ -1,6 +1,7 @@
 package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.dto.ProductDTO;
+import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.requests.ProductCreateRequest;
@@ -11,7 +12,6 @@ import com.profi_shop.services.StoreHouseService;
 import com.profi_shop.services.StoreService;
 import com.profi_shop.services.facade.ProductFacade;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -67,7 +66,7 @@ public class ProductController {
                            Model model) {
         List<Store> stores = storeService.getAllStores();
         List<Category> categories = categoryService.getAllCategories();
-        Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L), size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L), size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
 
 
         model.addAttribute("products", products);

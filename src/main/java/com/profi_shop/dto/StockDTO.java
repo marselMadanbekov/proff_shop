@@ -15,5 +15,5 @@ public class StockDTO {
     private StockType type;
     private int discount;
 
-    private List<ProductDTO> participants = new ArrayList<>();
+    private List<ProductDetailsDTO> participants = new ArrayList<>();
 }

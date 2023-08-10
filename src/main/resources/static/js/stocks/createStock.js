@@ -136,7 +136,7 @@ function loadNewProducts(pageNumber) {
     queryParams += '&minPrice=' + encodeURIComponent(minPrice);
     queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
     queryParams += '&sort=' + encodeURIComponent(sort);
-    if (searchQuery !== null)
+    if (searchQuery !== null && searchQuery !== '')
         queryParams += '&query=' + encodeURIComponent(searchQuery);
 
     $.ajax({

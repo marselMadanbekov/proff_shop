@@ -1,6 +1,8 @@
 package com.profi_shop.controllers.generalControllers;
 
+import com.profi_shop.model.Category;
 import com.profi_shop.model.Wishlist;
+import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,21 +23,25 @@ import java.util.Map;
 public class WishlistController {
 
     private final WishlistService wishlistService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public WishlistController(WishlistService wishlistService) {
+    public WishlistController(WishlistService wishlistService, CategoryService categoryService) {
         this.wishlistService = wishlistService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
     public String wishlist(Principal principal,
                            Model model){
         Wishlist wishlist = wishlistService.getByUsername(principal.getName());
+        List<Category> categories = categoryService.getMainCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("wishlist",wishlist);
         return "shop/wishlist";
     }
 
-    @GetMapping("/addToWishlist")
+    @GetMapping("/add")
     public ResponseEntity<Map<String,String>> addToWishlist(@RequestParam("productId") Long productId,
                                                             Principal principal){
         Map<String,String> response = new HashMap<>();
