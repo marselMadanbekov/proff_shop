@@ -229,7 +229,7 @@
                 <div class="breadcrumb_content">
                     <h3>Checkout</h3>
                     <ul>
-                        <li><a href="index.html">home</a></li>
+                        <li><a href="/home">home</a></li>
                         <li>Checkout</li>
                     </ul>
                 </div>
@@ -298,66 +298,7 @@
         <div class="checkout_form">
             <div class="row">
                 <div class="col-lg-6 col-md-6">
-                    <form action="#">
-                        <h3>Billing Details</h3>
-                        <div class="row">
-
-                            <div class="col-lg-6 mb-20">
-                                <label>First Name <span>*</span></label>
-                                <input type="text">
-                            </div>
-                            <div class="col-lg-6 mb-20">
-                                <label>Last Name <span>*</span></label>
-                                <input type="text">
-                            </div>
-                            <div class="col-12 mb-20">
-                                <label for="country">Region <span>*</span></label>
-                                <select class="select_option" name="cuntry" id="country">
-                                    <option value="2">bangladesh</option>
-                                    <option value="3">Algeria</option>
-                                    <option value="4">Afghanistan</option>
-                                    <option value="5">Ghana</option>
-                                    <option value="6">Albania</option>
-                                    <option value="7">Bahrain</option>
-                                    <option value="8">Colombia</option>
-                                    <option value="9">Dominican Republic</option>
-
-                                </select>
-                            </div>
-                            <div class="col-12 mb-20">
-                                <label for="country">City <span>*</span></label>
-                                <select class="select_option" name="cuntry" id="country">
-                                    <option value="2">bangladesh</option>
-                                    <option value="3">Algeria</option>
-                                    <option value="4">Afghanistan</option>
-                                    <option value="5">Ghana</option>
-                                    <option value="6">Albania</option>
-                                    <option value="7">Bahrain</option>
-                                    <option value="8">Colombia</option>
-                                    <option value="9">Dominican Republic</option>
-
-                                </select>
-                            </div>
-
-                            <div class="col-12 mb-20">
-                                <label>Street address <span>*</span></label>
-                                <input placeholder="House number and street name" type="text">
-                            </div>
-                            <div class="col-lg-6 mb-20">
-                                <label>Phone<span>*</span></label>
-                                <input type="text">
-
-                            </div>
-                            <div class="col-lg-6 mb-20">
-                                <label> Email Address <span>*</span></label>
-                                <input type="text">
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <form action="#">
+                    <form id="orderForm">
                         <h3>Your order</h3>
                         <div class="order_table table-responsive">
                             <table>
@@ -368,44 +309,93 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td> Handbag fringilla <strong> × 2</strong></td>
-                                    <td> $165.00</td>
+                                <tr th:each="cartItem: ${cart.cartItems}">
+                                    <td th:text="${cartItem.product.name} + ' × ' + ${cartItem.quantity}"></td>
+                                    <td th:text="${cartItem.amount} + ' сом'"></td>
                                 </tr>
-                                <tr>
-                                    <td> Handbag justo <strong> × 2</strong></td>
-                                    <td> $50.00</td>
-                                </tr>
-                                <tr>
-                                    <td> Handbag elit <strong> × 2</strong></td>
-                                    <td> $50.00</td>
-                                </tr>
-                                <tr>
-                                    <td> Handbag Rutrum <strong> × 1</strong></td>
-                                    <td> $50.00</td>
-                                </tr>
+
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <th>Cart Subtotal</th>
-                                    <td>$215.00</td>
+                                    <td id="cartSubtotal" th:text="${cart.cartAmount()} + ' сом'"></td>
                                 </tr>
                                 <tr>
                                     <th>Shipping</th>
-                                    <td><strong>$5.00</strong></td>
+                                    <td id="shippingPrice"><strong>0 сом</strong></td>
                                 </tr>
                                 <tr class="order_total">
                                     <th>Order Total</th>
-                                    <td><strong>$220.00</strong></td>
+                                    <td id="orderTotal"><strong th:text="${cart.cartAmount()} + ' сом'"></strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
+                    </form>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <form id="orderDetails">
+                        <h3>Billing Details</h3>
+                        <div class="row">
+                            <div class="col-lg-6 mb-20">
+                                <label>Имя<span>*</span></label>
+                                <input type="text" name="firstname" id="firstname" required>
+                            </div>
+                            <div class="col-lg-6 mb-20">
+                                <label>Фамилия<span>*</span></label>
+                                <input type="text" name="lastname" id="lastname" required>
+                            </div>
+                            <div class="col-lg-6 mb-20">
+                                <label>Номер телефона<span>*</span></label>
+                                <input type="text" name="phone_number" id="phone_number" required>
+                            </div>
+                            <div class="col-lg-6 mb-20">
+                                <label>Адрес электронной почты (e-mail) <span>*</span></label>
+                                <input type="email" name="email" id="email" required>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-20">
+                            <input id="shipment" type="checkbox" data-toggle="collapse" data-target="#collapseOne"/>
+                            <label for="shipment" data-toggle="collapse" data-target="#collapseOne"
+                                   aria-controls="collapseOne">Заказать доставку?</label>
+                            <a href="/checkout">/ Сброс</a>
+                            <div id="collapseOne" class="collapse one" data-parent="#accordion">
+                                <div class="card-body1">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner" id="spinner"></div>
+                                    </div>
+                                    <div class="col-12 mb-20">
+                                        <label for="state">Region <span>*</span></label>
+                                        <select class="form-select form-select-sm" name="state" id="state">
+                                            <option value=""></option>
+                                            <option th:each="state: ${states}" th:value="${state}"
+                                                    th:text="${state}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-20">
+                                        <label for="town">City <span>*</span></label>
+                                        <select class="form-select form-select-sm" name="town" id="town">
+                                            <option value=""></option>
+                                            <option th:each="town:${towns}" th:value="${town}"
+                                                    th:text="${town}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-20">
+                                        <label>Street address<span>*</span></label>
+                                        <input placeholder="House number and street name" type="text">
+                                    </div>
+                                    <div class="order_button">
+                                        <button type="button" id="scost">Посчитать</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="order_button">
-                            <button type="submit">Order</button>
+                            <button type="submit" id="order">Заказать</button>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
@@ -477,7 +467,7 @@
                 <div class="col-lg-4 col-md-5">
                     <div class="widgets_container widget_app">
                         <div class="footer_logo">
-                            <a href="index.html"><img src="/static/img/logo/logo.png" alt=""></a>
+                            <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
                         </div>
                         <div class="footer_widgetnav_menu">
                             <ul>
@@ -542,7 +532,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-6">
                     <div class="copyright_area">
-                        <p class="copyright-text">&copy; 2021 <a href="index.html">Lukani</a>. Made with <i
+                        <p class="copyright-text">&copy; 2021 <a href="/home">Lukani</a>. Made with <i
                                 class="fa fa-heart text-danger"></i> by <a href="https://hasthemes.com/"
                                                                            target="_blank">HasThemes</a></p>
 
@@ -588,7 +578,7 @@
 <script src="/static/js/slinky.menu.js"></script>
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
-
+<script src="/static/js/checkout.js"></script>
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>
 

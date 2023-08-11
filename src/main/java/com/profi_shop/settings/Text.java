@@ -78,6 +78,7 @@ public class Text {
         data.put("ERROR_INVALID_PHONE_NUMBER","Номер введен неправильно");
         data.put("ERROR_INVALID_PASSWORD","Неверно введен пароль");
         data.put("ERROR_INVALID_PHOTO","Проблема с обработкой фотографии");
+        data.put("ERROR_EMPTY_CART","Корзина пуста. Для заказа пополните корзину");
 
         data.put("ERROR_PASSWORD_DONT_MATCH","Новый пароль и подтверждение не совпадают");
 

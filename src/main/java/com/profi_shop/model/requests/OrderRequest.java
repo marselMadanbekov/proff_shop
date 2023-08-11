@@ -6,11 +6,12 @@ import java.util.Map;
 
 @Data
 public class OrderRequest {
-    private Long shipmentId;
+    private String state;
+    private String town;
     private String streetAddress;
-    private String customerFirstname;
-    private String customerLastname;
-    private String customerPhone;
-    private String customerEmail;
-    private Map<Long,Integer> orderItems;
+    private String firstname;
+    private String lastname;
+    private String phone_number;
+    private String email;
+    private boolean toShip;
 }

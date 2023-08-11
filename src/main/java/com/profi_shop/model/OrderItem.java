@@ -13,8 +13,6 @@ public class OrderItem {
     private int quantity;
     @OneToOne
     private Product product;
-    @OneToOne
-    private Order order;
 
     private int price;
 }

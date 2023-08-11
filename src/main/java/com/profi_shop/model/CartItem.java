@@ -11,6 +11,11 @@ public class CartItem {
     private Long id;
     @ManyToOne
     private Product product;
+
+    private int discount;
     private int quantity;
-    private int amount;
+    public int getAmount(){
+        if(discount > 0)    return (int) (product.getPrice() - (product.getPrice() * discount) / 100.0) * quantity;
+        return product.getPrice() * quantity;
+    }
 }

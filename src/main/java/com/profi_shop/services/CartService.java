@@ -31,18 +31,28 @@ public class CartService {
 
     private final CartItemRepository cartItemRepository;
 
+    private final PriceService priceService;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, PriceService priceService) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
+        this.priceService = priceService;
     }
 
     public Cart getCartByUsername(String username){
         User user = getUserByUsername(username);
         Cart cart = cartRepository.findByUser(user).orElse(new Cart(user));
+        if(cart.needForUpdating()){
+            System.out.println("hello there is my need to update");
+            for(CartItem cartItem : cart.getCartItems()){
+                cartItem.setDiscount(priceService.getDiscountForProductForUser(cartItem.getProduct(),true));
+                cartItemRepository.save(cartItem);
+            }
+        }
         return cartRepository.save(cart);
     }
 
@@ -69,7 +79,7 @@ public class CartService {
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
-        cartItem.setAmount(product.getPrice() * cartItem.getQuantity());
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,true));
         cartItemRepository.save(cartItem);
         cart.addItemToCart(cartItem);
         return cartRepository.save(cart);
@@ -80,7 +90,7 @@ public class CartService {
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
-        cartItem.setAmount(cartItem.getQuantity()*product.getPrice());
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
         cart.addItemToCart(cartItem);
         return cart;
     }
@@ -108,7 +118,7 @@ public class CartService {
             String encodedJson = Base64.getEncoder().encodeToString(serializedCart.getBytes());
             System.out.println(encodedJson);
             Cookie cartCookie = new Cookie("cart", encodedJson);
-            cartCookie.setMaxAge(7 * 24 * 60 * 60); // Например, на неделю
+            cartCookie.setMaxAge(4 * 60 * 60); // Например, на неделю
             cartCookie.setPath("/");
             response.addCookie(cartCookie);
         } catch (JsonProcessingException e) {

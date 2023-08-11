@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 public class ShipmentService {
@@ -35,6 +36,13 @@ public class ShipmentService {
         }
     }
 
+    public List<String> getUniqueStates() {
+        return shipmentRepository.findDistinctStates();
+    }
+    public List<String> getUniqueTowns() {
+        return shipmentRepository.findDistinctTown();
+    }
+
     public Page<Shipment> getPagedShipments(Integer page) {
         Pageable pageable = PageRequest.of(page,15);
         return shipmentRepository.findAll(pageable);
@@ -46,5 +54,17 @@ public class ShipmentService {
 
     private Shipment getShipmentById(Long id){
         return shipmentRepository.findById(id).orElseThrow(() ->new SearchException(SearchException.SHIPMENT_NOT_FOUND));
+    }
+
+    public List<String> getTownsByState(String state) {
+        return shipmentRepository.findTownsByState(state);
+    }
+
+    public Integer calculateShipping(String state, String town) {
+        return getShippingByStateAndTown(state,town).getCost();
+    }
+
+    public Shipment getShippingByStateAndTown(String state, String town){
+        return shipmentRepository.findByTownAndState(town,state).orElseThrow(() -> new SearchException(SearchException.SHIPMENT_NOT_FOUND));
     }
 }

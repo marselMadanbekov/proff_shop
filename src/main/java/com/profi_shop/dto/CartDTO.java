@@ -1,5 +1,6 @@
 package com.profi_shop.dto;
 
+import com.profi_shop.model.CartItem;
 import lombok.Data;
 
 import java.util.List;
@@ -8,5 +9,5 @@ import java.util.List;
 public class CartDTO {
     private Long id;
     private UserDTO user;
-    private List<ProductDetailsDTO> products;
+    private List<CartItem> products;
 }

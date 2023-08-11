@@ -3,6 +3,8 @@ package com.profi_shop.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +22,20 @@ public class Cart {
     @OneToMany
     private List<CartItem> cartItems = new ArrayList<>();
 
+    private Date last_update;
+
+    @PrePersist
+    private void onCreate(){
+        this.last_update = Date.valueOf(LocalDate.now());
+    }
+
+    public void updated(){
+        this.last_update = Date.valueOf(LocalDate.now());
+    }
+
+    public boolean needForUpdating(){
+        return LocalDate.now().minusDays(1).isAfter(last_update.toLocalDate());
+    }
     public Cart(){}
     public Cart(User user){
         this.user = user;
@@ -37,7 +53,6 @@ public class Cart {
         for(CartItem item : cartItems){
             if(item.getProduct().equals(product)){
                 item.setQuantity(quantity);
-                item.setAmount(quantity * product.getPrice());
             }
         }
     }

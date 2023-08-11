@@ -11,4 +11,6 @@ public class ProductDTO {
     private int price;
     private List<String> photos;
     private int discount;
+    private int newPrice;
+    private int oldPrice;
 }

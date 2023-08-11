@@ -7,6 +7,7 @@ import com.profi_shop.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -25,4 +26,5 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     List<Stock> findToActiveStocks(@Param("currentDate") LocalDate currentDate);
     @Query("SELECT s FROM Stock s WHERE (s.endDate < :currentDate OR s.startDate > :currentDate) AND s.active = true")
     List<Stock> findDisActiveStocks(@Param("currentDate") LocalDate currentDate);
+
 }

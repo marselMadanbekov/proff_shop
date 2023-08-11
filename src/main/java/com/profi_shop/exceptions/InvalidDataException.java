@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InvalidDataException extends Exception{
+public class InvalidDataException extends RuntimeException{
     public static final int INVALID_NAME = 1;
     public static final int INVALID_AGE = 2;
     public static final int INVALID_EMAIL = 3;
@@ -15,8 +15,8 @@ public class InvalidDataException extends Exception{
     public static final int TARGET_USER_NOT_EQUAL_REQUESTER = 6;
     public static final int PASSWORDS_DONT_MATCH = 7;
     public static final int INVALID_PASSWORD = 8;
-
     public static final int INVALID_PHOTO = 9;
+    public static final int EMPTY_CART = 10;
 
     private final int code;
     public InvalidDataException(int code){
@@ -33,6 +33,7 @@ public class InvalidDataException extends Exception{
             case 7 -> Text.get("ERROR_PASSWORD_DONT_MATCH");
             case 8 -> Text.get("ERROR_INVALID_PASSWORD");
             case 9 -> Text.get("ERROR_INVALID_PHOTO");
+            case 10 -> Text.get("ERROR_EMPTY_CART");
             default -> null;
         };
     }
