@@ -36,9 +36,12 @@ public class Cart {
     public boolean needForUpdating(){
         return LocalDate.now().minusDays(1).isAfter(last_update.toLocalDate());
     }
-    public Cart(){}
+    public Cart(){
+        updated();
+    }
     public Cart(User user){
         this.user = user;
+        updated();
     }
 
     public void addItemToCart(CartItem cartItem){

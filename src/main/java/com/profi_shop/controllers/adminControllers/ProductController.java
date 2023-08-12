@@ -20,7 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -83,16 +85,17 @@ public class ProductController {
     }
 
     @PostMapping("/receive-product")
-    public String receiveProduct(@RequestParam("store") Long storeId,
-                                 @RequestParam("productId") Long productId,
-                                 @RequestParam("quantity") int quantity) {
+    public ResponseEntity<Map<String ,String>> receiveProduct(@RequestParam("store") Long storeId,
+                                              @RequestParam("productId") Long productId,
+                                              @RequestParam("quantity") int quantity) {
+        Map<String,String> response = new HashMap<>();
         try {
-
             stockService.quantityUp(storeId, productId, quantity);
-            return "admin/product/products";
+            response.put("message", "Поступление сохранено");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return "admin/product/products";
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

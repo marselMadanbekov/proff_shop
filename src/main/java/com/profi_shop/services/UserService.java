@@ -27,49 +27,49 @@ public class UserService {
     private final UserRepository userRepository;
     private final WishlistRepository wishlistRepository;
     private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
     private final EmailServiceImpl emailService;
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, ProductRepository productRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.wishlistRepository = wishlistRepository;
         this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public User signUp(SignUpRequest request) {
+    public User signUp(SignUpRequest request) throws InvalidDataException {
         User user = new User();
-        user.setFirstname(request.getFirstname());
-        user.setLastname(request.getLastname());
+        user.setFirstname(Validator.validFirstname(request.getFirstname()));
+        user.setLastname(Validator.validLastname(request.getLastname()));
+        user.setPhone_number(Validator.validNumber(request.getPhone_number()));
         user.setRole(Role.ROLE_CUSTOMER);
         user.setEmail(request.getEmail());
         user.setUsername(request.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         user.setActive(true);
+        try {
+            userRepository.save(user);
+            Wishlist wishlist = new Wishlist();
+            wishlist.setCustomer(user);
+            wishlistRepository.save(wishlist);
 
-        userRepository.save(user);
-
-        Wishlist wishlist = new Wishlist();
-        wishlist.setCustomer(user);
-        wishlistRepository.save(wishlist);
-
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cartRepository.save(cart);
+        }catch (Exception e){
+            throw new ExistException(ExistException.USER_EXISTS);
+        }
+        cartRepository.save(new Cart(user));
         return user;
     }
 
     public void createAdmin(AdminCreateRequest adminCreate) {
         try {
             User user = new User();
-            user.setFirstname(adminCreate.getFirstname());
-            user.setLastname(adminCreate.getLastname());
+            user.setFirstname(Validator.validFirstname(adminCreate.getFirstname()));
+            user.setLastname(Validator.validLastname(adminCreate.getLastname()));
+            user.setPhone_number(Validator.validNumber(adminCreate.getPhone_number()));
             user.setRole(Role.ROLE_ADMIN);
             user.setEmail(adminCreate.getEmail());
             user.setUsername(adminCreate.getUsername());
@@ -81,13 +81,9 @@ public class UserService {
             store.setAdmin(user);
             storeRepository.save(store);
 
-            Wishlist wishlist = new Wishlist();
-            wishlist.setCustomer(user);
-            wishlistRepository.save(wishlist);
+            wishlistRepository.save(new Wishlist(user));
 
-            Cart cart = new Cart();
-            cart.setUser(user);
-            cartRepository.save(cart);
+            cartRepository.save(new Cart(user));
         } catch (Exception e) {
             throw new ExistException(ExistException.USER_EXISTS);
         }
@@ -147,8 +143,10 @@ public class UserService {
         User user = getUserByUsername(principal.getName());
         try {
             if (edit.getEmail() != null && !edit.getEmail().isEmpty()) user.setEmail(edit.getEmail());
-            if (edit.getFirstname() != null && !edit.getFirstname().isEmpty()) user.setFirstname(Validator.validFirstname(edit.getFirstname()));
-            if (edit.getLastname() != null && !edit.getLastname().isEmpty()) user.setLastname(Validator.validLastname(edit.getLastname()));
+            if (edit.getFirstname() != null && !edit.getFirstname().isEmpty())
+                user.setFirstname(Validator.validFirstname(edit.getFirstname()));
+            if (edit.getLastname() != null && !edit.getLastname().isEmpty())
+                user.setLastname(Validator.validLastname(edit.getLastname()));
             if (edit.getPhone_number() != null && !edit.getPhone_number().isEmpty())
                 user.setPhone_number(Validator.validNumber(edit.getPhone_number()));
             if (edit.getPassword() != null && !edit.getPassword().isEmpty())
@@ -159,17 +157,5 @@ public class UserService {
             System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    public void addProductToWishlist(Long productId, Principal principal) {
-        Product product = getProductById(productId);
-        User user = getUserByUsername(principal.getName());
-        Wishlist wishlist = wishlistRepository.findByCustomer(user).orElse(new Wishlist(user));
-        wishlist.addProduct(product);
-        wishlistRepository.save(wishlist);
-    }
-
-    private Product getProductById(Long productId){
-        return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 }

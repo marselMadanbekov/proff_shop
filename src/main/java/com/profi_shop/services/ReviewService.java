@@ -24,9 +24,6 @@ public class ReviewService {
     }
 
     public void createReview(ReviewRequest request, Principal principal) {
-        System.out.println(request.getReview() + " review");
-        System.out.println(request.getRating() + " rate");
-        System.out.println(request.getProductId() + "productId");
         try {
             Review review = new Review();
             Product product = getProductById(request.getProductId());
@@ -43,6 +40,10 @@ public class ReviewService {
     public Page<Review> lastReviewsByProductId(Long productId){
         Pageable pageable = PageRequest.of(0,9);
         return reviewRepository.getReviewByProduct(getProductById(productId),pageable);
+    }
+
+    public Review getReviewByUsername(String username){
+        return reviewRepository.findByUsername(username).orElse(null);
     }
 
     public int getAverageReviewByProduct(Product product){

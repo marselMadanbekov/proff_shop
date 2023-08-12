@@ -25,7 +25,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.RuntimeErrorException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -73,15 +76,12 @@ public class AuthController {
 
 
     @PostMapping("/signIn")
-    public String authenticateUser(@Valid LoginRequest loginRequest,
-                                   HttpServletRequest request,
-                                   HttpServletResponse response,
-                                   BindingResult bindingResult) {
+    public ResponseEntity<Map<String,String>> authenticateUser(@Valid LoginRequest loginRequest,
+                                                HttpServletRequest request,
+                                                HttpServletResponse response) {
 
+        Map<String,String> responseMessage = new HashMap<>();
         // Проверка наличия ошибок валидации
-        if (bindingResult.hasErrors()) {
-            return "shop/error";
-        }
 
         Authentication authentication;
         try {
@@ -91,9 +91,11 @@ public class AuthController {
             ));
         } catch (Exception e) {
             if (e instanceof DisabledException) {
-                return "redirect:/shop/error?message=Ваш аккаунт заблокирован!";
+                responseMessage.put("error", "Ваш аккаунт заблокирован!");
+                return new ResponseEntity<>(responseMessage, HttpStatus.UNAUTHORIZED);
             }
-            return "redirect:/shop/error?message=Неправильные учетные данные";
+            responseMessage.put("error", "Неправильные логин или пароль!");
+            return new ResponseEntity<>(responseMessage,HttpStatus.BAD_REQUEST);
         }
 
         User user = userService.getUserByUsername(loginRequest.getUsername());
@@ -104,20 +106,27 @@ public class AuthController {
         cookie.setMaxAge(3600); // Устанавливаем срок действия куки в секундах (здесь 1 час)
         cookie.setPath("/");
         response.addCookie(cookie);
-
-        if(user.getRole() != Role.ROLE_CUSTOMER){
-            return "redirect:/admin/dashboard";
-        }
-        return "redirect:/account";
+        responseMessage.put("message", "Success");
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
     @PostMapping("/signUp")
-    public String register(@Valid SignUpRequest signUpRequest) {
+    public ResponseEntity<Map<String,String>> register(@Valid SignUpRequest signUpRequest,
+                                                       BindingResult bindingResult) {
+
+        Map<String, String> response = new HashMap<>();
+        if(bindingResult.hasErrors()){
+            response.put("error", "Пароли не совпадают");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
         try {
             userService.signUp(signUpRequest);
-            return "shop/account";
+            response.put("message", "Регистрация завершилась успешно");
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }catch (Exception e){
-            return "shop/register";
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

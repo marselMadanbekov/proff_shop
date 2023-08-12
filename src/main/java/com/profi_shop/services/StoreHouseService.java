@@ -36,11 +36,11 @@ public class StoreHouseService {
     }
 
     public void quantityUp(Long storeId, Long productId, int quantity) {
+
         Product product = getProductById(productId);
         Store store = getStoreById(storeId);
         StoreHouse storeHouse = getStoreHouseByProductAndStore(product,store);
         storeHouse.setQuantity(storeHouse.getQuantity() + quantity);
-
         storeHouseRepository.save(storeHouse);
     }
 

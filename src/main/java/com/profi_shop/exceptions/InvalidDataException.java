@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InvalidDataException extends RuntimeException{
+public class InvalidDataException extends Exception{
     public static final int INVALID_NAME = 1;
     public static final int INVALID_AGE = 2;
     public static final int INVALID_EMAIL = 3;

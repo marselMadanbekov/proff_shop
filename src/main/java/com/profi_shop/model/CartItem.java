@@ -15,7 +15,7 @@ public class CartItem {
     private int discount;
     private int quantity;
     public int getAmount(){
-        if(discount > 0)    return (int) (product.getPrice() - (product.getPrice() * discount) / 100.0) * quantity;
+        if(discount > 0)    return (int) Math.ceil(product.getPrice() - (product.getPrice() * discount) / 100.0) * quantity;
         return product.getPrice() * quantity;
     }
 }

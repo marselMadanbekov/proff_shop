@@ -2,6 +2,7 @@ package com.profi_shop.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.profi_shop.dto.CartDTO;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Cart;
 import com.profi_shop.model.CartItem;
@@ -12,6 +13,7 @@ import com.profi_shop.repositories.CartItemRepository;
 import com.profi_shop.repositories.CartRepository;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.UserRepository;
+import com.profi_shop.services.facade.CartFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,15 +33,17 @@ public class CartService {
 
     private final CartItemRepository cartItemRepository;
 
+    private final CartFacade cartFacade;
     private final PriceService priceService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, PriceService priceService) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, CartFacade cartFacade, PriceService priceService) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
+        this.cartFacade = cartFacade;
         this.priceService = priceService;
     }
 
@@ -64,7 +68,7 @@ public class CartService {
                     String cartDataEncoded = cookie.getValue();
                     String decoded = new String(Base64.getDecoder().decode(cartDataEncoded));
                     try {
-                        return objectMapper.readValue(decoded, Cart.class);
+                        return cartFacade.cartDTOToCart(objectMapper.readValue(decoded, CartDTO.class));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
@@ -114,7 +118,8 @@ public class CartService {
 
     public void saveCartToCookie(Cart cart, HttpServletResponse response) {
         try {
-            String serializedCart = objectMapper.writeValueAsString(cart);
+
+            String serializedCart = objectMapper.writeValueAsString(cartFacade.cartToCartDTO(cart));
             String encodedJson = Base64.getEncoder().encodeToString(serializedCart.getBytes());
             System.out.println(encodedJson);
             Cookie cartCookie = new Cookie("cart", encodedJson);
@@ -146,4 +151,6 @@ public class CartService {
         }
         return cartRepository.save(cart);
     }
+
+
 }

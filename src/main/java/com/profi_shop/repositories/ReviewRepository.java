@@ -17,4 +17,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Double> findAverageMarkByProduct(Product product);
 
     Page<Review> getReviewByProduct(Product product, Pageable pageable);
+
+    Optional<Review> findByUsername(String username);
 }

@@ -27,7 +27,7 @@ public class OrderService {
         this.cartService = cartService;
     }
 
-    public Order createOrderByUnknown(OrderRequest orderRequest, HttpServletRequest request){
+    public Order createOrderByUnknown(OrderRequest orderRequest, HttpServletRequest request) throws InvalidDataException {
         Order order = new Order();
         Cart cart = cartService.getCartByRequestCookies(request);
         int totalPrice = 0;

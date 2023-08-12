@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
     $(document).on('click', '.receive-button', function() {
-        var productId = $(this).data('product-id');
+        let productId = $(this).data('product-id');
 
         $('#receiveModal').modal('show');
 
@@ -11,9 +11,9 @@
 
     // Обработчик события для кнопки "Поступление" в диалоговом окне
     $('#receiveButton').click(function() {
-        var productId = $('#productId').val();
-        var store = $('#selectStore').val();
-        var quantity = $('#inputQuantity').val();
+        let productId = $('#productId').val();
+        let store = $('#selectStore').val();
+        let quantity = $('#inputQuantity').val();
 
         // Выполнить AJAX-запрос на отправку данных в базу данных
         $.ajax({
@@ -30,8 +30,16 @@
                 $('#receiveModal').modal('hide');
             },
             error: function(xhr, status, error) {
-                // Обработка ошибки при отправке данных
-                alert('Ошибка при регистрации поступления товара');
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('Что-то пошло не так');
+                    }
+                } catch (e) {
+                    alert('Что-то пошло не так');
+                }
             }
         });
     });

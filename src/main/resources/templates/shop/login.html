@@ -92,7 +92,7 @@
                                 <a href="contact.html"> Contact Us</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="login.html">Войти</a>
+                                <a href="/auth/login">Войти</a>
                             </li>
                         </ul>
                     </div>
@@ -242,11 +242,20 @@
             <!--login area start-->
             <div class="col-lg-12 col-md-6">
                 <div class="account_form">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner" id="spinner"></div>
+                    </div>
+                    <div id="modal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" id="closeModal">&times;</span>
+                            <p id="modalMessage"></p>
+                        </div>
+                    </div>
                     <div class="login_submit" style="display: flex; justify-content: space-between">
                         <h2>login</h2>
                         <button onclick="window.location.href='/auth/register'">Register</button>
                     </div>
-                    <form action="/auth/signIn" method="post">
+                    <form id="login">
                         <p>
                             <label>Username <span>*</span></label>
                             <input name="username" type="text" required>
@@ -574,6 +583,7 @@
 <script src="/static/js/slinky.menu.js"></script>
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
+<script src="/static/js/auth/login.js"></script>
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>
