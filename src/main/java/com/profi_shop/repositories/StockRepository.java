@@ -4,6 +4,8 @@ import com.profi_shop.model.Product;
 import com.profi_shop.model.Stock;
 import com.profi_shop.model.StoreHouse;
 import com.profi_shop.model.Store;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,5 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     @Query("SELECT s FROM Stock s WHERE (s.endDate < :currentDate OR s.startDate > :currentDate) AND s.active = true")
     List<Stock> findDisActiveStocks(@Param("currentDate") LocalDate currentDate);
 
+    Page<Stock> findByActive(Boolean active,Pageable pageable);
 }

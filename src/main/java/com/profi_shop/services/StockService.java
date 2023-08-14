@@ -11,7 +11,9 @@ import com.profi_shop.repositories.StockRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -99,5 +101,19 @@ public class StockService {
     public Page<Stock> getPagedStocks(int page) {
         Pageable pageable = PageRequest.of(page,15);
         return stockRepository.findAll(pageable);
+    }
+
+    public Page<Stock> filteredStocksPage(int status, int sort, int page){
+        Pageable pageable;
+        if(sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC,"discount"));
+        else if(sort == 1) pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"create_date"));
+        else if(sort == 2) pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"startDate"));
+        else pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"endDate"));
+
+        switch (status){
+            case 1: return stockRepository.findByActive(true,pageable);
+            case 2: return stockRepository.findByActive(false,pageable);
+            default: return stockRepository.findAll(pageable);
+        }
     }
 }

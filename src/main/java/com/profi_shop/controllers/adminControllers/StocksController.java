@@ -36,8 +36,12 @@ public class StocksController {
 
     @GetMapping("/stocks")
     public String stocks(@RequestParam(value = "page",required = false) Optional<Integer> page,
+                         @RequestParam(value = "status", required = false) Optional<Integer> status,
+                         @RequestParam(value = "sort", required = false) Optional<Integer> sort,
                          Model model) {
-        Page<Stock> stocks = stockService.getPagedStocks(page.orElse(0));
+        Page<Stock> stocks = stockService.filteredStocksPage(status.orElse(0),sort.orElse(0),page.orElse(0));
+        model.addAttribute("selectedStatus", status.orElse(0));
+        model.addAttribute("selectedSort", sort.orElse(0));
         model.addAttribute("stocks",stocks);
         return "admin/stock/stocksPage";
     }

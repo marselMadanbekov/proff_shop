@@ -223,22 +223,6 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                <ul class="navbar-nav mr-lg-2">
-                                    <a class="nav-link" data-toggle="collapse" href="#ui-basic"
-                                       aria-expanded="false" aria-controls="ui-basic">
-                                        <i class="ti-list-ol menu-icon"></i>
-                                        <span class="menu-title">Сортировать по</span>
-                                        <i class="menu-arrow"></i>
-                                    </a>
-                                    <div class="collapse" id="ui-basic">
-                                        <ul class="nav flex-column sub-menu">
-                                            <li class="nav-item"><a class="nav-link">Buttons</a></li>
-                                            <li class="nav-item"><a class="nav-link">Typography</a></li>
-                                        </ul>
-                                    </div>
-                                </ul>
-                            </div>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -296,6 +280,35 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Фильтры</h4>
+                            <p class="card-description">Выберите параметры акций</p>
+                            <div class="form-group">
+                                <label for="statusSelect">Выберите статус</label>
+                                <select class="form-control form-control-sm" id="statusSelect">
+                                    <option value="0" th:selected="${selectedStatus == 0}">Все</option>
+                                    <option value="1" th:selected="${selectedStatus == 1}">Только активные</option>
+                                    <option value="2" th:selected="${selectedStatus == 2}">Завершенные</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sortSelect">Сортировать по</label>
+                                <select class="form-control form-control-sm" id="sortSelect">
+                                    <option value="0" th:selected="${selectedSort == 0}">Скидке</option>
+                                    <option value="1" th:selected="${selectedSort == 1}">Дате создания</option>
+                                    <option value="2" th:selected="${selectedSort == 2}">Дате начала</option>
+                                    <option value="3" th:selected="${selectedSort == 3}">Дате завершения</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary mr-2" id="filter">Применить</button>
+                            <button class="btn btn-light" id="cancel">Сброс</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -311,8 +324,9 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/stocks/stocks.js"></script>
+<!--<script src="/static/js/stocks/stocks.js"></script>-->
 <script src="/static/js/stocks/deleteStock.js"></script>
+<script src="/static/js/stocks/stocksFilter.js"></script>
 
 
 <!-- endinject -->

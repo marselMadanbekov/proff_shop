@@ -4,7 +4,11 @@ import com.profi_shop.model.enums.StockType;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.*;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Data
 @Entity
@@ -18,11 +22,16 @@ public class Stock {
     private boolean for_authenticated;
     private int discount;
     private boolean active;
+    private Date create_date;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER)
     private List<Product> participants = new ArrayList<>();
 
+    @PrePersist
+    private void onCreate(){
+        this.create_date = Date.valueOf(LocalDate.now());
+    }
 
     public void addCategory(Category category){
         categories.add(category);
