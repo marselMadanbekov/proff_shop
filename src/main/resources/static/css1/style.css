@@ -62,7 +62,7 @@
   display: none;
   position: fixed;
   z-index: 9999;
-  top: 0;
+  top: 10px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -81,7 +81,13 @@
 }
 
 .progress-spinner {
-  /* Стили для индикатора прогресса (спиннера) */
+  border: 4px solid rgba(0, 0, 0, 0.3);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  display: none; /* Начально скрываем спиннер */
 }
 @-moz-keyframes flash {
   0% {

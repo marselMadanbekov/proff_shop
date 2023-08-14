@@ -22,7 +22,7 @@ public class ShipmentService {
     }
 
 
-    public void createShipment(ShipmentCreateRequest request) {
+    public void createShipment(ShipmentCreateRequest request) throws ExistException {
         Shipment shipment = new Shipment();
         shipment.setCost(request.getCost());
         shipment.setTown(request.getTown());

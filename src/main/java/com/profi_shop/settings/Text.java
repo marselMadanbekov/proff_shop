@@ -48,21 +48,23 @@ public class Text {
         data.put("ERROR_DATE_FORMAT","Неправильный формат даты!");
 
         data.put("ERROR_USER_NOT_FOUND","Пользователь не найден!");
-        data.put("ERROR_STORE_NOT_FOUND","Филиал не найден");
-        data.put("ERROR_PRODUCT_NOT_FOUND","Продукт не найден");
-        data.put("ERROR_ORDER_NOT_FOUND","Заказ не найден");
-        data.put("ERROR_CATEGORY_NOT_FOUND","Категория не найдена");
-        data.put("ERROR_CONSUMPTION_NOT_FOUND","Расход не найден");
-        data.put("ERROR_STOCK_NOT_FOUND","Склад не найден");
-        data.put("ERROR_SHIPMENT_NOT_FOUND","Доставка не найдена");
-        data.put("ERROR_COUPON_TEMPLATE_NOT_FOUND","Шаблон купона не найден");
-        data.put("ERROR_WISHLIST_NOT_FOUND","Избранное не найдено");
+        data.put("ERROR_STORE_NOT_FOUND","Филиал не найден!");
+        data.put("ERROR_PRODUCT_NOT_FOUND","Продукт не найден!");
+        data.put("ERROR_ORDER_NOT_FOUND","Заказ не найден!");
+        data.put("ERROR_CATEGORY_NOT_FOUND","Категория не найдена!");
+        data.put("ERROR_CONSUMPTION_NOT_FOUND","Расход не найден!");
+        data.put("ERROR_STOCK_NOT_FOUND","Склад не найден!");
+        data.put("ERROR_SHIPMENT_NOT_FOUND","Доставка не найдена!");
+        data.put("ERROR_COUPON_TEMPLATE_NOT_FOUND","Шаблон купона не найден!");
+        data.put("ERROR_WISHLIST_NOT_FOUND","Избранное не найдено!");
+        data.put("ERROR_PRODUCT_VARIATION_NOT_FOUND","Такого размера товара нет!");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 
 
         data.put("ERROR_USER_EXISTS","Пользователь с таким логином уже существует!");
         data.put("ERROR_SHIPMENT_EXISTS","Доставка уже существует!");
+        data.put("ERROR_SIZE_OF_PRODUCT_EXIST","Вариант продукта с таким размером уже существует!");
 
         data.put("ERROR_NAME_EMPTY","Поле имени не может быть пустым!");
         data.put("ERROR_PASSWORD_EMPTY","Пароль не должен быть пустым!");

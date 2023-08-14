@@ -1,10 +1,11 @@
 package com.profi_shop.dto;
 
+import com.profi_shop.model.ProductVariation;
 import com.profi_shop.model.StoreHouse;
-import com.profi_shop.model.enums.ProductSize;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ProductDetailsDTO {
@@ -19,11 +20,12 @@ public class ProductDetailsDTO {
     private int oldPrice;
 
     private String color;
-    private ProductSize size;
+    private List<ProductVariation> productVariations;
     private int averageRating;
 
     private boolean inCart;
     private boolean inWishlist;
+    private Map<ProductVariation,Integer> productVariationCount;
     private List<StoreHouse> storeHouses;
 
     private String description;

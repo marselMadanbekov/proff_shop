@@ -21,7 +21,7 @@ public class Product {
     private int price;
     private String sku;
     private String color;
-    private ProductSize size;
+
     private Date create_date;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "product_id"))
@@ -41,4 +41,5 @@ public class Product {
     public void removePhoto(String photo) {
         photos.remove(photo);
     }
+
 }

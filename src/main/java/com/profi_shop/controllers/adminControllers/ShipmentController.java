@@ -48,7 +48,7 @@ public class ShipmentController {
         try{
             shipmentService.createShipment(shipment);
             return new ResponseEntity<>("Доставка успешно создана", HttpStatus.OK);
-        }catch (ExistException e){
+        }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }

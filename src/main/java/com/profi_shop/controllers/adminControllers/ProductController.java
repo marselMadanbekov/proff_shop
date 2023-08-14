@@ -2,8 +2,10 @@ package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.dto.ProductDetailsDTO;
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
+import com.profi_shop.model.ProductVariation;
 import com.profi_shop.model.requests.ProductCreateRequest;
 import com.profi_shop.model.Store;
 import com.profi_shop.services.CategoryService;
@@ -34,14 +36,14 @@ public class ProductController {
     private final CategoryService categoryService;
 
     private final ProductFacade productFacade;
-    private final StoreHouseService stockService;
+    private final StoreHouseService storeHouseService;
     private final StoreService storeService;
 
     public ProductController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, StoreHouseService stockService, StoreService storeService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.productFacade = productFacade;
-        this.stockService = stockService;
+        this.storeHouseService = stockService;
         this.storeService = storeService;
     }
 
@@ -49,11 +51,36 @@ public class ProductController {
     @PostMapping("/create-product")
     public ResponseEntity<String> createProduct(@ModelAttribute ProductCreateRequest product) {
         try {
-            Product createdProduct = productService.createProduct(product);
-            stockService.createStocksProduct(createdProduct);
+            productService.createProduct(product);
             return new ResponseEntity<>("Successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/products/deleteVariation")
+    public ResponseEntity<Map<String, String>> deleteVariation(@RequestParam Long variationId) {
+        Map<String,String> response = new HashMap<>();
+        try{
+            response.put("message", "Размер товара успешно удален");
+            productService.deleteProductVariationById(variationId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/products/addVariation")
+    public ResponseEntity<Map<String, String>> addVariation(@RequestParam Integer size,
+                                                            @RequestParam Long productId) {
+        Map<String,String> response = new HashMap<>();
+        try{
+            response.put("message", "Новый размер товара успешно добавлен");
+            productService.addVariationToProduct(productId, size);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -86,11 +113,11 @@ public class ProductController {
 
     @PostMapping("/receive-product")
     public ResponseEntity<Map<String ,String>> receiveProduct(@RequestParam("store") Long storeId,
-                                              @RequestParam("productId") Long productId,
+                                              @RequestParam("productId") Long productVar,
                                               @RequestParam("quantity") int quantity) {
         Map<String,String> response = new HashMap<>();
         try {
-            stockService.quantityUp(storeId, productId, quantity);
+            storeHouseService.quantityUp(storeId, productVar, quantity);
             response.put("message", "Поступление сохранено");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
@@ -124,8 +151,10 @@ public class ProductController {
 
     @GetMapping("/productDetails")
     public String productDetails(@RequestParam("productId") Long productId, Model model) {
-        Product product = productService.getProductById(productId);
+        ProductDetailsDTO product = productFacade.productToProductDetailsDTO(productService.getProductById(productId));
+        List<Store> stores = storeService.getAllStores();
         model.addAttribute("product", product);
+        model.addAttribute("stores", stores);
         return "admin/product/productDetails";
     }
 

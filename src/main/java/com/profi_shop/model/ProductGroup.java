@@ -3,15 +3,15 @@ package com.profi_shop.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
-public class StoreHouse {
+public class ProductGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Store store;
-    @ManyToOne
-    private ProductVariation product;
-    private int quantity;
+    
+    @OneToMany
+    private List<Product> products;
 }

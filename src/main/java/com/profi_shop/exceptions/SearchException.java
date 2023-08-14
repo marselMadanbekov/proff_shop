@@ -18,6 +18,7 @@ public class SearchException extends RuntimeException{
     public static final int SHIPMENT_NOT_FOUND = 8;
     public static final int COUPON_TEMPLATE_NOT_FOUND = 9;
     public static final int WISHLIST_NOT_FOUND = 10;
+    public static final int PRODUCT_VARIATION_NOT_FOUND = 11;
 
 
     private final int code;
@@ -40,6 +41,7 @@ public class SearchException extends RuntimeException{
             case 8 -> Text.get("ERROR_SHIPMENT_NOT_FOUND");
             case 9 -> Text.get("ERROR_COUPON_TEMPLATE_NOT_FOUND");
             case 10 -> Text.get("ERROR_WISHLIST_NOT_FOUND");
+            case 11 -> Text.get("ERROR_PRODUCT_VARIATION_NOT_FOUND");
             default -> "";
         };
     }

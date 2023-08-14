@@ -296,11 +296,11 @@
                                 <li th:style="'background:' + ${product.color}"><a href="#"></a></li>
                             </ul>
                         </div>
-                        <div class="product_variant">
+                        <div class="product_variant size">
                             <label>size</label>
-                            <ul>
-                                <li th:text="${product.size}"><a href="#"></a></li>
-                            </ul>
+                            <select class="select_option" id="color2" name="produc_color2">
+                                <option th:disabled="${product.getProductVariationCount().get(productVariable) == 0}" th:value="${productVariable.id}" th:each="productVariable : ${product.getProductVariations()}" th:text="${productVariable.productSize + ' (' + product.getProductVariationCount().get(productVariable) + ')'}"></option>
+                            </select>
                         </div>
                         <div class="product_variant quantity">
                             <label>quantity</label>
@@ -323,10 +323,6 @@
                         </div>
                         <div class="product_meta" th:if="${product.category != null}">
                             <span>Category: <a href="#" th:text="${product.category.name}"></a></span>
-                        </div>
-                        <div class="product_meta">
-                            <span>Count on store: <a th:each="storeHouse: ${product.getStoreHouses()}" href="#"
-                                                     th:text="${storeHouse.store.town} + ':' + ${storeHouse.quantity} + ','"></a></span>
                         </div>
                     </form>
                     <div>

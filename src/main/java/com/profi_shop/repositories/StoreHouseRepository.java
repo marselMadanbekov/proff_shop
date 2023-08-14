@@ -1,6 +1,7 @@
 package com.profi_shop.repositories;
 
 import com.profi_shop.model.Product;
+import com.profi_shop.model.ProductVariation;
 import com.profi_shop.model.Store;
 import com.profi_shop.model.StoreHouse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface StoreHouseRepository extends JpaRepository<StoreHouse, Long> {
-    Optional<StoreHouse> findByProductAndStore(Product product, Store store);
+    Optional<StoreHouse> findByProductAndStore(ProductVariation product, Store store);
 
-    List<StoreHouse> findStoreHouseByProduct(Product product);
+    List<StoreHouse> findStoreHouseByProduct(ProductVariation product);
 }

@@ -41,7 +41,7 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public User signUp(SignUpRequest request) throws InvalidDataException {
+    public User signUp(SignUpRequest request) throws InvalidDataException, ExistException {
         User user = new User();
         user.setFirstname(Validator.validFirstname(request.getFirstname()));
         user.setLastname(Validator.validLastname(request.getLastname()));
@@ -64,7 +64,7 @@ public class UserService {
         return user;
     }
 
-    public void createAdmin(AdminCreateRequest adminCreate) {
+    public void createAdmin(AdminCreateRequest adminCreate) throws ExistException {
         try {
             User user = new User();
             user.setFirstname(Validator.validFirstname(adminCreate.getFirstname()));

@@ -19,18 +19,18 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findAllByCategory(Category category);
 
-    Page<Product> findAllByCategoryAndColorAndSize(Pageable pageable, Category category, String color, ProductSize productSize);
+    Page<Product> findAllByCategoryAndColor(Pageable pageable, Category category, String color);
 
     @Query("SELECT p FROM Product p " +
             "WHERE (:category IS NULL OR p.category = :category) " +
             "AND (:query IS NULL OR (p.name = :query OR p.sku = :query)) " +
-            "AND (:productSize IS NULL OR p.size = :productSize) " +
+//            "AND (:productSize IS NULL OR p.size = :productSize) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
             "AND (:maxPrice IS NULL OR p.price <= :maxPrice)")
     Page<Product> findAllByFilters(
             Category category,
             String query,
-            ProductSize productSize,
+//            ProductSize productSize,
             Integer minPrice,
             Integer maxPrice,
             Pageable pageable
