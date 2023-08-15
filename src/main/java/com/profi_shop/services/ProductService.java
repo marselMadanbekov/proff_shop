@@ -86,7 +86,7 @@ public class ProductService {
         Integer targetMinPrice = (minPrice == maxPrice) ? null : minPrice;
         Integer targetMaxPrice = (maxPrice == minPrice) ? null : maxPrice;
 
-        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, pageable);
+        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice,targetSize, pageable);
     }
 
     public List<Product> getAllProducts() {

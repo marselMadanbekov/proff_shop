@@ -28,6 +28,7 @@
                 // Дополнительные действия при успешной отправке данных
                 alert('Поступление товара успешно зарегистрировано');
                 $('#receiveModal').modal('hide');
+                window.location.reload();
             },
             error: function(xhr, status, error) {
                 try {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <!-- Required meta tags -->
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>RoyalUI Admin</title>
@@ -22,9 +22,9 @@
 <div class="container-scroller">
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="/dashboard"><img src="/static/images/logo.svg" class="mr-2"
+            <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="/static/images/logo.svg" class="mr-2"
                                                                            alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="/dashboard"><img src="/static/images/logo-mini.svg"
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/static/images/logo-mini.svg"
                                                                            alt="logo"/></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -37,7 +37,8 @@
                        id="messageDropdown" href="#" data-toggle="dropdown">
                         <i class="ti-email mx-0"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="messageDropdown">
                         <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
                         <a class="dropdown-item">
                             <div class="item-thumbnail">
@@ -131,7 +132,8 @@
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
                         <img src="/static/images/faces/face28.jpg" alt="profile"/>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="profileDropdown">
                         <a class="dropdown-item">
                             <i class="ti-settings text-primary"></i>
                             Settings
@@ -208,199 +210,72 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">Proff Products</h4>
+                            <h4 class="font-weight-bold mb-0">Создать карточку</h4>
                         </div>
-                        <a href="/admin/createProduct" type="button"
-                           class="nav-link btn btn-primary btn-icon-text btn-rounded">
-                            <i class="ti-plus btn-icon-prepend"></i>Create product
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Продажи</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">34040</h3>
-                                <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-danger">0.12% <span
-                                    class="text-black ml-1"><small>(30 days)</small></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Посещения</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">47033</h3>
-                                <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-danger">0.47% <span
-                                    class="text-black ml-1"><small>(30 days)</small></span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Заказы</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">40016</h3>
-                                <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-success">64.00%<span
-                                    class="text-black ml-1"><small>(30 days)</small></span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title text-md-center text-xl-left">Филиалы</p>
-                            <div
-                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
-                                <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
-                                <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
-                            </div>
-                            <p class="mb-0 mt-2 text-success">23.00%<span
-                                    class="text-black ml-1"><small>(30 days)</small></span>
-                            </p>
+                        <div>
+                            <button class="btn btn-primary btn-rounded" onclick="createPromotion()">Сохранить</button>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                <p class="card-title mb-0" style="margin-top: 10px;">All Products</p>
-                                <a href="/admin/productGroups">Карточки товаров</a>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Фото</th>
-                                        <th>Продукт</th>
-                                        <th>Категория</th>
-                                        <th>Стоимость</th>
-                                        <th>SKU</th>
-                                        <th>Скидка</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="product : ${products.getContent()}">
-                                        <td>
-                                            <img th:if="${not #lists.isEmpty(product.photos)}"
-                                                 th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
-                                        </td>
-                                        <td>
-                                            <a th:href="@{'/admin/productDetails?productId=' + ${product.id}}">
-                                                <span th:text="${product.name}"></span>
-                                            </a>
-                                        </td>
-                                        <td th:text="${product.category == null ? '': product.category.name}"></td>
-                                        <td th:text="${product.oldPrice}"></td>
-                                        <td th:text="${product.sku}"></td>
-                                        <td th:text="${product.discount}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <input hidden id="page" th:value="${products.number}">
-                                    <ul>
-                                        <li th:if="${products.number > 0}" class="pagination-link" th:attr="page=${0}">
-                                            <a
-                                                    href="#"><<</a>
-                                        </li>
-                                        <li th:if="${products.number > 0}" class="pagination-link"
-                                            th:attr="page=${products.number - 1}"><a href="#"
-                                                                                     th:text="${products.number}"></a>
-                                        </li>
-                                        <li class="current"><a href="#" th:text="${products.number + 1}"></a></li>
-                                        <li th:if="${products.number + 1 < products.totalPages}" class="pagination-link"
-                                            th:attr="page=${products.number + 1}"><a href="#"
-                                                                                     th:text="${products.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${products.number + 2 < products.totalPages}" class="pagination-link"
-                                            th:attr="page=${products.number + 2}"><a href="#"
-                                                                                     th:text="${products.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${products.number + 1< products.totalPages}" class="pagination-link"
-                                            th:attr="page=${products.totalPages - 1}"><a href="#">>></a>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <p class="card-title text-md-center text-xl-left">Название карточки</p>
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="productGroupName">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-md-6 grid-margin stretch-card">
+                <div class="col-md-5 grid-margin stretch-card" style="display: none" id="productFilter">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Фильтры</h4>
                             <p class="card-description">Выберите параметры товаров</p>
                             <div class="form-group">
                                 <label for="searchQuery">Имя или штрихкод</label>
-                                <input class="form-control" id="searchQuery" type="text" th:value="${query}">
-                            </div>
-                            <div class="form-group">
-                                <label for="categorySelect">Выберите категорию</label>
-                                <select class="form-control form-control-sm" id="categorySelect">
-                                    <option value="0" th:selected="${selectedCategory == 0}">Все</option>
-                                    <option th:each="category: ${categories}"
-                                            th:value="${category.id}"
-                                            th:selected="${selectedCategory == category.id}"
-                                            th:text="${category.name}"></option>
-                                </select>
+                                <input class="form-control" id="searchQuery" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="sizeSelect">Выберите размер</label>
                                 <select class="form-control form-control-sm" id="sizeSelect">
-                                    <option value="0" th:selected="${selectedSize == 0}">Все</option>
-                                    <option value="1" th:selected="${selectedSize == 1}">S</option>
-                                    <option value="2" th:selected="${selectedSize == 2}">M</option>
-                                    <option value="3" th:selected="${selectedSize == 3}">L</option>
-                                    <option value="4" th:selected="${selectedSize == 4}">XL</option>
-                                    <option value="5" th:selected="${selectedSize == 5}">XXL</option>
+                                    <option value="0">Все</option>
+                                    <option value="1">S</option>
+                                    <option value="2">M</option>
+                                    <option value="3">L</option>
+                                    <option value="4">XL</option>
+                                    <option value="5">XXL</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="price">Диапазон цен</label>
                                 <div class="d-flex justify-content-between" id="price">
                                     <input id="minPrice" class="form-control form-control-sm" style="width: 40%"
-                                           type="number" min="0" th:value="${minPrice}">
+                                           type="number" min="0">
                                     <input id="maxPrice" class="form-control form-control-sm" style="width: 40%"
-                                           type="number" min="0" th:value="${maxPrice}">
+                                           type="number" min="0">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="sortSelect">Выберите способ сортировки</label>
                                 <select class="form-control form-control-sm" id="sortSelect">
-                                    <option value="0" th:selected="${sortType == 0}">
+                                    <option value="0">
                                         None sort
                                     </option>
-                                    <option value="1" th:selected="${sortType == 1}">
+                                    <option value="1">
                                         sort by newness
-                                    <option value="2" th:selected="${sortType == 2}">
+                                    <option value="2">
                                         Sort by price: low to high
-                                    <option value="3" th:selected="${sortType == 3}">
+                                    <option value="3">
                                         Sort by price: high to low
                                     </option>
-                                    <option value="4" th:selected="${sortType == 4}">
+                                    <option value="4">
                                         Product Name: Z
                                     </option>
                                 </select>
@@ -410,13 +285,71 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-7 grid-margin stretch-card" id="productsCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <p class="card-title mb-0" style="margin-top: 10px;">All Products</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="productTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Фото</th>
+                                        <th>Продукт</th>
+                                        <th>Стоимость</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product : ${products.getContent()}">
+                                        <td>
+                                            <img th:if="${not #lists.isEmpty(product.photos)}"
+                                                 th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
+                                        </td>
+                                        <td th:text="${product.name}"
+                                            th:data-product-id="${product.id}"
+                                        ></td>
+                                        <td>
+                                            <span th:text="${product.price}"></span>
+                                        </td>
+
+                                        <td>
+                                            <input type="checkbox"
+                                                   th:data-product-id="${product.id}"
+                                                   onclick="handleProductSelection(this)">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container">
+                                <div class="pagination" id="productPagination">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="page-link prev-page-link"
+                                               th:data-page="${products.number - 1}" th:if="${products.number > 0}">&laquo;</a>
+                                        </li>
+                                        <li th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}">
+                                            <a href="#" class="page-link"
+                                               th:class="${products.number == i} ? 'current' : ''" th:data-page="${i}"
+                                               th:text="${i + 1}"></a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="page-link next-page-link"
+                                               th:data-page="${products.number + 1}"
+                                               th:if="${products.number < products.totalPages - 1}">&raquo;</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <!-- container-scroller -->
-
-<!-- plugins:js -->
 <script src="/static/vendors/base/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page-->
@@ -426,12 +359,8 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/products/newProducts.js"></script>
-<script src="/static/js/products/products.js"></script>
-
+<script src="/static/js/products/createProductGroup.js"></script>
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
 </body>
-
-</html>

@@ -1,0 +1,161 @@
+const selectedProducts = {};
+
+let size = document.getElementById('sizeSelect').value;
+let searchQuery = document.getElementById('searchQuery').value;
+let minPrice = 0;
+let maxPrice = 0;
+let sort = document.getElementById('sortSelect').value;
+
+
+
+function updateProductsTable(data) {
+    const tableBody = $('#productTable tbody'); // Выбираем tbody таблицы
+    tableBody.empty(); // Очищаем содержимое tbody
+
+    // Генерируем HTML для новых строк таблицы на основе полученных данных
+    data.forEach(function (product) {
+        const isChecked = selectedProducts[product.id] ? 'checked' : ''; // Проверяем, выбран ли продукт
+        const photoUrl = product.photos.length > 0 ? `/products/${product.photos[0]}` : ''; // Получаем URL первого фото, если оно существует
+        const busy = product.discount > 0;
+        console.log(product.discount)
+        const row = `
+    <tr>
+      <td>
+        ${photoUrl ? `<img src="${photoUrl}">` : ''}
+      </td>
+      <td>${product.name}</td>
+      <td>${product.oldPrice}</td>
+      <td class="justify-content-center">
+        <input style="width: 10px" type="checkbox" data-product-id="${product.id}" onclick="handleProductSelection(this)" ${isChecked}>
+      </td>
+    </tr>
+  `;
+        tableBody.append(row); // Добавляем сгенерированную строку в tbody
+    });
+}
+
+function updateProductsPagination(data) {
+    const pagination = document.getElementById('productPagination');
+
+    // Генерируем ссылки для каждой страницы
+    let paginationHtml = '';
+
+    if (data.number > 0) {
+        paginationHtml += `<li>
+                                <a href="#" class="page-link prev-page-link" data-page="${0}">&laquo;</a>
+                           </li>`;
+    }
+
+
+    if(data.number > 1){
+        paginationHtml += `<li>
+                                <a href="#" class="page-link prev-page-link" data-page="${data.number - 1}">${data.number}</a>
+                           </li>`;
+    }
+
+    paginationHtml +=  `<li class="current">
+                                <a href="#" >${data.number + 1}</a>
+                           </li>`;
+
+    if (data.number + 1 < data.totalPages) {
+        paginationHtml += `<li>
+                                <a href="#" class="page-link next-page-link" data-page="${data.number + 1}">${data.number + 2}</a>
+                           </li>`;
+        paginationHtml += `<li>
+                                <a href="#" class="page-link next-page-link" data-page="${data.totalPages - 1}">&raquo;</a>
+                           </li>`;
+    }
+
+    // Добавляем ссылки в пагинацию
+    pagination.querySelector('ul').innerHTML = paginationHtml;
+}
+
+function loadNewProducts(pageNumber) {
+    let baseURL = '/admin/filter?';
+    let queryParams = '';
+
+    queryParams += 'size=' + encodeURIComponent(size) + '&';
+    queryParams += 'page=' + encodeURIComponent(pageNumber);
+    queryParams += '&minPrice=' + encodeURIComponent(minPrice);
+    queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
+    queryParams += '&sort=' + encodeURIComponent(sort);
+    if (searchQuery !== null && searchQuery !== '')
+        queryParams += '&query=' + encodeURIComponent(searchQuery);
+
+    $.ajax({
+        url: baseURL + queryParams,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            updateProductsTable(data.content);
+            updateProductsPagination(data);
+        },
+        error: function (xhr, status, error) {
+            console.error("Ошибка загрузки данных:", error);
+        }
+    });
+}
+
+function handleProductSelection(checkbox) {
+    const productId = $(checkbox).attr('data-product-id');
+    if (checkbox.checked) {
+        selectedProducts[productId] = true; // Добавляем продукт в выбранные
+    } else {
+        delete selectedProducts[productId]; // Удаляем продукт из выбранных
+    }
+    console.log(selectedProducts);
+}
+
+$(document).on("click", "#productPagination a", function (e) {
+    e.preventDefault();
+
+    const pageNumber = $(this).attr("data-page");
+    loadNewProducts(pageNumber);
+});
+
+$(document).on("click", "#filter", function (e) {
+    e.preventDefault();
+
+    size = document.getElementById('sizeSelect').value;
+    searchQuery = document.getElementById('searchQuery').value;
+    minPrice = document.getElementById('minPrice').value;
+    maxPrice = document.getElementById('maxPrice').value;
+    sort = document.getElementById('sortSelect').value;
+    loadNewProducts(0);
+});
+
+loadNewProducts(0);
+
+
+function createPromotion() {
+    // Получение данных акции
+    const groupName = $('#productGroupName').val();
+    // Создание объекта данных для отправки на сервер
+    const data = {
+        name: groupName,
+        members: selectedProducts,
+    };
+
+    $.ajax({
+        url: '/admin/create-productGroup', // URL вашего серверного маршрута для создания акции
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (response) {
+            // Успешное создание акции
+            alert(response.message)
+        },
+        error: function (xhr, status, error) {
+            try {
+                const errorData = JSON.parse(xhr.responseText);
+                if (errorData.hasOwnProperty("error")) {
+                    alert(errorData.error);
+                } else {
+                    alert('Что-то пошло не так');
+                }
+            } catch (e) {
+                alert('Что-то пошло не так');
+            }
+        }
+    });
+}

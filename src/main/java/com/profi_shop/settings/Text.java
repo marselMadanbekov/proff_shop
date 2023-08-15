@@ -58,6 +58,7 @@ public class Text {
         data.put("ERROR_COUPON_TEMPLATE_NOT_FOUND","Шаблон купона не найден!");
         data.put("ERROR_WISHLIST_NOT_FOUND","Избранное не найдено!");
         data.put("ERROR_PRODUCT_VARIATION_NOT_FOUND","Такого размера товара нет!");
+        data.put("ERROR_PRODUCT_GROUP_NOT_FOUND","Карточка не найдена!");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 

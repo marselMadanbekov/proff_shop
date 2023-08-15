@@ -17,7 +17,7 @@
                     success: function (response) {
                         // Обработка успешного удаления
                         alert(response.message);
-
+                        window.location.reload();
                         // Дополнительные действия при успешном удалении категории
                     },
                     error: function (xhr, status, error) {
@@ -47,7 +47,7 @@
                 success: function (response) {
                     // Обработка успешного удаления
                     alert(response.message);
-
+                    window.location.reload();
                     // Дополнительные действия при успешном удалении категории
                 },
                 error: function (xhr, status, error) {
