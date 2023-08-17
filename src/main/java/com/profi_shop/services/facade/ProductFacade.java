@@ -50,6 +50,7 @@ public class ProductFacade {
         productDTO.setAverageRating(reviewService.getAverageReviewByProduct(product));
         productDTO.setDiscount(getDiscountByProduct(product));
         productDTO.setOldPrice(product.getPrice());
+        productDTO.setSpecifications(product.getSpecifications());
         productDTO.setStoreHouses(getStoreHousesByProduct(product));
         productDTO.setProductVariationCount(getProductVariationsCount(productVariations));
         productDTO.setNewPrice(getNewPriceByPriceAndDiscount(product.getPrice(), productDTO.getDiscount()));

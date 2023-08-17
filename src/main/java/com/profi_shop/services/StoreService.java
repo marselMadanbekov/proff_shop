@@ -16,17 +16,20 @@ import java.util.List;
 public class StoreService {
     private final StoreRepository storeRepository;
 
+    private final StoreHouseService storeHouseService;
     @Autowired
-    public StoreService(StoreRepository storeRepository) {
+    public StoreService(StoreRepository storeRepository, StoreHouseService storeHouseService) {
         this.storeRepository = storeRepository;
+        this.storeHouseService = storeHouseService;
     }
 
-    public Store createStore(StoreDTO storeToCreate){
+    public void createStore(StoreDTO storeToCreate){
         Store store = new Store();
         store.setName(storeToCreate.getName());
         store.setTown(storeToCreate.getTown());
         store.setPhone_number(storeToCreate.getPhone_number());
-        return storeRepository.save(store);
+        store.setAddress(storeToCreate.getAddress());
+        storeRepository.save(store);
     }
 
     public List<Store> getAllStores() {

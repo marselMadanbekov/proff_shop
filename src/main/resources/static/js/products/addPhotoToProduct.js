@@ -1,33 +1,34 @@
-const saveButton = document.querySelector('#savePhoto');
+$(document).ready(function () {
+    $('#photoForm').submit(function (e) {
+        e.preventDefault(); // Отменяем стандартное поведение отправки формы
 
-// Добавляем обработчик события на клик кнопки "Save"
-saveButton.addEventListener('click', function(event) {
-    // Отменяем стандартное действие формы (отправку)
-    event.preventDefault();
+        var formData = new FormData(this); // Создаем объект FormData из формы
 
-    // Получаем ссылку на форму
-    const form = document.querySelector('form');
-
-    // Создаем объект FormData для сбора данных из формы, включая файл
-    const formData = new FormData(form);
-
-    // Выполняем AJAX-запрос на сервер
-    fetch('/admin/addPhoto', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => {
-            // Обрабатываем ответ от сервера
-            if (response.ok) {
-                // Если ответ успешный, делаем что-то, например, обновляем страницу
+        $('#progressModal').modal('show');
+        $.ajax({
+            url: '/admin/addPhoto',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $('#progressModal').modal('hide');
+                alert(response.message);
                 window.location.reload();
-            } else {
-                // Если ответ неуспешный, обрабатываем ошибку
-                alert('Ошибка при загрузке фото:' + response.statusText);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $('#progressModal').modal('hide');
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('Что-то пошло не так');
+                    }
+                } catch (e) {
+                    alert('Что-то пошло не так');
+                }
             }
-        })
-        .catch(error => {
-            // Обрабатываем ошибку, если AJAX-запрос не выполнен
-            console.error('Ошибка при выполнении запроса:', error);
         });
+    });
 });

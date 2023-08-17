@@ -21,6 +21,7 @@ public class ProductDetailsDTO {
 
     private String color;
     private List<ProductVariation> productVariations;
+    private Map<String,String> specifications;
     private int averageRating;
 
     private boolean inCart;

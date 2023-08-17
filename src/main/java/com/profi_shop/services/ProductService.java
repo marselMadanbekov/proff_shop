@@ -61,7 +61,11 @@ public class ProductService {
             throw new InvalidDataException(InvalidDataException.INVALID_PHOTO);
         }
 
-        productRepository.save(product);
+        try {
+            productRepository.save(product);
+        } catch (Exception e) {
+            throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
+        }
 
         ProductVariation productVariation = new ProductVariation();
         productVariation.setProductSize(ProductSize.values()[productToCreate.getSize()]);
@@ -86,7 +90,7 @@ public class ProductService {
         Integer targetMinPrice = (minPrice == maxPrice) ? null : minPrice;
         Integer targetMaxPrice = (maxPrice == minPrice) ? null : maxPrice;
 
-        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice,targetSize, pageable);
+        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, targetSize, pageable);
     }
 
     public List<Product> getAllProducts() {
@@ -110,11 +114,11 @@ public class ProductService {
         return productRepository.findAllByName(request, PageRequest.of(page, 9));
     }
 
-    public Product addPhotoToProductById(Long productId, MultipartFile photo) throws IOException {
+    public void addPhotoToProductById(Long productId, MultipartFile photo) throws IOException {
         Product product = getProductById(productId);
         String newPhoto = photoService.savePhoto(photo);
         product.addPhoto(newPhoto);
-        return productRepository.save(product);
+        productRepository.save(product);
     }
 
     public void deletePhotoByProductId(String photo, Long productId) throws IOException {
@@ -140,8 +144,20 @@ public class ProductService {
             productVariation.setParent(product);
             productVariationRepository.save(productVariation);
             storeHouseService.createStoreHouseProduct(productVariation);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ExistException(ExistException.SIZE_OF_PRODUCT_EXIST);
         }
+    }
+
+    public void addSpecificationToProduct(Long productId, String key, String value) {
+        Product product = getProductById(productId);
+        product.addSpecification(key,value);
+        productRepository.save(product);
+    }
+
+    public void deleteSpecificationOfProduct(Long productId, String key) {
+        Product product = getProductById(productId);
+        product.removeSpecification(key);
+        productRepository.save(product);
     }
 }

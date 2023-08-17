@@ -1,5 +1,6 @@
 package com.profi_shop.services;
 
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
@@ -33,30 +34,34 @@ public class StockService {
         this.productRepository = productRepository;
     }
 
-    public void createStock(StockRequest request){
-        Stock stock = new Stock();
-        stock.setStartDate(request.getStartDate());
-        stock.setEndDate(request.getEndDate());
-        stock.setDiscount(request.getDiscount());
-        stock.setFor_authenticated(request.getAuthenticated());
-        stock.setType(request.getType() == 1 ? StockType.CATEGORY : StockType.SELECT);
-        if(request.getType() == 1){
-            for(Long categoryId : request.getParticipants().keySet()){
-                Category current = categoryService.getCategoryById(categoryId);
-                stock.addCategory(current);
-                List<Product> products = productRepository.findAllByCategory(current);
-                stock.addAllParticipants(products);
+    public void createStock(StockRequest request) throws ExistException {
+        try {
+            Stock stock = new Stock();
+            stock.setStartDate(request.getStartDate());
+            stock.setEndDate(request.getEndDate());
+            stock.setDiscount(request.getDiscount());
+            stock.setFor_authenticated(request.getAuthenticated());
+            stock.setType(request.getType() == 1 ? StockType.CATEGORY : StockType.SELECT);
+            if (request.getType() == 1) {
+                for (Long categoryId : request.getParticipants().keySet()) {
+                    Category current = categoryService.getCategoryById(categoryId);
+                    stock.addCategory(current);
+                    List<Product> products = productRepository.findAllByCategory(current);
+                    stock.addAllParticipants(products);
+                }
+            } else {
+                for (Long productId : request.getParticipants().keySet()) {
+                    Product product = productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
+                    stock.addProduct(product);
+                }
             }
-        }else{
-            for(Long productId: request.getParticipants().keySet()){
-                Product product = productRepository.findById(productId).orElseThrow(()-> new SearchException(SearchException.PRODUCT_NOT_FOUND));
-                stock.addProduct(product);
-            }
-        }
 
-        boolean isActive = request.getStartDate().before(Date.valueOf(LocalDate.now())) && request.getEndDate().after(Date.valueOf(LocalDate.now()));
-        stock.setActive(isActive);
-        stockRepository.save(stock);
+            boolean isActive = request.getStartDate().before(Date.valueOf(LocalDate.now())) && request.getEndDate().after(Date.valueOf(LocalDate.now()));
+            stock.setActive(isActive);
+            stockRepository.save(stock);
+        }catch (Exception e){
+            throw new ExistException(ExistException.PRODUCT_IS_ALREADY_IN_STOCK);
+        }
     }
 
 

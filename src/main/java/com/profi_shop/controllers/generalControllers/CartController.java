@@ -74,6 +74,30 @@ public class CartController {
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
+    @PostMapping("/addByVariation")
+    public ResponseEntity<Map<String, String>> addToCartByVariationQuantity(@RequestParam("productId") Long productId,
+                                                         @RequestParam("variationId") Long variationId,
+                                                         @RequestParam("quantity") Integer quantity,
+                                                         HttpServletRequest request,
+                                                         HttpServletResponse response,
+                                                         Principal principal) {
+        Map<String, String> responseMessage = new HashMap<>();
+        Cart cart;
+        try {
+            if (principal == null) {
+                cart = cartService.addProductToCartProductByVariationAndQuantity(request, productId, variationId, quantity);
+                cartService.saveCartToCookie(cart, response);
+                responseMessage.put("message", "Продукт успешно добавлен в корзину");
+            } else {
+                cart = cartService.addProductToCartProductByVariationAndQuantity(principal.getName(), productId,variationId, quantity);
+                responseMessage.put("message", "Продукт успешно добавлен в корзину");
+            }
+        } catch (Exception e) {
+            responseMessage.put("error", e.getMessage());
+            return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
 
     @GetMapping("/remove")
     public ResponseEntity<Map<String, String>> removeFromCart(@RequestParam("productId") Long productId,

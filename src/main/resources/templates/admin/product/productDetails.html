@@ -231,12 +231,17 @@
 
                                     <tr th:each="productVariable: ${product.getProductVariations()}">
                                         <td class="text-muted" th:text="${productVariable.productSize}"></td>
-                                        <td class="text-muted" th:text="${product.getProductVariationCount().get(productVariable)}"></td>
+                                        <td class="text-muted"
+                                            th:text="${product.getProductVariationCount().get(productVariable)}"></td>
                                         <td>
-                                            <button class="btn btn-sm btn-danger deleteVariation" th:attr="productVarID=${productVariable.id}"><i class="ti-trash"></i></button>
+                                            <button class="btn btn-sm btn-danger deleteVariation"
+                                                    th:attr="productVarID=${productVariable.id}"><i
+                                                    class="ti-trash"></i></button>
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-success receive-button" th:data-product-id="${productVariable.id}">Поступление</button>
+                                            <button class="btn btn-sm btn-success receive-button"
+                                                    th:data-product-id="${productVariable.id}">Поступление
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -255,7 +260,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <form id="receiveForm">
-                                                    <input type="hidden" id="productId"/>
+                                                    <input type="hidden" id="productId" th:value="${product.id}"/>
                                                     <div class="form-group">
                                                         <label for="selectStore">Выберите категорию:</label>
                                                         <select class="form-control" id="selectStore">
@@ -295,7 +300,9 @@
                                         </select>
                                     </div>
                                     <div class="form-group align-content-center justify-content-center">
-                                        <button class="btn btn-sm btn-primary" th:attr="productId=${product.id}" id="newVariation">Добавить</button>
+                                        <button class="btn btn-sm btn-primary" th:attr="productId=${product.id}"
+                                                id="newVariation">Добавить
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -336,10 +343,7 @@
                         <div class="card-body">
                             <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
                                 <div>
-                                    <h4 class="card-title" style="margin-top: 10px;">Selected product</h4>
-                                    <p class="card-description">
-                                        Add class <code>.table-striped</code>
-                                    </p>
+                                    <h4 class="card-title" style="margin-top: 10px;">Детали товара</h4>
                                 </div>
                             </div>
 
@@ -348,51 +352,39 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            Name
+                                            Название
                                         </td>
-                                        <td>
-                                            Product name
-                                        </td>
+                                        <td th:text="${product.name}"></td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Price
+                                            Цена
                                         </td>
-                                        <td>
-                                            $245.30
-                                        </td>
+                                        <td th:text="${product.oldPrice}"></td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            SKU
+                                            Штрихкод
                                         </td>
-                                        <td>
-                                            098431345
-                                        </td>
+                                        <td th:text="${product.sku}"></td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Discount
+                                            Скидка
                                         </td>
+                                        <td th:text="${product.discount} + '%'"></td>
+                                    </tr>
+                                    <tr th:if="${product.category != null}">
                                         <td>
-                                            50%
+                                            Категория
                                         </td>
+                                        <td th:text="${product.category.name}"></td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            Category
+                                            Описание
                                         </td>
-                                        <td>
-                                            beauty
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Description
-                                        </td>
-                                        <td>
-                                            hello world
-                                        </td>
+                                        <td th:text="${product.description}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -408,9 +400,6 @@
                         <div class="card-body">
                             <div>
                                 <h4 class="card-title" style="margin-top: 10px;">Фото</h4>
-                                <p class="card-description">
-                                    Add class <code>.table-striped</code>
-                                </p>
                             </div>
                             <div class="gallery">
                                 <div class="main-photo mb-3"
@@ -431,9 +420,8 @@
                                          th:photo="${photo}"
                                          th:src="@{'/products/' + ${photo}}">
                                 </div>
-
                                 <hr>
-                                <form>
+                                <form id="photoForm">
                                     <div class="form-group">
                                         <label>Photo</label>
                                         <input type="file" name="photo" class="file-upload-default">
@@ -451,43 +439,59 @@
                                         <button class="btn btn-primary" type="submit" id="savePhoto">Save</button>
                                     </div>
                                 </form>
+                                <div id="progressModal" class="modal">
+                                    <div class="modal-content">
+                                        <div class="progress-spinner"></div>
+                                        <p>Sending...</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 grid-margin stretch-card">
+                <div class="col-md-5 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <p class="card-title">Sales details</p>
-                            <p class="text-muted font-weight-light">Received overcame oh sensible so at an. Formed do
-                                change merely
-                                to county it. Am separate contempt domestic to to oh. On relation my so addition
-                                branched.</p>
-                            <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
-                            <canvas id="sales-chart"></canvas>
-                        </div>
-                        <div class="card border-right-0 border-left-0 border-bottom-0">
-                            <div class="d-flex justify-content-center justify-content-md-end">
-                                <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
-                                    <button class="btn btn-lg btn-outline-light dropdown-toggle rounded-0 border-top-0 border-bottom-0"
-                                            type="button" id="dropdownMenuDate2" data-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="true">
-                                        Today
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
-                                        <a class="dropdown-item" href="#">January - March</a>
-                                        <a class="dropdown-item" href="#">March - June</a>
-                                        <a class="dropdown-item" href="#">June - August</a>
-                                        <a class="dropdown-item" href="#">August - November</a>
-                                    </div>
-                                </div>
-                                <button class="btn btn-lg btn-outline-light text-primary rounded-0 border-0 d-none d-md-block"
-                                        type="button"> View all
-                                </button>
+                            <p class="card-title">Спецификации</p>
+                            <div class="table-responsive mb-3 mb-md-0">
+                                <table class="table table-borderless report-table">
+                                    <thead>
+                                    <th>Название</th>
+                                    <th>Значение</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="specKey: ${product.getSpecifications().keySet()}">
+                                        <td class="text-muted" th:text="${specKey}"></td>
+                                        <td class="text-muted"
+                                            th:text="${product.specifications.get(specKey)}"></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger deleteSpecification"
+                                                    th:attr="specKey=${specKey}"><i
+                                                    class="ti-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Добавить спецификацию</h4>
+                            <form class="form-inline" id="addSpec">
+                                <input type="text" class="form-control mb-2 mr-sm-2" name="key"
+                                       placeholder="Название">
+
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <input type="text" class="form-control" name="value" placeholder="Значение">
+                                </div>
+                                <input hidden th:value="${product.id}" name="productId">
+                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -573,6 +577,7 @@
 <script src="/static/js/gallery.js"></script>
 <script src="/static/js/products/addPhotoToProduct.js"></script>
 <script src="/static/js/products/productVariations.js"></script>
+<script src="/static/js/products/productSpecification.js"></script>
 <script src="/static/js/products/newProducts.js"></script>
 
 <!-- endinject -->

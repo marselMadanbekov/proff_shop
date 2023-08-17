@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -58,16 +60,15 @@ public class StocksController {
     }
 
     @PostMapping("/create-stock")
-    public ResponseEntity<String> createStock(@RequestBody StockRequest createStock) {
+    public ResponseEntity<Map<String,String>> createStock(@RequestBody StockRequest createStock) {
+        Map<String,String> response = new HashMap<>();
         try {
-            System.out.println(createStock.getType());
-            for(Long id : createStock.getParticipants().keySet()){
-                System.out.println(id);
-            }
             stockService.createStock(createStock);
-            return new ResponseEntity<>("successfully", HttpStatus.OK);
+            response.put("message", "Акция успешно создана");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

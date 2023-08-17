@@ -14,4 +14,11 @@ public class StoreHouse {
     @ManyToOne
     private ProductVariation product;
     private int quantity;
+
+    public StoreHouse(){}
+
+    public StoreHouse(ProductVariation product, Store store){
+        this.product = product;
+        this.store = store;
+    }
 }

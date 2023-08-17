@@ -4,15 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profi_shop.dto.CartDTO;
 import com.profi_shop.exceptions.SearchException;
-import com.profi_shop.model.Cart;
-import com.profi_shop.model.CartItem;
-import com.profi_shop.model.Product;
-import com.profi_shop.model.User;
+import com.profi_shop.model.*;
 import com.profi_shop.model.requests.CartUpdateRequest;
-import com.profi_shop.repositories.CartItemRepository;
-import com.profi_shop.repositories.CartRepository;
-import com.profi_shop.repositories.ProductRepository;
-import com.profi_shop.repositories.UserRepository;
+import com.profi_shop.repositories.*;
 import com.profi_shop.services.facade.CartFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,16 +27,19 @@ public class CartService {
 
     private final CartItemRepository cartItemRepository;
 
+    private final ProductVariationRepository productVariationRepository;
+
     private final CartFacade cartFacade;
     private final PriceService priceService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, CartFacade cartFacade, PriceService priceService) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, CartFacade cartFacade, PriceService priceService) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
+        this.productVariationRepository = productVariationRepository;
         this.cartFacade = cartFacade;
         this.priceService = priceService;
     }
@@ -88,6 +85,21 @@ public class CartService {
         cart.addItemToCart(cartItem);
         return cartRepository.save(cart);
     }
+    public Cart addProductToCartProductByVariationAndQuantity(String username, Long productId, Long variationId, Integer quantity) {
+        Cart cart = getCartByUsername(username);
+        Product product = getProductById(productId);
+        CartItem cartItem = new CartItem();
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,true));
+        if(variationId > 0) {
+            ProductVariation productVariation = getProductVariationById(variationId);
+            cartItem.setProductVariation(productVariation);
+        }
+        cartItemRepository.save(cartItem);
+        cart.addItemToCart(cartItem);
+        return cartRepository.save(cart);
+    }
     public Cart addProductToCart(HttpServletRequest request, Long productId) {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
@@ -95,6 +107,20 @@ public class CartService {
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
         cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
+        cart.addItemToCart(cartItem);
+        return cart;
+    }
+    public Cart addProductToCartProductByVariationAndQuantity(HttpServletRequest request, Long productId, Long variationId, int quantity) {
+        Cart cart = getCartByRequestCookies(request);
+        Product product = getProductById(productId);
+        CartItem cartItem = new CartItem();
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
+        if(variationId > 0) {
+            ProductVariation productVariation = getProductVariationById(variationId);
+            cartItem.setProductVariation(productVariation);
+        }
         cart.addItemToCart(cartItem);
         return cart;
     }
@@ -153,4 +179,9 @@ public class CartService {
     }
 
 
+
+
+    private ProductVariation getProductVariationById(Long variationId) {
+        return productVariationRepository.findById(variationId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
+    }
 }

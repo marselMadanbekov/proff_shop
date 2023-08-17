@@ -66,6 +66,9 @@ public class Text {
         data.put("ERROR_USER_EXISTS","Пользователь с таким логином уже существует!");
         data.put("ERROR_SHIPMENT_EXISTS","Доставка уже существует!");
         data.put("ERROR_SIZE_OF_PRODUCT_EXIST","Вариант продукта с таким размером уже существует!");
+        data.put("ERROR_PRODUCT_SKU_EXIST","Продукт с таким штрихкодом уже существует!");
+        data.put("ERROR_WISHLIST_CONTAINS_PRODUCT","Продукт уже в избранных!");
+        data.put("ERROR_PRODUCT_IS_ALREADY_IN_STOCK","В списке присутствует продукт который уже участвует в другой акции!");
 
         data.put("ERROR_NAME_EMPTY","Поле имени не может быть пустым!");
         data.put("ERROR_PASSWORD_EMPTY","Пароль не должен быть пустым!");

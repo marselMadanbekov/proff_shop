@@ -2,6 +2,7 @@ package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.model.Category;
+import com.profi_shop.model.Product;
 import com.profi_shop.model.Review;
 import com.profi_shop.model.requests.ReviewRequest;
 import com.profi_shop.services.*;
@@ -22,18 +23,16 @@ import java.util.Optional;
 public class ShopController {
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final ProductGroupService productGroupService;
     private final ProductFacade productFacade;
     private final ReviewService reviewService;
-    private final UserService userService;
-    private final StockService stockService;
 
-    public ShopController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, ReviewService reviewService, UserService userService, StockService stockService) {
+    public ShopController(ProductService productService, CategoryService categoryService, ProductGroupService productGroupService, ProductFacade productFacade, ReviewService reviewService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.productGroupService = productGroupService;
         this.productFacade = productFacade;
         this.reviewService = reviewService;
-        this.userService = userService;
-        this.stockService = stockService;
     }
 
     @GetMapping("")
@@ -90,9 +89,11 @@ public class ShopController {
                                  Principal principal,
                                  Model model){
         ProductDetailsDTO product = productFacade.productToProductDetailsDTO(productService.getProductById(productId));
+        List<Product> sameGroup = productGroupService.getListOfProductsByProductId(productId);
         Page<Review> reviews = reviewService.lastReviewsByProductId(productId);
         List<Category> categories = categoryService.getMainCategories();
         model.addAttribute("categories",categories);
+        model.addAttribute("group", sameGroup);
         model.addAttribute("reviews", reviews);
         model.addAttribute("authenticated", principal != null);
         model.addAttribute("product", product);

@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ProductGroupService {
     private final ProductGroupRepository productGroupRepository;
@@ -64,5 +67,15 @@ public class ProductGroupService {
         Product product = getProductById(productId);
         productGroup.addProduct(product);
         productGroupRepository.save(productGroup);
+    }
+
+    public List<Product> getListOfProductsByProductId(Long productId) {
+        Product product = getProductById(productId);
+        List<ProductGroup> productGroups = productGroupRepository.findProductGroupByProducts(product);
+        List<Product> response = new ArrayList<>();
+        for(ProductGroup p : productGroups){
+            response.addAll(p.getProducts());
+        }
+        return response;
     }
 }

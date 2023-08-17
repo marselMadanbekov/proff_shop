@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     Page<Product> findAllByCategoryAndColor(Pageable pageable, Category category, String color);
 
     @Query("SELECT DISTINCT p FROM Product p " +
-            "WHERE (:category IS NULL OR p.category = :category) " +
+            "WHERE (:category IS NULL OR (p.category = :category OR p.category.parent = :category)) " +
             "AND (:query IS NULL OR (p.name = :query OR p.sku = :query)) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
             "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +

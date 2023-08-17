@@ -1,6 +1,6 @@
 const selectedProducts = {};
 const selectedCategory = {};
-
+const stockForm = document.getElementById('createStock');
 
 let size = document.getElementById('sizeSelect').value;
 let searchQuery = document.getElementById('searchQuery').value;
@@ -69,13 +69,13 @@ function updateProductsPagination(data) {
     }
 
 
-    if(data.number > 1){
+    if (data.number > 1) {
         paginationHtml += `<li>
                                 <a href="#" class="page-link prev-page-link" data-page="${data.number - 1}">${data.number}</a>
                            </li>`;
     }
 
-    paginationHtml +=  `<li class="current">
+    paginationHtml += `<li class="current">
                                 <a href="#" >${data.number + 1}</a>
                            </li>`;
 
@@ -91,6 +91,7 @@ function updateProductsPagination(data) {
     // Добавляем ссылки в пагинацию
     pagination.querySelector('ul').innerHTML = paginationHtml;
 }
+
 function updateCategoryPagination(data) {
     const pagination = document.getElementById('categoryPagination');
 
@@ -104,13 +105,13 @@ function updateCategoryPagination(data) {
     }
 
 
-    if(data.number > 1){
+    if (data.number > 1) {
         paginationHtml += `<li>
                                 <a href="#" class="page-link prev-page-link" data-page="${data.number - 1}">${data.number}</a>
                            </li>`;
     }
 
-    paginationHtml +=  `<li class="current">
+    paginationHtml += `<li class="current">
                                 <a href="#" >${data.number + 1}</a>
                            </li>`;
 
@@ -214,9 +215,8 @@ $(document).on("click", "#filter", function (e) {
 loadNewProducts(0);
 loadNewCategories(0);
 
-
-function createPromotion() {
-    // Получение данных акции
+stockForm.addEventListener('submit',function (e){
+    e.preventDefault();
     const startDate = $('#startDate').val(); // Значение начальной даты из элемента с id "start-date"
     const endDate = $('#endDate').val(); // Значение конечной даты из элемента с id "end-date"
     const discount = $('#discount').val(); // Значение суммы скидки из элемента с id "discount-amount"
@@ -233,23 +233,31 @@ function createPromotion() {
         participants: type === '1' ? selectedCategory : selectedProducts,
     };
 
-    console.log(data);
-    // Отправка запроса на сервер
+    $('#progressModal').modal('show');
     $.ajax({
         url: '/admin/create-stock', // URL вашего серверного маршрута для создания акции
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function (response) {
-            // Успешное создание акции
-            console.log('Акция успешно создана:', response);
+            $('#progressModal').modal('hide');
+            alert(response.message);
         },
         error: function (xhr, status, error) {
-            // Ошибка при создании акции
-            console.error('Ошибка при создании акции:' + error);
+            $('#progressModal').modal('hide');
+            try {
+                const errorData = JSON.parse(xhr.responseText);
+                if (errorData.hasOwnProperty("error")) {
+                    alert(errorData.error);
+                } else {
+                    alert('Что-то пошло не так');
+                }
+            } catch (e) {
+                alert('Что-то пошло не так');
+            }
         }
     });
-}
+})
 
 function searchProducts() {
     // Получение значения поискового запроса

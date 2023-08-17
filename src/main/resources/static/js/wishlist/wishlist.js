@@ -15,7 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 error: function (xhr,status,error) {
                     $("#spinner").hide();
-                    showModal('Adding to wishlist', xhr.error);
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        showModal('Adding to wishlist', xhr.responseJSON.error);
+                    } else {
+                        showModal('Adding to wishlist', 'Произошла ошибка при удалении размера товара');
+                    }
                 }
             });
         });

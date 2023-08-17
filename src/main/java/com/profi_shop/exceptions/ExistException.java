@@ -11,6 +11,9 @@ public class ExistException extends Exception{
     public static final int SHIPMENT_EXISTS = 2;
 
     public static final int SIZE_OF_PRODUCT_EXIST = 3;
+    public static final int PRODUCT_SKU_EXIST = 4;
+    public static final int WISHLIST_CONTAINS_PRODUCT = 5;
+    public static final int PRODUCT_IS_ALREADY_IN_STOCK = 6;
 
 
     private final int code;
@@ -25,6 +28,9 @@ public class ExistException extends Exception{
             case 1 -> Text.get("ERROR_USER_EXISTS");
             case 2 -> Text.get("ERROR_SHIPMENT_EXISTS");
             case 3 -> Text.get("ERROR_SIZE_OF_PRODUCT_EXIST");
+            case 4 -> Text.get("ERROR_PRODUCT_SKU_EXIST");
+            case 5 -> Text.get("ERROR_WISHLIST_CONTAINS_PRODUCT");
+            case 6 -> Text.get("ERROR_PRODUCT_IS_ALREADY_IN_STOCK");
             default -> "";
         };
     }

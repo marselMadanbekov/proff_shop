@@ -7,7 +7,9 @@ import lombok.Data;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -23,6 +25,12 @@ public class Product {
     private String color;
 
     private Date create_date;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_specification", joinColumns = @JoinColumn(name = "product_id"))
+    @MapKeyColumn(name = "spec_key")
+    @Column(name = "spec_value")
+    private Map<String,String> specifications = new HashMap<>();
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "product_id"))
     private List<String> photos = new ArrayList<>();
@@ -42,4 +50,11 @@ public class Product {
         photos.remove(photo);
     }
 
+    public void addSpecification(String key, String value){
+        this.specifications.put(key, value);
+    }
+
+    public void removeSpecification(String key) {
+        this.specifications.remove(key);
+    }
 }

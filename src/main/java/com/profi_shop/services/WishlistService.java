@@ -1,5 +1,6 @@
 package com.profi_shop.services;
 
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.User;
@@ -25,12 +26,16 @@ public class WishlistService {
         this.userRepository = userRepository;
     }
 
-    public void addProductToWishlist(Long productId, Principal principal) {
-        Product product = getProductById(productId);
-        User user = getUserByUsername(principal.getName());
-        Wishlist wishlist = wishlistRepository.findByCustomer(user).orElse(new Wishlist(user));
-        wishlist.addProduct(product);
-        wishlistRepository.save(wishlist);
+    public void addProductToWishlist(Long productId, Principal principal) throws ExistException {
+        try {
+            Product product = getProductById(productId);
+            User user = getUserByUsername(principal.getName());
+            Wishlist wishlist = wishlistRepository.findByCustomer(user).orElse(new Wishlist(user));
+            wishlist.addProduct(product);
+            wishlistRepository.save(wishlist);
+        }catch (Exception e){
+            throw new ExistException(ExistException.WISHLIST_CONTAINS_PRODUCT);
+        }
     }
     public void removeProduct(Long productId, Principal principal) {
         Product product = getProductById(productId);

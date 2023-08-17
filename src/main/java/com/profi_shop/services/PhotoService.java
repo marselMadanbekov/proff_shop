@@ -1,8 +1,6 @@
 package com.profi_shop.services;
 
-import com.profi_shop.settings.Templates;
 import net.coobird.thumbnailator.Thumbnails;
-import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,7 +18,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -31,22 +29,19 @@ public class PhotoService {
     private String uploadDir;
 
     public String savePhoto(MultipartFile file) throws IOException {
-        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+        String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String extension = StringUtils.getFilenameExtension(originalFilename);
         String filename = UUID.randomUUID().toString() + "_" + originalFilename;
         Path filePath = Paths.get(uploadDir, filename);
 
         File uploadDire = new File(uploadDir);
-        if(!uploadDire.exists()){
+        if(!uploadDire.exists())
             uploadDire.mkdirs();
-        }
-        // Получение загруженного изображения
+
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
 
-        // Создание нового изображения с белым фоном и подгонкой исходного изображения
-        BufferedImage resizedImage = resizeImageWithWhiteBackground(originalImage, 600, 600);
+        BufferedImage resizedImage = resizeImageWithWhiteBackground(originalImage);
 
-        // Сохранение изображения
         Thumbnails.of(resizedImage)
                 .outputFormat(extension)
                 .outputQuality(0.8)
@@ -55,17 +50,17 @@ public class PhotoService {
 
         return filename;
     }
-    private BufferedImage resizeImageWithWhiteBackground(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException {
+    private BufferedImage resizeImageWithWhiteBackground(BufferedImage originalImage) throws IOException {
         double aspectRatio = (double) originalImage.getWidth() / originalImage.getHeight();
 
         int newWidth;
         int newHeight;
         if (aspectRatio > 1) {
-            newWidth = targetWidth;
-            newHeight = (int) (targetWidth / aspectRatio);
+            newWidth = 600;
+            newHeight = (int) (600 / aspectRatio);
         } else {
-            newWidth = (int) (targetHeight * aspectRatio);
-            newHeight = targetHeight;
+            newWidth = (int) (600 * aspectRatio);
+            newHeight = 600;
         }
 
         BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
@@ -73,13 +68,13 @@ public class PhotoService {
         g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
         g2d.dispose();
 
-        BufferedImage resultImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage resultImage = new BufferedImage(600, 600, BufferedImage.TYPE_INT_RGB);
         g2d = resultImage.createGraphics();
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, targetWidth, targetHeight);
+        g2d.fillRect(0, 0, 600, 600);
 
-        int x = (targetWidth - newWidth) / 2;
-        int y = (targetHeight - newHeight) / 2;
+        int x = (600 - newWidth) / 2;
+        int y = (600 - newHeight) / 2;
         g2d.drawImage(scaledImage, x, y, null);
         g2d.dispose();
 

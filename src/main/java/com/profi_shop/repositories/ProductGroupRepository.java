@@ -9,8 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductGroupRepository extends JpaRepository<ProductGroup, Long> {
     @Query("SELECT p FROM ProductGroup p WHERE (:name IS NULL OR p.name = :name) ")
     Page<ProductGroup> findAllByFilters(String name, Pageable pageable);
+
+    List<ProductGroup> findProductGroupByProducts(Product product);
 }

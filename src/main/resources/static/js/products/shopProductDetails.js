@@ -39,6 +39,54 @@
             });
         });
     });
+    $(document).ready(function () {
+        $("#addToCart").click(function (event) {
+            event.preventDefault();
+
+            let productId = document.getElementById("productId").value;
+            let variationId = document.getElementById('size').value;
+            let quantity = document.getElementById('quantity').value;
+
+            let formData = new FormData();
+            formData.append('productId', productId);
+            formData.append('variationId', variationId);
+            formData.append('quantity', quantity);
+            // Показываем прогресс-спиннер при отправке запроса
+            $("#spinner").show();
+
+
+            $.ajax({
+                url: "/cart/addByVariation",
+                type: "POST",
+                data:formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    // Скрываем прогресс-спиннер после получения ответа
+                    $("#spinner").hide();
+
+                    // Показываем модальное окно с сообщением из JSON-ответа
+                    showModal('Success', data.message);
+                },
+                error: function (xhr, status, error) {
+                    // Скрываем прогресс-спиннер при ошибке
+                    $("#spinner").hide();
+
+                    // Показываем модальное окно с сообщением об ошибке
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        if (errorData.hasOwnProperty("error")) {
+                            showModal('Error', errorData.error);
+                        } else {
+                            showModal('Error', 'An error occurred while processing the request.');
+                        }
+                    } catch (e) {
+                        showModal('Error', 'An error occurred while processing the request.');
+                    }
+                }
+            });
+        });
+    });
 
 // Функция для показа модального окна
     function showModal(title, message) {

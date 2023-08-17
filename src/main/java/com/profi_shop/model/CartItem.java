@@ -11,7 +11,8 @@ public class CartItem {
     private Long id;
     @ManyToOne
     private Product product;
-
+    @ManyToOne
+    private ProductVariation productVariation;
     private int discount;
     private int quantity;
     public int getAmount(){

@@ -36,7 +36,6 @@ public class StoreHouseService {
     }
 
     public void quantityUp(Long storeId, Long productId, int quantity) {
-
         ProductVariation product = getProductVariationById(productId);
         Store store = getStoreById(storeId);
         StoreHouse storeHouse = getStoreHouseByProductAndStore(product,store);
@@ -49,7 +48,7 @@ public class StoreHouseService {
     }
 
     public StoreHouse getStoreHouseByProductAndStore(ProductVariation product, Store store){
-        return storeHouseRepository.findByProductAndStore(product, store).orElseThrow(() -> new SearchException(SearchException.STOCK_NOT_FOUND));
+        return storeHouseRepository.findByProductAndStore(product, store).orElse(new StoreHouse(product,store));
     }
     private Store getStoreById(Long storeId){
         return storeRepository.findById(storeId).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));

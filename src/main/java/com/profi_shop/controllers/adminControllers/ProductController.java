@@ -2,12 +2,11 @@ package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.dto.ProductDetailsDTO;
-import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.*;
 import com.profi_shop.model.requests.ProductCreateRequest;
-import com.profi_shop.model.requests.ProductGroupRequest;
 import com.profi_shop.services.*;
 import com.profi_shop.services.facade.ProductFacade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,54 +33,14 @@ public class ProductController {
     private final StoreHouseService storeHouseService;
     private final StoreService storeService;
 
-    private final ProductGroupService productGroupService;
-
-    public ProductController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, StoreHouseService stockService, StoreService storeService, ProductGroupService productGroupService) {
+    @Autowired
+    public ProductController(ProductService productService, CategoryService categoryService, ProductFacade productFacade, StoreHouseService stockService, StoreService storeService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.productFacade = productFacade;
         this.storeHouseService = stockService;
         this.storeService = storeService;
-        this.productGroupService = productGroupService;
     }
-
-
-    @PostMapping("/create-product")
-    public ResponseEntity<String> createProduct(@ModelAttribute ProductCreateRequest product) {
-        try {
-            productService.createProduct(product);
-            return new ResponseEntity<>("Successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/products/deleteVariation")
-    public ResponseEntity<Map<String, String>> deleteVariation(@RequestParam Long variationId) {
-        Map<String,String> response = new HashMap<>();
-        try{
-            response.put("message", "Размер товара успешно удален");
-            productService.deleteProductVariationById(variationId);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-    @PostMapping("/products/addVariation")
-    public ResponseEntity<Map<String, String>> addVariation(@RequestParam Integer size,
-                                                            @RequestParam Long productId) {
-        Map<String,String> response = new HashMap<>();
-        try{
-            response.put("message", "Новый размер товара успешно добавлен");
-            productService.addVariationToProduct(productId, size);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
-
 
     @GetMapping("/products")
     public String products(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
@@ -109,6 +68,74 @@ public class ProductController {
         model.addAttribute("query", query.orElse(""));
         return "admin/product/products";
     }
+    @PostMapping("/create-product")
+    public ResponseEntity<Map<String,String>> createProduct(@ModelAttribute ProductCreateRequest product) {
+        Map<String,String> response = new HashMap<>();
+        try {
+            productService.createProduct(product);
+            response.put("message", "Продукт успешно создан");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/product/addSpecification")
+    public ResponseEntity<Map<String,String>> addSpecification(@RequestParam String key,
+                                                               @RequestParam String value,
+                                                               @RequestParam Long productId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            productService.addSpecificationToProduct(productId, key, value);
+            response.put("message", "Спецификация успешно добавлена");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/product/deleteSpecification")
+    public ResponseEntity<Map<String,String>> deleteSpecification(@RequestParam String specKey,
+                                                                  @RequestParam Long productId){
+        Map<String,String> response = new HashMap<>();
+        System.out.println(productId + " product id \n + key " + specKey);
+        try{
+            productService.deleteSpecificationOfProduct(productId, specKey);
+            response.put("message", "Спецификация успешно удалена");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/products/deleteVariation")
+    public ResponseEntity<Map<String, String>> deleteVariation(@RequestParam Long variationId) {
+        Map<String,String> response = new HashMap<>();
+        try{
+            response.put("message", "Размер товара успешно удален");
+            productService.deleteProductVariationById(variationId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/products/addVariation")
+    public ResponseEntity<Map<String, String>> addVariation(@RequestParam Integer size,
+                                                            @RequestParam Long productId) {
+        Map<String,String> response = new HashMap<>();
+        try{
+            response.put("message", "Новый размер товара успешно добавлен");
+            productService.addVariationToProduct(productId, size);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
     @PostMapping("/receive-product")
     public ResponseEntity<Map<String ,String>> receiveProduct(@RequestParam("store") Long storeId,
@@ -126,107 +153,33 @@ public class ProductController {
     }
 
     @PostMapping("/addPhoto")
-    public String addPhoto(@RequestParam("photo") MultipartFile photo,
+    public ResponseEntity<Map<String,String>> addPhoto(@RequestParam("photo") MultipartFile photo,
                            @RequestParam("productId") Long productId) {
+        Map<String,String> response = new HashMap<>();
         try {
-            Product product = productService.addPhotoToProductById(productId, photo);
-            return "redirect:/admin/productDetails?productId=" + product.getId();
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-    }
-
-    @GetMapping("/productGroupDetails")
-    public String productGroupDetails(@RequestParam("groupId") Long groupId,
-                                      Model model){
-        ProductGroup productGroup = productGroupService.getProductGroupById(groupId);
-        Page<Product> products = productService.getPagedProducts(0,10);
-        model.addAttribute("productGroup", productGroup);
-        model.addAttribute("products", products);
-        return "admin/product/productGroupDetails";
-    }
-    @GetMapping("/productGroups")
-    public String productGroups(@RequestParam(value = "page",required = false) Optional<Integer> page,
-                                @RequestParam(value = "name", required = false) Optional<String> name,
-                                @RequestParam(value = "sort", required = false) Optional<Integer> sort,
-                                Model model){
-        Page<ProductGroup> productGroups = productGroupService.productGroupsFiltered(page.orElse(0),name.orElse(null), sort.orElse(0));
-        model.addAttribute("query", name.orElse(null));
-        model.addAttribute("selectedSort", sort.orElse(0));
-        model.addAttribute("productGroups", productGroups);
-        return "admin/product/productGroups";
-    }
-    @GetMapping("/create-productGroup")
-    public String createProductGroup(Model model){
-        Page<Product> products = productService.getPagedProducts(0, 10);
-        model.addAttribute("products", products);
-        return "admin/product/createProductGroup";
-    }
-
-    @PostMapping("/create-productGroup")
-    public ResponseEntity<Map<String,String>> createProductGroup(@RequestBody ProductGroupRequest productGroupRequest) {
-        Map<String, String> response = new HashMap<>();
-        try {
-            productGroupService.createProductGroup(productGroupRequest);
-            response.put("message", "Карточка успешно создана");
+            productService.addPhotoToProductById(productId, photo);
+            response.put("message" , "Фото успешно добавлено!");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-    }
-    @PostMapping("/products/removeFromGroup")
-    public ResponseEntity<Map<String,String>> removeFromGroup(@RequestParam Long groupId,
-                                                              @RequestParam Long productId){
-        Map<String,String> response = new HashMap<>();
-        try{
-            productGroupService.removeProductFromGroup(productId, groupId);
-            response.put("message", "Товар успешно удален из карточки");
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/products/addToGroup")
-    public ResponseEntity<Map<String, String>> addToGroup(@RequestParam Long groupId,
-                                                          @RequestParam Long productId){
-        Map<String, String> response = new HashMap<>();
-        try{
-            productGroupService.addProductToGroup(productId, groupId);
-            response.put("message", "Товар успешно добален в карточку");
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
 
-    @PostMapping("/products/deleteGroup")
-    public ResponseEntity<Map<String,String>> deleteProductGroup(@RequestParam Long groupId){
-        Map<String,String> response = new HashMap<>();
-        try{
-            productGroupService.deleteGroupById(groupId);
-            response.put("message", "Карточка успешно удалена");
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-    }
 
-    @GetMapping("/deletePhoto")
-    public String deletePhoto(@RequestParam("photo") String photo,
+    @PostMapping("/deletePhoto")
+    public ResponseEntity<Map<String,String>> deletePhoto(@RequestParam("photo") String photo,
                               @RequestParam("productId") Long productId) {
+        Map<String,String> response = new HashMap<>();
         try {
             productService.deletePhotoByProductId(photo, productId);
-            return "redirect:/productDetails?productId=" + productId;
+            response.put("message", "Фото успешно уделено");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return e.getMessage();
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @GetMapping("/productDetails")

@@ -21,12 +21,20 @@
                 contentType: false,
                 success: function(response) {
                     // Обработка успешного ответа
-                    alert("Продукт успешно создан");
+                    alert(response.message);
                     $('#progressModal').modal('hide');
                 },
                 error: function(xhr, status, error) {
-                    // Обработка ошибки
-                    alert("Ошибка при создании продукта");
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        if (errorData.hasOwnProperty("error")) {
+                            alert(errorData.error);
+                        } else {
+                            alert('Что-то пошло не так');
+                        }
+                    } catch (e) {
+                        alert('Что-то пошло не так');
+                    }
                     $('#progressModal').modal('hide');
                 }
             });
