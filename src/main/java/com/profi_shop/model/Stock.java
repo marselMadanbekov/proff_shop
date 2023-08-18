@@ -22,7 +22,7 @@ public class Stock {
     private boolean for_authenticated;
     private int discount;
     private boolean active;
-    private Date create_date;
+    private Date createDate;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER)
@@ -30,7 +30,7 @@ public class Stock {
 
     @PrePersist
     private void onCreate(){
-        this.create_date = Date.valueOf(LocalDate.now());
+        this.createDate = Date.valueOf(LocalDate.now());
     }
 
     public void addCategory(Category category){

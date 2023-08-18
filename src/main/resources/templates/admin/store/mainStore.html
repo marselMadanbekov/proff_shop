@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -9,13 +9,9 @@
     <!-- plugins:css -->
     <link rel="stylesheet" href="/static/vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" href="/static/vendors/base/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
     <link rel="stylesheet" href="/static/css1/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="/static/images/favicon.png" />
+    <link rel="shortcut icon" href="/static/images/favicon.png"/>
 </head>
 
 <body>
@@ -23,26 +19,13 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
             <a class="navbar-brand brand-logo mr-5" href="/dashboard"><img src="/images/logo.svg" class="mr-2"
-                                                                           alt="logo" /></a>
-            <a class="navbar-brand brand-logo-mini" href="/dashboard"><img src="/images/logo-mini.svg" alt="logo" /></a>
+                                                                           alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="/dashboard"><img src="/images/logo-mini.svg" alt="logo"/></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                 <span class="ti-view-list"></span>
             </button>
-            <ul class="navbar-nav mr-lg-2">
-                <li class="nav-item nav-search d-none d-lg-block">
-                    <div class="input-group">
-                        <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                <span class="input-group-text" id="search">
-                  <i class="ti-search"></i>
-                </span>
-                        </div>
-                        <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-                               aria-label="search" aria-describedby="search">
-                    </div>
-                </li>
-            </ul>
             <ul class="navbar-nav navbar-nav-right">
                 <li class="nav-item dropdown mr-1">
                     <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
@@ -95,7 +78,8 @@
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="notificationDropdown">
                         <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
                         <a class="dropdown-item">
                             <div class="item-thumbnail">
@@ -140,7 +124,7 @@
                 </li>
                 <li class="nav-item nav-profile dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                        <img src="/images/faces/face28.jpg" alt="profile" />
+                        <img src="/images/faces/face28.jpg" alt="profile"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                         <a class="dropdown-item">
@@ -215,30 +199,116 @@
         </nav>
 
         <div class="content-wrapper">
-            <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Create new Store</h4>
-                        <form id="storeForm" class="forms-sample">
-                            <div class="form-group">
-                                <label for="exampleInputName">Name</label>
-                                <input type="text" name="name" class="form-control" id="exampleInputName" placeholder="Name">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="font-weight-bold mb-0">Головной офис</h4>
+                        </div>
+                        <div th:text="${mainStore.balance}">
+                            <i class="ti-clipboard btn-icon-prepend" style="margin-right: 5px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title">Все номера</p>
+                            <div class="table-responsive mb-3 mb-md-0">
+                                <table class="table table-borderless report-table">
+                                    <thead>
+                                    <th>Номер</th>
+                                    <th>Удалить</th>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr th:each="phone_number: ${mainStore.phone_numbers}">
+                                        <td class="text-muted" th:text="${phone_number}"></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger deletePhone"
+                                                    th:attr="phone=${phone_number}"><i
+                                                    class="ti-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail">Town</label>
-                                <input type="text" name="town" class="form-control" id="exampleInputEmail" placeholder="town">
+                            <div class="card-footer">
+                                <form id="phoneForm" class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" name="phone" class="form-control" required>
+                                    </div>
+                                    <div class="form-group align-content-center justify-content-center">
+                                        <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPrimeCost">Address</label>
-                                <input type="text" name="address" class="form-control" id="exampleInputPrimeCost" placeholder="address">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title">Информация</p>
+                            <div class="table-responsive mb-3 mb-md-0">
+                                <table class="table table-borderless report-table">
+                                    <tr>
+                                        <td>Город</td>
+                                        <td th:text="${mainStore.town}"></td>
+                                        <td>
+                                            <form class="form-inline" id="townForm">
+                                                <input class="form-control" name="town" required>
+                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Область</td>
+                                        <td th:text="${mainStore.state}"></td>
+                                        <td>
+                                            <form class="form-inline" id="stateForm">
+                                                <input class="form-control" name="state" required>
+                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Инстаграм</td>
+                                        <td th:text="${mainStore.instagram}"></td>
+                                        <td>
+                                            <form class="form-inline" id="instaForm">
+                                                <input class="form-control" name="instagram" required>
+                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td th:text="${mainStore.email}"></td>
+                                        <td>
+                                            <form class="form-inline" id="emailForm">
+                                                <input class="form-control" name="email" type="email" required>
+                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Время работы</td>
+                                        <td th:text="${mainStore.working_time}"></td>
+                                        <td>
+                                            <form class="form-inline" id="workingTimeForm">
+                                                <input class="form-control" name="workTime" type="text" required>
+                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPrice">Phone number</label>
-                                <input type="text" name="phone_number" class="form-control" id="exampleInputPrice" placeholder="phone number">
-                            </div>
-                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                            <button class="btn btn-light">Cancel</button>
-                        </form>
+                        </div>
                         <div id="progressModal" class="modal">
                             <div class="modal-content">
                                 <div class="progress-spinner"></div>
@@ -252,6 +322,8 @@
     </div>
 </div>
 <!-- container-scroller -->
+
+<!-- plugins:js -->
 <script src="/static/vendors/base/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page-->
@@ -259,9 +331,10 @@
 <!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="/static/js/off-canvas.js"></script>
+<script src="/static/js/file-upload.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/store/storeCreate.js"></script>
+<script src="/static/js/store/mainStore.js"></script>
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->

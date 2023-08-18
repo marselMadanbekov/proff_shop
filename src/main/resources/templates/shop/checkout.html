@@ -85,7 +85,7 @@
                                 <a href="blog.html">blog</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="my-account.html">my account</a>
+                                <a href="/account">my account</a>
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="about.html">about Us</a>
@@ -94,7 +94,7 @@
                                 <a href="contact.html"> Contact Us</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="login.html">Войти</a>
+                                <a href="/auth/login">Войти</a>
                             </li>
                         </ul>
                     </div>
@@ -171,13 +171,10 @@
                             </div>
                             <div class="categories_menu_toggle">
                                 <ul>
-                                    <!-- Итерируем по списку категорий -->
                                     <li class="menu_item_children" th:each="category : ${categories}">
                                         <a th:href="${'/shop?categoryId=' + category.id}" th:text="${category.name}"><i
                                                 class="fa fa-angle-right"></i></a>
-                                        <!-- Проверяем, есть ли у категории подкатегории -->
                                         <ul class="categories_mega_menu" th:if="${(category.subCategories.size() > 0)}">
-                                            <!-- Итерируем по списку подкатегорий -->
                                             <ul>
                                                 <li th:each="subCategory : ${category.subCategories}">
                                                     <a th:href="${'/shop?categoryId=' + subCategory.id}"

@@ -258,24 +258,3 @@ stockForm.addEventListener('submit',function (e){
         }
     });
 })
-
-function searchProducts() {
-    // Получение значения поискового запроса
-    const searchQuery = $('#navbar-search-input').val();
-
-    // Отправка запроса на сервер
-    $.ajax({
-        url: '/admin/products/search?query=' + searchQuery, // URL вашего серверного маршрута для выполнения поиска продуктов
-        method: 'GET',
-        contentType: 'application/json',
-        dataType: "json",
-        success: function (response) {
-            // Обновление таблицы с продуктами
-            updateProductsTable(response.getContent());
-            updateProductsPagination(response);
-        },
-        error: function (xhr, status, error) {
-            console.error('Ошибка при выполнении поиска:', error);
-        }
-    });
-}

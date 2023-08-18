@@ -111,7 +111,7 @@ public class StockService {
     public Page<Stock> filteredStocksPage(int status, int sort, int page){
         Pageable pageable;
         if(sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC,"discount"));
-        else if(sort == 1) pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"create_date"));
+        else if(sort == 1) pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"createDate"));
         else if(sort == 2) pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"startDate"));
         else pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"endDate"));
 
