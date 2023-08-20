@@ -23,11 +23,7 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     Optional<Stock> findStockWithMaxDiscount();
 
     @Query("SELECT s FROM Stock s WHERE s.endDate > :currentDate AND s.startDate < :currentDate")
-    List<Stock> findActiveStocks(@Param("currentDate") LocalDate currentDate);
-    @Query("SELECT s FROM Stock s WHERE (s.endDate > :currentDate AND s.startDate < :currentDate) AND s.active = false")
-    List<Stock> findToActiveStocks(@Param("currentDate") LocalDate currentDate);
-    @Query("SELECT s FROM Stock s WHERE (s.endDate < :currentDate OR s.startDate > :currentDate) AND s.active = true")
-    List<Stock> findDisActiveStocks(@Param("currentDate") LocalDate currentDate);
-
-    Page<Stock> findByActive(Boolean active,Pageable pageable);
+    Page<Stock> findActiveStocks(@Param("currentDate") LocalDate currentDate,Pageable pageable);
+    @Query("SELECT s FROM Stock s WHERE s.endDate < :currentDate AND s.startDate > :currentDate")
+    Page<Stock> findInActiveStocks(@Param("currentDate") LocalDate currentDate,Pageable pageable);
 }

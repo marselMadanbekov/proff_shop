@@ -21,7 +21,6 @@ public class Stock {
     private StockType type;
     private boolean for_authenticated;
     private int discount;
-    private boolean active;
     private Date createDate;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Category> categories = new ArrayList<>();
@@ -42,5 +41,9 @@ public class Stock {
     }
     public void addAllParticipants(List<Product> products){
         participants.addAll(products);
+    }
+
+    public boolean isActive(){
+        return startDate.before(Date.valueOf(LocalDate.now())) && endDate.after(Date.valueOf(LocalDate.now()));
     }
 }

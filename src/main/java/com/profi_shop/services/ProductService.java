@@ -29,16 +29,14 @@ public class ProductService {
     private final CategoryService categoryService;
     private final ProductVariationRepository productVariationRepository;
     private final StoreHouseService storeHouseService;
-    private final StockService stockService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, PhotoService photoService, CategoryService categoryService, ProductVariationRepository productVariationRepository, StoreHouseService storeHouseService, StockService stockService) {
+    public ProductService(ProductRepository productRepository, PhotoService photoService, CategoryService categoryService, ProductVariationRepository productVariationRepository, StoreHouseService storeHouseService) {
         this.productRepository = productRepository;
         this.photoService = photoService;
         this.categoryService = categoryService;
         this.productVariationRepository = productVariationRepository;
         this.storeHouseService = storeHouseService;
-        this.stockService = stockService;
     }
 
     public void createProduct(ProductCreateRequest productToCreate) throws Exception {

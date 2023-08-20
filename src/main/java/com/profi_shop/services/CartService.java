@@ -32,9 +32,12 @@ public class CartService {
     private final CartFacade cartFacade;
     private final PriceService priceService;
 
+    private final StockRepository stockRepository;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, CartFacade cartFacade, PriceService priceService) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, CartFacade cartFacade, PriceService priceService, StockRepository stockRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
@@ -42,22 +45,26 @@ public class CartService {
         this.productVariationRepository = productVariationRepository;
         this.cartFacade = cartFacade;
         this.priceService = priceService;
+        this.stockRepository = stockRepository;
     }
 
-    public Cart getCartByUsername(String username){
+    public Cart getCartByUsername(String username) {
         User user = getUserByUsername(username);
         Cart cart = cartRepository.findByUser(user).orElse(new Cart(user));
-        if(cart.needForUpdating()){
-            System.out.println("hello there is my need to update");
-            for(CartItem cartItem : cart.getCartItems()){
-                cartItem.setDiscount(priceService.getDiscountForProductForUser(cartItem.getProduct(),true));
-                cartItemRepository.save(cartItem);
-            }
+        for (CartItem cartItem : cart.getCartItems()) {
+            Stock stock = getStockByProduct(cartItem.getProduct());
+            if (stock == null) cartItem.setStockType(0);
+            else if (stock.isActive()) {
+                if (stock.isFor_authenticated()) cartItem.setStockType(1);
+                else cartItem.setStockType(2);
+            } else cartItem.setStockType(0);
+            cartItem.setDiscount(priceService.getDiscountForProductForUser(cartItem.getProduct(), true));
+            cartItemRepository.save(cartItem);
         }
         return cartRepository.save(cart);
     }
 
-    public Cart getCartByRequestCookies(HttpServletRequest request){
+    public Cart getCartByRequestCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -74,25 +81,27 @@ public class CartService {
         }
         return new Cart();
     }
+
     public Cart addProductToCart(String username, Long productId) {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
-        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,true));
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
         cartItemRepository.save(cartItem);
         cart.addItemToCart(cartItem);
         return cartRepository.save(cart);
     }
+
     public Cart addProductToCartProductByVariationAndQuantity(String username, Long productId, Long variationId, Integer quantity) {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
-        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,true));
-        if(variationId > 0) {
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
+        if (variationId > 0) {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
         }
@@ -100,24 +109,26 @@ public class CartService {
         cart.addItemToCart(cartItem);
         return cartRepository.save(cart);
     }
+
     public Cart addProductToCart(HttpServletRequest request, Long productId) {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
-        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
         cart.addItemToCart(cartItem);
         return cart;
     }
+
     public Cart addProductToCartProductByVariationAndQuantity(HttpServletRequest request, Long productId, Long variationId, int quantity) {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
-        cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
-        if(variationId > 0) {
+        cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
+        if (variationId > 0) {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
         }
@@ -132,12 +143,14 @@ public class CartService {
         cartRepository.save(cart);
         return cart;
     }
+
     public Cart removeProductFromCart(HttpServletRequest request, Long productId) {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
         cart.removeProduct(product);
         return cart;
     }
+
     private Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
@@ -158,30 +171,31 @@ public class CartService {
         }
     }
 
-    private User getUserByUsername(String username){
+    private User getUserByUsername(String username) {
         return userRepository.findUserByUsername(username).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
 
     public Cart cartUpdate(HttpServletRequest request, List<CartUpdateRequest> cartItems) {
         Cart cart = getCartByRequestCookies(request);
-        for(CartUpdateRequest item : cartItems){
+        for (CartUpdateRequest item : cartItems) {
             cart.quantityUp(getProductById(item.getProductId()), item.getNewQuantity());
         }
         return cart;
     }
 
-    public Cart cartUpdate(String username, List<CartUpdateRequest> cartItems){
+    public Cart cartUpdate(String username, List<CartUpdateRequest> cartItems) {
         Cart cart = getCartByUsername(username);
-        for(CartUpdateRequest item : cartItems){
+        for (CartUpdateRequest item : cartItems) {
             cart.quantityUp(getProductById(item.getProductId()), item.getNewQuantity());
         }
         return cartRepository.save(cart);
     }
 
-
-
-
     private ProductVariation getProductVariationById(Long variationId) {
         return productVariationRepository.findById(variationId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
+    }
+
+    private Stock getStockByProduct(Product product) {
+        return stockRepository.findByParticipants(product).orElse(null);
     }
 }

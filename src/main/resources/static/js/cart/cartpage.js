@@ -53,12 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
             data: JSON.stringify(cartItems),
             success: function (response) {
                 $("#spinner").hide();
-                showModal('Добавление продукта', data.message);
-                // Обработка успешного ответа от сервера, если необходимо
+                showModal('Добавление продукта', response.message);
             },
             error: function (xhr, status, error) {
                 $("#spinner").hide();
-
                 try {
                     const errorData = JSON.parse(xhr.responseText);
                     if (errorData.hasOwnProperty("error")) {
@@ -83,14 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Закрытие модального окна при клике на крестик
         document.getElementById('closeModal').addEventListener('click', function () {
             modal.style.display = 'none';
-            window.location.href = '/cart'
+            window.location.reload();
         });
 
         // Закрытие модального окна при клике вне его области
         window.addEventListener('click', function (event) {
             if (event.target === modal) {
                 modal.style.display = 'none';
-                window.location.href = '/cart'
+                window.location.reload();
             }
         });
     }

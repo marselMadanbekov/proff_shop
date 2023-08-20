@@ -3,6 +3,7 @@ package com.profi_shop.controllers.generalControllers;
 import com.profi_shop.model.Cart;
 import com.profi_shop.model.requests.OrderRequest;
 import com.profi_shop.services.CartService;
+import com.profi_shop.services.OrderService;
 import com.profi_shop.services.ShipmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -22,11 +25,13 @@ import java.util.Optional;
 public class CheckoutController {
 
     private final ShipmentService shipmentService;
+    private final OrderService orderService;
     private final CartService cartService;
 
     @Autowired
-    public CheckoutController(ShipmentService shipmentService, CartService cartService) {
+    public CheckoutController(ShipmentService shipmentService, OrderService orderService, CartService cartService) {
         this.shipmentService = shipmentService;
+        this.orderService = orderService;
         this.cartService = cartService;
     }
 
@@ -45,7 +50,7 @@ public class CheckoutController {
             } else {
                 cart = cartService.getCartByUsername(principal.getName());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             cart = new Cart();
         }
 
@@ -60,36 +65,43 @@ public class CheckoutController {
     }
 
     @GetMapping("/towns")
-    public ResponseEntity<List<String>> getTowns(@RequestParam("state") String state){
-        try{
+    public ResponseEntity<List<String>> getTowns(@RequestParam("state") String state) {
+        try {
             List<String> towns = shipmentService.getTownsByState(state);
             return new ResponseEntity<>(towns, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/calculateShipping")
     public ResponseEntity<Integer> calculateShipping(@RequestParam("state") String state,
-                                                     @RequestParam("town") String town){
-        try{
-            Integer cost = shipmentService.calculateShipping(state,town);
+                                                     @RequestParam("town") String town) {
+        try {
+            Integer cost = shipmentService.calculateShipping(state, town);
             return new ResponseEntity<>(cost, HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/order")
-    public ResponseEntity<String> submitOrder(@ModelAttribute OrderRequest orderDetails) {
-        System.out.println("hello from order");
-        System.out.println("orderer firstname " + orderDetails.getFirstname());
-        System.out.println("orderer lastname " + orderDetails.getLastname());
-        System.out.println("orderer email " + orderDetails.getEmail());
-        System.out.println("orderer phone " + orderDetails.getPhone_number());
-        System.out.println("orderer to ship " + orderDetails.isToShip());
-        System.out.println("orderer to town " + orderDetails.getTown());
-        System.out.println("orderer to state " + orderDetails.getState());
-        return new ResponseEntity<>("Order submitted successfully", HttpStatus.OK);
+    public ResponseEntity<Map<String, String>> submitOrder(@ModelAttribute OrderRequest orderDetails,
+                                                           HttpServletRequest request,
+                                                           Principal principal) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            if(principal == null){
+                orderService.createOrderByUnknown(orderDetails,request);
+            }else{
+                orderService.createOrderByUsername(orderDetails,principal.getName());
+            }
+            response.put("message", "Заказ успешно оформлен. Ожидайте скоро с вами свяжутся операторы!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 }

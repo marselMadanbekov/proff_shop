@@ -20,11 +20,21 @@ document.addEventListener('DOMContentLoaded', function() {
             contentType: false,
             processData: false,
             success: function(response) {
-                console.log(response)
                 $("#spinner").hide();
+                showModal("Заказ", response.message)
             },
             error: function(xhr, status, error) {
-                console.log(xhr.error)
+                $("#spinner").hide();
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        showModal('Order',errorData.error);
+                    } else {
+                        showModal('order','Что-то пошло не так');
+                    }
+                } catch (e) {
+                    showModal('Order','Что-то пошло не так');
+                }
             }
         });
     })
@@ -81,7 +91,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     })
+    function showModal(title, message) {
+        const modal = document.getElementById('modal');
+        const modalMessage = document.getElementById('modalMessage');
+        modalMessage.textContent = message;
 
+        // Отображаем модальное окно
+        modal.style.display = 'block';
 
+        // Закрытие модального окна при клике на крестик
+        document.getElementById('closeModal').addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
 
+        // Закрытие модального окна при клике вне его области
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
 });

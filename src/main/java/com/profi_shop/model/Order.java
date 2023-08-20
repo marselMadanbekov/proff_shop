@@ -18,6 +18,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int total_price;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String phone_number;
     private OrderStatus status;
     private ShipmentType shipmentType;
     @ManyToOne

@@ -246,16 +246,26 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table_desc">
+                        <div>
+                            <i class="fa fa-user"></i><span> - Акция только для зарегистрированных пользователей</span>
+                        </div>
+                        <div>
+                            <i class="fa fa-check"></i><span> - Акция для каждого клиента</span>
+                        </div>
+                        <div>
+                            <i class="fa fa-close"></i><span> - Акции нет</span>
+                        </div>
                         <div class="cart_page table-responsive">
                             <table>
                                 <thead>
                                 <tr>
-                                    <th class="product_remove">Delete</th>
-                                    <th class="product_thumb">Image</th>
-                                    <th class="product_name">Product</th>
-                                    <th class="product-price">Price</th>
-                                    <th class="product_quantity">Quantity</th>
-                                    <th class="product_total">Total</th>
+                                    <th class="product_remove">Удалить</th>
+                                    <th class="product_remove">Акция</th>
+                                    <th class="product_thumb">Фото</th>
+                                    <th class="product_name">Название</th>
+                                    <th class="product-price">Цена</th>
+                                    <th class="product_quantity">Количество</th>
+                                    <th class="product_total">Сумма</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -264,16 +274,23 @@
                                                                   th:attr="productId=${cartItem.product.id}"><i
                                             class="fa fa-trash-o"></i></a>
                                     </td>
-                                    <td class="product_thumb"><a href="#"><img
+                                    <td><a href="javascript:void(0)"><i class="fa"
+                                                                        th:classappend="${cartItem.stockType == 0 ? 'fa-close' : ((cartItem.stockType == 1) ? 'fa-user' : 'fa-check')}"></i></a>
+                                    </td>
+                                    <td class="product_thumb"><a href="javascript:void(0)"><img
                                             th:src="'/products/' + ${cartItem.product.getPhotos().get(0)}" alt=""></a>
                                     </td>
-                                    <td class="product_name"><a href="#" th:text="${cartItem.product.name}"></a></td>
+                                    <td class="product_name">
+                                        <a href="javascript:void(0)" th:text="${cartItem.product.name}"></a>
+                                        <a href="javascript:void(0)" th:if="${cartItem.productVariation != null}"
+                                           th:text="${' ( ' + cartItem.productVariation.productSize} + ' ) '"></a>
+                                    </td>
                                     <td class="product-price" th:text="${cartItem.product.price} + 'сом'"></td>
-                                    <td class="product_quantity"><label>Quantity</label> <input class="product_q" min="1"
-                                                                                                max="100"
-                                                                                                th:attr="productId=${cartItem.product.id}"
-                                                                                                th:value="${cartItem.quantity}"
-                                                                                                type="number"></td>
+                                    <td class="product_quantity"><label>Кол-во</label><input class="product_q" min="1"
+                                                                                              max="100"
+                                                                                              th:attr="productId=${cartItem.product.id}"
+                                                                                              th:value="${cartItem.quantity}"
+                                                                                              type="number"></td>
                                     <td class="product_total" th:text="${cartItem.amount} + 'сом'"></td>
                                 </tr>
                                 </tbody>
@@ -317,7 +334,7 @@
                                 </div>
                                 <div class="cart_subtotal ">
                                     <p>Shipping</p>
-                                    <p class="cart_amount" ><span>Flat Rate:</span>334 сом</p>
+                                    <p class="cart_amount"><span>Flat Rate:</span>334 сом</p>
                                 </div>
                                 <a href="#">Calculate shipping</a>
 

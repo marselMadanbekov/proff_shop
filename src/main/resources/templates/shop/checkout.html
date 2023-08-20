@@ -244,48 +244,16 @@
                 <div class="user-actions">
                     <h3>
                         <i class="fa fa-file-o" aria-hidden="true"></i>
-                        Returning customer?
-                        <a class="Returning" href="#" data-toggle="collapse" data-target="#checkout_login"
-                           aria-expanded="true">Click here to login</a>
-                    </h3>
-                    <div id="checkout_login" class="collapse" data-parent="#accordion">
-                        <div class="checkout_info">
-                            <p>If you have shopped with us before, please enter your details in the boxes below. If
-                                you are a new customer please proceed to the Billing & Shipping section.</p>
-                            <form action="#">
-                                <div class="form_group">
-                                    <label>Username or email <span>*</span></label>
-                                    <input type="text">
-                                </div>
-                                <div class="form_group">
-                                    <label>Password <span>*</span></label>
-                                    <input type="text">
-                                </div>
-                                <div class="form_group group_3 ">
-                                    <button type="submit">Login</button>
-                                    <label for="remember_box">
-                                        <input id="remember_box" type="checkbox">
-                                        <span> Remember me </span>
-                                    </label>
-                                </div>
-                                <a href="#">Lost your password?</a>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="user-actions">
-                    <h3>
-                        <i class="fa fa-file-o" aria-hidden="true"></i>
-                        Returning customer?
+                        У вас есть купон?
                         <a class="Returning" href="#" data-toggle="collapse" data-target="#checkout_coupon"
-                           aria-expanded="true">Click here to enter your code</a>
+                           aria-expanded="true">Нажмите здесь чтобы применить</a>
 
                     </h3>
                     <div id="checkout_coupon" class="collapse" data-parent="#accordion">
                         <div class="checkout_info coupon_info">
                             <form action="#">
                                 <input placeholder="Coupon code" type="text">
-                                <button type="submit">Apply coupon</button>
+                                <button type="submit">Применить</button>
                             </form>
                         </div>
                     </div>
@@ -301,20 +269,21 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Total</th>
+                                    <th>Товар</th>
+                                    <th>Сумма</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="cartItem: ${cart.cartItems}">
-                                    <td th:text="${cartItem.product.name} + ' × ' + ${cartItem.quantity}"></td>
+                                    <td th:if="${cartItem.productVariation == null}" th:text="${cartItem.product.name} + ' × ' + ${cartItem.quantity}"></td>
+                                    <td th:if="${cartItem.productVariation != null}" th:text="${cartItem.product.name} + ' ( ' + ${cartItem.productVariation.productSize} + ' ) ' + ' × ' + ${cartItem.quantity}"></td>
                                     <td th:text="${cartItem.amount} + ' сом'"></td>
                                 </tr>
 
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Cart Subtotal</th>
+                                    <th>Сумма</th>
                                     <td id="cartSubtotal" th:text="${cart.cartAmount()} + ' сом'"></td>
                                 </tr>
                                 <tr>
@@ -322,17 +291,23 @@
                                     <td id="shippingPrice"><strong>0 сом</strong></td>
                                 </tr>
                                 <tr class="order_total">
-                                    <th>Order Total</th>
+                                    <th>Итого</th>
                                     <td id="orderTotal"><strong th:text="${cart.cartAmount()} + ' сом'"></strong></td>
                                 </tr>
                                 </tfoot>
                             </table>
                         </div>
+                        <div id="modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeModal">&times;</span>
+                                <p id="modalMessage"></p>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <form id="orderDetails">
-                        <h3>Billing Details</h3>
+                        <h3>Детали заказа</h3>
                         <div class="row">
                             <div class="col-lg-6 mb-20">
                                 <label>Имя<span>*</span></label>

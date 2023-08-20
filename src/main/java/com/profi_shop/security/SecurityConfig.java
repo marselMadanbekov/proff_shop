@@ -88,6 +88,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(SecurityConstants.SUPER_ADMIN_URLS).hasRole("SUPER_ADMIN")
                         .requestMatchers(SecurityConstants.ADMIN_URLS).hasAnyRole("ADMIN","SUPER_ADMIN")
                         .requestMatchers("/account", "/wishlist").authenticated()
                         .anyRequest().permitAll())

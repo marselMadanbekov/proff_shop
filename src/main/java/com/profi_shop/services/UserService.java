@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -157,5 +158,9 @@ public class UserService {
             System.out.println(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public List<User> getAdmins() {
+        return userRepository.findByRole(Role.ROLE_ADMIN);
     }
 }

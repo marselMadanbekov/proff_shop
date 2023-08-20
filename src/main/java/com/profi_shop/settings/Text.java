@@ -42,7 +42,8 @@ public class Text {
         data.put("OCTOBER","Октябрь");
         data.put("NOVEMBER","Ноябрь");
         data.put("DECEMBER","Декабрь");
-        data.put("MESSAGE_PASSWORD_RESET","Ваш пароль на сайте SITE_NAME, был обновлен на - NEW_PASSWORD. Вы можете изменить пароль в личном кабинете.");
+        data.put("MESSAGE_PASSWORD_RESET","Ваш пароль на сайте SITE_NAME, был обновлен на - ( NEW_PASSWORD ). Вы можете изменить пароль в личном кабинете.");
+        data.put("MESSAGE_ORDER_NOTIFICATION","Поступил новый заказ, номер заказа - ORDER_NUMBER.");
 
         data.put("ERROR_TITLE_EMPTY","Вы не ввели название!");
         data.put("ERROR_DATE_FORMAT","Неправильный формат даты!");
@@ -59,6 +60,7 @@ public class Text {
         data.put("ERROR_WISHLIST_NOT_FOUND","Избранное не найдено!");
         data.put("ERROR_PRODUCT_VARIATION_NOT_FOUND","Такого размера товара нет!");
         data.put("ERROR_PRODUCT_GROUP_NOT_FOUND","Карточка не найдена!");
+        data.put("ERROR_NOTIFICATION_NOT_FOUND","Уведомление не найдено!");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 

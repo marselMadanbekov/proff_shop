@@ -55,9 +55,6 @@ public class StockService {
                     stock.addProduct(product);
                 }
             }
-
-            boolean isActive = request.getStartDate().before(Date.valueOf(LocalDate.now())) && request.getEndDate().after(Date.valueOf(LocalDate.now()));
-            stock.setActive(isActive);
             stockRepository.save(stock);
         }catch (Exception e){
             throw new ExistException(ExistException.PRODUCT_IS_ALREADY_IN_STOCK);
@@ -65,22 +62,6 @@ public class StockService {
     }
 
 
-    @Scheduled(fixedDelay = 86400000)
-    public void updateStockStatus(){
-        List<Stock> toDisActivate = stockRepository.findDisActiveStocks(LocalDate.now());
-        for(Stock stock : toDisActivate){
-            stock.setActive(false);
-            stockRepository.save(stock);
-        }
-        List<Stock> toActivate = stockRepository.findToActiveStocks(LocalDate.now());
-        for(Stock stock : toDisActivate){
-            stock.setActive(true);
-            stockRepository.save(stock);
-        }
-    }
-    public List<Stock> getActiveStocks() {
-        return stockRepository.findActiveStocks(LocalDate.now());
-    }
 
     public Stock getStockByProduct(Product product){
         return stockRepository.findByParticipants(product).orElse(null);
@@ -116,8 +97,8 @@ public class StockService {
         else pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"endDate"));
 
         switch (status){
-            case 1: return stockRepository.findByActive(true,pageable);
-            case 2: return stockRepository.findByActive(false,pageable);
+            case 1: return stockRepository.findActiveStocks(LocalDate.now(),pageable);
+            case 2: return stockRepository.findInActiveStocks(LocalDate.now(),pageable);
             default: return stockRepository.findAll(pageable);
         }
     }
