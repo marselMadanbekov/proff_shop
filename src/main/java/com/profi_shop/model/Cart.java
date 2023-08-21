@@ -1,5 +1,7 @@
 package com.profi_shop.model;
 
+import com.profi_shop.exceptions.ExistException;
+import com.profi_shop.model.enums.ProductSize;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -44,12 +46,20 @@ public class Cart {
         updated();
     }
 
-    public void addItemToCart(CartItem cartItem){
-        this.cartItems.add(cartItem);
+    public void addItemToCart(CartItem cartItem) throws ExistException {
+        if(!cartItems.contains(cartItem))
+            this.cartItems.add(cartItem);
+        else{
+            throw new ExistException(ExistException.CART_ITEM_EXIST);
+        }
     }
 
     public void removeProduct(Product product) {
-        cartItems.removeIf(cartItem -> cartItem.getProduct().equals(product));
+        cartItems.removeIf(cartItem -> cartItem.getProduct().equals(product) && cartItem.getProductVariation() == null);
+    }
+
+    public void removeProductVariation(ProductVariation productVariation){
+        cartItems.removeIf(cartItem -> productVariation.equals(cartItem.getProductVariation()));
     }
 
     public void quantityUp(Product product, int quantity){

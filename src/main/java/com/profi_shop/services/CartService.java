@@ -3,8 +3,11 @@ package com.profi_shop.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profi_shop.dto.CartDTO;
+import com.profi_shop.exceptions.ExistException;
+import com.profi_shop.exceptions.NotEnoughException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
+import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.model.requests.CartUpdateRequest;
 import com.profi_shop.repositories.*;
 import com.profi_shop.services.facade.CartFacade;
@@ -28,7 +31,7 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     private final ProductVariationRepository productVariationRepository;
-
+    private final StoreHouseRepository storeHouseRepository;
     private final CartFacade cartFacade;
     private final PriceService priceService;
 
@@ -37,12 +40,13 @@ public class CartService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, CartFacade cartFacade, PriceService priceService, StockRepository stockRepository) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, StoreHouseRepository storeHouseRepository, CartFacade cartFacade, PriceService priceService, StockRepository stockRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
         this.productVariationRepository = productVariationRepository;
+        this.storeHouseRepository = storeHouseRepository;
         this.cartFacade = cartFacade;
         this.priceService = priceService;
         this.stockRepository = stockRepository;
@@ -64,7 +68,7 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    public Cart getCartByRequestCookies(HttpServletRequest request) {
+    public Cart getCartByRequestCookies(HttpServletRequest request) throws ExistException {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -82,9 +86,10 @@ public class CartService {
         return new Cart();
     }
 
-    public Cart addProductToCart(String username, Long productId) {
+    public Cart addProductToCart(String username, Long productId) throws ExistException, NotEnoughException {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
+        if(countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(),0);
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
@@ -94,7 +99,7 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    public Cart addProductToCartProductByVariationAndQuantity(String username, Long productId, Long variationId, Integer quantity) {
+    public Cart addProductToCartProductByVariationAndQuantity(String username, Long productId, Long variationId, Integer quantity) throws ExistException, NotEnoughException {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
         CartItem cartItem = new CartItem();
@@ -104,15 +109,21 @@ public class CartService {
         if (variationId > 0) {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
+            int count = countOfProductVariationInStore(productVariation);
+            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getProductSize() + " )", count);
+        }else{
+            int count = countOfProductInStore(product);
+            if(count < quantity) throw new NotEnoughException(product.getName() , count);
         }
         cartItemRepository.save(cartItem);
         cart.addItemToCart(cartItem);
         return cartRepository.save(cart);
     }
 
-    public Cart addProductToCart(HttpServletRequest request, Long productId) {
+    public Cart addProductToCart(HttpServletRequest request, Long productId) throws ExistException, NotEnoughException {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
+        if(countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(),0);
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(1);
@@ -121,7 +132,7 @@ public class CartService {
         return cart;
     }
 
-    public Cart addProductToCartProductByVariationAndQuantity(HttpServletRequest request, Long productId, Long variationId, int quantity) {
+    public Cart addProductToCartProductByVariationAndQuantity(HttpServletRequest request, Long productId, Long variationId, int quantity) throws ExistException, NotEnoughException {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
         CartItem cartItem = new CartItem();
@@ -131,23 +142,38 @@ public class CartService {
         if (variationId > 0) {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
+            int count = countOfProductVariationInStore(productVariation);
+            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getProductSize() + " )", count);
+        }else{
+            int count = countOfProductInStore(product);
+            if(count < quantity) throw new NotEnoughException(product.getName() , count);
         }
         cart.addItemToCart(cartItem);
         return cart;
     }
 
-    public Cart removeProductFromCart(String username, Long productId) {
+    public Cart removeProductFromCart(String username, Long productId, Integer size) {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
-        cart.removeProduct(product);
+        if(size == 0){
+            cart.removeProduct(product);
+        }else{
+            ProductVariation productVariation = productVariationRepository.findByParentAndProductSize(product, ProductSize.values()[size]).orElse(null);
+            cart.removeProductVariation(productVariation);
+        }
         cartRepository.save(cart);
         return cart;
     }
 
-    public Cart removeProductFromCart(HttpServletRequest request, Long productId) {
+    public Cart removeProductFromCart(HttpServletRequest request, Long productId,Integer size) throws ExistException {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
-        cart.removeProduct(product);
+        if(size == 0){
+            cart.removeProduct(product);
+        }else{
+            ProductVariation productVariation = productVariationRepository.findByParentAndProductSize(product, ProductSize.values()[size]).orElse(null);
+            cart.removeProductVariation(productVariation);
+        }
         return cart;
     }
 
@@ -175,7 +201,7 @@ public class CartService {
         return userRepository.findUserByUsername(username).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
 
-    public Cart cartUpdate(HttpServletRequest request, List<CartUpdateRequest> cartItems) {
+    public Cart cartUpdate(HttpServletRequest request, List<CartUpdateRequest> cartItems) throws ExistException {
         Cart cart = getCartByRequestCookies(request);
         for (CartUpdateRequest item : cartItems) {
             cart.quantityUp(getProductById(item.getProductId()), item.getNewQuantity());
@@ -197,5 +223,23 @@ public class CartService {
 
     private Stock getStockByProduct(Product product) {
         return stockRepository.findByParticipants(product).orElse(null);
+    }
+
+    private Integer countOfProductInStore(Product product){
+        List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
+        int count = 0;
+        for(ProductVariation productVariation: productVariations){
+            count+=countOfProductVariationInStore(productVariation);
+        }
+        return count;
+    }
+
+    private Integer countOfProductVariationInStore(ProductVariation productVariation){
+        List<StoreHouse> storeHouses = storeHouseRepository.findStoreHouseByProduct(productVariation);
+        int count = 0;
+        for(StoreHouse storeHouse: storeHouses){
+            count += storeHouse.getQuantity();
+        }
+        return count;
     }
 }

@@ -41,14 +41,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Закрытие модального окна при клике на крестик
         document.getElementById('closeModal').addEventListener('click', function () {
             modal.style.display = 'none';
-            window.location.href = '/cart'
+            window.location.reload();
         });
 
         // Закрытие модального окна при клике вне его области
         window.addEventListener('click', function (event) {
             if (event.target === modal) {
                 modal.style.display = 'none';
-                window.location.href = '/cart'
+                window.location.reload();
             }
         });
     }

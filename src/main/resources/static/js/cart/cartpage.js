@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
         item.addEventListener('click', function(event) {
             event.preventDefault();
             let selectedProductId = item.getAttribute("productId");
+            let selectedProductSize = item.getAttribute("size");
             $("#spinner").show();
             $.ajax({
-                url: "/cart/remove?productId=" + selectedProductId,
+                url: "/cart/remove?productId=" + selectedProductId+'&size=' + selectedProductSize,
                 type: "GET",
                 success: function (data) {
                     // Скрываем прогресс-спиннер после получения ответа

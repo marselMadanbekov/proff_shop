@@ -22,4 +22,20 @@ public class CartItem {
         if(discount > 0)    return (int) Math.ceil(product.getPrice() - (product.getPrice() * discount) / 100.0) * quantity;
         return product.getPrice() * quantity;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        if(cartItem.productVariation == null) {
+            if(this.productVariation == null)
+                return product.equals(cartItem.getProduct());
+            return false;
+        }
+        if(this.productVariation == null) {
+            return false;
+        }
+        return product.equals(cartItem.getProduct()) && productVariation.getProductSize().equals(cartItem.getProductVariation().getProductSize());
+    }
 }

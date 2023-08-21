@@ -271,7 +271,7 @@
                                 <tbody>
                                 <tr th:if="${not(cart == null)}" th:each="cartItem: ${cart.cartItems}">
                                     <td class="product_remove"><a href="javascript:void(0)" class="cart_remove"
-                                                                  th:attr="productId=${cartItem.product.id}"><i
+                                                                  th:attr="productId=${cartItem.product.id}, size=${cartItem.productVariation == null ? 0: cartItem.productVariation.productSize.ordinal()}"><i
                                             class="fa fa-trash-o"></i></a>
                                     </td>
                                     <td><a href="javascript:void(0)"><i class="fa"

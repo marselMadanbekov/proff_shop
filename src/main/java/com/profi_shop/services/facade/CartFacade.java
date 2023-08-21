@@ -2,10 +2,12 @@ package com.profi_shop.services.facade;
 
 import com.profi_shop.dto.CartDTO;
 import com.profi_shop.dto.CartItemDTO;
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
 import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.repositories.ProductRepository;
+import com.profi_shop.repositories.ProductVariationRepository;
 import com.profi_shop.repositories.StockRepository;
 import com.profi_shop.services.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CartFacade {
     private final ProductFacade productFacade;
+    private final ProductVariationRepository productVariationRepository;
     private final ProductRepository productRepository;
     private final StockRepository stockRepository;
     private final PriceService priceService;
 
     @Autowired
-    public CartFacade(ProductFacade productFacade, ProductRepository productRepository, StockRepository stockRepository, PriceService priceService) {
+    public CartFacade(ProductFacade productFacade, ProductVariationRepository productVariationRepository, ProductRepository productRepository, StockRepository stockRepository, PriceService priceService) {
         this.productFacade = productFacade;
+        this.productVariationRepository = productVariationRepository;
         this.productRepository = productRepository;
         this.stockRepository = stockRepository;
         this.priceService = priceService;
@@ -38,7 +42,7 @@ public class CartFacade {
         return cartDTO;
     }
 
-    public Cart cartDTOToCart(CartDTO cartDTO){
+    public Cart cartDTOToCart(CartDTO cartDTO) throws ExistException {
         Cart cart = new Cart();
         for(CartItemDTO cartItemDTO : cartDTO.getCartItems()){
             Product product = getProductByProductId(cartItemDTO.getProductId());
@@ -53,10 +57,7 @@ public class CartFacade {
             cartItem.setProduct(product);
             cartItem.setQuantity(cartItemDTO.getQuantity());
             if(cartItemDTO.getSize() != null){
-                ProductVariation productVariation = new ProductVariation();
-                productVariation.setParent(product);
-                productVariation.setProductSize(ProductSize.values()[cartItemDTO.getSize()]);
-                cartItem.setProductVariation(productVariation);
+                cartItem.setProductVariation(getProductVariationByProductAndSize(product,ProductSize.values()[cartItemDTO.getSize()] ));
             }
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
             cart.addItemToCart(cartItem);
@@ -71,5 +72,9 @@ public class CartFacade {
 
     private Product getProductByProductId(Long productId){
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
+    }
+
+    private ProductVariation getProductVariationByProductAndSize(Product product, ProductSize productSize){
+        return productVariationRepository.findByParentAndProductSize(product, productSize).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
     }
 }

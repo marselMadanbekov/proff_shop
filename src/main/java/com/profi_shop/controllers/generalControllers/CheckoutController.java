@@ -99,7 +99,7 @@ public class CheckoutController {
             response.put("message", "Заказ успешно оформлен. Ожидайте скоро с вами свяжутся операторы!");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }

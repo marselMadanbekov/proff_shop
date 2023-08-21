@@ -275,7 +275,6 @@
                                 <li><a href="#"><i th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a></li>
                                 <li><a href="#"><i th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a></li>
                             </ul>
-
                         </div>
                         <div class="price_box">
                             <span class="current_price" th:if="${product.discount > 0}"
@@ -289,15 +288,19 @@
                         <div class="product_desc">
                             <p th:text="${product.description}"></p>
                         </div>
-                        <div class="product_variant color">
-                            <h3>Available Options</h3>
-                            <label>Текущий цвет</label>
-                            <ul>
-                                <li th:style="'background:' + ${product.color}"><a ></a></li>
-                            </ul>
-                            <label>Другие цвета</label>
+                        <div class="product_variant group">
+                            <label>Связанные товары</label>
                             <ul>
                                 <li th:each="otherProduct: ${group}" th:style="'background:'+ ${otherProduct.color}"><a th:href="'/shop/productDetails?productId=' + ${otherProduct.id} "><img th:src="@{'/products/' + ${otherProduct.getPhotos().get(0)}}"></a></li>
+                            </ul>
+                            <hr>
+                        </div>
+
+                        <div class="product_variant color">
+                            <h3>Свойства</h3>
+                            <label>Цвет</label>
+                            <ul>
+                                <li th:style="'background:' + ${product.color}"><a ></a></li>
                             </ul>
                         </div>
                         <div class="product_variant size">

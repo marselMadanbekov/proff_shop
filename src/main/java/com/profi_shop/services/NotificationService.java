@@ -42,14 +42,12 @@ public class NotificationService {
         return message.replace("ORDER_NUMBER", order.toString());
     }
 
-    @Scheduled(cron = "0 0/1 0-9 * * *") // 60000 миллисекунд = 1 минута
+    @Scheduled(cron = "0 0/1 0-9 * * *")
     public void emailNotification() {
         List<User> admins = userService.getAdmins();
         for(User admin : admins){
-            System.out.println("hello notification for " +admin.getUsername());
             List<Notification> notViewedNotifications = notificationRepository.findByUserAndViewed(admin, false);
             if(notViewedNotifications.size() == 0) continue;
-            System.out.println("found");
             emailService.sendSimpleMessage(admin.getEmail(), "Поступили новые заказы, перейдите на сайт магазина PROFF-SHOP для просмотра");
         }
         System.out.println("Метод с 9-18 сработал! Текущее время: " + System.currentTimeMillis());

@@ -13,4 +13,12 @@ public class ProductVariation {
     private ProductSize productSize;
     @ManyToOne
     private Product parent;
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductVariation productVariation = (ProductVariation) o;
+        return this.productSize.equals(productVariation.getProductSize());
+    }
 }

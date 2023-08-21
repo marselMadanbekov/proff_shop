@@ -1,5 +1,6 @@
 package com.profi_shop.controllers.generalControllers;
 
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.Cart;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.requests.CartUpdateRequest;
@@ -36,7 +37,7 @@ public class CartController {
     public String cart(Principal principal,
                        HttpServletRequest request,
                        HttpServletResponse response,
-                       Model model) {
+                       Model model) throws ExistException {
         Cart cart;
         if (principal == null) {
             cart = cartService.getCartByRequestCookies(request);
@@ -101,6 +102,7 @@ public class CartController {
 
     @GetMapping("/remove")
     public ResponseEntity<Map<String, String>> removeFromCart(@RequestParam("productId") Long productId,
+                                                              @RequestParam("size") Integer size,
                                                               HttpServletRequest request,
                                                               HttpServletResponse response,
                                                               Principal principal) {
@@ -108,7 +110,7 @@ public class CartController {
         Cart cart;
         if (principal == null) {
             try {
-                cart = cartService.removeProductFromCart(request, productId);
+                cart = cartService.removeProductFromCart(request, productId,size);
                 cartService.saveCartToCookie(cart, response);
                 responseMessage.put("message", "Продукт успешно удален из корзины");
                 return new ResponseEntity<>(responseMessage, HttpStatus.OK);
@@ -117,7 +119,7 @@ public class CartController {
                 return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
             }
         } else {
-            cart = cartService.removeProductFromCart(principal.getName(), productId);
+            cart = cartService.removeProductFromCart(principal.getName(), productId,size);
             responseMessage.put("message", "Продукт успешно удален из корзины");
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);

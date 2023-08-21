@@ -6357,8 +6357,45 @@ ul li.current {
   margin-right: 0;
 }
 .product_variant.color ul li a {
-  width: 50px;
-  height: 50px;
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+.product_variant.group {
+  margin-bottom: 26px;
+}
+@media only screen and (max-width: 767px) {
+  .product_variant.color {
+    margin-bottom: 18px;
+  }
+}
+.product_variant.group h3 {
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 18px;
+  margin-bottom: 0;
+  margin-right: 40px;
+}
+.product_variant.group label {
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.product_variant.group ul li {
+  display: inline-block;
+  padding: 2px;
+  border: 1px solid #ccc;
+  margin-right: 5px;
+}
+.product_variant.group ul li:hover {
+  border-color: #E88888;
+}
+.product_variant.group ul li:last-child {
+  margin-right: 0;
+}
+.product_variant.group ul li a {
+  width: 60px;
+  height: 60px;
   display: block;
 }
 

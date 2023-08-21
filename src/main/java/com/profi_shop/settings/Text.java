@@ -67,6 +67,7 @@ public class Text {
 
         data.put("ERROR_USER_EXISTS","Пользователь с таким логином уже существует!");
         data.put("ERROR_SHIPMENT_EXISTS","Доставка уже существует!");
+        data.put("ERROR_CART_ITEM_EXIST","Продукт уже есть в корзине!");
         data.put("ERROR_SIZE_OF_PRODUCT_EXIST","Вариант продукта с таким размером уже существует!");
         data.put("ERROR_PRODUCT_SKU_EXIST","Продукт с таким штрихкодом уже существует!");
         data.put("ERROR_WISHLIST_CONTAINS_PRODUCT","Продукт уже в избранных!");
