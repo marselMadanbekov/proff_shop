@@ -9,9 +9,16 @@ import com.profi_shop.model.enums.OrderStatus;
 import com.profi_shop.model.enums.ShipmentType;
 import com.profi_shop.model.requests.OrderRequest;
 import com.profi_shop.repositories.*;
+import com.profi_shop.validations.Validator;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,6 +34,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final CartService cartService;
 
+    @Autowired
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, ProductVariationRepository productVariationRepository, ShipmentRepository shipmentRepository, StoreRepository storeRepository, NotificationService notificationService, StoreHouseRepository storeHouseRepository, UserRepository userRepository, CartService cartService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
@@ -39,6 +47,21 @@ public class OrderService {
         this.cartService = cartService;
     }
 
+    public Page<Order> getFilteredOrders(Integer status, Integer sort, Integer page){
+        Pageable pageable;
+        if(sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC,"totalPrice"));
+        else if(sort == 1) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"totalPrice"));
+        else if(sort == 2) pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.ASC,"date"));
+        else pageable = PageRequest.of(page, 10,  Sort.by(Sort.Direction.DESC,"date"));
+
+        return switch (status) {
+            case 1 -> orderRepository.findByStatus(OrderStatus.REQUEST, pageable);
+            case 2 -> orderRepository.findByStatus(OrderStatus.PAID, pageable);
+            case 3 -> orderRepository.findByStatus(OrderStatus.DELIVERING, pageable);
+            case 4 -> orderRepository.findByStatus(OrderStatus.FINISHED, pageable);
+            default -> orderRepository.findAll(pageable);
+        };
+    }
     public void createOrderByUnknown(OrderRequest orderRequest, HttpServletRequest request) throws InvalidDataException, NotEnoughException, ExistException {
         Cart cart = cartService.getCartByRequestCookies(request);
         Order order = createBaseOrder(orderRequest,cart);
@@ -61,6 +84,10 @@ public class OrderService {
         if(cart.getCartItems().size() == 0){
             throw new InvalidDataException(InvalidDataException.EMPTY_CART);
         }
+        order.setEmail(orderRequest.getEmail());
+        order.setFirstname(orderRequest.getFirstname());
+        order.setLastname(orderRequest.getLastname());
+        order.setPhone_number(Validator.validNumber(orderRequest.getPhone_number()));
         if(orderRequest.isToShip()){
             Shipment shipment = shipmentRepository.findByTownAndState(orderRequest.getTown(), orderRequest.getState()).orElseThrow(() -> new SearchException(SearchException.SHIPMENT_NOT_FOUND));
             order.setShipment(shipment);
@@ -74,7 +101,7 @@ public class OrderService {
         for(CartItem cartItem : cart.getCartItems()){
             if(cartItem.getProductVariation() != null){
                 int count = countOfProductVariationInStore(cartItem.getProductVariation());
-                if(count < cartItem.getQuantity())  throw new NotEnoughException(cartItem.getProduct().getName() + " ( " + cartItem.getProductVariation().getProductSize() + " ) ",count);
+                if(count < cartItem.getQuantity())  throw new NotEnoughException(cartItem.getProduct().getName() + " ( " + cartItem.getProductVariation().getSize() + " ) ",count);
             }else{
                 int count = countOfProductInStore(cartItem.getProduct());
                 if(count < cartItem.getQuantity())  throw new NotEnoughException(cartItem.getProduct().getName(),count);
@@ -88,17 +115,35 @@ public class OrderService {
             order.addOrderItem(orderItem);
         }
         totalPrice += cart.cartAmount();
-        order.setTotal_price(totalPrice);
-        order.setStore(chooseStoreToOrder());
+        order.setTotalPrice(totalPrice);
+        order.setStore(chooseStoreToOrder(cart.getCartItems()));
         return orderRepository.save(order);
     }
     private User getUserByUsername(String username){
         return userRepository.findUserByUsername(username).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
 
-    private Store chooseStoreToOrder(){
-        List<Store> stores = storeRepository.findAll();
-        return stores.get(new Random().nextInt(stores.size()));
+    private Store chooseStoreToOrder(List<CartItem> cartItems){
+        List<StoreHouse> storeHouses = new ArrayList<>();
+        if(cartItems.get(0).getProductVariation() == null){
+            List<ProductVariation> productVariations = productVariationRepository.findByParent(cartItems.get(0).getProduct());
+            for(ProductVariation pv : productVariations){
+                storeHouses.addAll(storeHouseRepository.findStoreHouseByProduct(pv));
+            }
+        }else{
+            storeHouses.addAll(storeHouseRepository.findStoreHouseByProduct(cartItems.get(0).getProductVariation()));
+        }
+        int max = Integer.MIN_VALUE;
+        Store maxStore = null;
+        for(StoreHouse sh : storeHouses){
+            if(sh.getQuantity() > max){
+                maxStore = sh.getStore();
+            }
+        }
+        if(maxStore == null){
+            maxStore = storeRepository.findAll().get(0);
+        }
+        return maxStore;
     }
 
     private Integer countOfProductInStore(Product product){

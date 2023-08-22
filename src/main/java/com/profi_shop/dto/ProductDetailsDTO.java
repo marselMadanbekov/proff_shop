@@ -24,8 +24,7 @@ public class ProductDetailsDTO {
     private Map<String,String> specifications;
     private int averageRating;
 
-    private boolean inCart;
-    private boolean inWishlist;
+    private boolean available;
     private Map<ProductVariation,Integer> productVariationCount;
     private List<StoreHouse> storeHouses;
 

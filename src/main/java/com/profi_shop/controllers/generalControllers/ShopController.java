@@ -37,7 +37,7 @@ public class ShopController {
 
     @GetMapping("")
     public String shopPage(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
-                           @RequestParam(value = "size",required = false) Optional<Integer> size,
+                           @RequestParam(value = "size",required = false) Optional<String> size,
                            @RequestParam(value = "color",required = false) Optional<String> color,
                            @RequestParam(value = "minPrice",required = false) Optional<Integer> minPrice,
                            @RequestParam(value = "maxPrice",required = false) Optional<Integer> maxPrice,
@@ -46,7 +46,7 @@ public class ShopController {
                            @RequestParam(value = "sort", required = false) Optional<Integer> sort,
                            Model model){
 
-        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0),categoryId.orElse(0L),size.orElse(0),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0),categoryId.orElse(0L),size.orElse(null),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
         List<Category> categories = categoryService.getMainCategories();
 
 
@@ -57,7 +57,7 @@ public class ShopController {
         model.addAttribute("minPrice", minPrice.orElse(0));
         model.addAttribute("maxPrice", maxPrice.orElse(0));
         model.addAttribute("selectedCategoryId", categoryId.orElse(0L));
-        model.addAttribute("selectedSize", size.orElse(0));
+        model.addAttribute("selectedSize", size.orElse(""));
         model.addAttribute("query", query.orElse(""));
 
         return "shop/shop";

@@ -6,6 +6,7 @@ import com.profi_shop.model.Category;
 import com.profi_shop.model.requests.CartUpdateRequest;
 import com.profi_shop.services.CartService;
 import com.profi_shop.services.CategoryService;
+import com.profi_shop.services.ShipmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,13 @@ public class CartController {
 
     private final CartService cartService;
     private final CategoryService categoryService;
+    private final ShipmentService shipmentService;
 
     @Autowired
-    public CartController(CartService cartService, CategoryService categoryService) {
+    public CartController(CartService cartService, CategoryService categoryService, ShipmentService shipmentService) {
         this.cartService = cartService;
         this.categoryService = categoryService;
+        this.shipmentService = shipmentService;
     }
 
     @GetMapping("")
@@ -46,6 +49,11 @@ public class CartController {
             cart = cartService.getCartByUsername(principal.getName());
         }
         List<Category> categories = categoryService.getMainCategories();
+        List<String> states = shipmentService.getUniqueStates();
+        List<String> towns = shipmentService.getUniqueTowns();
+
+        model.addAttribute("cart", cart);
+        model.addAttribute("states", states);
         model.addAttribute("categories", categories);
         model.addAttribute("cart", cart);
         return "shop/cart";
@@ -102,7 +110,7 @@ public class CartController {
 
     @GetMapping("/remove")
     public ResponseEntity<Map<String, String>> removeFromCart(@RequestParam("productId") Long productId,
-                                                              @RequestParam("size") Integer size,
+                                                              @RequestParam("size") String size,
                                                               HttpServletRequest request,
                                                               HttpServletResponse response,
                                                               Principal principal) {

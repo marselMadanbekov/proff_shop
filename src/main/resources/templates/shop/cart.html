@@ -244,8 +244,9 @@
     <div class="container">
         <form action="#">
             <div class="row">
+                <h3 th:if="${cart.cartItems.size() == 0}">Корзина пуста</h3>
                 <div class="col-12">
-                    <div class="table_desc">
+                    <div class="table_desc" th:if="${cart.cartItems.size() > 0}">
                         <div>
                             <i class="fa fa-user"></i><span> - Акция только для зарегистрированных пользователей</span>
                         </div>
@@ -271,7 +272,7 @@
                                 <tbody>
                                 <tr th:if="${not(cart == null)}" th:each="cartItem: ${cart.cartItems}">
                                     <td class="product_remove"><a href="javascript:void(0)" class="cart_remove"
-                                                                  th:attr="productId=${cartItem.product.id}, size=${cartItem.productVariation == null ? 0: cartItem.productVariation.productSize.ordinal()}"><i
+                                                                  th:attr="productId=${cartItem.product.id}, size=${cartItem.productVariation == null ? 0: cartItem.productVariation.size}"><i
                                             class="fa fa-trash-o"></i></a>
                                     </td>
                                     <td><a href="javascript:void(0)"><i class="fa"
@@ -283,14 +284,14 @@
                                     <td class="product_name">
                                         <a href="javascript:void(0)" th:text="${cartItem.product.name}"></a>
                                         <a href="javascript:void(0)" th:if="${cartItem.productVariation != null}"
-                                           th:text="${' ( ' + cartItem.productVariation.productSize} + ' ) '"></a>
+                                           th:text="${' ( ' + cartItem.productVariation.size} + ' ) '"></a>
                                     </td>
                                     <td class="product-price" th:text="${cartItem.product.price} + 'сом'"></td>
                                     <td class="product_quantity"><label>Кол-во</label><input class="product_q" min="1"
-                                                                                              max="100"
-                                                                                              th:attr="productId=${cartItem.product.id}"
-                                                                                              th:value="${cartItem.quantity}"
-                                                                                              type="number"></td>
+                                                                                             max="100"
+                                                                                             th:attr="productId=${cartItem.product.id}"
+                                                                                             th:value="${cartItem.quantity}"
+                                                                                             type="number"></td>
                                     <td class="product_total" th:text="${cartItem.amount} + 'сом'"></td>
                                 </tr>
                                 </tbody>
@@ -312,83 +313,144 @@
                 </div>
             </div>
             <!--coupon code area start-->
-            <div class="coupon_area">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="coupon_code left">
-                            <h3>Coupon</h3>
-                            <div class="coupon_inner">
-                                <p>Enter your coupon code if you have one.</p>
-                                <input placeholder="Coupon code" type="text">
-                                <button type="submit">Apply coupon</button>
+            <div class="Checkout_section  mt-50" id="accordion" th:if="${cart.cartItems.size() > 0}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h3>Оформление заказа</h3>
+                            <div class="user-actions">
+                                <h3>
+                                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                                    У вас есть купон?
+                                    <a class="Returning" href="#" data-toggle="collapse" data-target="#checkout_coupon"
+                                       aria-expanded="true">Нажмите здесь чтобы применить</a>
+
+                                </h3>
+                                <div id="checkout_coupon" class="collapse" data-parent="#accordion">
+                                    <div class="checkout_info coupon_info">
+                                        <form action="#">
+                                            <input placeholder="Coupon code" type="text">
+                                            <button type="submit">Применить</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="coupon_code right">
-                            <h3>Cart Totals</h3>
-                            <div class="coupon_inner">
-                                <div class="cart_subtotal">
-                                    <p>Subtotal</p>
-                                    <p class="cart_amount" th:text="${cart.cartAmount()} + 'сом'"></p>
-                                </div>
-                                <div class="cart_subtotal ">
-                                    <p>Shipping</p>
-                                    <p class="cart_amount"><span>Flat Rate:</span>334 сом</p>
-                                </div>
-                                <a href="#">Calculate shipping</a>
+                    <div class="checkout_form">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <form id="orderForm">
+                                    <h3>Your order</h3>
+                                    <div class="order_table table-responsive">
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th>Товар</th>
+                                                <th>Сумма</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="cartItem: ${cart.cartItems}">
+                                                <td th:if="${cartItem.productVariation == null}"
+                                                    th:text="${cartItem.product.name} + ' × ' + ${cartItem.quantity}"></td>
+                                                <td th:if="${cartItem.productVariation != null}"
+                                                    th:text="${cartItem.product.name} + ' ( ' + ${cartItem.productVariation.size} + ' ) ' + ' × ' + ${cartItem.quantity}"></td>
+                                                <td th:text="${cartItem.amount} + ' сом'"></td>
+                                            </tr>
 
-                                <div class="cart_subtotal">
-                                    <p>Total</p>
-                                    <p class="cart_amount" th:text="${cart.cartAmount()} + 'сом'"></p>
-                                </div>
-                                <div class="checkout_btn">
-                                    <a href="/checkout">Proceed to Checkout</a>
-                                </div>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Сумма</th>
+                                                <td id="cartSubtotal" th:text="${cart.cartAmount()} + ' сом'"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Shipping</th>
+                                                <td id="shippingPrice"><strong>0 сом</strong></td>
+                                            </tr>
+                                            <tr class="order_total">
+                                                <th>Итого</th>
+                                                <td id="orderTotal"><strong
+                                                        th:text="${cart.cartAmount()} + ' сом'"></strong></td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </form>
                             </div>
+                            <div class="col-lg-6 col-md-6">
+                                <form id="orderDetails">
+                                    <h3>Детали заказа</h3>
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-20">
+                                            <label>Имя<span>*</span></label>
+                                            <input type="text" name="firstname" id="firstname" required>
+                                        </div>
+                                        <div class="col-lg-6 mb-20">
+                                            <label>Фамилия<span>*</span></label>
+                                            <input type="text" name="lastname" id="lastname" required>
+                                        </div>
+                                        <div class="col-lg-6 mb-20">
+                                            <label>Номер телефона<span>*</span></label>
+                                            <input type="text" name="phone_number" id="phone_number" required>
+                                        </div>
+                                        <div class="col-lg-6 mb-20">
+                                            <label>Адрес электронной почты (e-mail) <span>*</span></label>
+                                            <input type="email" name="email" id="email" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-20">
+                                        <input id="shipment" type="checkbox" data-toggle="collapse"
+                                               data-target="#collapseOne"/>
+                                        <label for="shipment" data-toggle="collapse" data-target="#collapseOne"
+                                               aria-controls="collapseOne">Заказать доставку?</label>
+                                        <a href="/checkout">/ Сброс</a>
+                                        <div id="collapseOne" class="collapse one" data-parent="#accordion">
+                                            <div class="card-body1">
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="spinner" id="spinner1"></div>
+                                                </div>
+                                                <div class="col-12 mb-20">
+                                                    <label for="state">Region <span>*</span></label>
+                                                    <select class="form-select form-select-sm" name="state" id="state">
+                                                        <option value=""></option>
+                                                        <option th:each="state: ${states}" th:value="${state}"
+                                                                th:text="${state}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-20">
+                                                    <label for="town">City <span>*</span></label>
+                                                    <select class="form-select form-select-sm" name="town" id="town">
+                                                        <option value=""></option>
+                                                        <option th:each="town:${towns}" th:value="${town}"
+                                                                th:text="${town}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-20">
+                                                    <label>Street address<span>*</span></label>
+                                                    <input placeholder="House number and street name" type="text">
+                                                </div>
+                                                <div class="order_button">
+                                                    <button type="button" id="scost">Посчитать</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order_button">
+                                        <button type="submit" id="order">Заказать</button>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-            <!--coupon code area end-->
         </form>
     </div>
 </div>
 <!--shopping cart area end -->
-
-<!--brand area start-->
-<div class="brand_area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="brand_container owl-carousel">
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand1.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand2.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand3.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand4.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand5.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand6.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand2.png" alt=""></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--brand area end-->
 
 <!--footer area start-->
 <footer class="footer_widgets">
@@ -532,6 +594,7 @@
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
 <script src="/static/js/cart/cartpage.js"></script>
+<script src="/static/js/checkout.js"></script>
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>

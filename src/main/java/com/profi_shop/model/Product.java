@@ -21,7 +21,6 @@ public class Product {
     private String name;
     private int prime_cost;
     private int price;
-    private String sku;
     private String color;
 
     private Date create_date;
@@ -34,6 +33,12 @@ public class Product {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "product_id"))
     private List<String> photos = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "tags", joinColumns = @JoinColumn(name = "product_id"))
+    private List<String> tags = new ArrayList<>();
+
+    private String brand;
     private String description;
     @ManyToOne
     private Category category;
@@ -52,6 +57,9 @@ public class Product {
 
     public void addSpecification(String key, String value){
         this.specifications.put(key, value);
+    }
+    public void addTag(String tag){
+        this.tags.add(tag);
     }
 
     public void removeSpecification(String key) {

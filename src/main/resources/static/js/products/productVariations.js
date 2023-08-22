@@ -2,7 +2,7 @@
     "use strict";
 
     const deleteVariation = document.querySelectorAll('.deleteVariation');
-    const newVariation = document.getElementById('newVariation');
+    const newVariation = document.getElementById('addVariationForm');
 
     deleteVariation.forEach(function(link) {
         link.addEventListener('click', function(event) {
@@ -33,17 +33,17 @@
     });
 
 
-    newVariation.addEventListener('click', function (e){
+    newVariation.addEventListener('submit', function (e){
         let variation = document.getElementById('newSize').value;
         let productId = this.getAttribute('productId');
         if(confirm("Creation of " + variation)){
+            let formData = new FormData(this);
             $.ajax({
                 url: '/admin/products/addVariation',
                 type: 'POST',
-                data: {
-                    size: variation,
-                    productId: productId
-                }, // Передаем variation в запросе
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     // Обработка успешного удаления
                     alert(response.message);

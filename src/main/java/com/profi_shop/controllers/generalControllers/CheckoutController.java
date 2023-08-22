@@ -35,34 +35,6 @@ public class CheckoutController {
         this.cartService = cartService;
     }
 
-    @GetMapping("")
-    public String checkout(@RequestParam(value = "state", required = false) Optional<String> state,
-                           @RequestParam(value = "town", required = false) Optional<String> town,
-                           Model model,
-                           Principal principal,
-                           HttpServletRequest request,
-                           HttpServletResponse response) {
-        Cart cart;
-        try {
-            if (principal == null) {
-                cart = cartService.getCartByRequestCookies(request);
-                cartService.saveCartToCookie(cart, response);
-            } else {
-                cart = cartService.getCartByUsername(principal.getName());
-            }
-        } catch (Exception e) {
-            cart = new Cart();
-        }
-
-
-        List<String> states = shipmentService.getUniqueStates();
-        List<String> towns = shipmentService.getUniqueTowns();
-
-        model.addAttribute("cart", cart);
-        model.addAttribute("states", states);
-        model.addAttribute("towns", towns);
-        return "shop/checkout";
-    }
 
     @GetMapping("/towns")
     public ResponseEntity<List<String>> getTowns(@RequestParam("state") String state) {

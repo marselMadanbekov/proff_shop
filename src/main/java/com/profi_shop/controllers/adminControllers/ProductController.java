@@ -44,7 +44,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public String products(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
-                           @RequestParam(value = "size", required = false) Optional<Integer> size,
+                           @RequestParam(value = "size", required = false) Optional<String> size,
                            @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
                            @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
                            @RequestParam(value = "query", required = false) Optional<String> query,
@@ -53,7 +53,7 @@ public class ProductController {
                            Model model) {
         List<Store> stores = storeService.getAllStores();
         List<Category> categories = categoryService.getAllCategories();
-        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L), size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L), size.orElse(null), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
 
 
         model.addAttribute("products", products);
@@ -64,7 +64,7 @@ public class ProductController {
         model.addAttribute("minPrice", minPrice.orElse(0));
         model.addAttribute("maxPrice", maxPrice.orElse(0));
         model.addAttribute("selectedCategory", categoryId.orElse(0L));
-        model.addAttribute("selectedSize", size.orElse(0));
+        model.addAttribute("selectedSize", size.orElse(""));
         model.addAttribute("query", query.orElse(""));
         return "admin/product/products";
     }
@@ -122,12 +122,13 @@ public class ProductController {
         }
     }
     @PostMapping("/products/addVariation")
-    public ResponseEntity<Map<String, String>> addVariation(@RequestParam Integer size,
-                                                            @RequestParam Long productId) {
+    public ResponseEntity<Map<String, String>> addVariation(@RequestParam String size,
+                                                            @RequestParam Long productId,
+                                                            @RequestParam(value = "sku", required = false) Optional<String> sku) {
         Map<String,String> response = new HashMap<>();
         try{
             response.put("message", "Новый размер товара успешно добавлен");
-            productService.addVariationToProduct(productId, size);
+            productService.addVariationToProduct(productId, size, sku.orElse(null));
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             response.put("error", e.getMessage());
@@ -212,7 +213,7 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<Object> filterProducts(@RequestParam(value = "size", required = false) Optional<Integer> size,
+    public ResponseEntity<Object> filterProducts(@RequestParam(value = "size", required = false) Optional<String> size,
                                                   @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
                                                   @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
                                                   @RequestParam(value = "query", required = false) Optional<String> query,
@@ -220,7 +221,7 @@ public class ProductController {
                                                   @RequestParam(value = "sort", required = false) Optional<Integer> sort) {
         try {
 
-            Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), 0L, size.orElse(0), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
+            Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), 0L, size.orElse(null), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
             return new ResponseEntity<>(products, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);

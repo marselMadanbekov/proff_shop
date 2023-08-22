@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int total_price;
+    private int totalPrice;
     private String firstname;
     private String lastname;
     private String email;
@@ -33,10 +34,12 @@ public class Order {
 
     @ManyToOne
     private User user;
-    private Date date;
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp date;
     @PrePersist
     private void onCreate(){
-        date = Date.valueOf(LocalDate.now());
+        date = new Timestamp(System.currentTimeMillis());
     }
 
     public void addOrderItem(OrderItem orderItem) {

@@ -14,7 +14,6 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    Page<Product> findAllBySku(String sku,Pageable pageable);
     Page<Product> findAllByName(String name, Pageable pageable);
 
     List<Product> findAllByCategory(Category category);
@@ -23,16 +22,16 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query("SELECT DISTINCT p FROM Product p " +
             "WHERE (:category IS NULL OR (p.category = :category OR p.category.parent = :category)) " +
-            "AND (:query IS NULL OR (p.name = :query OR p.sku = :query)) " +
+            "AND (:query IS NULL OR (p.name LIKE %:query%)) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
             "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
-            "AND (:size IS NULL OR EXISTS (SELECT 1 FROM ProductVariation pv WHERE pv.parent = p AND pv.productSize = :size))")
+            "AND (:size IS NULL OR EXISTS (SELECT 1 FROM ProductVariation pv WHERE pv.parent = p AND pv.size = :size))")
     Page<Product> findAllByFilters(
             Category category,
             String query,
             Integer minPrice,
             Integer maxPrice,
-            ProductSize size,
+            String size,
             Pageable pageable
     );
 }

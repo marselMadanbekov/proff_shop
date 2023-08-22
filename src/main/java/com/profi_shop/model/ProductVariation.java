@@ -10,7 +10,9 @@ public class ProductVariation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private ProductSize productSize;
+
+    private String sku;
+    private String size;
     @ManyToOne
     private Product parent;
 
@@ -19,6 +21,6 @@ public class ProductVariation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductVariation productVariation = (ProductVariation) o;
-        return this.productSize.equals(productVariation.getProductSize());
+        return this.size.equals(productVariation.getSize());
     }
 }

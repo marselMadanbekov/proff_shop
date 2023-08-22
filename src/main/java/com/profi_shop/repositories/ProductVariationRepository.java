@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface ProductVariationRepository extends JpaRepository<ProductVariation, Long> {
     List<ProductVariation> findByParent(Product product);
-    Optional<ProductVariation> findByParentAndProductSize(Product product, ProductSize size);
+    Optional<ProductVariation> findByParentAndSize(Product product, String size);
 }

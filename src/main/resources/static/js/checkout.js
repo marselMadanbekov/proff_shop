@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
         formData.append('toShip', checkbox.checked);
         console.log(formData);
-        $("#spinner").show();
+        $("#spinner1").show();
 
         $.ajax({
             url: '/checkout/order', // Замените на адрес вашего сервера
@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
             contentType: false,
             processData: false,
             success: function(response) {
-                $("#spinner").hide();
+                $("#spinner1").hide();
                 showModal("Заказ", response.message)
             },
             error: function(xhr, status, error) {
-                $("#spinner").hide();
+                $("#spinner1").hide();
                 try {
                     const errorData = JSON.parse(xhr.responseText);
                     if (errorData.hasOwnProperty("error")) {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let state = states.value;
         let town = towns.value;
 
-        $("#spinner").show();
+        $("#spinner1").show();
         console.log(state + 'state.' + town + 'town.');
         $.ajax({
             url: "/checkout/towns?state=" + encodeURIComponent(state),
@@ -59,10 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     option.textContent = town;
                     towns.appendChild(option);
                 });
-                $("#spinner").hide();
+                $("#spinner1").hide();
             },
             error: function (xhr,status,error) {
-                $("#spinner").hide();
+                $("#spinner1").hide();
             }
         });
     })
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let state = states.value;
         let town = towns.value;
 
-        $("#spinner").show();
+        $("#spinner1").show();
         console.log(state + 'state.' + town + 'town.');
         $.ajax({
             url: "/checkout/calculateShipping?state=" + encodeURIComponent(state) +'&town=' + encodeURIComponent(town),
@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const orderTotalElement = document.getElementById('orderTotal');
                 const newOrderTotal = cartSubtotal + data;
                 orderTotalElement.innerHTML = `<strong>${newOrderTotal} сом</strong>`;
-                $("#spinner").hide();
+                $("#spinner1").hide();
             },
             error: function (xhr,status,error) {
-                $("#spinner").hide();
+                $("#spinner1").hide();
             }
         });
     })

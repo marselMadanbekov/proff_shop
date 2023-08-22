@@ -59,7 +59,11 @@ public class Cart {
     }
 
     public void removeProductVariation(ProductVariation productVariation){
-        cartItems.removeIf(cartItem -> productVariation.equals(cartItem.getProductVariation()));
+        cartItems.removeIf(cartItem -> {
+            if (cartItem.getProductVariation() == null ^ productVariation == null) return false;
+            else if(cartItem.getProductVariation() == null) return true;
+            return cartItem.getProductVariation().equals(productVariation);
+        });
     }
 
     public void quantityUp(Product product, int quantity){

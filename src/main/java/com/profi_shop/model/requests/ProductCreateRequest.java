@@ -11,10 +11,12 @@ public class ProductCreateRequest {
     private int prime_cost;
     private int price;
     private String sku;
+    private Category category;
+    private String size;
     private String color;
-    private int size;
+    private String tag;
+    private String brand;
     private MultipartFile photo;
     private String description;
-    private Category category;
 
 }

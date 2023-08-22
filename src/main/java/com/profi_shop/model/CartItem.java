@@ -36,6 +36,6 @@ public class CartItem {
         if(this.productVariation == null) {
             return false;
         }
-        return product.equals(cartItem.getProduct()) && productVariation.getProductSize().equals(cartItem.getProductVariation().getProductSize());
+        return product.equals(cartItem.getProduct()) && productVariation.getSize().equals(cartItem.getProductVariation().getSize());
     }
 }

@@ -5,7 +5,6 @@ import com.profi_shop.dto.CartItemDTO;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
-import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.ProductVariationRepository;
 import com.profi_shop.repositories.StockRepository;
@@ -36,7 +35,7 @@ public class CartFacade {
             CartItemDTO item = new CartItemDTO();
             item.setProductId(cartItem.getProduct().getId());
             item.setQuantity(cartItem.getQuantity());
-            item.setSize((cartItem.getProductVariation() == null) ? null: cartItem.getProductVariation().getProductSize().ordinal());
+            item.setSize(cartItem.getProductVariation() == null ? "" : cartItem.getProductVariation().getSize());
             cartDTO.addItem(item);
         }
         return cartDTO;
@@ -57,7 +56,7 @@ public class CartFacade {
             cartItem.setProduct(product);
             cartItem.setQuantity(cartItemDTO.getQuantity());
             if(cartItemDTO.getSize() != null){
-                cartItem.setProductVariation(getProductVariationByProductAndSize(product,ProductSize.values()[cartItemDTO.getSize()] ));
+                cartItem.setProductVariation(getProductVariationByProductAndSize(product,cartItemDTO.getSize() ));
             }
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
             cart.addItemToCart(cartItem);
@@ -74,7 +73,7 @@ public class CartFacade {
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 
-    private ProductVariation getProductVariationByProductAndSize(Product product, ProductSize productSize){
-        return productVariationRepository.findByParentAndProductSize(product, productSize).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
+    private ProductVariation getProductVariationByProductAndSize(Product product, String productSize){
+        return productVariationRepository.findByParentAndSize(product, productSize).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
     }
 }

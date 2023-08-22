@@ -40,7 +40,6 @@ public class ProductFacade {
         List<ProductVariation> productVariations = getVariationByProduct(product);
         ProductDetailsDTO productDTO = new ProductDetailsDTO();
         productDTO.setName(product.getName());
-        productDTO.setSku(product.getSku());
         productDTO.setPhotos(product.getPhotos());
         productDTO.setCategory(categoryFacade.categoryToCategoryDTO(product.getCategory()));
         productDTO.setColor(product.getColor());
@@ -54,6 +53,8 @@ public class ProductFacade {
         productDTO.setStoreHouses(getStoreHousesByProduct(product));
         productDTO.setProductVariationCount(getProductVariationsCount(productVariations));
         productDTO.setNewPrice(getNewPriceByPriceAndDiscount(product.getPrice(), productDTO.getDiscount()));
+        productDTO.setAvailable(isAvailable(productVariations));
+
         return productDTO;
     }
 
@@ -128,5 +129,12 @@ public class ProductFacade {
     private int getNewPriceByPriceAndDiscount(int price, int discount) {
         if (discount > 0) return price - (int) (price * ((double) discount / 100));
         return 0;
+    }
+
+    private boolean isAvailable(List<ProductVariation> productVariations){
+        for(ProductVariation var : productVariations){
+            if(getCountOfProductVariation(var) > 0) return true;
+        }
+        return false;
     }
 }

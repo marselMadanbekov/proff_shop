@@ -1,5 +1,10 @@
 package com.profi_shop.services;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Writer;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code128Writer;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
@@ -21,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ProductService {
@@ -29,6 +35,20 @@ public class ProductService {
     private final CategoryService categoryService;
     private final ProductVariationRepository productVariationRepository;
     private final StoreHouseService storeHouseService;
+
+    private String generateArticul() {
+        StringBuilder articul = new StringBuilder();
+        Random random = new Random();
+        int ARTICUL_LENGTH = 7;
+        for (int i = 0; i < ARTICUL_LENGTH; i++) {
+            String SYMBOLS = "0123456789abcd";
+            int randomIndex = random.nextInt(SYMBOLS.length());
+            char digit = SYMBOLS.charAt(randomIndex);
+            articul.append(digit);
+        }
+
+        return articul.toString();
+    }
 
     @Autowired
     public ProductService(ProductRepository productRepository, PhotoService photoService, CategoryService categoryService, ProductVariationRepository productVariationRepository, StoreHouseService storeHouseService) {
@@ -44,13 +64,13 @@ public class ProductService {
         product.setName(productToCreate.getName());
         product.setPrime_cost(productToCreate.getPrime_cost());
         product.setPrice(productToCreate.getPrice());
-        product.setSku(productToCreate.getSku());
         product.setDescription(productToCreate.getDescription());
         product.setCategory(productToCreate.getCategory());
+        product.setBrand(productToCreate.getBrand());
+        product.addTag(productToCreate.getTag());
 
         if (!productToCreate.getColor().equals("none")) product.setColor(productToCreate.getColor());
         else product.setColor(null);
-
 
         try {
             String firstPhoto = photoService.savePhoto(productToCreate.getPhoto());
@@ -64,15 +84,16 @@ public class ProductService {
         } catch (Exception e) {
             throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
         }
-
-        ProductVariation productVariation = new ProductVariation();
-        productVariation.setProductSize(ProductSize.values()[productToCreate.getSize()]);
-        productVariation.setParent(product);
-        productVariationRepository.save(productVariation);
+        if(productToCreate.getSize() == null || productToCreate.getSize().isEmpty()){
+            addVariationToProduct(product.getId(), "DEFAULT", productToCreate.getSku());
+        }
+        else{
+            addVariationToProduct(product.getId(), productToCreate.getSize(), productToCreate.getSku());
+        }
     }
 
-    public Page<Product> productsFilteredPage(int page, Long categoryId, int size, String query, int minPrice, int maxPrice, int sort) {
-        Pageable pageable = null;
+    public Page<Product> productsFilteredPage(int page, Long categoryId, String size, String query, int minPrice, int maxPrice, int sort) {
+        Pageable pageable;
         if (sort != 0) {
             if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
             else if (sort == 2) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "price"));
@@ -82,17 +103,12 @@ public class ProductService {
             pageable = PageRequest.of(page, 9);
         }
         Category category = (categoryId == 0) ? null : categoryService.getCategoryById(categoryId);
-        ProductSize targetSize = (size == 0) ? null : ProductSize.values()[size];
         String targetQuery = (query.equals("")) ? null : query;
 
         Integer targetMinPrice = (minPrice == maxPrice) ? null : minPrice;
         Integer targetMaxPrice = (maxPrice == minPrice) ? null : maxPrice;
 
-        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, targetSize, pageable);
-    }
-
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, size, pageable);
     }
 
     public Page<Product> getPagedProducts(int page, int size) {
@@ -134,13 +150,20 @@ public class ProductService {
         return productVariationRepository.findById(variationId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
     }
 
-    public void addVariationToProduct(Long productId, Integer size) throws ExistException {
+    public void addVariationToProduct(Long productId, String size, String sku) throws ExistException {
         try {
             Product product = getProductById(productId);
             ProductVariation productVariation = new ProductVariation();
-            productVariation.setProductSize(ProductSize.values()[size]);
+            productVariation.setSize(size);
             productVariation.setParent(product);
-            productVariationRepository.save(productVariation);
+            if(sku != null && !sku.isEmpty()) {
+                productVariation.setSku(sku);
+                productVariationRepository.save(productVariation);
+            }else {
+                productVariationRepository.save(productVariation);
+                productVariation.setSku(generateArticul());
+                productVariationRepository.save(productVariation);
+            }
             storeHouseService.createStoreHouseProduct(productVariation);
         } catch (Exception e) {
             throw new ExistException(ExistException.SIZE_OF_PRODUCT_EXIST);

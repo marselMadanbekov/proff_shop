@@ -9,6 +9,7 @@ import com.profi_shop.model.enums.StockType;
 import com.profi_shop.model.requests.StockRequest;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.StockRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class StockService {
 
     private final ProductRepository productRepository;
 
+    @Autowired
     public StockService(StockRepository stockRepository, CategoryService categoryService, ProductRepository productRepository) {
         this.stockRepository = stockRepository;
         this.categoryService = categoryService;

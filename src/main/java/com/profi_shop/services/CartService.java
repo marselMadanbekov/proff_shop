@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CartService {
@@ -110,7 +111,7 @@ public class CartService {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
             int count = countOfProductVariationInStore(productVariation);
-            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getProductSize() + " )", count);
+            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getSize() + " )", count);
         }else{
             int count = countOfProductInStore(product);
             if(count < quantity) throw new NotEnoughException(product.getName() , count);
@@ -143,7 +144,7 @@ public class CartService {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
             int count = countOfProductVariationInStore(productVariation);
-            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getProductSize() + " )", count);
+            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getSize() + " )", count);
         }else{
             int count = countOfProductInStore(product);
             if(count < quantity) throw new NotEnoughException(product.getName() , count);
@@ -152,26 +153,26 @@ public class CartService {
         return cart;
     }
 
-    public Cart removeProductFromCart(String username, Long productId, Integer size) {
+    public Cart removeProductFromCart(String username, Long productId, String size) {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
-        if(size == 0){
+        if(size.isEmpty()){
             cart.removeProduct(product);
         }else{
-            ProductVariation productVariation = productVariationRepository.findByParentAndProductSize(product, ProductSize.values()[size]).orElse(null);
+            ProductVariation productVariation = productVariationRepository.findByParentAndSize(product, size).orElse(null);
             cart.removeProductVariation(productVariation);
         }
         cartRepository.save(cart);
         return cart;
     }
 
-    public Cart removeProductFromCart(HttpServletRequest request, Long productId,Integer size) throws ExistException {
+    public Cart removeProductFromCart(HttpServletRequest request, Long productId,String size) throws ExistException {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
-        if(size == 0){
+        if(Objects.equals(size, "")){
             cart.removeProduct(product);
         }else{
-            ProductVariation productVariation = productVariationRepository.findByParentAndProductSize(product, ProductSize.values()[size]).orElse(null);
+            ProductVariation productVariation = productVariationRepository.findByParentAndSize(product, size).orElse(null);
             cart.removeProductVariation(productVariation);
         }
         return cart;

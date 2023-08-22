@@ -306,11 +306,10 @@
                         <div class="product_variant size">
                             <label>size</label>
                             <select class="select_option" id="size" name="variationId">
-                                <option th:value="0" selected>Не выбрано</option>
-                                <option th:disabled="${product.getProductVariationCount().get(productVariable) == 0}" th:value="${productVariable.id}" th:each="productVariable : ${product.getProductVariations()}" th:text="${productVariable.productSize + ' (' + product.getProductVariationCount().get(productVariable) + ')'}"></option>
+                                <option th:disabled="${product.getProductVariationCount().get(productVariable) == 0}" th:value="${productVariable.id}" th:each="productVariable : ${product.getProductVariations()}" th:text="${productVariable.size + ' (' + product.getProductVariationCount().get(productVariable) + ' шт)'}"></option>
                             </select>
                         </div>
-                        <div class="product_variant quantity">
+                        <div class="product_variant quantity" th:if="${product.available}">
                             <label>quantity</label>
                             <input min="1" max="100" value="1" type="number" id="quantity">
                             <button class="button" type="submit" id="addToCart">add to cart</button>
