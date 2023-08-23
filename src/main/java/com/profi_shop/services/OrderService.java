@@ -138,6 +138,7 @@ public class OrderService {
         for(StoreHouse sh : storeHouses){
             if(sh.getQuantity() > max){
                 maxStore = sh.getStore();
+                max = sh.getQuantity();
             }
         }
         if(maxStore == null){

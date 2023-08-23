@@ -288,7 +288,7 @@
                         <div class="product_desc">
                             <p th:text="${product.description}"></p>
                         </div>
-                        <div class="product_variant group">
+                        <div class="product_variant group" th:if="${group.size() > 1}">
                             <label>Связанные товары</label>
                             <ul>
                                 <li th:each="otherProduct: ${group}" th:style="'background:'+ ${otherProduct.color}"><a th:href="'/shop/productDetails?productId=' + ${otherProduct.id} "><img th:src="@{'/products/' + ${otherProduct.getPhotos().get(0)}}"></a></li>
@@ -304,15 +304,18 @@
                             </ul>
                         </div>
                         <div class="product_variant size">
-                            <label>size</label>
-                            <select class="select_option" id="size" name="variationId">
+                            <label>Размеры</label>
+                            <select th:if="${product.getProductVariationCount().size() > 0}" class="select_option" id="size" name="variationId">
                                 <option th:disabled="${product.getProductVariationCount().get(productVariable) == 0}" th:value="${productVariable.id}" th:each="productVariable : ${product.getProductVariations()}" th:text="${productVariable.size + ' (' + product.getProductVariationCount().get(productVariable) + ' шт)'}"></option>
                             </select>
                         </div>
                         <div class="product_variant quantity" th:if="${product.available}">
-                            <label>quantity</label>
+                            <label>количество</label>
                             <input min="1" max="100" value="1" type="number" id="quantity">
-                            <button class="button" type="submit" id="addToCart">add to cart</button>
+                            <button class="button" th:classappend="${not product.available ? 'disabled':''}" type="submit" id="addToCart">в корзину</button>
+                        </div>
+                        <div class="product_variant quantity" th:if="${not product.available}">
+                            <label>Нет на складе</label>
                         </div>
                         <div class="product_d_action">
                             <ul>
@@ -329,14 +332,9 @@
                             </div>
                         </div>
                         <div class="product_meta" th:if="${product.category != null}">
-                            <span>Category: <a href="#" th:text="${product.category.name}"></a></span>
+                            <span>Категория: <a href="#" th:text="${product.category.name}"></a></span>
                         </div>
                     </form>
-                    <div>
-                        <a class="nav-link btn btn-sm btn-dark"
-                           th:href="@{'/shop?categoryId=' + ${product.category == null ? 0 : product.category.id} + '&query=' + ${product.name}}">Другие
-                            варианты</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -369,18 +367,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="info" role="tabpanel">
                             <div class="product_info_content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec
-                                    est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare
-                                    lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus
-                                    eu, suscipit id nulla.</p>
-                                <p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis
-                                    fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa
-                                    massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit
-                                    est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere
-                                    nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et,
-                                    luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget.
-                                </p>
+                                <p th:text="${product.description}"></p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="sheet" role="tabpanel">
@@ -409,11 +396,8 @@
 
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <div class="reviews_wrapper">
-                                <h2>1 review for Donec eu furniture</h2>
+                                <h2 th:text="'Отзывы к продукту ' + ${product.name}"></h2>
                                 <div class="reviews_comment_box" th:each="review:${reviews}">
-                                    <div class="comment_thmb">
-                                        <img src="/static/img/blog/comment2.jpg" alt="">
-                                    </div>
                                     <div class="comment_text">
                                         <div class="reviews_meta">
                                             <div class="star_rating">
@@ -426,35 +410,35 @@
                                                 </ul>
                                             </div>
                                             <strong th:text="${review.username}"></strong>
-                                            <p th:text="${review.created_date}">- September 12, 2018</p>
-                                            <span th:text="${review.text}">roadthemes</span>
+                                            <p th:text="${review.created_date}"></p>
+                                            <span th:text="${review.text}"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="comment_title">
-                                    <h2>Add a review</h2>
-                                    <p>Your email address will not be published. Required fields are marked</p>
+                                    <h2>Написать отзыв</h2>
+                                    <p>Чтобы оставить отзыв зарегистрируйтесь</p>
                                 </div>
                                 <div class="product_ratting mb-10">
-                                    <h3>Your rating</h3>
+                                    <h3>Ваша оценка</h3>
                                     <ul class="rating_stars">
-                                        <li><a href="#"><i class="icon-star"></i></a></li>
-                                        <li><a href="#"><i class="icon-star"></i></a></li>
-                                        <li><a href="#"><i class="icon-star"></i></a></li>
-                                        <li><a href="#"><i class="icon-star"></i></a></li>
-                                        <li><a href="#"><i class="icon-star"></i></a></li>
+                                        <li><a href="javascript:void(0)"><i class="icon-star"></i></a></li>
+                                        <li><a href="javascript:void(0)"><i class="icon-star"></i></a></li>
+                                        <li><a href="javascript:void(0)"><i class="icon-star"></i></a></li>
+                                        <li><a href="javascript:void(0)"><i class="icon-star"></i></a></li>
+                                        <li><a href="javascript:void(0)"><i class="icon-star"></i></a></li>
                                     </ul>
                                 </div>
                                 <div class="product_review_form">
                                     <form id="review_form" action="#">
                                         <div class="row">
                                             <div class="col-12">
-                                                <label for="review_comment">Your review</label>
+                                                <label for="review_comment">Ваш отзыв</label>
                                                 <textarea name="comment" id="review_comment"></textarea>
                                             </div>
                                             <input th:value="${product.id}" hidden id="productId">
                                         </div>
-                                        <button type="submit" th:if="${authenticated}">Submit</button>
+                                        <button type="submit" th:if="${authenticated}">Отправить</button>
                                         <label th:if="${!authenticated}">Only registered</label>
                                     </form>
                                 </div>

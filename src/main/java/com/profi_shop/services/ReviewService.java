@@ -24,17 +24,13 @@ public class ReviewService {
     }
 
     public void createReview(ReviewRequest request, Principal principal) {
-        try {
-            Review review = new Review();
-            Product product = getProductById(request.getProductId());
-            review.setText(request.getReview());
-            review.setUsername(principal.getName());
-            review.setMark(request.getRating());
-            review.setProduct(product);
-            reviewRepository.save(review);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+        Review review = new Review();
+        Product product = getProductById(request.getProductId());
+        review.setText(request.getReview());
+        review.setUsername(principal.getName());
+        review.setMark(request.getRating());
+        review.setProduct(product);
+        reviewRepository.save(review);
     }
 
     public Page<Review> lastReviewsByProductId(Long productId){

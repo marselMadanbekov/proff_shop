@@ -2,13 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const paginationLinks = document.querySelectorAll('.pagination-link');
     const categoryItems = document.querySelectorAll('.category-item');
     const sizeItems = document.querySelectorAll('.size-item');
+    const tagItems = document.querySelectorAll('.tag-item');
+    const brandItems = document.querySelectorAll('.brand-item');
     const filterButton = document.getElementById('filter');
     const selectSort = document.getElementById('short');
 
-    const category = document.getElementById('currentCategory');
-    const size = document.getElementById('currentSize');
-    let currentSize = size.value;
-    let currentCategory = category.value;
+    let currentTag = document.getElementById('currentTag').value;
+    let currentBrand = document.getElementById('currentBrand').value;
+    let currentSize =  document.getElementById('currentSize').value;
+    let currentCategory = document.getElementById('currentCategory').value;
     let sort = selectSort.value;
     let minPrice = document.getElementById('minPrice').value;
     let maxPrice = document.getElementById('maxPrice').value;
@@ -17,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(event) {
             event.preventDefault();
             page = link.getAttribute('page');
-            console.log('Компонент с id ' + page + ' нажат!');
             sendRequestToShopController();
         });
     });
@@ -29,12 +30,39 @@ document.addEventListener('DOMContentLoaded', function() {
             // Выполните дополнительные действия, если нужно
             // Например, добавьте класс 'active' к выбранному элементу
             categoryItems.forEach(function(item) {
-                item.classList.remove('active');
+                item.classList.remove('current');
             });
-            item.classList.add('active');
-            sendRequestToShopController(); // Отправить запрос на сервер
+            item.classList.add('current');
+            console.log('hello');
         });
     });
+
+    brandItems.forEach(function (item){
+        item.addEventListener('click', function (e){
+            e.preventDefault();
+            currentBrand = item.getAttribute('brand');
+            brandItems.forEach(function (item){
+                item.classList.remove('current');
+            })
+            item.classList.add('current');
+            console.log('hello');
+
+        })
+    })
+
+    tagItems.forEach(function (item){
+        item.addEventListener('click',function (e){
+            e.preventDefault();
+            currentTag = item.getAttribute('tag');
+            tagItems.forEach(function (item){
+                item.classList.remove('current');
+            })
+            item.classList.add('current');
+            console.log('hello');
+
+        })
+    })
+
     sizeItems.forEach(function(item) {
         item.addEventListener('click', function(event) {
             event.preventDefault();
@@ -42,10 +70,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(currentSize);
 
             sizeItems.forEach(function(item) {
-                item.classList.remove('active');
+                item.classList.remove('current');
             });
-            item.classList.add('active');
-            sendRequestToShopController(); // Отправить запрос на сервер
+            item.classList.add('current');
+            console.log('hello');
         });
     });
 
@@ -65,13 +93,20 @@ document.addEventListener('DOMContentLoaded', function() {
         let baseURL = '/shop';
         let queryParams = '';
 
-        queryParams += 'categoryId=' + encodeURIComponent(currentCategory) + '&';
-        queryParams += 'size=' + encodeURIComponent(currentSize) + '&';
-        queryParams += 'page=' + encodeURIComponent(page);
-        queryParams += '&minPrice=' + encodeURIComponent(minPrice);
-        queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
-        queryParams += '&sort=' + encodeURIComponent(sort);
-        if(document.getElementById("search-text") !== null)
+        if(currentCategory !== null && currentCategory !== '')
+            queryParams += 'categoryId=' + encodeURIComponent(currentCategory) + '&';
+        if(currentSize !== null && currentSize !== '')
+            queryParams += 'size=' + encodeURIComponent(currentSize) + '&';
+        if(currentTag !== null && currentTag !== '')
+            queryParams += 'tag=' + encodeURIComponent(currentTag) + '&';
+        if(currentBrand !== null && currentBrand !== '')
+            queryParams += 'brand=' + encodeURIComponent(currentBrand) + '&';
+        if(page !== null && page !== '')
+            queryParams += 'page=' + encodeURIComponent(page) + '&';
+        queryParams += 'minPrice=' + encodeURIComponent(minPrice) + '&';
+        queryParams += 'maxPrice=' + encodeURIComponent(maxPrice) + '&';
+        queryParams += 'sort=' + encodeURIComponent(sort) + '&';
+        if(document.getElementById("search-text").value !== null && document.getElementById("search-text").value !== '')
             queryParams += '&query=' + encodeURIComponent(document.getElementById("search-text").value );
         window.location.href = baseURL + '?' + queryParams;
     }

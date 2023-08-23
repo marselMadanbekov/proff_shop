@@ -450,6 +450,10 @@
                                     <th>Значение</th>
                                     </thead>
                                     <tbody>
+                                    <tr>
+                                        <td>Бренд</td>
+                                        <td th:text="${product.brand}"></td>
+                                    </tr>
                                     <tr th:each="specKey: ${product.getSpecifications().keySet()}">
                                         <td class="text-muted" th:text="${specKey}"></td>
                                         <td class="text-muted"

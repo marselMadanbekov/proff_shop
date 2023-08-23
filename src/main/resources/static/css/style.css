@@ -5369,6 +5369,19 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
   border-color: #79a206;
   color: #ffffff;
 }
+.tag_cloud a.current {
+  background: #79a206;
+  border-color: #79a206;
+  color: #ffffff;
+}
+ul a.current {
+  color: #79a206;
+  border-color: #79a206;
+}
+li a.current {
+  color: #79a206;
+  border-color: #79a206;
+}
 
 .shop_sidebar_product .single_product {
   margin-bottom: 20px;

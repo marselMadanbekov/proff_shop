@@ -40,6 +40,7 @@
     });
 
     newSpecForm.addEventListener('submit', function (e) {
+        e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
             url: '/admin/product/addSpecification',

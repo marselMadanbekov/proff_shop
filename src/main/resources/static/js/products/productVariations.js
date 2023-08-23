@@ -34,9 +34,8 @@
 
 
     newVariation.addEventListener('submit', function (e){
-        let variation = document.getElementById('newSize').value;
-        let productId = this.getAttribute('productId');
-        if(confirm("Creation of " + variation)){
+        if(confirm("Вы уверены что хотите добавить размер?")){
+            e.preventDefault();
             let formData = new FormData(this);
             $.ajax({
                 url: '/admin/products/addVariation',
@@ -45,16 +44,19 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    // Обработка успешного удаления
                     alert(response.message);
                     window.location.reload();
-                    // Дополнительные действия при успешном удалении категории
                 },
                 error: function (xhr, status, error) {
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        alert(xhr.responseJSON.error);
-                    } else {
-                        alert('Произошла ошибка при создании размера товара');
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        if (errorData.hasOwnProperty("error")) {
+                            alert(errorData.error);
+                        } else {
+                            alert('An error occurred while processing the request.');
+                        }
+                    } catch (e) {
+                        alert('An error occurred while processing the request.');
                     }
                 }
             });

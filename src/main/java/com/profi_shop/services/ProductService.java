@@ -1,21 +1,17 @@
 package com.profi_shop.services;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Writer;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.Code128Writer;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.ProductVariation;
-import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.model.requests.ProductCreateRequest;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.ProductVariationRepository;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
@@ -84,15 +79,14 @@ public class ProductService {
         } catch (Exception e) {
             throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
         }
-        if(productToCreate.getSize() == null || productToCreate.getSize().isEmpty()){
+        if (productToCreate.getSize() == null || productToCreate.getSize().isEmpty()) {
             addVariationToProduct(product.getId(), "DEFAULT", productToCreate.getSku());
-        }
-        else{
+        } else {
             addVariationToProduct(product.getId(), productToCreate.getSize(), productToCreate.getSku());
         }
     }
 
-    public Page<Product> productsFilteredPage(int page, Long categoryId, String size, String query, int minPrice, int maxPrice, int sort) {
+    public Page<Product> productsFilteredPage(int page, Long categoryId, String size, String query, int minPrice, int maxPrice, int sort, String tag, String brand) {
         Pageable pageable;
         if (sort != 0) {
             if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
@@ -108,7 +102,7 @@ public class ProductService {
         Integer targetMinPrice = (minPrice == maxPrice) ? null : minPrice;
         Integer targetMaxPrice = (maxPrice == minPrice) ? null : maxPrice;
 
-        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, size, pageable);
+        return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, size, tag, brand, pageable);
     }
 
     public Page<Product> getPagedProducts(int page, int size) {
@@ -156,29 +150,47 @@ public class ProductService {
             ProductVariation productVariation = new ProductVariation();
             productVariation.setSize(size);
             productVariation.setParent(product);
-            if(sku != null && !sku.isEmpty()) {
+            if (sku != null && !sku.isEmpty()) {
                 productVariation.setSku(sku);
                 productVariationRepository.save(productVariation);
-            }else {
+            } else {
                 productVariationRepository.save(productVariation);
                 productVariation.setSku(generateArticul());
                 productVariationRepository.save(productVariation);
             }
             storeHouseService.createStoreHouseProduct(productVariation);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
+            if(e.getRootCause().getMessage().contains("sku")) throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
             throw new ExistException(ExistException.SIZE_OF_PRODUCT_EXIST);
         }
     }
 
-    public void addSpecificationToProduct(Long productId, String key, String value) {
-        Product product = getProductById(productId);
-        product.addSpecification(key,value);
-        productRepository.save(product);
+    public void addSpecificationToProduct(Long productId, String key, String value) throws ExistException {
+        try {
+
+            Product product = getProductById(productId);
+            product.addSpecification(key, value);
+            productRepository.save(product);
+        } catch (Exception e) {
+            throw new ExistException(ExistException.SPECIFICATION_EXIST);
+        }
     }
 
     public void deleteSpecificationOfProduct(Long productId, String key) {
         Product product = getProductById(productId);
         product.removeSpecification(key);
         productRepository.save(product);
+    }
+
+    public List<String> getTags() {
+        return productRepository.findTop10DistinctTags();
+    }
+
+    public List<String> getSizes() {
+        return productVariationRepository.findTop10DistinctSize();
+    }
+
+    public List<String> getBrands() {
+        return productRepository.findTop10DistinctBrands();
     }
 }

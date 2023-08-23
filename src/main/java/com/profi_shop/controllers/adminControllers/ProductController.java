@@ -45,6 +45,8 @@ public class ProductController {
     @GetMapping("/products")
     public String products(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
                            @RequestParam(value = "size", required = false) Optional<String> size,
+                           @RequestParam(value = "tag", required = false) Optional<String> tag,
+                           @RequestParam(value = "brand", required = false) Optional<String> brand,
                            @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
                            @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
                            @RequestParam(value = "query", required = false) Optional<String> query,
@@ -53,7 +55,15 @@ public class ProductController {
                            Model model) {
         List<Store> stores = storeService.getAllStores();
         List<Category> categories = categoryService.getAllCategories();
-        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0), categoryId.orElse(0L), size.orElse(null), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0),
+                categoryId.orElse(0L),
+                size.orElse(null),
+                query.orElse(""),
+                minPrice.orElse(0),
+                maxPrice.orElse(0),
+                sort.orElse(0),
+                tag.orElse(null),
+                brand.orElse(null)));
 
 
         model.addAttribute("products", products);
@@ -127,8 +137,8 @@ public class ProductController {
                                                             @RequestParam(value = "sku", required = false) Optional<String> sku) {
         Map<String,String> response = new HashMap<>();
         try{
-            response.put("message", "Новый размер товара успешно добавлен");
             productService.addVariationToProduct(productId, size, sku.orElse(null));
+            response.put("message", "Новый размер товара успешно добавлен");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             response.put("error", e.getMessage());
@@ -217,11 +227,23 @@ public class ProductController {
                                                   @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
                                                   @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
                                                   @RequestParam(value = "query", required = false) Optional<String> query,
+                                                  @RequestParam(value = "tag", required = false) Optional<String> tag,
+                                                  @RequestParam(value = "brand", required = false) Optional<String> brand,
                                                   @RequestParam(value = "page", required = false) Optional<Integer> page,
                                                   @RequestParam(value = "sort", required = false) Optional<Integer> sort) {
         try {
 
-            Page<ProductDTO> products = productFacade.mapToProductDTOPage(productService.productsFilteredPage(page.orElse(0), 0L, size.orElse(null), query.orElse(""), minPrice.orElse(0), maxPrice.orElse(0), sort.orElse(0)));
+            Page<ProductDTO> products = productFacade.mapToProductDTOPage(
+                    productService.productsFilteredPage(page.orElse(0),
+                    0L,
+                    size.orElse(null),
+                    query.orElse(""),
+                    minPrice.orElse(0),
+                    maxPrice.orElse(0),
+                    sort.orElse(0),
+                    tag.orElse(null),
+                    brand.orElse(null))
+            );
             return new ResponseEntity<>(products, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);

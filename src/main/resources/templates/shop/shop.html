@@ -250,11 +250,11 @@
                 <aside class="sidebar_widget">
                     <div class="widget_inner">
                         <div class="widget_list widget_categories">
-                            <h3>Categories</h3>
+                            <h3>Выберите фильтры</h3>
                             <small th:text="${selectedCategoryId}"></small>
-                            <input hidden id="currentCategory" th:value="${selectedCategoryId}">
+                            <input hidden th:value="${selectedCategoryId}" id="currentCategory">
                             <ul>
-                                <a href="javascript:void(0)" class="category-item" th:attr="categoryId=${0}">Все</a>
+                                <a href="javascript:void(0)" class="category-item" th:attr="categoryId=${0}" th:classappend="${selectedCategoryId == 0 ? 'current' : ''}">Все</a>
                                 <li th:class="'widget_sub_categories sub_categories' + ${index.index+1}"
                                     th:each="category,index : ${categories}">
                                     <a href="javascript:void(0)" th:text="${category.name}" class="main-category"
@@ -262,8 +262,7 @@
                                     <ul th:class="'widget_dropdown_categories dropdown_categories' + ${index.index+1}"
                                         th:if="${category.subCategories}">
                                         <li th:each="subCategory : ${category.subCategories}">
-                                            <a class="category-item"
-                                               th:style="${selectedCategoryId == subCategory.id ? 'color: red': ''}"
+                                            <a class="category-item" th:classappend="${selectedCategoryId == subCategory.id ? 'current' : ''}"
                                                th:text="${subCategory.name}" th:attr="categoryId=${category.id}"></a>
                                         </li>
                                     </ul>
@@ -274,7 +273,7 @@
                             </ul>
                         </div>
                         <div class="widget_list widget_filter">
-                            <h3>Filter by price</h3>
+                            <h3>Цена</h3>
                             <div class="input-group input-group-sm mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Min</span>
@@ -293,37 +292,36 @@
                                        th:value="${maxPrice}"
                                        aria-describedby="inputGroup-sizing-sm">
                             </div>
-                            <button type="submit" class="btn btn-dark btn-rounded" id="filter">Filter</button>
                         </div>
-                        <div class="widget_list widget_color">
-                            <h3>Select By SIze</h3>
-                            <ul>
-                                <input id="currentSize" hidden th:value="${selectedSize}">
-                                <li th:classappend="${0 == selectedSize} ? 'current' : ''">
-                                    <a class="size-item"
-                                       th:attr="size=${0}">All <span>(6)</span></a>
-                                </li>
-                                <li th:classappend="${1 == selectedSize} ? 'current' : ''">
-                                    <a class="size-item"
-                                       th:attr="size=${1}">S <span>(6)</span></a>
-                                </li>
-                                <li th:classappend="${2 == selectedSize} ? 'current' : ''">
-                                    <a class="size-item"
-                                       th:attr="size=${2}">M<span>(8)</span></a>
-                                </li>
-                                <li th:classappend="${3 == selectedSize} ? 'current' : ''">
-                                    <a class="size-item"
-                                       th:attr="size=${3}">L <span>(10)</span></a>
-                                </li>
-                                <li th:classappend="${4 == selectedSize} ? 'current' : ''">
-                                    <a class="size-item"
-                                       th:attr="size=${4}"> XL <span>(6)</span></a>
-                                </li>
-                                <li th:classappend="${5 == selectedSize} ? 'current' : ''">
-                                    <a class="size-item"
-                                       th:attr="size=${5}">XLL <span>(4)</span></a>
+
+                        <div class="widget_list widget_manu">
+                            <h3>Бренд</h3>
+                            <input th:value="${selectedBrand}" id="currentBrand" hidden>
+                            <ul th:each="brand:${brands}">
+                                <li>
+                                    <a class="brand-item" th:classappend="${brand == selectedBrand ? 'current':''}" th:attr="brand=${brand}" th:text="${brand}"></a>
                                 </li>
                             </ul>
+                        </div>
+                        <div class="widget_list tags_widget">
+                            <h3>Теги</h3>
+                            <input th:value="${selectedTag}" id="currentTag" hidden>
+                            <div class="tag_cloud">
+                                <a class="tag-item" th:classappend="${selectedTag == tag ? 'current' : ''}" th:attr="tag=${tag}" href="javascript:void(0)" th:each="tag: ${tags}" th:text="${tag}"></a>
+                            </div>
+                        </div>
+                        <div class="widget_list tags_widget">
+                            <h3>Размеры</h3>
+                            <input id="currentSize" hidden th:value="${selectedSize}">
+                            <div class="tag_cloud">
+                                <a th:each="size : ${sizes}" class="size-item"
+                                   th:classappend="${size == selectedSize} ? 'current' : ''"
+                                   th:attr="size=${size}" th:text="${size}"><span>(6)</span></a>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-dark btn-rounded" id="filter">Применить</button>
+                            <button type="submit" class="btn btn-light btn-rounded" ><a href="/shop">Сброс</a></button>
                         </div>
                     </div>
                 </aside>
@@ -386,7 +384,8 @@
                                             <li class="add_to_cart" th:attr="productId=${product.id}"><a
                                                     title="Add to cart"><i
                                                     class="icon-shopping-bag"></i></a></li>
-                                            <li class="wishlist add_to_wishlist" th:attr="productId=${product.id}"><a title="Add to Wishlist"><i
+                                            <li class="wishlist add_to_wishlist" th:attr="productId=${product.id}"><a
+                                                    title="Add to Wishlist"><i
                                                     class="icon-heart"></i></a></li>
                                         </ul>
                                     </div>
@@ -402,8 +401,9 @@
                                                 <li><a href="#"><i class="icon-star"></i></a></li>
                                             </ul>
                                         </div>
-                                        <h4 class="product_name"><a th:href="'/shop/productDetails?productId=' + ${product.id}"
-                                                                    th:text="${product.name}"></a></h4>
+                                        <h4 class="product_name"><a
+                                                th:href="'/shop/productDetails?productId=' + ${product.id}"
+                                                th:text="${product.name}"></a></h4>
                                         <div class="price_box">
                                             <span class="current_price" th:if="${product.discount > 0}"
                                                   th:text="${product.newPrice}"></span>
@@ -444,7 +444,8 @@
                                             <li class="add_to_cart" th:attr="productId=${product.id}"><a
                                                     title="Add to cart">Add to
                                                 cart</a></li>
-                                            <li class="wishlist add_to_wishlist" th:attr="productId=${product.id}"><a title="Add to Wishlist"><i
+                                            <li class="wishlist add_to_wishlist" th:attr="productId=${product.id}"><a
+                                                    title="Add to Wishlist"><i
                                                     class="icon-heart"></i></a></li>
                                         </ul>
                                     </div>

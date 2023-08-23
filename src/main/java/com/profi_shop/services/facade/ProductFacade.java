@@ -54,6 +54,7 @@ public class ProductFacade {
         productDTO.setProductVariationCount(getProductVariationsCount(productVariations));
         productDTO.setNewPrice(getNewPriceByPriceAndDiscount(product.getPrice(), productDTO.getDiscount()));
         productDTO.setAvailable(isAvailable(productVariations));
+        productDTO.setBrand(product.getBrand());
 
         return productDTO;
     }
@@ -94,7 +95,7 @@ public class ProductFacade {
 
     private int getDiscountByProduct(Product product) {
         Stock stock = stockService.getStockByProduct(product);
-        if (stock != null) return stock.getDiscount();
+        if (stock != null && stock.isActive()) return stock.getDiscount();
         else return 0;
     }
 

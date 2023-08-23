@@ -27,6 +27,7 @@ public class ProductDetailsDTO {
     private boolean available;
     private Map<ProductVariation,Integer> productVariationCount;
     private List<StoreHouse> storeHouses;
+    private String brand;
 
     private String description;
     private CategoryDTO category;

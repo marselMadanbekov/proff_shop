@@ -73,9 +73,10 @@ function updateProductsPagination(data) {
 function loadNewProducts(pageNumber) {
     let baseURL = '/admin/filter?';
     let queryParams = '';
-
-    queryParams += 'size=' + encodeURIComponent(size) + '&';
-    queryParams += 'page=' + encodeURIComponent(pageNumber);
+    if(size !== null && size !== '')
+        queryParams += 'size=' + encodeURIComponent(size) + '&';
+    if(pageNumber !== null && pageNumber !== '')
+        queryParams += 'page=' + encodeURIComponent(pageNumber);
     queryParams += '&minPrice=' + encodeURIComponent(minPrice);
     queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
     queryParams += '&sort=' + encodeURIComponent(sort);
@@ -123,8 +124,6 @@ $(document).on("click", "#filter", function (e) {
     sort = document.getElementById('sortSelect').value;
     loadNewProducts(0);
 });
-
-loadNewProducts(0);
 
 
 function createPromotion() {

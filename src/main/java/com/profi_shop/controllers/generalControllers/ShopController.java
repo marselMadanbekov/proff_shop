@@ -15,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -38,7 +40,8 @@ public class ShopController {
     @GetMapping("")
     public String shopPage(@RequestParam(value = "categoryId", required = false) Optional<Long> categoryId,
                            @RequestParam(value = "size",required = false) Optional<String> size,
-                           @RequestParam(value = "color",required = false) Optional<String> color,
+                           @RequestParam(value = "brand",required = false) Optional<String> brand,
+                           @RequestParam(value = "tag",required = false) Optional<String> tag,
                            @RequestParam(value = "minPrice",required = false) Optional<Integer> minPrice,
                            @RequestParam(value = "maxPrice",required = false) Optional<Integer> maxPrice,
                            @RequestParam(value = "query", required = false) Optional<String> query,
@@ -46,19 +49,36 @@ public class ShopController {
                            @RequestParam(value = "sort", required = false) Optional<Integer> sort,
                            Model model){
 
-        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.productsFilteredPage(page.orElse(0),categoryId.orElse(0L),size.orElse(null),query.orElse(""),minPrice.orElse(0),maxPrice.orElse(0),sort.orElse(0)));
+        Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(
+                productService.productsFilteredPage(page.orElse(0),
+                        categoryId.orElse(0L),
+                        size.orElse(null),
+                        query.orElse(""),
+                        minPrice.orElse(0),
+                        maxPrice.orElse(0),
+                        sort.orElse(0),
+                        tag.orElse(null),
+                        brand.orElse(null)));
         List<Category> categories = categoryService.getMainCategories();
+        List<String> tags = productService.getTags();
+        List<String> sizes = productService.getSizes();
+        List<String> brands = productService.getBrands();
 
 
         model.addAttribute("products",products);
         model.addAttribute("categories",categories);
+        model.addAttribute("tags", tags);
+        model.addAttribute("brands", brands);
+        model.addAttribute("sizes", sizes);
 
         model.addAttribute("sortType",sort.orElse(0));
+        model.addAttribute("selectedTag", tag.orElse(null));
+        model.addAttribute("selectedBrand", brand.orElse(null));
         model.addAttribute("minPrice", minPrice.orElse(0));
         model.addAttribute("maxPrice", maxPrice.orElse(0));
         model.addAttribute("selectedCategoryId", categoryId.orElse(0L));
-        model.addAttribute("selectedSize", size.orElse(""));
-        model.addAttribute("query", query.orElse(""));
+        model.addAttribute("selectedSize", size.orElse(null));
+        model.addAttribute("query", query.orElse(null));
 
         return "shop/shop";
     }
@@ -101,16 +121,16 @@ public class ShopController {
     }
 
     @PostMapping("/productReview")
-    public ResponseEntity<String> productReview(@RequestBody ReviewRequest request,
-                                                Principal principal){
+    public ResponseEntity<Map<String,String>> productReview(@RequestBody ReviewRequest request,
+                                             Principal principal){
+        Map<String,String> response = new HashMap<>();
         try{
-            System.out.println("Review is come " + principal.getName());
             reviewService.createReview(request, principal);
-            return new ResponseEntity<>("Отзыв сохранен", HttpStatus.OK);
+            response.put("message", "Отзыв успешно сохранен");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e) {
-            return new ResponseEntity<>( "Error", HttpStatus.BAD_REQUEST);
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }
