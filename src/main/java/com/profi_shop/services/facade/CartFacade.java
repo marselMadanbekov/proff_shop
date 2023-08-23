@@ -35,7 +35,7 @@ public class CartFacade {
             CartItemDTO item = new CartItemDTO();
             item.setProductId(cartItem.getProduct().getId());
             item.setQuantity(cartItem.getQuantity());
-            item.setSize(cartItem.getProductVariation() == null ? "" : cartItem.getProductVariation().getSize());
+            item.setSize(cartItem.getProductVariation() == null ? null : cartItem.getProductVariation().getSize());
             cartDTO.addItem(item);
         }
         return cartDTO;
@@ -56,7 +56,7 @@ public class CartFacade {
             cartItem.setProduct(product);
             cartItem.setQuantity(cartItemDTO.getQuantity());
             if(cartItemDTO.getSize() != null){
-                cartItem.setProductVariation(getProductVariationByProductAndSize(product,cartItemDTO.getSize() ));
+                cartItem.setProductVariation(getProductVariationByProductAndSize(product,cartItemDTO.getSize()));
             }
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product,false));
             cart.addItemToCart(cartItem);

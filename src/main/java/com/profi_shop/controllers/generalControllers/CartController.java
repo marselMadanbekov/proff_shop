@@ -144,12 +144,12 @@ public class CartController {
         try {
             if (principal == null) {
                 Cart cart;
-                cart = cartService.cartUpdate(request, cartItems);
+                cart = cartService.cartUpdateForUnknown(request, cartItems);
                 cartService.saveCartToCookie(cart, response);
-                responseMessage.put("message", "Корзина успешно обновлена");
             } else {
-                cartService.cartUpdate(principal.getName(), cartItems);
+                cartService.cartUpdateForAuthUser(principal.getName(), cartItems);
             }
+            responseMessage.put("message", "Корзина успешно обновлена");
         } catch (Exception e) {
             responseMessage.put("error", e.getMessage());
             return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);

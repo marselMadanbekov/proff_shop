@@ -42,8 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $('.product_q').each(function () {
             let productId = $(this).attr('productId');
+            let productVariationId = $(this).attr('productVariationId');
             let newQuantity = $(this).val();
-            cartItems.push({productId: productId, newQuantity: newQuantity});
+            cartItems.push({productId: productId,productVariationId:productVariationId, newQuantity: newQuantity});
         });
         $("#spinner").show();
 

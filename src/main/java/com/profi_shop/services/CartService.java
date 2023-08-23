@@ -7,7 +7,6 @@ import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.NotEnoughException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
-import com.profi_shop.model.enums.ProductSize;
 import com.profi_shop.model.requests.CartUpdateRequest;
 import com.profi_shop.repositories.*;
 import com.profi_shop.services.facade.CartFacade;
@@ -76,6 +75,7 @@ public class CartService {
                 if (cookie.getName().equals("cart")) {
                     String cartDataEncoded = cookie.getValue();
                     String decoded = new String(Base64.getDecoder().decode(cartDataEncoded));
+                    System.out.println(decoded);
                     try {
                         return cartFacade.cartDTOToCart(objectMapper.readValue(decoded, CartDTO.class));
                     } catch (JsonProcessingException e) {
@@ -88,16 +88,20 @@ public class CartService {
     }
 
     public Cart addProductToCart(String username, Long productId) throws ExistException, NotEnoughException {
-        Cart cart = getCartByUsername(username);
-        Product product = getProductById(productId);
-        if(countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(),0);
-        CartItem cartItem = new CartItem();
-        cartItem.setProduct(product);
-        cartItem.setQuantity(1);
-        cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
-        cartItemRepository.save(cartItem);
-        cart.addItemToCart(cartItem);
-        return cartRepository.save(cart);
+        try {
+            Cart cart = getCartByUsername(username);
+            Product product = getProductById(productId);
+            if (countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(), 0);
+            CartItem cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(1);
+            cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
+            cartItemRepository.save(cartItem);
+            cart.addItemToCart(cartItem);
+            return cartRepository.save(cart);
+        }catch (Exception e){
+            throw new ExistException(ExistException.CART_ITEM_EXIST);
+        }
     }
 
     public Cart addProductToCartProductByVariationAndQuantity(String username, Long productId, Long variationId, Integer quantity) throws ExistException, NotEnoughException {
@@ -122,15 +126,19 @@ public class CartService {
     }
 
     public Cart addProductToCart(HttpServletRequest request, Long productId) throws ExistException, NotEnoughException {
-        Cart cart = getCartByRequestCookies(request);
-        Product product = getProductById(productId);
-        if(countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(),0);
-        CartItem cartItem = new CartItem();
-        cartItem.setProduct(product);
-        cartItem.setQuantity(1);
-        cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
-        cart.addItemToCart(cartItem);
-        return cart;
+        try {
+            Cart cart = getCartByRequestCookies(request);
+            Product product = getProductById(productId);
+            if (countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(), 0);
+            CartItem cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(1);
+            cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
+            cart.addItemToCart(cartItem);
+            return cart;
+        }catch (Exception e){
+            throw new ExistException(ExistException.CART_ITEM_EXIST);
+        }
     }
 
     public Cart addProductToCartProductByVariationAndQuantity(HttpServletRequest request, Long productId, Long variationId, int quantity) throws ExistException, NotEnoughException {
@@ -202,21 +210,33 @@ public class CartService {
         return userRepository.findUserByUsername(username).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
 
-    public Cart cartUpdate(HttpServletRequest request, List<CartUpdateRequest> cartItems) throws ExistException {
+    public Cart cartUpdateForUnknown(HttpServletRequest request, List<CartUpdateRequest> cartItems) throws ExistException, NotEnoughException {
         Cart cart = getCartByRequestCookies(request);
+        return cartUpdate(cart, cartItems);
+    }
+    public void cartUpdateForAuthUser(String username, List<CartUpdateRequest> cartItems) throws NotEnoughException {
+        Cart cart = getCartByUsername(username);
+        cartUpdate(cart, cartItems);
+    }
+    private Cart cartUpdate(Cart cart, List<CartUpdateRequest> cartItems) throws NotEnoughException {
         for (CartUpdateRequest item : cartItems) {
+            Product product = getProductById(item.getProductId());
+            if(item.getProductVariationId() != null && item.getProductVariationId() != 0){
+                ProductVariation pv = getProductVariationById(item.getProductVariationId());
+                int count = countOfProductVariationInStore(pv);
+                if(count < item.getNewQuantity())  {
+                    throw new NotEnoughException(product.getName() + " ( " + pv.getSize() + " )", count);
+                }
+            }else{
+                int count = countOfProductInStore(product);
+                if(count < item.getNewQuantity()) throw new NotEnoughException(product.getName(), count);
+            }
             cart.quantityUp(getProductById(item.getProductId()), item.getNewQuantity());
         }
         return cart;
     }
 
-    public Cart cartUpdate(String username, List<CartUpdateRequest> cartItems) {
-        Cart cart = getCartByUsername(username);
-        for (CartUpdateRequest item : cartItems) {
-            cart.quantityUp(getProductById(item.getProductId()), item.getNewQuantity());
-        }
-        return cartRepository.save(cart);
-    }
+
 
     private ProductVariation getProductVariationById(Long variationId) {
         return productVariationRepository.findById(variationId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));

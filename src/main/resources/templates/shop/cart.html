@@ -289,7 +289,7 @@
                                     <td class="product-price" th:text="${cartItem.product.price} + 'сом'"></td>
                                     <td class="product_quantity"><label>Кол-во</label><input class="product_q" min="1"
                                                                                              max="100"
-                                                                                             th:attr="productId=${cartItem.product.id}"
+                                                                                             th:attr="productId=${cartItem.product.id}, productVariationId=${cartItem.productVariation != null ? cartItem.productVariation.id : 0}"
                                                                                              th:value="${cartItem.quantity}"
                                                                                              type="number"></td>
                                     <td class="product_total" th:text="${cartItem.amount} + 'сом'"></td>
