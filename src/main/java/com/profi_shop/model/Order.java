@@ -45,4 +45,8 @@ public class Order {
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
     }
+
+    public void removeOrderItem(OrderItem orderItem) {
+        this.orderItems.removeIf(orderItem1 -> orderItem1.equals(orderItem));
+    }
 }

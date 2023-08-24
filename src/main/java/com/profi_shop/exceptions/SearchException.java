@@ -21,6 +21,7 @@ public class SearchException extends RuntimeException{
     public static final int PRODUCT_VARIATION_NOT_FOUND = 11;
     public static final int PRODUCT_GROUP_NOT_FOUND = 12;
     public static final int NOTIFICATION_NOT_FOUND = 13;
+    public static final int ORDER_ITEM_NOT_FOUND = 14;
 
 
     private final int code;
@@ -46,6 +47,7 @@ public class SearchException extends RuntimeException{
             case 11 -> Text.get("ERROR_PRODUCT_VARIATION_NOT_FOUND");
             case 12 -> Text.get("ERROR_PRODUCT_GROUP_NOT_FOUND");
             case 13 -> Text.get("ERROR_NOTIFICATION_NOT_FOUND");
+            case 14 -> Text.get("ERROR_ORDER_ITEM_NOT_FOUND");
             default -> "";
         };
     }

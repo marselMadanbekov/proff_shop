@@ -29,6 +29,11 @@ public class Text {
         data.put("MENU_EDIT","Правка");
         data.put("MENU_VIEW","Вид");
         data.put("MENU_HELP","Помощь");
+        data.put("REQUEST","Запрос");
+        data.put("PAID","Оплачено");
+        data.put("DELIVERING","В пути");
+        data.put("FINISHED","Завершен");
+
 
         data.put("JANUARY","Январь");
         data.put("FEBRUARY","Февраль");
@@ -61,6 +66,7 @@ public class Text {
         data.put("ERROR_PRODUCT_VARIATION_NOT_FOUND","Такого размера товара нет!");
         data.put("ERROR_PRODUCT_GROUP_NOT_FOUND","Карточка не найдена!");
         data.put("ERROR_NOTIFICATION_NOT_FOUND","Уведомление не найдено!");
+        data.put("ERROR_ORDER_ITEM_NOT_FOUND","Элемент заказа не найден!");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 

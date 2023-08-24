@@ -368,15 +368,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="sizeSelect">Выберите размер</label>
-                                <select class="form-control form-control-sm" id="sizeSelect">
-                                    <option value="0" th:selected="${selectedSize == 0}">Все</option>
-                                    <option value="1" th:selected="${selectedSize == 1}">S</option>
-                                    <option value="2" th:selected="${selectedSize == 2}">M</option>
-                                    <option value="3" th:selected="${selectedSize == 3}">L</option>
-                                    <option value="4" th:selected="${selectedSize == 4}">XL</option>
-                                    <option value="5" th:selected="${selectedSize == 5}">XXL</option>
-                                </select>
+                                <label for="sizeSelect">Размер</label>
+                                <input class="form-control" id="sizeSelect" type="text" th:value="${selectedSize}">
                             </div>
                             <div class="form-group">
                                 <label for="price">Диапазон цен</label>

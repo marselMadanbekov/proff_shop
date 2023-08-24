@@ -307,7 +307,7 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="order : ${orders.getContent()}">
-                                        <td th:text="${order.id}">Jacob</td>
+                                        <td ><a th:href="@{'/admin/orderDetails?orderId=' + ${order.id}}" th:text="${order.id}"></a></td>
                                         <td th:text="${order.phone_number}"></td>
                                         <td th:text="${order.totalPrice}"></i></td>
                                         <td th:text="${order.date}"></td>

@@ -42,12 +42,13 @@
         let queryParams = '';
 
         queryParams += 'categoryId=' + encodeURIComponent(categoryId) + '&';
-        queryParams += 'size=' + encodeURIComponent(size) + '&';
         queryParams += 'page=' + encodeURIComponent(page);
         queryParams += '&minPrice=' + encodeURIComponent(minPrice);
         queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
         queryParams += '&sort=' + encodeURIComponent(sort);
-        if (searchQuery !== null)
+        if(size !== null && size !== '')
+            queryParams += '&size=' + encodeURIComponent(size);
+        if (searchQuery !== null && searchQuery !== '')
             queryParams += '&query=' + encodeURIComponent(searchQuery);
         window.location.href = baseURL + '?' + queryParams;
     }

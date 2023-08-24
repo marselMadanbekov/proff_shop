@@ -343,7 +343,6 @@
                                     <h4 class="card-title" style="margin-top: 10px;">Детали товара</h4>
                                 </div>
                             </div>
-
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <tbody>
@@ -375,7 +374,11 @@
                                         <td>
                                             Описание
                                         </td>
-                                        <td th:text="${product.description}"></td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <p th:text="${product.description}"></p>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>

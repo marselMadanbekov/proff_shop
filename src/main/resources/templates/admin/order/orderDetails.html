@@ -207,352 +207,213 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0" th:text="${order.name}"></h4>
+                            <h4 class="font-weight-bold mb-0" th:text="'Номер заказа : ' + ${order.id}"></h4>
+                            <input id="orderId" th:value="${order.id}" hidden>
+                            <div class="mt-1">
+                                <small class="font-weight-bold mb-0"
+                                       th:text="'Сумма заказа : ' + ${order.totalPrice}"></small>
+                            </div>
                         </div>
-                        <div th:text="${order.id}">
-                            <i class="ti-clipboard btn-icon-prepend" style="margin-right: 5px;"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-7 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title">Все товары</p>
-                            <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table table-borderless report-table">
-                                    <thead>
-                                    <th>Фото</th>
-                                    <th>Название</th>
-                                    <th>Штрихкод</th>
-                                    <th>Размер</th>
-                                    </thead>
-                                    <tbody>
-
-                                    <tr th:each="productVariable: ${product.getProductVariations()}">
-                                        <td class="text-muted" th:text="${productVariable.productSize}"></td>
-                                        <td class="text-muted"
-                                            th:text="${product.getProductVariationCount().get(productVariable)}"></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger deleteVariation"
-                                                    th:attr="productVarID=${productVariable.id}"><i
-                                                    class="ti-trash"></i></button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-sm btn-success receive-button"
-                                                    th:data-product-id="${productVariable.id}">Поступление
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="modal fade" id="receiveModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="receiveModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="receiveModalLabel">Поступление
-                                                    товара</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="receiveForm">
-                                                    <input type="hidden" id="productId" th:value="${product.id}"/>
-                                                    <div class="form-group">
-                                                        <label for="selectStore">Выберите категорию:</label>
-                                                        <select class="form-control" id="selectStore">
-                                                            <option th:each="store : ${stores}" th:value="${store.id}"
-                                                                    th:text="${store.name}"></option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="inputQuantity">Количество:</label>
-                                                        <input type="number" class="form-control" id="inputQuantity"
-                                                               placeholder="Введите количество">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Закрыть
-                                                </button>
-                                                <button type="button" class="btn btn-primary" id="receiveButton">
-                                                    Поступление
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <div>
+                            <div class="d-flex flex-wrap">
+                                <div class="mr-2" style="height: 20px">
+                                    <a class="btn-sm btn-primary" id="statusDown"><i class="ti-arrow-left"></i>
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="d-flex justify-content-between">
-                                    <div class="form-group">
-                                        <select class="form-control" name="size" id="newSize">
-                                            <option value="0" selected>Универсальный</option>
-                                            <option value="1">S</option>
-                                            <option value="2">M</option>
-                                            <option value="3">L</option>
-                                            <option value="4">XL</option>
-                                            <option value="5">XXL</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group align-content-center justify-content-center">
-                                        <button class="btn btn-sm btn-primary" th:attr="productId=${product.id}"
-                                                id="newVariation">Добавить
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5 grid-margin stretch-card">
-                    <div class="card border-bottom-0">
-                        <div class="card-body pb-0">
-                            <p class="card-title">Остатки</p>
-                            <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table table-borderless report-table">
-                                    <thead>
-                                    <th>Размер</th>
-                                    <th>Магазин</th>
-                                    <th>Количество</th>
-                                    </thead>
-                                    <tbody>
-
-                                    <tr th:each="storeHouse: ${product.getStoreHouses()}">
-                                        <td class="text-muted" th:text="${storeHouse.product.productSize}"></td>
-                                        <td class="text-muted" th:text="${storeHouse.store.town}"></td>
-                                        <td>
-                                            <h5 class="font-weight-bold mb-0" th:text="${storeHouse.quantity}"></h5>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-7 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                <div>
-                                    <h4 class="card-title" style="margin-top: 10px;">Детали товара</h4>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Название
-                                        </td>
-                                        <td th:text="${product.name}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Цена
-                                        </td>
-                                        <td th:text="${product.oldPrice}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Штрихкод
-                                        </td>
-                                        <td th:text="${product.sku}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Скидка
-                                        </td>
-                                        <td th:text="${product.discount} + '%'"></td>
-                                    </tr>
-                                    <tr th:if="${product.category != null}">
-                                        <td>
-                                            Категория
-                                        </td>
-                                        <td th:text="${product.category.name}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Описание
-                                        </td>
-                                        <td th:text="${product.description}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="mt-3" style="display:flex; justify-content: right;">
-                                    <a class="nav-link btn btn-success btn-rounded" href="productDetails.html">More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div>
-                                <h4 class="card-title" style="margin-top: 10px;">Фото</h4>
-                            </div>
-                            <div class="gallery">
-                                <div class="main-photo mb-3"
-                                     style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-                                    <img th:if="${not #lists.isEmpty(product.photos)}"
-                                         th:photo="${product.getPhotos().get(0)}"
-                                         th:productId="${product.id}"
-                                         th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
+                                <div class="d-flex align-content-center justify-content-center">
                                     <div>
-                                        <button class="btn btn-sm btn-success btn-rounded" id="delete-button">Удалить
-                                        </button>
+                                        <span th:if="${order.status.ordinal() == 0}"
+                                          class="badge badge-danger">ЗАПРОС</span>
+                                        <span th:if="${order.status.ordinal() == 1}"
+                                              class="badge badge-warning">ОПЛАЧЕНО</span>
+                                        <span th:if="${order.status.ordinal() == 2}"
+                                              class="badge badge-info">В ПУТИ</span>
+                                        <span th:if="${order.status.ordinal() == 3}"
+                                              class="badge badge-success">ЗАВЕРШЕН</span>
                                     </div>
                                 </div>
-                                <div class="thumbnails">
-                                    <img class="thumbnail"
-                                         th:each="photo:${product.getPhotos()}"
-                                         th:data-src="@{'/products/' + ${photo}}"
-                                         th:photo="${photo}"
-                                         th:src="@{'/products/' + ${photo}}">
-                                </div>
-                                <hr>
-                                <form id="photoForm">
-                                    <div class="form-group">
-                                        <label>Photo</label>
-                                        <input type="file" name="photo" class="file-upload-default">
-                                        <div class="input-group col-xs-12">
-                                            <input type="text" class="form-control file-upload-info" disabled
-                                                   placeholder="Upload Image">
-                                            <span class="input-group-append">
-                                                <button class="file-upload-browse btn btn-primary"
-                                                        type="button">Upload</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="productId" th:value="${product.id}">
-                                    <div>
-                                        <button class="btn btn-primary" type="submit" id="savePhoto">Save</button>
-                                    </div>
-                                </form>
-                                <div id="progressModal" class="modal">
-                                    <div class="modal-content">
-                                        <div class="progress-spinner"></div>
-                                        <p>Sending...</p>
-                                    </div>
+                                <div class="ml-2" style="height: 20px">
+                                    <a class="btn-sm btn-primary" id="statusUp"><i class="ti-arrow-right"></i>
+                                    </a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-title">Спецификации</p>
-                            <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table table-borderless report-table">
-                                    <thead>
-                                    <th>Название</th>
-                                    <th>Значение</th>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="specKey: ${product.getSpecifications().keySet()}">
-                                        <td class="text-muted" th:text="${specKey}"></td>
-                                        <td class="text-muted"
-                                            th:text="${product.specifications.get(specKey)}"></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger deleteSpecification"
-                                                    th:attr="specKey=${specKey}"><i
-                                                    class="ti-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-7 grid-margin">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Добавить спецификацию</h4>
-                            <form class="form-inline" id="addSpec">
-                                <input type="text" class="form-control mb-2 mr-sm-2" name="key"
-                                       placeholder="Название">
-
-                                <div class="input-group mb-2 mr-sm-2">
-                                    <input type="text" class="form-control" name="value" placeholder="Значение">
-                                </div>
-                                <input hidden th:value="${product.id}" name="productId">
-                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card position-relative">
+                    <div class="card">
                         <div class="card-body">
-                            <p class="card-title">Edit product</p>
-                            <div class="row">
-                                <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
-                                    <div class="ml-xl-4">
-                                        <h1>33500</h1>
-                                        <h3 class="font-weight-light mb-xl-4">Sales</h3>
-                                        <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date
-                                            range. It is the
-                                            period time a user is actively engaged with your website, page or app,
-                                            etc</p>
-                                    </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-title">Все товары</p>
+                                <div>
+                                    <button class="btn btn-sm btn-primary" id="updateOrderItems">Сохранить изменения
+                                    </button>
                                 </div>
-                                <div class="card-body">
-                                    <form class="forms-sample">
-                                        <div class="form-group">
-                                            <label for="exampleInputUsername1">Name</label>
-                                            <input type="text" class="form-control" id="exampleInputUsername1"
-                                                   placeholder="Username">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Price</label>
-                                            <input type="email" class="form-control" id="exampleInputEmail1"
-                                                   placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">SKU</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                                   placeholder="Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleSelectGender">Category</label>
-                                            <select class="form-control" id="exampleSelectGender">
-                                                <option>Male</option>
-                                                <option>Female</option>
+                            </div>
+                            <div class="table-responsive mb-3 mb-md-0">
+                                <table class="table report-table">
+                                    <thead>
+                                    <th>Удалить</th>
+                                    <th>Фото</th>
+                                    <th>Название</th>
+                                    <th>Количество</th>
+                                    <th>Размер</th>
+                                    <th>Штрихкод</th>
+                                    <th>Изменить размер</th>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr th:each="orderItem: ${order.orderItems}">
+                                        <td>
+                                            <div>
+                                                <button class="btn btn-sm btn-danger removeFromOrder"
+                                                        th:attr="orderItemId=${orderItem.id}"><i class="ti-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <img th:if="${not #lists.isEmpty(orderItem.product.photos)}"
+                                                 th:src="@{'/products/' + ${orderItem.product.getPhotos().get(0)}}"/>
+                                        </td>
+                                        <td class="text-muted"
+                                            th:text="${orderItem.product.name}"></td>
+                                        <td class="text-muted" th:text="${orderItem.quantity}"></td>
+                                        <td class="text-muted">
+                                            <p th:if="${orderItem.productVariation != null}"
+                                               th:text="${orderItem.productVariation.size}"></p>
+                                        </td>
+                                        <td>
+                                            <p th:if="${orderItem.productVariation != null}"
+                                               th:text="${orderItem.productVariation.sku}"></p>
+                                        </td>
+                                        <td class="form-group">
+                                            <select class="form-control newSize" th:attr="orderItemId=${orderItem.id}">
+                                                <option th:each="size: ${orderItem.getAvailableSizes()}"
+                                                        th:text="${size.size}" th:value="${size.id}"></option>
                                             </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputConfirmPassword1">Discount</label>
-                                            <input type="password" class="form-control"
-                                                   id="exampleInputConfirmPassword1"
-                                                   placeholder="Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputConfirmPassword1">Description</label>
-                                            <input type="password" class="form-control"
-                                                   id="exampleInputConfirmPassword2"
-                                                   placeholder="Password">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        <button class="btn btn-light">Cancel</button>
-                                    </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div>
+                                    <h4 class="card-title" style="margin-top: 10px;">Информация о клиенте</h4>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Имя
+                                        </td>
+                                        <td th:text="${order.firstname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Фамилия
+                                        </td>
+                                        <td th:text="${order.lastname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Номер телефона
+                                        </td>
+                                        <td th:text="${order.phone_number}"></td>
+                                    </tr>
+                                    <tr th:if="${order.email != null}">
+                                        <td>
+                                            email
+                                        </td>
+                                        <td th:text="${order.email}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div>
+                                    <h4 class="card-title" style="margin-top: 10px;">Информация о доставке</h4>
+                                </div>
+                                <div>
+                                    <button th:hidden="${order.shipment == null}" class="btn btn-sm btn-danger"
+                                            id="removeShipment" th:attr="orderId=${order.id}">Удалить доставку
+                                    </button>
+                                </div>
+                            </div>
+                            <h5 th:if="${order.shipment == null}">Доставка не обозначена</h5>
+                            <div class="table-responsive" th:if="${order.shipment != null}">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Область
+                                        </td>
+                                        <td th:text="${order.shipment.state}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Город
+                                        </td>
+                                        <td th:text="${order.shipment.town}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Стоимость
+                                        </td>
+                                        <td th:text="${order.shipment.cost}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr>
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div>
+                                    <h4 class="card-title mt-1">Выбор доставки</h4>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-primary" id="newShipment"
+                                            th:attr="orderId=${order.id}">Сохранить
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner" id="spinner1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">Область <span>*</span></label>
+                                    <select class="form-control" name="state" id="state">
+                                        <option value=""></option>
+                                        <option th:each="state: ${states}" th:value="${state}"
+                                                th:text="${state}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="town">Город <span>*</span></label>
+                                    <select class="form-control" name="town" id="town">
+                                        <option value=""></option>
+                                        <option th:each="town:${towns}" th:value="${town}"
+                                                th:text="${town}"></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -575,10 +436,8 @@
 <script src="/static/js/file-upload.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/todolist.js"></script>
-
-<!-- endinject -->
-<!-- Custom js for this page-->
+<script src="/static/js/orders/orderDetailsPage.js"></script>
+<script src="/static/js/orders/shipment.js"></script>
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
 </body>

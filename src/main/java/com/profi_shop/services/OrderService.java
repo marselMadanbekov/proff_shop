@@ -8,14 +8,17 @@ import com.profi_shop.model.*;
 import com.profi_shop.model.enums.OrderStatus;
 import com.profi_shop.model.enums.ShipmentType;
 import com.profi_shop.model.requests.OrderRequest;
+import com.profi_shop.model.requests.OrderUpdateRequest;
 import com.profi_shop.repositories.*;
 import com.profi_shop.validations.Validator;
 import jakarta.servlet.http.HttpServletRequest;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -163,5 +166,69 @@ public class OrderService {
             count += storeHouse.getQuantity();
         }
         return count;
+    }
+
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new SearchException(SearchException.ORDER_NOT_FOUND));
+    }
+
+    public void deleteOrderItem(Long orderItemId) {
+        OrderItem orderItem = getOrderItemById(orderItemId);
+        Order order = orderRepository.findByOrderItems(orderItem).orElseThrow(() -> new SearchException(SearchException.ORDER_NOT_FOUND));
+        order.removeOrderItem(orderItem);
+        orderRepository.save(order);
+        updateOrderData(order);
+        orderItemRepository.delete(orderItem);
+    }
+
+    public void updateOrderData(Order order){
+        int totalPrice = 0;
+        for(OrderItem oi : order.getOrderItems())
+            totalPrice += oi.getPrice();
+        if(order.getShipment() != null)
+            totalPrice += order.getShipment().getCost();
+        order.setTotalPrice(totalPrice);
+        orderRepository.save(order);
+    }
+    private OrderItem getOrderItemById(Long orderItemId) {
+        return orderItemRepository.findById(orderItemId).orElseThrow(() -> new SearchException(SearchException.ORDER_ITEM_NOT_FOUND));
+    }
+
+    public void updateOrderItemSizes(List<OrderUpdateRequest> orderItems) {
+        for(OrderUpdateRequest oi: orderItems){
+            System.out.println(oi.getOrderItemId() + " orderItemId");
+            System.out.println(oi.getProductVariationId() + " variationId");
+            if(oi.getOrderItemId() == null || oi.getProductVariationId() == null) continue;
+            OrderItem orderItem = getOrderItemById(oi.getOrderItemId());
+            ProductVariation pv = productVariationRepository.findById(oi.getProductVariationId()).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
+            orderItem.setProductVariation(pv);
+            orderItemRepository.save(orderItem);
+        }
+    }
+
+    public void newShipmentToOrder(Long orderId, String state, String town) {
+        Shipment shipment = shipmentRepository.findByTownAndState(town,state).orElseThrow(() -> new SearchException(SearchException.SHIPMENT_NOT_FOUND));
+        Order order = getOrderById(orderId);
+        order.setShipment(shipment);
+        orderRepository.save(order);
+        updateOrderData(order);
+    }
+
+    public void removeShipmentByOrderId(Long orderId) {
+        Order order = getOrderById(orderId);
+        order.setShipment(null);
+        orderRepository.save(order);
+        updateOrderData(order);
+    }
+
+    public void orderStatusUp(Long orderId) {
+        Order order = getOrderById(orderId);
+        order.setStatus(OrderStatus.values()[order.getStatus().ordinal() + 1]);
+        orderRepository.save(order);
+    }
+    public void orderStatusDown(Long orderId){
+        Order order = getOrderById(orderId);
+        order.setStatus(OrderStatus.values()[order.getStatus().ordinal() - 1]);
+        orderRepository.save(order);
     }
 }
