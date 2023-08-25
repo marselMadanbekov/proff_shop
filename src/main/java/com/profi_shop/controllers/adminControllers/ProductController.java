@@ -224,6 +224,7 @@ public class ProductController {
 
     @GetMapping("/filter")
     public ResponseEntity<Object> filterProducts(@RequestParam(value = "size", required = false) Optional<String> size,
+                                                  @RequestParam(value = "categoryId",required = false) Optional<Long> categoryId,
                                                   @RequestParam(value = "minPrice", required = false) Optional<Integer> minPrice,
                                                   @RequestParam(value = "maxPrice", required = false) Optional<Integer> maxPrice,
                                                   @RequestParam(value = "query", required = false) Optional<String> query,
@@ -235,7 +236,7 @@ public class ProductController {
 
             Page<ProductDTO> products = productFacade.mapToProductDTOPage(
                     productService.productsFilteredPage(page.orElse(0),
-                    0L,
+                    categoryId.orElse(0L),
                     size.orElse(null),
                     query.orElse(""),
                     minPrice.orElse(0),

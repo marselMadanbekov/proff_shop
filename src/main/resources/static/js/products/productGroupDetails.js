@@ -102,6 +102,7 @@
         // Генерируем HTML для новых строк таблицы на основе полученных данных
         data.forEach(function (product) {
             const photoUrl = product.photos.length > 0 ? `/products/${product.photos[0]}` : ''; // Получаем URL первого фото, если оно существует
+            const id = product.id;
             const row = `
     <tr>
       <td>
@@ -110,7 +111,7 @@
       <td>${product.name}</td>
       <td>
          <div>
-           <button class="btn btn-sm btn-primary addToGroup" productId=${product.id}">Добавить</button>
+           <button class="btn btn-sm btn-primary addToGroup" productId="${id}">Добавить</button>
          </div>
       </td>
     </tr>
@@ -127,47 +128,52 @@
         });
     });
 
-    addToGroup.forEach(function (button){
-        button.addEventListener('click', function (e){
-            let productId = button.getAttribute('productId');
-            console.log(productId);
-            if (confirm('Вы уверены, что хотите добавить этот продукт в карточку?')) {
-                $.ajax({
-                    url: '/admin/products/addToGroup',
-                    type: 'POST',
-                    data: { groupId: groupId,
-                        productId: productId
-                    },
-                    success: function (response) {
-                        // Обработка успешного удаления
-                        alert(response.message);
-                        window.location.reload();
-                        // Дополнительные действия при успешном удалении категории
-                    },
-                    error: function (xhr, status, error) {
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            alert(xhr.responseJSON.error);
-                        } else {
-                            alert('Произошла ошибка при удалении размера товара');
-                        }
+    $('#productTable').on('click', '.addToGroup', function (e) {
+        e.preventDefault();
+        let button = $(this); // Получаем текущую кнопку
+        let productId = button.attr('productId');
+        let formData = new FormData();
+        formData.append('groupId', groupId);
+        formData.append('productId', productId);
+
+        if (confirm('Вы уверены, что хотите добавить этот продукт в карточку?')) {
+            $.ajax({
+                url: '/admin/products/addToGroup',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Обработка успешного добавления
+                    alert(response.message);
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        alert(xhr.responseJSON.error);
+                    } else {
+                        alert('Произошла ошибка при добавлении товара в карточку');
                     }
-                });
-            }
-        })
-    })
+                }
+            });
+        }
+    });
 
     function loadNewProducts(pageNumber) {
         let baseURL = '/admin/filter?';
         let queryParams = '';
 
-        queryParams += 'size=' + encodeURIComponent(size) + '&';
-        queryParams += 'page=' + encodeURIComponent(pageNumber);
+        queryParams += 'categoryId=' + encodeURIComponent(categoryId) + '&';
+        queryParams += 'page=' + encodeURIComponent(page);
         queryParams += '&minPrice=' + encodeURIComponent(minPrice);
         queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
         queryParams += '&sort=' + encodeURIComponent(sort);
+        if(size !== null && size !== '')
+            queryParams += '&size=' + encodeURIComponent(size);
         if (searchQuery !== null && searchQuery !== '')
             queryParams += '&query=' + encodeURIComponent(searchQuery);
 
+        console.log(queryParams);
         $.ajax({
             url: baseURL + queryParams,
             method: "GET",

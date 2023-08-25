@@ -1,20 +1,24 @@
 package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.dto.OrderDetailsDTO;
+import com.profi_shop.model.Category;
 import com.profi_shop.model.Order;
+import com.profi_shop.model.Product;
 import com.profi_shop.model.requests.OrderUpdateRequest;
+import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.OrderService;
+import com.profi_shop.services.ProductService;
 import com.profi_shop.services.ShipmentService;
 import com.profi_shop.services.facade.OrderFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +30,16 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderFacade orderFacade;
+    private final ProductService productService;
+    private final CategoryService categoryService;
     private final ShipmentService shipmentService;
 
     @Autowired
-    public OrderController(OrderService orderService, OrderFacade orderFacade, ShipmentService shipmentService) {
+    public OrderController(OrderService orderService, OrderFacade orderFacade, ProductService productService, CategoryService categoryService, ShipmentService shipmentService) {
         this.orderService = orderService;
         this.orderFacade = orderFacade;
+        this.productService = productService;
+        this.categoryService = categoryService;
         this.shipmentService = shipmentService;
     }
 
@@ -47,15 +55,44 @@ public class OrderController {
         model.addAttribute("selectedSort", sort.orElse(0));
         return "admin/order/orders";
     }
+    @GetMapping("/orders/createOrder")
+    public ResponseEntity<Map<String,String>> createNewOrder(Principal principal){
+        Map<String,String> response = new HashMap<>();
+        try{
+            Long orderId = orderService.createOrderByAdminUsername(principal.getName());
+            response.put("message",orderId.toString());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    @PostMapping("/order/addToOrder")
+    public ResponseEntity<Map<String,String>> addToOrder(@RequestParam Long orderId,
+                                                         @RequestParam Long productId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            orderService.addProductToOrder(orderId, productId);
+            response.put("message", "Продукт успешно добавлен");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/orderDetails")
     public String orderDetails(@RequestParam("orderId") Long orderId,
                                Model model){
         OrderDetailsDTO order = orderFacade.orderToOrderDetails(orderService.getOrderById(orderId));
         List<String> states = shipmentService.getUniqueStates();
         List<String> towns = shipmentService.getUniqueTowns();
+        Page<Product> products = productService.getPagedProducts(0,10);
+        List<Category> categories = categoryService.getAllCategories();
 
         model.addAttribute("states", states);
+        model.addAttribute("categories", categories);
+        model.addAttribute("products", products);
         model.addAttribute("towns", towns);
         model.addAttribute("order", order);
         return "admin/order/orderDetails";
@@ -70,6 +107,31 @@ public class OrderController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e) {
             System.out.println(e.getMessage());
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/order/itemCountDown")
+    public ResponseEntity<Map<String, String>> itemCountDown(@RequestParam Long orderItemId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            orderService.itemQuantityDown(orderItemId);
+            response.put("message", "Количество успешно уменьшено");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/order/itemCountUp")
+    public ResponseEntity<Map<String, String>> itemCountUp(@RequestParam Long orderItemId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            orderService.itemQuantityUp(orderItemId);
+            response.put("message", "Количество успешно увеличено");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
             response.put("error", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }

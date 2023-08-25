@@ -77,8 +77,10 @@ public class Text {
         data.put("ERROR_SIZE_OF_PRODUCT_EXIST","Вариант продукта с таким размером уже существует!");
         data.put("ERROR_PRODUCT_SKU_EXIST","Продукт с таким штрихкодом уже существует!");
         data.put("ERROR_SPECIFICATION_EXISTS","Спецификация уже существует!");
+        data.put("ERROR_ORDER_ITEM_EXISTS","Такой вариант товара уже существует в заказе!");
         data.put("ERROR_WISHLIST_CONTAINS_PRODUCT","Продукт уже в избранных!");
         data.put("ERROR_PRODUCT_IS_ALREADY_IN_STOCK","В списке присутствует продукт который уже участвует в другой акции!");
+        data.put("ERROR_PRODUCT_IS_ALREADY_IN_GROUP","Товар уже состоит в этой группе!");
 
         data.put("ERROR_NAME_EMPTY","Поле имени не может быть пустым!");
         data.put("ERROR_PASSWORD_EMPTY","Пароль не должен быть пустым!");
@@ -86,6 +88,7 @@ public class Text {
         data.put("ERROR_AGE_MUST_BE_BETWEEN_0_100","Возраст должен быть в диапазоне 0-100!");
         data.put("ERROR_FOREIGN_BRANCH","Вы не можете призводить манипуляции над данным филиалом!");
         data.put("ERROR_FOREIGN_ACCOUNT","Вы не можете производить манипуляции над чужим аккаунтом!");
+        data.put("ERROR_ONLY_ADMIN_OF_SHOP","Только администратор конкретного филиала может создавать заказы!");
 
         data.put("ERROR_INVALID_NAME","В имени есть недопустимые символы!");
         data.put("ERROR_INVALID_AGE","Возраст введен неверно!");

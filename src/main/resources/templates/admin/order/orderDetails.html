@@ -216,14 +216,14 @@
                         </div>
                         <div>
                             <div class="d-flex flex-wrap">
-                                <div class="mr-2" style="height: 20px">
-                                    <a class="btn-sm btn-primary" id="statusDown"><i class="ti-arrow-left"></i>
-                                    </a>
+                                <div class="mr-2" style="height: 20px" th:hidden="${order.status.ordinal() <= 0}">
+                                    <small class="badge badge-primary" id="statusDown"><i class="ti-arrow-left"></i>
+                                    </small>
                                 </div>
                                 <div class="d-flex align-content-center justify-content-center">
                                     <div>
                                         <span th:if="${order.status.ordinal() == 0}"
-                                          class="badge badge-danger">ЗАПРОС</span>
+                                              class="badge badge-danger">ЗАПРОС</span>
                                         <span th:if="${order.status.ordinal() == 1}"
                                               class="badge badge-warning">ОПЛАЧЕНО</span>
                                         <span th:if="${order.status.ordinal() == 2}"
@@ -232,76 +232,16 @@
                                               class="badge badge-success">ЗАВЕРШЕН</span>
                                     </div>
                                 </div>
-                                <div class="ml-2" style="height: 20px">
-                                    <a class="btn-sm btn-primary" id="statusUp"><i class="ti-arrow-right"></i>
-                                    </a>
+                                <div class="ml-2" style="height: 20px" th:hidden="${order.status.ordinal() >= 3}">
+                                    <small class="badge badge-primary" id="statusUp"><i class="ti-arrow-right"></i>
+                                    </small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <p class="card-title">Все товары</p>
-                                <div>
-                                    <button class="btn btn-sm btn-primary" id="updateOrderItems">Сохранить изменения
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table report-table">
-                                    <thead>
-                                    <th>Удалить</th>
-                                    <th>Фото</th>
-                                    <th>Название</th>
-                                    <th>Количество</th>
-                                    <th>Размер</th>
-                                    <th>Штрихкод</th>
-                                    <th>Изменить размер</th>
-                                    </thead>
-                                    <tbody>
 
-                                    <tr th:each="orderItem: ${order.orderItems}">
-                                        <td>
-                                            <div>
-                                                <button class="btn btn-sm btn-danger removeFromOrder"
-                                                        th:attr="orderItemId=${orderItem.id}"><i class="ti-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <img th:if="${not #lists.isEmpty(orderItem.product.photos)}"
-                                                 th:src="@{'/products/' + ${orderItem.product.getPhotos().get(0)}}"/>
-                                        </td>
-                                        <td class="text-muted"
-                                            th:text="${orderItem.product.name}"></td>
-                                        <td class="text-muted" th:text="${orderItem.quantity}"></td>
-                                        <td class="text-muted">
-                                            <p th:if="${orderItem.productVariation != null}"
-                                               th:text="${orderItem.productVariation.size}"></p>
-                                        </td>
-                                        <td>
-                                            <p th:if="${orderItem.productVariation != null}"
-                                               th:text="${orderItem.productVariation.sku}"></p>
-                                        </td>
-                                        <td class="form-group">
-                                            <select class="form-control newSize" th:attr="orderItemId=${orderItem.id}">
-                                                <option th:each="size: ${orderItem.getAvailableSizes()}"
-                                                        th:text="${size.size}" th:value="${size.id}"></option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
             <div class="row">
@@ -414,6 +354,195 @@
                                         <option th:each="town:${towns}" th:value="${town}"
                                                 th:text="${town}"></option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <p class="card-title">Все товары</p>
+                                <div>
+                                    <button class="btn btn-sm btn-primary" id="updateOrderItems">Сохранить изменения
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-responsive mb-3 mb-md-0">
+                                <table class="table report-table">
+                                    <thead>
+                                    <th>Удалить</th>
+                                    <th>Фото</th>
+                                    <th>Название</th>
+                                    <th>Количество</th>
+                                    <th>Размер</th>
+                                    <th>Штрихкод</th>
+                                    <th>Изменить размер</th>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr th:each="orderItem: ${order.orderItems}">
+                                        <td>
+                                            <div>
+                                                <button class="btn btn-sm btn-danger removeFromOrder"
+                                                        th:attr="orderItemId=${orderItem.id}"><i class="ti-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <img th:if="${not #lists.isEmpty(orderItem.product.photos)}"
+                                                 th:src="@{'/products/' + ${orderItem.product.getPhotos().get(0)}}"/>
+                                        </td>
+                                        <td class="text-muted"
+                                            th:text="${orderItem.product.name}"></td>
+                                        <td class="text-muted">
+                                            <div class="d-flex">
+                                                <i class="ti-minus btn-primary itemCountDown" th:attr="orderItemId=${orderItem.id}"></i>
+                                                <span class="mr-3 ml-3" th:text="${orderItem.quantity}"></span>
+                                                <i class="ti-plus btn-primary itemCountUp" th:attr="orderItemId=${orderItem.id}"></i>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">
+                                            <p th:if="${orderItem.productVariation != null}"
+                                               th:text="${orderItem.productVariation.size}"></p>
+                                        </td>
+                                        <td>
+                                            <p th:if="${orderItem.productVariation != null}"
+                                               th:text="${orderItem.productVariation.sku}"></p>
+                                        </td>
+                                        <td class="form-group">
+                                            <select class="form-control newSize" th:attr="orderItemId=${orderItem.id}">
+                                                <option th:each="size: ${orderItem.getAvailableSizes()}"
+                                                        th:text="${size.size}" th:value="${size.id}"></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Фильтры</h4>
+                            <p class="card-description">Выберите параметры товаров</p>
+                            <div class="form-group">
+                                <label for="searchQuery">Имя или штрихкод</label>
+                                <input class="form-control" id="searchQuery" type="text">
+                            </div>
+                            <div class="form-group">
+                                <label for="categorySelect">Выберите категорию</label>
+                                <select class="form-control form-control-sm" id="categorySelect">
+                                    <option value="0">Все</option>
+                                    <option th:each="category: ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sizeSelect">Размер</label>
+                                <input class="form-control" id="sizeSelect" type="text">
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Диапазон цен</label>
+                                <div class="d-flex justify-content-between" id="price">
+                                    <input id="minPrice" class="form-control form-control-sm" style="width: 40%"
+                                           type="number" min="0">
+                                    <input id="maxPrice" class="form-control form-control-sm" style="width: 40%"
+                                           type="number" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sortSelect">Выберите способ сортировки</label>
+                                <select class="form-control form-control-sm" id="sortSelect">
+                                    <option value="0">
+                                        По умолчанию
+                                    </option>
+                                    <option value="1">
+                                        по дате создания: новые
+                                    <option value="2">
+                                        по возрастанию цены
+                                    <option value="3">
+                                        по убыванию цены
+                                    </option>
+                                    <option value="4">
+                                        по названию
+                                    </option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary mr-2" id="filter">Применить</button>
+                            <button class="btn btn-light" id="cancel">Сброс</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <p class="card-title mb-0" style="margin-top: 10px;">Все товары</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="productTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Фото</th>
+                                        <th>Название</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product : ${products.getContent()}">
+                                        <td>
+                                            <img th:if="${not #lists.isEmpty(product.getPhotos())}"
+                                                 th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{'/admin/productDetails?productId=' + ${product.id}}">
+                                                <span th:text="${product.name}"></span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <button class="btn btn-sm btn-primary addToOrder"
+                                                        th:attr="productId=${product.id}">Добавить
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container">
+                                <div class="pagination" id="productPagination">
+                                    <input hidden id="page" th:value="${products.number}">
+                                    <ul>
+                                        <li th:if="${products.number > 0}" class="pagination-link" th:attr="page=${0}">
+                                            <a
+                                                    href="#"><<</a>
+                                        </li>
+                                        <li th:if="${products.number > 0}" class="pagination-link"
+                                            th:attr="page=${products.number - 1}"><a href="#"
+                                                                                     th:text="${products.number}"></a>
+                                        </li>
+                                        <li class="current"><a href="#" th:text="${products.number + 1}"></a></li>
+                                        <li th:if="${products.number + 1 < products.totalPages}" class="pagination-link"
+                                            th:attr="page=${products.number + 1}"><a href="#"
+                                                                                     th:text="${products.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${products.number + 2 < products.totalPages}" class="pagination-link"
+                                            th:attr="page=${products.number + 2}"><a href="#"
+                                                                                     th:text="${products.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${products.number + 1< products.totalPages}" class="pagination-link"
+                                            th:attr="page=${products.totalPages - 1}"><a href="#">>></a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

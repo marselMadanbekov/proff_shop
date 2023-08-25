@@ -1,5 +1,6 @@
 package com.profi_shop.model;
 
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.enums.OrderStatus;
 import com.profi_shop.model.enums.ShipmentType;
 import jakarta.persistence.*;
@@ -42,7 +43,9 @@ public class Order {
         date = new Timestamp(System.currentTimeMillis());
     }
 
-    public void addOrderItem(OrderItem orderItem) {
+    public void addOrderItem(OrderItem orderItem) throws ExistException {
+        if(orderItems.contains(orderItem))
+            throw new ExistException(ExistException.ORDER_ITEM_EXISTS);
         orderItems.add(orderItem);
     }
 

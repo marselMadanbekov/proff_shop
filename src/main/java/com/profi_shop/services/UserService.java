@@ -77,8 +77,11 @@ public class UserService {
             user.setPassword(bCryptPasswordEncoder.encode(adminCreate.getPassword()));
             user.setActive(true);
             Store store = getStoreById(adminCreate.getStoreId());
-
             userRepository.save(user);
+
+            if(store.getAdmin() != null){
+                userRepository.delete(store.getAdmin());
+            }
             store.setAdmin(user);
             storeRepository.save(store);
 

@@ -1,8 +1,10 @@
 package com.profi_shop.controllers.adminControllers;
 
+import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.ProductGroup;
 import com.profi_shop.model.requests.ProductGroupRequest;
+import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductGroupService;
 import com.profi_shop.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,11 +26,13 @@ public class ProductGroupController {
 
     private final ProductGroupService productGroupService;
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductGroupController(ProductGroupService productGroupService, ProductService productService) {
+    public ProductGroupController(ProductGroupService productGroupService, ProductService productService, CategoryService categoryService) {
         this.productGroupService = productGroupService;
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/productGroupDetails")
@@ -35,6 +40,8 @@ public class ProductGroupController {
                                       Model model){
         ProductGroup productGroup = productGroupService.getProductGroupById(groupId);
         Page<Product> products = productService.getPagedProducts(0,10);
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("productGroup", productGroup);
         model.addAttribute("products", products);
         return "admin/product/productGroupDetails";

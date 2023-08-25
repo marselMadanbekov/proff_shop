@@ -309,27 +309,19 @@
                                                 <td>
                                                     Name
                                                 </td>
-                                                <td th:text="${store.admin.firstname}"></td>
+                                                <td th:text="${store.admin.firstname} + ' ' + ${store.admin.lastname}"></td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     Номер
                                                 </td>
-                                                <td th:text="${store.phone_number}"></td>
+                                                <td th:text="${store.admin.phone_number}"></td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    Начало работы
+                                                    Email
                                                 </td>
-                                                <td>
-                                                    09:00
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Адрес
-                                                </td>
-                                                <td th:text="${store.address}"></td>
+                                                <td th:text="${store.admin.email}"></td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -243,7 +243,9 @@
                                         <td th:text="${product.price}"></td>
                                         <td>
                                             <div>
-                                                <button class="btn btn-sm btn-danger deleteFromGroup" th:attr="productId=${product.id}"><i class="ti-trash"></i></button>
+                                                <button class="btn btn-sm btn-danger deleteFromGroup"
+                                                        th:attr="productId=${product.id}"><i class="ti-trash"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -262,53 +264,45 @@
                             <p class="card-description">Выберите параметры товаров</p>
                             <div class="form-group">
                                 <label for="searchQuery">Имя или штрихкод</label>
-                                <input class="form-control" id="searchQuery" type="text" th:value="${query}">
+                                <input class="form-control" id="searchQuery" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="categorySelect">Выберите категорию</label>
                                 <select class="form-control form-control-sm" id="categorySelect">
-                                    <option value="0" th:selected="${selectedCategory == 0}">Все</option>
+                                    <option value="0">Все</option>
                                     <option th:each="category: ${categories}"
                                             th:value="${category.id}"
-                                            th:selected="${selectedCategory == category.id}"
                                             th:text="${category.name}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="sizeSelect">Выберите размер</label>
-                                <select class="form-control form-control-sm" id="sizeSelect">
-                                    <option value="0" th:selected="${selectedSize == 0}">Все</option>
-                                    <option value="1" th:selected="${selectedSize == 1}">S</option>
-                                    <option value="2" th:selected="${selectedSize == 2}">M</option>
-                                    <option value="3" th:selected="${selectedSize == 3}">L</option>
-                                    <option value="4" th:selected="${selectedSize == 4}">XL</option>
-                                    <option value="5" th:selected="${selectedSize == 5}">XXL</option>
-                                </select>
+                                <label for="sizeSelect">Размер</label>
+                                <input class="form-control" id="sizeSelect" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="price">Диапазон цен</label>
                                 <div class="d-flex justify-content-between" id="price">
                                     <input id="minPrice" class="form-control form-control-sm" style="width: 40%"
-                                           type="number" min="0" th:value="${minPrice}">
+                                           type="number" min="0">
                                     <input id="maxPrice" class="form-control form-control-sm" style="width: 40%"
-                                           type="number" min="0" th:value="${maxPrice}">
+                                           type="number" min="0">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="sortSelect">Выберите способ сортировки</label>
                                 <select class="form-control form-control-sm" id="sortSelect">
-                                    <option value="0" th:selected="${sortType == 0}">
-                                        None sort
+                                    <option value="0">
+                                        По умолчанию
                                     </option>
-                                    <option value="1" th:selected="${sortType == 1}">
-                                        sort by newness
-                                    <option value="2" th:selected="${sortType == 2}">
-                                        Sort by price: low to high
-                                    <option value="3" th:selected="${sortType == 3}">
-                                        Sort by price: high to low
+                                    <option value="1">
+                                        по дате создания: новые
+                                    <option value="2">
+                                        по возрастанию цены
+                                    <option value="3">
+                                        по убыванию цены
                                     </option>
-                                    <option value="4" th:selected="${sortType == 4}">
-                                        Product Name: Z
+                                    <option value="4">
+                                        по названию
                                     </option>
                                 </select>
                             </div>
@@ -322,7 +316,7 @@
                         <div class="card-body">
                             <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
                                 <p class="card-title mb-0" style="margin-top: 10px;">Все товары</p>
-                                <input th:value="${productGroup.id}" id="productGroupId" hidden disabled>
+                                <input th:value="${productGroup.id}" id="productGroupId" hidden>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover" id="productTable">
@@ -345,7 +339,9 @@
                                         </td>
                                         <td>
                                             <div>
-                                                <button class="btn btn-sm btn-primary addToGroup" th:attr="productId=${product.id}">Добавить</button>
+                                                <button class="btn btn-sm btn-primary addToGroup"
+                                                        th:attr="productId=${product.id}">Добавить
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -353,7 +349,7 @@
                                 </table>
                             </div>
                             <div class="pagination-container">
-                                <div class="pagination">
+                                <div class="pagination" id="productPagination">
                                     <input hidden id="page" th:value="${products.number}">
                                     <ul>
                                         <li th:if="${products.number > 0}" class="pagination-link" th:attr="page=${0}">

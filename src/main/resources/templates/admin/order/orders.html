@@ -225,6 +225,9 @@
                         <div>
                             <h4 class="font-weight-bold mb-0">Заказы</h4>
                         </div>
+                        <div>
+                            <button class="btn btn-sm btn-primary" id="newOrderCreate">Создать заказ</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -307,11 +310,25 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="order : ${orders.getContent()}">
-                                        <td ><a th:href="@{'/admin/orderDetails?orderId=' + ${order.id}}" th:text="${order.id}"></a></td>
+                                        <td><a th:href="@{'/admin/orderDetails?orderId=' + ${order.id}}"
+                                               th:text="${order.id}"></a></td>
                                         <td th:text="${order.phone_number}"></td>
                                         <td th:text="${order.totalPrice}"></i></td>
                                         <td th:text="${order.date}"></td>
-                                        <td th:text="${order.status}"></td>
+                                        <td>
+
+                                            <div>
+                                                <span th:if="${order.status.ordinal() == 0}"
+                                                      class="badge badge-danger">ЗАПРОС</span>
+                                                <span th:if="${order.status.ordinal() == 1}"
+                                                      class="badge badge-warning">ОПЛАЧЕНО</span>
+                                                <span th:if="${order.status.ordinal() == 2}"
+                                                      class="badge badge-info">В ПУТИ</span>
+                                                <span th:if="${order.status.ordinal() == 3}"
+                                                      class="badge badge-success">ЗАВЕРШЕН</span>
+                                            </div>
+
+                                        </td>
                                         <td th:text="${order.store.town}"></td>
                                     </tr>
                                     </tbody>
@@ -392,7 +409,7 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/redirectOrder.js"></script>
+<script src="/static/js/orders/orders.js"></script>
 <script src="/static/js/orders/orderFilter.js"></script>
 <!-- endinject -->
 <!-- Custom js for this page-->

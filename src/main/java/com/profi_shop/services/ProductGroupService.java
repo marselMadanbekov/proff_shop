@@ -1,5 +1,6 @@
 package com.profi_shop.services;
 
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.ProductGroup;
@@ -25,25 +26,25 @@ public class ProductGroupService {
         this.productRepository = productRepository;
     }
 
-    public void createProductGroup(ProductGroupRequest productGroupRequest){
+    public void createProductGroup(ProductGroupRequest productGroupRequest) {
         ProductGroup productGroup = new ProductGroup();
         productGroup.setName(productGroupRequest.getName());
-        for(Long productId : productGroupRequest.getMembers().keySet()){
+        for (Long productId : productGroupRequest.getMembers().keySet()) {
             Product product = getProductById(productId);
             productGroup.addProduct(product);
         }
         productGroupRepository.save(productGroup);
     }
 
-    public Page<ProductGroup> productGroupsFiltered(int page, String name, int sort){
+    public Page<ProductGroup> productGroupsFiltered(int page, String name, int sort) {
         Pageable pageable;
-        if(sort == 0)   pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC,"name"));
-        else pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC,"name"));
+        if (sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "name"));
+        else pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "name"));
 
-        return productGroupRepository.findAllByFilters(name,pageable);
+        return productGroupRepository.findAllByFilters(name, pageable);
     }
 
-    private Product getProductById(Long productId){
+    private Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 
@@ -62,18 +63,23 @@ public class ProductGroupService {
         productGroupRepository.save(productGroup);
     }
 
-    public void addProductToGroup(Long productId, Long groupId) {
-        ProductGroup productGroup = getProductGroupById(groupId);
-        Product product = getProductById(productId);
-        productGroup.addProduct(product);
-        productGroupRepository.save(productGroup);
+    public void addProductToGroup(Long productId, Long groupId) throws ExistException {
+        try {
+
+            ProductGroup productGroup = getProductGroupById(groupId);
+            Product product = getProductById(productId);
+            productGroup.addProduct(product);
+            productGroupRepository.save(productGroup);
+        }catch (Exception e){
+            throw new ExistException(ExistException.PRODUCT_IS_ALREADY_IN_GROUP);
+        }
     }
 
     public List<Product> getListOfProductsByProductId(Long productId) {
         Product product = getProductById(productId);
         List<ProductGroup> productGroups = productGroupRepository.findProductGroupByProducts(product);
         List<Product> response = new ArrayList<>();
-        for(ProductGroup p : productGroups){
+        for (ProductGroup p : productGroups) {
             response.addAll(p.getProducts());
         }
         return response;
