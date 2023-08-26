@@ -103,7 +103,7 @@ public class AuthController {
         String jwt =  jwtTokenProvider.generateToken(authentication);
         Cookie cookie = new Cookie("jwtToken", jwt);
         cookie.setHttpOnly(true); // Устанавливаем флаг HttpOnly для защиты от XSS атак
-        cookie.setMaxAge(3600); // Устанавливаем срок действия куки в секундах (здесь 1 час)
+        cookie.setMaxAge(3*3600); // Устанавливаем срок действия куки в секундах (здесь 1 час)
         cookie.setPath("/");
         response.addCookie(cookie);
         responseMessage.put("message", "Success");

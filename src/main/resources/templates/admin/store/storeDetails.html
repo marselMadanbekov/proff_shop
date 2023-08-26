@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -15,543 +15,556 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="/static/css1/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="/static/images/favicon.png" />
+    <link rel="shortcut icon" href="/static/images/favicon.png"/>
 </head>
 
 <body>
-    <div class="container-scroller">
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="/dashboard"><img src="/static/images/logo.svg" class="mr-2"
-                                                                               alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="/dashboard"><img src="/static/images/logo-mini.svg"
-                        alt="logo" /></a>
-            </div>
-            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-                    <span class="ti-view-list"></span>
-                </button>
-                <ul class="navbar-nav mr-lg-2">
-                    <li class="nav-item nav-search d-none d-lg-block">
-                        <div class="input-group">
-                            <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+<div class="container-scroller">
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo mr-5" href="/dashboard"><img src="/static/images/logo.svg" class="mr-2"
+                                                                           alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="/dashboard"><img src="/static/images/logo-mini.svg"
+                                                                           alt="logo"/></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="ti-view-list"></span>
+            </button>
+            <ul class="navbar-nav mr-lg-2">
+                <li class="nav-item nav-search d-none d-lg-block">
+                    <div class="input-group">
+                        <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
                                 <span class="input-group-text" id="search">
                                     <i class="ti-search"></i>
                                 </span>
+                        </div>
+                        <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
+                               aria-label="search" aria-describedby="search">
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item dropdown mr-1">
+                    <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
+                       id="messageDropdown" href="#" data-toggle="dropdown">
+                        <i class="ti-email mx-0"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="messageDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <img src="/static/images/faces/face4.jpg" alt="image" class="profile-pic">
                             </div>
-                            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-                                aria-label="search" aria-describedby="search">
-                        </div>
-                    </li>
-                </ul>
-                <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item dropdown mr-1">
-                        <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
-                            id="messageDropdown" href="#" data-toggle="dropdown">
-                            <i class="ti-email mx-0"></i>
+                            <div class="item-content flex-grow">
+                                <h6 class="ellipsis font-weight-normal">David Grey
+                                </h6>
+                                <p class="font-weight-light small-text text-muted mb-0">
+                                    The meeting is cancelled
+                                </p>
+                            </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
-                            aria-labelledby="messageDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-                            <a class="dropdown-item">
-                                <div class="item-thumbnail">
-                                    <img src="/static/images/faces/face4.jpg" alt="image" class="profile-pic">
-                                </div>
-                                <div class="item-content flex-grow">
-                                    <h6 class="ellipsis font-weight-normal">David Grey
-                                    </h6>
-                                    <p class="font-weight-light small-text text-muted mb-0">
-                                        The meeting is cancelled
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item">
-                                <div class="item-thumbnail">
-                                    <img src="/static/images/faces/face2.jpg" alt="image" class="profile-pic">
-                                </div>
-                                <div class="item-content flex-grow">
-                                    <h6 class="ellipsis font-weight-normal">Tim Cook
-                                    </h6>
-                                    <p class="font-weight-light small-text text-muted mb-0">
-                                        New product launch
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item">
-                                <div class="item-thumbnail">
-                                    <img src="/static/images/faces/face3.jpg" alt="image" class="profile-pic">
-                                </div>
-                                <div class="item-content flex-grow">
-                                    <h6 class="ellipsis font-weight-normal"> Johnson
-                                    </h6>
-                                    <p class="font-weight-light small-text text-muted mb-0">
-                                        Upcoming board meeting
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-                            data-toggle="dropdown">
-                            <i class="ti-bell mx-0"></i>
-                            <span class="count"></span>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <img src="/static/images/faces/face2.jpg" alt="image" class="profile-pic">
+                            </div>
+                            <div class="item-content flex-grow">
+                                <h6 class="ellipsis font-weight-normal">Tim Cook
+                                </h6>
+                                <p class="font-weight-light small-text text-muted mb-0">
+                                    New product launch
+                                </p>
+                            </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
-                            aria-labelledby="notificationDropdown">
-                            <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                            <a class="dropdown-item">
-                                <div class="item-thumbnail">
-                                    <div class="item-icon bg-success">
-                                        <i class="ti-info-alt mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="item-content">
-                                    <h6 class="font-weight-normal">Application Error</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        Just now
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item">
-                                <div class="item-thumbnail">
-                                    <div class="item-icon bg-warning">
-                                        <i class="ti-settings mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="item-content">
-                                    <h6 class="font-weight-normal">Settings</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        Private message
-                                    </p>
-                                </div>
-                            </a>
-                            <a class="dropdown-item">
-                                <div class="item-thumbnail">
-                                    <div class="item-icon bg-info">
-                                        <i class="ti-user mx-0"></i>
-                                    </div>
-                                </div>
-                                <div class="item-content">
-                                    <h6 class="font-weight-normal">New user registration</h6>
-                                    <p class="font-weight-light small-text mb-0 text-muted">
-                                        2 days ago
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item nav-profile dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                            <img src="/static/images/faces/face28.jpg" alt="profile" />
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <img src="/static/images/faces/face3.jpg" alt="image" class="profile-pic">
+                            </div>
+                            <div class="item-content flex-grow">
+                                <h6 class="ellipsis font-weight-normal"> Johnson
+                                </h6>
+                                <p class="font-weight-light small-text text-muted mb-0">
+                                    Upcoming board meeting
+                                </p>
+                            </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
-                            aria-labelledby="profileDropdown">
-                            <a class="dropdown-item">
-                                <i class="ti-settings text-primary"></i>
-                                Settings
-                            </a>
-                            <a class="dropdown-item">
-                                <i class="ti-power-off text-primary"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                       data-toggle="dropdown">
+                        <i class="ti-bell mx-0"></i>
+                        <span class="count"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="notificationDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <div class="item-icon bg-success">
+                                    <i class="ti-info-alt mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                <h6 class="font-weight-normal">Application Error</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    Just now
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <div class="item-icon bg-warning">
+                                    <i class="ti-settings mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                <h6 class="font-weight-normal">Settings</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    Private message
+                                </p>
+                            </div>
+                        </a>
+                        <a class="dropdown-item">
+                            <div class="item-thumbnail">
+                                <div class="item-icon bg-info">
+                                    <i class="ti-user mx-0"></i>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                <h6 class="font-weight-normal">New user registration</h6>
+                                <p class="font-weight-light small-text mb-0 text-muted">
+                                    2 days ago
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item nav-profile dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                        <img src="/static/images/faces/face28.jpg" alt="profile"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                         aria-labelledby="profileDropdown">
+                        <a class="dropdown-item">
+                            <i class="ti-settings text-primary"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item">
+                            <i class="ti-power-off text-primary"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
                     data-toggle="offcanvas">
-                    <span class="ti-view-list"></span>
-                </button>
-            </div>
+                <span class="ti-view-list"></span>
+            </button>
+        </div>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dashboard">
+                        <i class="ti-shield menu-icon"></i>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="ti-shopping-cart-full menu-icon"></i>
+                        <span class="menu-title">Products</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/categories">
+                        <i class="ti-layout-list-post menu-icon"></i>
+                        <span class="menu-title">Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/orders">
+                        <i class="ti-pie-chart menu-icon"></i>
+                        <span class="menu-title">Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/stores">
+                        <i class="ti-home menu-icon"></i>
+                        <span class="menu-title">Stores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/stocks">
+                        <i class="ti-gift menu-icon"></i>
+                        <span class="menu-title">Stocks</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/shipments">
+                        <i class="ti-truck menu-icon"></i>
+                        <span class="menu-title">Shipments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/coupons">
+                        <i class="ti-medall menu-icon"></i>
+                        <span class="menu-title">Coupons</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
-        <div class="container-fluid page-body-wrapper">
-            <nav class="sidebar sidebar-offcanvas" id="sidebar">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/dashboard">
-                            <i class="ti-shield menu-icon"></i>
-                            <span class="menu-title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
-                            <i class="ti-shopping-cart-full menu-icon"></i>
-                            <span class="menu-title">Products</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/categories">
-                            <i class="ti-layout-list-post menu-icon"></i>
-                            <span class="menu-title">Categories</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/orders">
-                            <i class="ti-pie-chart menu-icon"></i>
-                            <span class="menu-title">Orders</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/stores">
-                            <i class="ti-home menu-icon"></i>
-                            <span class="menu-title">Stores</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/stocks">
-                            <i class="ti-gift menu-icon"></i>
-                            <span class="menu-title">Stocks</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/shipments">
-                            <i class="ti-truck menu-icon"></i>
-                            <span class="menu-title">Shipments</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/coupons">
-                            <i class="ti-medall menu-icon"></i>
-                            <span class="menu-title">Coupons</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
 
-            <div class="content-wrapper">
-                <div class="row">
-                    <div class="col-md-12 grid-margin">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="font-weight-bold mb-0" th:text="${store.town}"></h4>
-                            </div>
-                            <div>
-                                <i class="ti-clipboard btn-icon-prepend" style="margin-right: 5px;" th:text="${store.name}"></i>
-                            </div>
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="font-weight-bold mb-0" th:text="${store.town}"></h4>
+                        </div>
+                        <div>
+                            <i class="ti-clipboard btn-icon-prepend" style="margin-right: 5px;"
+                               th:text="${store.name}"></i>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-7 grid-margin stretch-card">
-                        <div class="card border-bottom-0">
-                            <div class="card-body pb-0">
-                                <p class="card-title">Отчет</p>
-                                <p class="text-muted font-weight-light">Выберите начальную и конечную даты в которых
-                                    хотели просмотреть отчет о продажах</p>
-                                <div style="display: flex; margin: 10px;">
+            </div>
+            <div class="row">
+                <div class="col-md-7 grid-margin stretch-card">
+                    <div class="card border-bottom-0">
+                        <div class="card-body pb-0">
+                            <p class="card-title">Отчет</p>
+                            <p class="text-muted font-weight-light">Выберите начальную и конечную даты в которых
+                                хотели просмотреть отчет о продажах</p>
+                            <form id="dateForm">
+                                <input id="storeId" hidden th:value="${store.id}">
+                                <div class="d-flex mt-1">
                                     <div class="coc-form">
                                         <div class="coc-block-row">
-                                            <label class="text-muted font-weight-light" for="dateofbirth">с</label>
+                                            <label class="text-muted font-weight-light" for="dateFrom">с</label>
                                             <div class="coc-block">
-                                                <input class="coc-input" type="date" name="dateofbirth"
-                                                    id="dateofbirth">
+                                                <input class="coc-input" type="date" name="startDate" id="dateFrom">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="coc-form">
                                         <div class="coc-block-row">
-                                            <label class="text-muted font-weight-light" for="dateofbirth">по</label>
+                                            <label class="text-muted font-weight-light" for="dateTo">по</label>
                                             <div class="coc-block">
-                                                <input class="coc-input" type="date" name="dateofbirth"
-                                                    id="dateofbirth1">
+                                                <input class="coc-input" type="date" name="endDate" id="dateTo">
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <button class="btn btn-sm btn-primary" style="margin-left: 10px;">применить</button>
+                                        <button class="btn btn-sm btn-primary ml-1" type="submit">применить</button>
                                     </div>
                                 </div>
-                                <div class="table-responsive" style="margin-top: 5px;">
-                                    <table class="table table-hover">
-                                        <tbody>
-                                            <tr>
-                                                <td>Онлайн продажи</td>
-                                                <td>12345 сом</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Офлайн продажи</td>
-                                                <td>127384 сом</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Отмененные заказы</td>
-                                                <td>8764 шт</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Расходы</td>
-                                                <td>1235 сом</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Транзакции</td>
-                                                <td>53275 сом</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <hr>
+                            </form>
+                            <div class="table-responsive" style="margin-top: 5px;">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <td>Онлайн продажи</td>
+                                        <td th:text="${onlineSales} + ' сом'"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Офлайн продажи</td>
+                                        <td th:text="${offlineSales} + ' сом'"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отмененные заказы</td>
+                                        <td th:text="${canceledOrders} + ' шт'"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Расходы</td>
+                                        <td>1235 сом</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Транзакции</td>
+                                        <td>53275 сом</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                            <hr>
                         </div>
                     </div>
-                    <div class="col-lg-5 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mt-1">Администратор</h4>
-                                    </div>
-                                    <div>
-                                        <h3 class="card-title mt-1" th:if="${store.admin == null}">Администратор не назначен</h3>
-                                    </div>
-                                </div>
-                                <div class="table-responsive" th:if="${store.admin != null}">
-                                    <table class="table table-striped">
-                                        <tbody>
-                                            <tr >
-                                                <td>
-                                                    Name
-                                                </td>
-                                                <td th:text="${store.admin.firstname} + ' ' + ${store.admin.lastname}"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Номер
-                                                </td>
-                                                <td th:text="${store.admin.phone_number}"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Email
-                                                </td>
-                                                <td th:text="${store.admin.email}"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                </div>
+                <div class="col-lg-5 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <div>
+                                    <h4 class="card-title mt-1">Администратор</h4>
                                 </div>
                                 <div>
-                                    <a class="btn btn-sm btn-success btn-rounded" th:href="@{${'/admin/superAdmin/create-admin?storeId=' + store.id}}">New admin</a>
+                                    <h3 class="card-title mt-1" th:if="${store.admin == null}">Администратор не
+                                        назначен</h3>
                                 </div>
+                            </div>
+                            <div class="table-responsive" th:if="${store.admin != null}">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Name
+                                        </td>
+                                        <td th:text="${store.admin.firstname} + ' ' + ${store.admin.lastname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Номер
+                                        </td>
+                                        <td th:text="${store.admin.phone_number}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Email
+                                        </td>
+                                        <td th:text="${store.admin.email}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <a class="btn btn-sm btn-success btn-rounded"
+                                   th:href="@{${'/admin/superAdmin/create-admin?storeId=' + store.id}}">New admin</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-7 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div style="display: flex; justify-content: space-between;">
-                                    <p class="card-title">Продажи</p>
-                                    <div>
-                                        <button class="badge badge-primary">Применить</button>
-                                    </div>
-                                </div>
-
-                                <div class="form-group"
-                                    style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="optionsRadios"
-                                                id="optionsRadios1" value="">
-                                            Онлайн
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="optionsRadios"
-                                                id="optionsRadios2" value="option2" checked>
-                                            Офлайн
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="optionsRadios"
-                                                id="optionsRadios3" value="option3">
-                                            Отмененные
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Request .No</th>
-                                                <th>Sum</th>
-                                                <th>date time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Jacob</td>
-                                                <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                                <td><label class="badge badge-danger">Pending</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Messsy</td>
-                                                <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
-                                                <td><label class="badge badge-warning">In progress</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>John</td>
-                                                <td class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
-                                                <td><label class="badge badge-info">Fixed</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Peter</td>
-                                                <td class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
-                                                <td><label class="badge badge-success">Completed</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Dave</td>
-                                                <td class="text-success"> 98.05% <i class="ti-arrow-up"></i></td>
-                                                <td><label class="badge badge-warning">In progress</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Messsy</td>
-                                                <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
-                                                <td><label class="badge badge-info">Fixed</label></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="pagination">
-                                    <a href="#">&laquo;</a>
-                                    <a href="#">1</a>
-                                    <a href="#" class="active">2</a>
-                                    <a href="#">3</a>
-                                    <a href="#">4</a>
-                                    <a href="#">5</a>
-                                    <a href="#">6</a>
-                                    <a href="#">&raquo;</a>
+            </div>
+            <div class="row">
+                <div class="col-md-7 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; justify-content: space-between;">
+                                <p class="card-title">Продажи</p>
+                                <div>
+                                    <button class="badge badge-primary">Применить</button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                    <div>
-                                        <h4 class="card-title" style="margin-top: 10px;">Расходы</h4>
-                                    </div>
-                                </div>
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Описание</th>
-                                                <th>Сумма</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    Обед
-                                                </td>
-                                                <td>
-                                                    200
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Ужин
-                                                </td>
-                                                <td>
-                                                    300
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Завтрак
-                                                </td>
-                                                <td>
-                                                    100
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Сегодняк
-                                                </td>
-                                                <td>
-                                                    400
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
+                            <div class="form-group"
+                                 style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios"
+                                               id="optionsRadios1" value="">
+                                        Онлайн
+                                    </label>
                                 </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios"
+                                               id="optionsRadios2" value="option2" checked>
+                                        Офлайн
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optionsRadios"
+                                               id="optionsRadios3" value="option3">
+                                        Отмененные
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Request .No</th>
+                                        <th>Sum</th>
+                                        <th>date time</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Jacob</td>
+                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
+                                        <td><label class="badge badge-danger">Pending</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Messsy</td>
+                                        <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
+                                        <td><label class="badge badge-warning">In progress</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>John</td>
+                                        <td class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
+                                        <td><label class="badge badge-info">Fixed</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Peter</td>
+                                        <td class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
+                                        <td><label class="badge badge-success">Completed</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dave</td>
+                                        <td class="text-success"> 98.05% <i class="ti-arrow-up"></i></td>
+                                        <td><label class="badge badge-warning">In progress</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Messsy</td>
+                                        <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
+                                        <td><label class="badge badge-info">Fixed</label></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination">
+                                <a href="#">&laquo;</a>
+                                <a href="#">1</a>
+                                <a href="#" class="active">2</a>
+                                <a href="#">3</a>
+                                <a href="#">4</a>
+                                <a href="#">5</a>
+                                <a href="#">6</a>
+                                <a href="#">&raquo;</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-9 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                    <p class="card-title mb-0" style="margin-top: 10px;">В магазине</p>
-                                    <ul class="navbar-nav mr-lg-2">
-                                        <a class="nav-link" data-toggle="collapse" href="#ui-basic"
-                                            aria-expanded="false" aria-controls="ui-basic">
-                                            <i class="ti-list-ol menu-icon"></i>
-                                            <span class="menu-title">Сортировать по</span>
-                                            <i class="menu-arrow"></i>
-                                        </a>
-                                        <div class="collapse" id="ui-basic">
-                                            <ul class="nav flex-column sub-menu">
-                                                <li class="nav-item"> <a class="nav-link"
-                                                        href="pages/ui-features/buttons.html">Buttons</a></li>
-                                                <li class="nav-item"> <a class="nav-link"
-                                                        href="pages/ui-features/typography.html">Typography</a></li>
-                                            </ul>
-                                        </div>
-                                    </ul>
+                <div class="col-lg-5 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div>
+                                    <h4 class="card-title" style="margin-top: 10px;">Расходы</h4>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Фото</th>
-                                                <th>Продукт</th>
-                                                <th>Стоимость</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><img src="/static/images/auth/lockscreen-bg.jpg"></td>
-                                                <td>Photoshop</td>
-                                                <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                                                <td><button class="btn btn-sm btn-primary">поступление</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td><img src="/static/images/auth/login-bg.jpg"></td>
-                                                <td>Flash</td>
-                                                <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
-                                                <td><button class="btn btn-sm btn-primary">поступление</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td><img src="/static/images/auth/lockscreen-bg.jpg"></td>
-                                                <td>Premier</td>
-                                                <td class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
-                                                <td><button class="btn btn-sm btn-primary">поступление</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td><img src="/static/images/auth/login-bg.jpg"></td>
-                                                <td>After effects</td>
-                                                <td class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
-                                                <td><button class="btn btn-sm btn-primary">поступление</button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="pagination">
-                                    <a href="#">&laquo;</a>
-                                    <a href="#">1</a>
-                                    <a href="#" class="active">2</a>
-                                    <a href="#">3</a>
-                                    <a href="#">4</a>
-                                    <a href="#">5</a>
-                                    <a href="#">6</a>
-                                    <a href="#">&raquo;</a>
-                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Описание</th>
+                                        <th>Сумма</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Обед
+                                        </td>
+                                        <td>
+                                            200
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Ужин
+                                        </td>
+                                        <td>
+                                            300
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Завтрак
+                                        </td>
+                                        <td>
+                                            100
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Сегодняк
+                                        </td>
+                                        <td>
+                                            400
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <p class="card-title mb-0" style="margin-top: 10px;">В магазине</p>
+                                <ul class="navbar-nav mr-lg-2">
+                                    <a class="nav-link" data-toggle="collapse" href="#ui-basic"
+                                       aria-expanded="false" aria-controls="ui-basic">
+                                        <i class="ti-list-ol menu-icon"></i>
+                                        <span class="menu-title">Сортировать по</span>
+                                        <i class="menu-arrow"></i>
+                                    </a>
+                                    <div class="collapse" id="ui-basic">
+                                        <ul class="nav flex-column sub-menu">
+                                            <li class="nav-item"><a class="nav-link"
+                                                                    href="pages/ui-features/buttons.html">Buttons</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link"
+                                                                    href="pages/ui-features/typography.html">Typography</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Фото</th>
+                                        <th>Продукт</th>
+                                        <th>Стоимость</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><img src="/static/images/auth/lockscreen-bg.jpg"></td>
+                                        <td>Photoshop</td>
+                                        <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary">поступление</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/static/images/auth/login-bg.jpg"></td>
+                                        <td>Flash</td>
+                                        <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary">поступление</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/static/images/auth/lockscreen-bg.jpg"></td>
+                                        <td>Premier</td>
+                                        <td class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary">поступление</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/static/images/auth/login-bg.jpg"></td>
+                                        <td>After effects</td>
+                                        <td class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary">поступление</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination">
+                                <a href="#">&laquo;</a>
+                                <a href="#">1</a>
+                                <a href="#" class="active">2</a>
+                                <a href="#">3</a>
+                                <a href="#">4</a>
+                                <a href="#">5</a>
+                                <a href="#">6</a>
+                                <a href="#">&raquo;</a>
                             </div>
                         </div>
                     </div>
@@ -559,24 +572,19 @@
             </div>
         </div>
     </div>
-    <!-- container-scroller -->
+</div>
+<!-- container-scroller -->
 
-    <!-- plugins:js -->
-    <script src="/static/vendors/base/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page-->
-    <script src="/static/vendors/chart.js/Chart.min.js"></script>
-    <!-- End plugin js for this page-->
-    <!-- inject:js -->
-    <script src="/static/js/off-canvas.js"></script>
-    <script src="/static/js/hoverable-collapse.js"></script>
-    <script src="/static/js/template.js"></script>
-    <script src="/static/js/redirectOrder.js"></script>
+<!-- plugins:js -->
+<script src="/static/vendors/base/vendor.bundle.base.js"></script>
+<script src="/static/vendors/chart.js/Chart.min.js"></script>
+<script src="/static/js/off-canvas.js"></script>
+<script src="/static/js/hoverable-collapse.js"></script>
+<script src="/static/js/template.js"></script>
+<script src="/static/js/store/storeDetails.js"></script>
 
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="/static/js/dashboard.js"></script>
-    <!-- End custom js for this page-->
+<script src="/static/js/dashboard.js"></script>
+<!-- End custom js for this page-->
 </body>
 
 </html>

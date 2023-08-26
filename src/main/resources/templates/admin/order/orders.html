@@ -319,12 +319,14 @@
 
                                             <div>
                                                 <span th:if="${order.status.ordinal() == 0}"
-                                                      class="badge badge-danger">ЗАПРОС</span>
+                                                      class="badge badge-dark">ОТМЕНЕН</span>
                                                 <span th:if="${order.status.ordinal() == 1}"
-                                                      class="badge badge-warning">ОПЛАЧЕНО</span>
+                                                      class="badge badge-danger">ЗАПРОС</span>
                                                 <span th:if="${order.status.ordinal() == 2}"
-                                                      class="badge badge-info">В ПУТИ</span>
+                                                      class="badge badge-warning">ОПЛАЧЕНО</span>
                                                 <span th:if="${order.status.ordinal() == 3}"
+                                                      class="badge badge-info">В ПУТИ</span>
+                                                <span th:if="${order.status.ordinal() == 4}"
                                                       class="badge badge-success">ЗАВЕРШЕН</span>
                                             </div>
 
@@ -373,10 +375,21 @@
                                 <label for="statusSelect">Выберите статус</label>
                                 <select class="form-control form-control-sm" id="statusSelect">
                                     <option value="0" th:selected="${selectedStatus == 0}">Все</option>
-                                    <option value="1" th:selected="${selectedStatus == 1}">Запросы</option>
-                                    <option value="2" th:selected="${selectedStatus == 2}">Оплеченные</option>
-                                    <option value="3" th:selected="${selectedStatus == 3}">В пути</option>
-                                    <option value="4" th:selected="${selectedStatus == 4}">Завершенные</option>
+                                    <option value="1" th:selected="${selectedStatus == 1}">Отмененные</option>
+                                    <option value="2" th:selected="${selectedStatus == 2}">Запросы</option>
+                                    <option value="3" th:selected="${selectedStatus == 3}">Оплеченные</option>
+                                    <option value="4" th:selected="${selectedStatus == 4}">В пути</option>
+                                    <option value="5" th:selected="${selectedStatus == 5}">Завершенные</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="statusSelect">Выберите магазин</label>
+                                <select class="form-control form-control-sm" id="storeSelect">
+                                    <option value="0" th:selected="${selectedStore == 0}">Все</option>
+                                    <option th:each="store : ${stores}" th:value="${store.id}"
+                                            th:selected="${selectedStore == store.id}" th:text="${store.town}">
+                                    </option>
+
                                 </select>
                             </div>
                             <div class="form-group">

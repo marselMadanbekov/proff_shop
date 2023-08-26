@@ -206,33 +206,40 @@
             <div class="row">
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h4 class="font-weight-bold mb-0" th:text="'Номер заказа : ' + ${order.id}"></h4>
-                            <input id="orderId" th:value="${order.id}" hidden>
-                            <div class="mt-1">
-                                <small class="font-weight-bold mb-0"
-                                       th:text="'Сумма заказа : ' + ${order.totalPrice}"></small>
+                        <div class="d-flex">
+                            <div th:if="${order.status.ordinal() > 0}">
+                                <button class="btn btn-sm btn-danger mr-2" id="deleteOrder"><i class="ti-trash"></i></button>
+                            </div>
+                            <div>
+                                <h4 class="font-weight-bold mb-0" th:text="'Номер заказа : ' + ${order.id}"></h4>
+                                <input id="orderId" th:value="${order.id}" hidden>
+                                <div class="mt-1">
+                                    <small class="font-weight-bold mb-0"
+                                           th:text="'Сумма заказа : ' + ${order.totalPrice}"></small>
+                                </div>
                             </div>
                         </div>
                         <div>
                             <div class="d-flex flex-wrap">
-                                <div class="mr-2" style="height: 20px" th:hidden="${order.status.ordinal() <= 0}">
+                                <div class="mr-2" style="height: 20px" th:hidden="${order.status.ordinal() <= 1}">
                                     <small class="badge badge-primary" id="statusDown"><i class="ti-arrow-left"></i>
                                     </small>
                                 </div>
                                 <div class="d-flex align-content-center justify-content-center">
                                     <div>
                                         <span th:if="${order.status.ordinal() == 0}"
-                                              class="badge badge-danger">ЗАПРОС</span>
+                                              class="badge badge-dark">ОТМЕНЕН</span>
                                         <span th:if="${order.status.ordinal() == 1}"
-                                              class="badge badge-warning">ОПЛАЧЕНО</span>
+                                              class="badge badge-danger">ЗАПРОС</span>
                                         <span th:if="${order.status.ordinal() == 2}"
-                                              class="badge badge-info">В ПУТИ</span>
+                                              class="badge badge-warning">ОПЛАЧЕНО</span>
                                         <span th:if="${order.status.ordinal() == 3}"
+                                              class="badge badge-info">В ПУТИ</span>
+                                        <span th:if="${order.status.ordinal() == 4}"
                                               class="badge badge-success">ЗАВЕРШЕН</span>
                                     </div>
                                 </div>
-                                <div class="ml-2" style="height: 20px" th:hidden="${order.status.ordinal() >= 3}">
+                                <div class="ml-2" style="height: 20px" th:hidden="${order.status.ordinal() >= 4 || order.status.ordinal() == 0}">
                                     <small class="badge badge-primary" id="statusUp"><i class="ti-arrow-right"></i>
                                     </small>
                                 </div>
@@ -243,15 +250,16 @@
             </div>
 
 
-
             <div class="row">
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                <div>
-                                    <h4 class="card-title" style="margin-top: 10px;">Информация о клиенте</h4>
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="card-title mt-1">Информация о заказе</h4>
+                                    <h4 class="card-title mt-1" th:text="${order.store.town}"></h4>
                                 </div>
+                                <small>Клиент</small>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-striped">
@@ -283,6 +291,28 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <hr>
+
+                            <div class="form-group" th:if="${order.status.ordinal() == 1}">
+                                <a class="btn btn-dark" data-toggle="collapse" href="#auth" aria-expanded="false"
+                                   aria-controls="auth">
+                                    <i class="ti-upload menu-icon"></i>
+                                    <span class="menu-title ml-3">Перенаправить в другой магазин</span>
+                                    <i class="menu-arrow"></i>
+                                </a>
+                            </div>
+                            <div class="collapse" id="auth" th:if="${order.status.ordinal() == 1}">
+                                <div class="accordion-body">
+                                    <label>Целевой магазин</label>
+                                    <div class="form-group form-inline d-flex">
+                                        <select class="form-control" id="targetStore">
+                                            <option th:each="store : ${stores}" th:text="${store.town}"
+                                                    th:value="${store.id}"></option>
+                                        </select>
+                                        <button class="btn btn-sm btn-primary ml-3" id="redirect">Перенаправить</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -293,7 +323,7 @@
                                 <div>
                                     <h4 class="card-title" style="margin-top: 10px;">Информация о доставке</h4>
                                 </div>
-                                <div>
+                                <div th:if="${order.status.ordinal() == 1}">
                                     <button th:hidden="${order.shipment == null}" class="btn btn-sm btn-danger"
                                             id="removeShipment" th:attr="orderId=${order.id}">Удалить доставку
                                     </button>
@@ -325,7 +355,8 @@
                                 </table>
                             </div>
                             <hr>
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                            <div class="d-flex flex-wrap justify-content-between"
+                                 th:if="${order.status.ordinal() == 1}">
                                 <div>
                                     <h4 class="card-title mt-1">Выбор доставки</h4>
                                 </div>
@@ -335,7 +366,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div>
+                            <div th:if="${order.status.ordinal() == 1}">
                                 <div class="d-flex justify-content-center">
                                     <div class="spinner" id="spinner1"></div>
                                 </div>
@@ -367,25 +398,26 @@
                             <div class="d-flex justify-content-between">
                                 <p class="card-title">Все товары</p>
                                 <div>
-                                    <button class="btn btn-sm btn-primary" id="updateOrderItems">Сохранить изменения
+                                    <button th:if="${order.status.ordinal() == 1}" class="btn btn-sm btn-primary"
+                                            id="updateOrderItems">Сохранить изменения
                                     </button>
                                 </div>
                             </div>
                             <div class="table-responsive mb-3 mb-md-0">
                                 <table class="table report-table">
                                     <thead>
-                                    <th>Удалить</th>
+                                    <th th:if="${order.status.ordinal() == 1}">Удалить</th>
                                     <th>Фото</th>
                                     <th>Название</th>
                                     <th>Количество</th>
                                     <th>Размер</th>
                                     <th>Штрихкод</th>
-                                    <th>Изменить размер</th>
+                                    <th th:if="${order.status.ordinal() == 1}">Изменить размер</th>
                                     </thead>
                                     <tbody>
 
                                     <tr th:each="orderItem: ${order.orderItems}">
-                                        <td>
+                                        <td th:if="${order.status.ordinal() == 1}">
                                             <div>
                                                 <button class="btn btn-sm btn-danger removeFromOrder"
                                                         th:attr="orderItemId=${orderItem.id}"><i class="ti-trash"></i>
@@ -400,9 +432,13 @@
                                             th:text="${orderItem.product.name}"></td>
                                         <td class="text-muted">
                                             <div class="d-flex">
-                                                <i class="ti-minus btn-primary itemCountDown" th:attr="orderItemId=${orderItem.id}"></i>
+                                                <i th:if="${order.status.ordinal() == 1}"
+                                                   class="ti-minus btn-primary itemCountDown"
+                                                   th:attr="orderItemId=${orderItem.id}"></i>
                                                 <span class="mr-3 ml-3" th:text="${orderItem.quantity}"></span>
-                                                <i class="ti-plus btn-primary itemCountUp" th:attr="orderItemId=${orderItem.id}"></i>
+                                                <i th:if="${order.status.ordinal() == 1}"
+                                                   class="ti-plus btn-primary itemCountUp"
+                                                   th:attr="orderItemId=${orderItem.id}"></i>
                                             </div>
                                         </td>
                                         <td class="text-muted">
@@ -413,10 +449,12 @@
                                             <p th:if="${orderItem.productVariation != null}"
                                                th:text="${orderItem.productVariation.sku}"></p>
                                         </td>
-                                        <td class="form-group">
+                                        <td class="form-group" th:if="${order.status.ordinal() == 1}">
                                             <select class="form-control newSize" th:attr="orderItemId=${orderItem.id}">
                                                 <option th:each="size: ${orderItem.getAvailableSizes()}"
-                                                        th:text="${size.size}" th:value="${size.id}"></option>
+                                                        th:text="${size.size}" th:value="${size.id}"
+                                                        th:selected="${size.equals(orderItem.productVariation)}"
+                                                ></option>
                                             </select>
                                         </td>
                                     </tr>
@@ -427,7 +465,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" th:if="${order.status.ordinal() == 1}">
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
@@ -566,6 +604,7 @@
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
 <script src="/static/js/orders/orderDetailsPage.js"></script>
+<script src="/static/js/orders/orderDetailsPageCRUD.js"></script>
 <script src="/static/js/orders/shipment.js"></script>
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->

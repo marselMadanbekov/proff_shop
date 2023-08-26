@@ -7,6 +7,7 @@
 
     let statusSelect = document.getElementById('statusSelect').value;
     let sortSelect = document.getElementById('sortSelect').value;
+    let storeSelect = document.getElementById('storeSelect').value;
     let page = 0;
 
 
@@ -17,6 +18,7 @@
     filterButton.addEventListener('click', () => {
         statusSelect = document.getElementById('statusSelect').value;
         sortSelect = document.getElementById('sortSelect').value;
+        storeSelect  = document.getElementById('storeSelect').value;
         sendRequestToShopController();
     })
 
@@ -33,6 +35,7 @@
         let queryParams = '';
 
         queryParams += 'status=' + encodeURIComponent(statusSelect) + '&';
+        queryParams += 'storeId=' + encodeURIComponent(storeSelect) + '&';
         queryParams += 'sort=' + encodeURIComponent(sortSelect) + '&';
         queryParams += 'page=' + encodeURIComponent(page);
 

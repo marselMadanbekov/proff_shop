@@ -46,20 +46,37 @@ public class OrderService {
         this.cartService = cartService;
     }
 
-    public Page<Order> getFilteredOrders(Integer status, Integer sort, Integer page) {
+    public Page<Order> getFilteredOrders(Integer status, Integer sort, Long storeId, Integer page) {
         Pageable pageable;
         if (sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "totalPrice"));
         else if (sort == 1) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "totalPrice"));
         else if (sort == 2) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "date"));
         else pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "date"));
 
-        return switch (status) {
-            case 1 -> orderRepository.findByStatus(OrderStatus.REQUEST, pageable);
-            case 2 -> orderRepository.findByStatus(OrderStatus.PAID, pageable);
-            case 3 -> orderRepository.findByStatus(OrderStatus.DELIVERING, pageable);
-            case 4 -> orderRepository.findByStatus(OrderStatus.FINISHED, pageable);
-            default -> orderRepository.findAll(pageable);
-        };
+        Store store = null;
+        if(!storeId.equals(0L))
+            store = getStoreById(storeId);
+
+        switch (status) {
+            case 1 :
+                if (store == null) return orderRepository.findByStatus(OrderStatus.CANCELED, pageable);
+                else return orderRepository.findByStatusAndStore(OrderStatus.CANCELED, store, pageable);
+            case 2 :
+                if (store == null) return orderRepository.findByStatus(OrderStatus.REQUEST, pageable);
+                return orderRepository.findByStatusAndStore(OrderStatus.REQUEST,store, pageable);
+            case 3 :
+                if (store == null) return orderRepository.findByStatus(OrderStatus.PAID, pageable);
+                return orderRepository.findByStatusAndStore(OrderStatus.PAID,store, pageable);
+            case 4 :
+                if (store == null) return orderRepository.findByStatus(OrderStatus.DELIVERING, pageable);
+                return orderRepository.findByStatusAndStore(OrderStatus.DELIVERING,store, pageable);
+            case 5 :
+                if (store == null) return orderRepository.findByStatus(OrderStatus.FINISHED, pageable);
+                return orderRepository.findByStatusAndStore(OrderStatus.FINISHED,store, pageable);
+            default :
+                if(store == null) return orderRepository.findAll(pageable);
+                return orderRepository.findByStore(store, pageable);
+        }
     }
 
     public void createOrderByUnknown(OrderRequest orderRequest, HttpServletRequest request) throws InvalidDataException, NotEnoughException, ExistException {
@@ -201,17 +218,29 @@ public class OrderService {
         return orderItemRepository.findById(orderItemId).orElseThrow(() -> new SearchException(SearchException.ORDER_ITEM_NOT_FOUND));
     }
 
-    public void updateOrderItemSizes(List<OrderUpdateRequest> orderItems) throws NotEnoughException {
+    public void updateOrderItemSizes(List<OrderUpdateRequest> orderItems) throws NotEnoughException, ExistException {
         for (OrderUpdateRequest oi : orderItems) {
             if (oi.getOrderItemId() == null || oi.getProductVariationId() == null) continue;
             OrderItem orderItem = getOrderItemById(oi.getOrderItemId());
             ProductVariation pv = productVariationRepository.findById(oi.getProductVariationId()).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
+
+            if (pv.equals(orderItem.getProductVariation()))  continue;
+            if (isOrderContainsProductVariation(pv,orderItem)) throw new ExistException(ExistException.ORDER_ITEM_EXISTS);
+
             int count = countOfProductVariationInStore(pv);
             if(count < orderItem.getQuantity())
                 throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + pv.getSize() + " ) ", count);
             orderItem.setProductVariation(pv);
             orderItemRepository.save(orderItem);
         }
+    }
+
+    private boolean isOrderContainsProductVariation(ProductVariation productVariation, OrderItem orderItem){
+        Order order = getOrderByOrderItem(orderItem);
+        for(OrderItem oi : order.getOrderItems()){
+            if(productVariation.equals(oi.getProductVariation())) return true;
+        }
+        return false;
     }
 
     public void newShipmentToOrder(Long orderId, String state, String town) {
@@ -264,7 +293,7 @@ public class OrderService {
         }else{
             throw new Exception("Выберите размер товара перед увеличением количества");
         }
-        if (orderItem.getQuantity() + 1 < count) {
+        if (orderItem.getQuantity() + 1 <= count) {
             orderItem.setQuantity(orderItem.getQuantity() + 1);
             orderItem.setPrice(orderItem.getPrice() + priceOfOne);
             orderItemRepository.save(orderItem);
@@ -299,17 +328,42 @@ public class OrderService {
         if(countOfProductInStore(product) < 1){
             throw new NotEnoughException(product.getName(), 0);
         }
+
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product);
         orderItem.setQuantity(1);
         orderItem.setPrice(product.getPrice());
+
+        List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
+        if(productVariations.size() == 1) {
+            orderItem.setProductVariation(productVariations.get(0));
+        }
         orderItemRepository.save(orderItem);
         order.addOrderItem(orderItem);
         orderRepository.save(order);
         updateOrderData(order);
     }
-
     private Product getProductById(Long productId){
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
+    }
+
+    public void redirectOrder(Long orderId, Long targetStoreId) {
+        Order order = getOrderById(orderId);
+        Store store = getStoreById(targetStoreId);
+
+        if(!order.getStore().equals(store)){
+            notificationService.createLocalOrderRedirectNotification(store.getAdmin(),order.getStore().getAdmin().getUsername(),orderId);
+            order.setStore(store);
+            orderRepository.save(order);
+        }
+    }
+    private Store getStoreById(Long targetStoreId) {
+        return storeRepository.findById(targetStoreId).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
+    }
+
+    public void cancelOrder(Long orderId) {
+        Order order = getOrderById(orderId);
+        order.setStatus(OrderStatus.CANCELED);
+        orderRepository.save(order);
     }
 }

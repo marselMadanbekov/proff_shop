@@ -96,6 +96,10 @@ public class CartService {
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
+            List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
+            if(productVariations.size() == 1){
+                cartItem.setProductVariation(productVariations.get(0));
+            }
             cartItemRepository.save(cartItem);
             cart.addItemToCart(cartItem);
             return cartRepository.save(cart);
@@ -134,6 +138,10 @@ public class CartService {
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
+            List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
+            if(productVariations.size() == 1){
+                cartItem.setProductVariation(productVariations.get(0));
+            }
             cart.addItemToCart(cartItem);
             return cart;
         }catch (Exception e){

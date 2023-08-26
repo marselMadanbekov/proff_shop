@@ -4,11 +4,9 @@ import com.profi_shop.dto.OrderDetailsDTO;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.Order;
 import com.profi_shop.model.Product;
+import com.profi_shop.model.Store;
 import com.profi_shop.model.requests.OrderUpdateRequest;
-import com.profi_shop.services.CategoryService;
-import com.profi_shop.services.OrderService;
-import com.profi_shop.services.ProductService;
-import com.profi_shop.services.ShipmentService;
+import com.profi_shop.services.*;
 import com.profi_shop.services.facade.OrderFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,23 +32,28 @@ public class OrderController {
     private final CategoryService categoryService;
     private final ShipmentService shipmentService;
 
+    private final StoreService storeService;
     @Autowired
-    public OrderController(OrderService orderService, OrderFacade orderFacade, ProductService productService, CategoryService categoryService, ShipmentService shipmentService) {
+    public OrderController(OrderService orderService, OrderFacade orderFacade, ProductService productService, CategoryService categoryService, ShipmentService shipmentService, StoreService storeService) {
         this.orderService = orderService;
         this.orderFacade = orderFacade;
         this.productService = productService;
         this.categoryService = categoryService;
         this.shipmentService = shipmentService;
+        this.storeService = storeService;
     }
 
     @GetMapping("/orders")
     public String orders(@RequestParam(value = "status", required = false)Optional<Integer> status,
                          @RequestParam(value = "sort", required = false) Optional<Integer> sort,
+                         @RequestParam(value = "storeId", required = false) Optional<Long> storeId,
                          @RequestParam(value = "page", required = false) Optional<Integer> page,
                          Model model) {
-        Page<Order> orders = orderService.getFilteredOrders(status.orElse(0),sort.orElse(0), page.orElse(0));
-
+        Page<Order> orders = orderService.getFilteredOrders(status.orElse(0),sort.orElse(0), storeId.orElse(0L),page.orElse(0));
+        List<Store> stores = storeService.getAllStores();
         model.addAttribute("orders", orders);
+        model.addAttribute("stores", stores);
+        model.addAttribute("selectedStore", storeId.orElse(0L));
         model.addAttribute("selectedStatus", status.orElse(0));
         model.addAttribute("selectedSort", sort.orElse(0));
         return "admin/order/orders";
@@ -89,7 +92,9 @@ public class OrderController {
         List<String> towns = shipmentService.getUniqueTowns();
         Page<Product> products = productService.getPagedProducts(0,10);
         List<Category> categories = categoryService.getAllCategories();
+        List<Store> stores = storeService.getAllStores();
 
+        model.addAttribute("stores", stores);
         model.addAttribute("states", states);
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
@@ -118,6 +123,33 @@ public class OrderController {
         try{
             orderService.itemQuantityDown(orderItemId);
             response.put("message", "Количество успешно уменьшено");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/order/redirect")
+    public ResponseEntity<Map<String,String>> redirectOrder(@RequestParam Long orderId,
+                                                            @RequestParam Long targetStoreId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            orderService.redirectOrder(orderId, targetStoreId);
+            response.put("message", "Успешно перенаправлен");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/order/delete")
+    public ResponseEntity<Map<String, String>> cancelOrder(@RequestParam Long orderId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            orderService.cancelOrder(orderId);
+            response.put("message","Заказ успешно отменен");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             response.put("error", e.getMessage());
