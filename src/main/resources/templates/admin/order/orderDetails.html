@@ -232,14 +232,16 @@
                                         <span th:if="${order.status.ordinal() == 1}"
                                               class="badge badge-danger">ЗАПРОС</span>
                                         <span th:if="${order.status.ordinal() == 2}"
-                                              class="badge badge-warning">ОПЛАЧЕНО</span>
+                                              class="badge badge-primary">ЖДЕТ ОПЛАТЫ</span>
                                         <span th:if="${order.status.ordinal() == 3}"
-                                              class="badge badge-info">В ПУТИ</span>
+                                              class="badge badge-warning">ОПЛАЧЕНО</span>
                                         <span th:if="${order.status.ordinal() == 4}"
+                                              class="badge badge-info">В ПУТИ</span>
+                                        <span th:if="${order.status.ordinal() == 5}"
                                               class="badge badge-success">ЗАВЕРШЕН</span>
                                     </div>
                                 </div>
-                                <div class="ml-2" style="height: 20px" th:hidden="${order.status.ordinal() >= 4 || order.status.ordinal() == 0}">
+                                <div class="ml-2" style="height: 20px" th:hidden="${order.status.ordinal() >= 5 || order.status.ordinal() == 0}">
                                     <small class="badge badge-primary" id="statusUp"><i class="ti-arrow-right"></i>
                                     </small>
                                 </div>

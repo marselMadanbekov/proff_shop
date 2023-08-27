@@ -50,6 +50,7 @@ public class Text {
         data.put("MESSAGE_PASSWORD_RESET","Ваш пароль на сайте SITE_NAME, был обновлен на - ( NEW_PASSWORD ). Вы можете изменить пароль в личном кабинете.");
         data.put("MESSAGE_ORDER_NOTIFICATION","Поступил новый заказ, номер заказа - ORDER_NUMBER.");
         data.put("MESSAGE_REDIRECT_ORDER_NOTIFICATION","Новый перенаправленный заказ номер заказа - ORDER_NUMBER. Перенаправлен пользователем - SENDER");
+        data.put("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER","Нельзя изменить статус отмененного заказа!");
 
         data.put("ERROR_TITLE_EMPTY","Вы не ввели название!");
         data.put("ERROR_DATE_FORMAT","Неправильный формат даты!");

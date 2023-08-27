@@ -54,27 +54,27 @@ public class OrderService {
         else pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "date"));
 
         Store store = null;
-        if(!storeId.equals(0L))
+        if (!storeId.equals(0L))
             store = getStoreById(storeId);
 
         switch (status) {
-            case 1 :
+            case 1:
                 if (store == null) return orderRepository.findByStatus(OrderStatus.CANCELED, pageable);
                 else return orderRepository.findByStatusAndStore(OrderStatus.CANCELED, store, pageable);
-            case 2 :
+            case 2:
                 if (store == null) return orderRepository.findByStatus(OrderStatus.REQUEST, pageable);
-                return orderRepository.findByStatusAndStore(OrderStatus.REQUEST,store, pageable);
-            case 3 :
+                return orderRepository.findByStatusAndStore(OrderStatus.REQUEST, store, pageable);
+            case 3:
                 if (store == null) return orderRepository.findByStatus(OrderStatus.PAID, pageable);
-                return orderRepository.findByStatusAndStore(OrderStatus.PAID,store, pageable);
-            case 4 :
+                return orderRepository.findByStatusAndStore(OrderStatus.PAID, store, pageable);
+            case 4:
                 if (store == null) return orderRepository.findByStatus(OrderStatus.DELIVERING, pageable);
-                return orderRepository.findByStatusAndStore(OrderStatus.DELIVERING,store, pageable);
-            case 5 :
+                return orderRepository.findByStatusAndStore(OrderStatus.DELIVERING, store, pageable);
+            case 5:
                 if (store == null) return orderRepository.findByStatus(OrderStatus.FINISHED, pageable);
-                return orderRepository.findByStatusAndStore(OrderStatus.FINISHED,store, pageable);
-            default :
-                if(store == null) return orderRepository.findAll(pageable);
+                return orderRepository.findByStatusAndStore(OrderStatus.FINISHED, store, pageable);
+            default:
+                if (store == null) return orderRepository.findAll(pageable);
                 return orderRepository.findByStore(store, pageable);
         }
     }
@@ -224,21 +224,22 @@ public class OrderService {
             OrderItem orderItem = getOrderItemById(oi.getOrderItemId());
             ProductVariation pv = productVariationRepository.findById(oi.getProductVariationId()).orElseThrow(() -> new SearchException(SearchException.PRODUCT_VARIATION_NOT_FOUND));
 
-            if (pv.equals(orderItem.getProductVariation()))  continue;
-            if (isOrderContainsProductVariation(pv,orderItem)) throw new ExistException(ExistException.ORDER_ITEM_EXISTS);
+            if (pv.equals(orderItem.getProductVariation())) continue;
+            if (isOrderContainsProductVariation(pv, orderItem))
+                throw new ExistException(ExistException.ORDER_ITEM_EXISTS);
 
             int count = countOfProductVariationInStore(pv);
-            if(count < orderItem.getQuantity())
+            if (count < orderItem.getQuantity())
                 throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + pv.getSize() + " ) ", count);
             orderItem.setProductVariation(pv);
             orderItemRepository.save(orderItem);
         }
     }
 
-    private boolean isOrderContainsProductVariation(ProductVariation productVariation, OrderItem orderItem){
+    private boolean isOrderContainsProductVariation(ProductVariation productVariation, OrderItem orderItem) {
         Order order = getOrderByOrderItem(orderItem);
-        for(OrderItem oi : order.getOrderItems()){
-            if(productVariation.equals(oi.getProductVariation())) return true;
+        for (OrderItem oi : order.getOrderItems()) {
+            if (productVariation.equals(oi.getProductVariation())) return true;
         }
         return false;
     }
@@ -258,14 +259,26 @@ public class OrderService {
         updateOrderData(order);
     }
 
-    public void orderStatusUp(Long orderId) {
+    public void orderStatusUp(Long orderId) throws Exception {
         Order order = getOrderById(orderId);
+        if(order.getStatus().equals(OrderStatus.CANCELED))  throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
         order.setStatus(OrderStatus.values()[order.getStatus().ordinal() + 1]);
+        if (order.getStatus().equals(OrderStatus.PAID)) {
+            Store store = order.getStore();
+            if (order.getShipment() == null) store.balanceUp(order.getTotalPrice());
+            else store.balanceUp(order.getTotalPrice() - order.getShipment().getCost());
+        }
         orderRepository.save(order);
     }
 
-    public void orderStatusDown(Long orderId) {
+    public void orderStatusDown(Long orderId) throws Exception {
         Order order = getOrderById(orderId);
+        if(order.getStatus().equals(OrderStatus.CANCELED))  throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
+        if (order.getStatus().equals(OrderStatus.PAID)) {
+            Store store = order.getStore();
+            if(order.getShipment() == null) store.balanceDown(order.getTotalPrice());
+            else store.balanceDown((order.getTotalPrice() - order.getShipment().getCost()));
+        }
         order.setStatus(OrderStatus.values()[order.getStatus().ordinal() - 1]);
         orderRepository.save(order);
     }
@@ -279,7 +292,7 @@ public class OrderService {
             orderItemRepository.save(orderItem);
             Order order = getOrderByOrderItem(orderItem);
             updateOrderData(order);
-        }else {
+        } else {
             throw new Exception("Нельзя уменьшить количество товара оно минимально");
         }
     }
@@ -288,9 +301,9 @@ public class OrderService {
         OrderItem orderItem = getOrderItemById(orderItemId);
         int priceOfOne = orderItem.getPrice() / orderItem.getQuantity();
         int count = 0;
-        if(orderItem.getProductVariation() != null){
+        if (orderItem.getProductVariation() != null) {
             count = countOfProductVariationInStore(orderItem.getProductVariation());
-        }else{
+        } else {
             throw new Exception("Выберите размер товара перед увеличением количества");
         }
         if (orderItem.getQuantity() + 1 <= count) {
@@ -299,7 +312,7 @@ public class OrderService {
             orderItemRepository.save(orderItem);
             Order order = getOrderByOrderItem(orderItem);
             updateOrderData(order);
-        }else {
+        } else {
             throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + orderItem.getProductVariation().getSize() + " ) ", count);
         }
     }
@@ -313,7 +326,7 @@ public class OrderService {
             order.setStatus(OrderStatus.REQUEST);
             orderRepository.save(order);
             return order.getId();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new AccessDeniedException(AccessDeniedException.ONLY_ADMIN_OF_SHOP);
         }
     }
@@ -325,7 +338,7 @@ public class OrderService {
     public void addProductToOrder(Long orderId, Long productId) throws ExistException, NotEnoughException {
         Order order = getOrderById(orderId);
         Product product = getProductById(productId);
-        if(countOfProductInStore(product) < 1){
+        if (countOfProductInStore(product) < 1) {
             throw new NotEnoughException(product.getName(), 0);
         }
 
@@ -335,7 +348,7 @@ public class OrderService {
         orderItem.setPrice(product.getPrice());
 
         List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
-        if(productVariations.size() == 1) {
+        if (productVariations.size() == 1) {
             orderItem.setProductVariation(productVariations.get(0));
         }
         orderItemRepository.save(orderItem);
@@ -343,7 +356,8 @@ public class OrderService {
         orderRepository.save(order);
         updateOrderData(order);
     }
-    private Product getProductById(Long productId){
+
+    private Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 
@@ -351,12 +365,13 @@ public class OrderService {
         Order order = getOrderById(orderId);
         Store store = getStoreById(targetStoreId);
 
-        if(!order.getStore().equals(store)){
-            notificationService.createLocalOrderRedirectNotification(store.getAdmin(),order.getStore().getAdmin().getUsername(),orderId);
+        if (!order.getStore().equals(store)) {
+            notificationService.createLocalOrderRedirectNotification(store.getAdmin(), order.getStore().getAdmin().getUsername(), orderId);
             order.setStore(store);
             orderRepository.save(order);
         }
     }
+
     private Store getStoreById(Long targetStoreId) {
         return storeRepository.findById(targetStoreId).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
     }

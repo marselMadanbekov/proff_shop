@@ -88,22 +88,23 @@ public class CartService {
     }
 
     public Cart addProductToCart(String username, Long productId) throws ExistException, NotEnoughException {
+        Cart cart = getCartByUsername(username);
+        Product product = getProductById(productId);
+        if (countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(), 0);
         try {
-            Cart cart = getCartByUsername(username);
-            Product product = getProductById(productId);
-            if (countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(), 0);
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
             List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
-            if(productVariations.size() == 1){
+            if (productVariations.size() == 1) {
                 cartItem.setProductVariation(productVariations.get(0));
             }
             cartItemRepository.save(cartItem);
             cart.addItemToCart(cartItem);
             return cartRepository.save(cart);
-        }catch (Exception e){
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new ExistException(ExistException.CART_ITEM_EXIST);
         }
     }
@@ -119,10 +120,11 @@ public class CartService {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
             int count = countOfProductVariationInStore(productVariation);
-            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getSize() + " )", count);
-        }else{
+            if (count < quantity)
+                throw new NotEnoughException(product.getName() + " ( " + productVariation.getSize() + " )", count);
+        } else {
             int count = countOfProductInStore(product);
-            if(count < quantity) throw new NotEnoughException(product.getName() , count);
+            if (count < quantity) throw new NotEnoughException(product.getName(), count);
         }
         cartItemRepository.save(cartItem);
         cart.addItemToCart(cartItem);
@@ -130,21 +132,21 @@ public class CartService {
     }
 
     public Cart addProductToCart(HttpServletRequest request, Long productId) throws ExistException, NotEnoughException {
+        Cart cart = getCartByRequestCookies(request);
+        Product product = getProductById(productId);
+        if (countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(), 0);
         try {
-            Cart cart = getCartByRequestCookies(request);
-            Product product = getProductById(productId);
-            if (countOfProductInStore(product) < 1) throw new NotEnoughException(product.getName(), 0);
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
             List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
-            if(productVariations.size() == 1){
+            if (productVariations.size() == 1) {
                 cartItem.setProductVariation(productVariations.get(0));
             }
             cart.addItemToCart(cartItem);
             return cart;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ExistException(ExistException.CART_ITEM_EXIST);
         }
     }
@@ -160,10 +162,11 @@ public class CartService {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
             int count = countOfProductVariationInStore(productVariation);
-            if(count < quantity) throw new NotEnoughException(product.getName() + " ( " + productVariation.getSize() + " )", count);
-        }else{
+            if (count < quantity)
+                throw new NotEnoughException(product.getName() + " ( " + productVariation.getSize() + " )", count);
+        } else {
             int count = countOfProductInStore(product);
-            if(count < quantity) throw new NotEnoughException(product.getName() , count);
+            if (count < quantity) throw new NotEnoughException(product.getName(), count);
         }
         cart.addItemToCart(cartItem);
         return cart;
@@ -172,9 +175,9 @@ public class CartService {
     public Cart removeProductFromCart(String username, Long productId, String size) {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
-        if(size.isEmpty()){
+        if (size.isEmpty()) {
             cart.removeProduct(product);
-        }else{
+        } else {
             ProductVariation productVariation = productVariationRepository.findByParentAndSize(product, size).orElse(null);
             cart.removeProductVariation(productVariation);
         }
@@ -182,12 +185,12 @@ public class CartService {
         return cart;
     }
 
-    public Cart removeProductFromCart(HttpServletRequest request, Long productId,String size) throws ExistException {
+    public Cart removeProductFromCart(HttpServletRequest request, Long productId, String size) throws ExistException {
         Cart cart = getCartByRequestCookies(request);
         Product product = getProductById(productId);
-        if(Objects.equals(size, "")){
+        if (Objects.equals(size, "")) {
             cart.removeProduct(product);
-        }else{
+        } else {
             ProductVariation productVariation = productVariationRepository.findByParentAndSize(product, size).orElse(null);
             cart.removeProductVariation(productVariation);
         }
@@ -222,28 +225,29 @@ public class CartService {
         Cart cart = getCartByRequestCookies(request);
         return cartUpdate(cart, cartItems);
     }
+
     public void cartUpdateForAuthUser(String username, List<CartUpdateRequest> cartItems) throws NotEnoughException {
         Cart cart = getCartByUsername(username);
         cartUpdate(cart, cartItems);
     }
+
     private Cart cartUpdate(Cart cart, List<CartUpdateRequest> cartItems) throws NotEnoughException {
         for (CartUpdateRequest item : cartItems) {
             Product product = getProductById(item.getProductId());
-            if(item.getProductVariationId() != null && item.getProductVariationId() != 0){
+            if (item.getProductVariationId() != null && item.getProductVariationId() != 0) {
                 ProductVariation pv = getProductVariationById(item.getProductVariationId());
                 int count = countOfProductVariationInStore(pv);
-                if(count < item.getNewQuantity())  {
+                if (count < item.getNewQuantity()) {
                     throw new NotEnoughException(product.getName() + " ( " + pv.getSize() + " )", count);
                 }
-            }else{
+            } else {
                 int count = countOfProductInStore(product);
-                if(count < item.getNewQuantity()) throw new NotEnoughException(product.getName(), count);
+                if (count < item.getNewQuantity()) throw new NotEnoughException(product.getName(), count);
             }
             cart.quantityUp(getProductById(item.getProductId()), item.getNewQuantity());
         }
         return cart;
     }
-
 
 
     private ProductVariation getProductVariationById(Long variationId) {
@@ -254,19 +258,19 @@ public class CartService {
         return stockRepository.findByParticipants(product).orElse(null);
     }
 
-    private Integer countOfProductInStore(Product product){
+    private Integer countOfProductInStore(Product product) {
         List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
         int count = 0;
-        for(ProductVariation productVariation: productVariations){
-            count+=countOfProductVariationInStore(productVariation);
+        for (ProductVariation productVariation : productVariations) {
+            count += countOfProductVariationInStore(productVariation);
         }
         return count;
     }
 
-    private Integer countOfProductVariationInStore(ProductVariation productVariation){
+    private Integer countOfProductVariationInStore(ProductVariation productVariation) {
         List<StoreHouse> storeHouses = storeHouseRepository.findStoreHouseByProduct(productVariation);
         int count = 0;
-        for(StoreHouse storeHouse: storeHouses){
+        for (StoreHouse storeHouse : storeHouses) {
             count += storeHouse.getQuantity();
         }
         return count;

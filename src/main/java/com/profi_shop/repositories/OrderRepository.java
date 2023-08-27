@@ -4,12 +4,10 @@ import com.profi_shop.model.Order;
 import com.profi_shop.model.OrderItem;
 import com.profi_shop.model.Store;
 import com.profi_shop.model.enums.OrderStatus;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -27,11 +25,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT SUM(o.totalPrice)" +
             " FROM Order o WHERE (o.store = :store)" +
-            " and (o.firstname is not NULL) " +
+            " and (o.firstname IS NOT NULL) " +
             " and (o.status = :status)" +
+            " and (o.shipment IS NULL)" +
             " and (o.date >= :startDate)" +
             " and (o.date <= :endDate)")
-    Optional<Integer> calculateTotalOnlineRevenueForStore(OrderStatus status,Store store, Date startDate, Date endDate);
+    Optional<Integer> calculateTotalOnlineRevenueForStoreLessShipment(OrderStatus status,Store store, Date startDate, Date endDate);
+
+    @Query("SELECT SUM(o.totalPrice - o.shipment.cost)" +
+            " FROM Order o WHERE (o.store = :store)" +
+            " and (o.firstname IS NOT NULL) " +
+            " and (o.status = :status)" +
+            " and (o.shipment IS NOT NULL)" +
+            " and (o.date >= :startDate)" +
+            " and (o.date <= :endDate)")
+    Optional<Integer> calculateTotalOnlineRevenueForStoreMinusShipment(OrderStatus status,Store store, Date startDate, Date endDate);
+
 
     @Query("SELECT SUM(o.totalPrice)" +
             " FROM Order o WHERE (o.store = :store) " +
@@ -47,4 +56,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             " and (o.date >= :startDate)" +
             " and (o.date <= :endDate)")
     Optional<Integer> countOrdersByStatus(OrderStatus status, Store store, Date startDate, Date endDate);
+
+    @Query("SELECT o FROM Order o WHERE (o.store = :store)" +
+            " and (o.firstname IS NOT NULL) " +
+            " and (o.status = :status)")
+    Page<Order> getPageOnlineSales(Store store, Pageable pageable, OrderStatus status);
+    @Query("SELECT o FROM Order o WHERE (o.store = :store)" +
+            " and (o.firstname IS NULL) " +
+            " and (o.status = :status)")
+    Page<Order> getPageOfflineSales(Store store, Pageable pageable, OrderStatus status);
 }

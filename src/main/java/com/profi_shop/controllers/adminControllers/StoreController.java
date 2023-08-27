@@ -1,17 +1,23 @@
 package com.profi_shop.controllers.adminControllers;
 
+import com.profi_shop.dto.ProductQuantityDTO;
 import com.profi_shop.dto.StoreDTO;
+import com.profi_shop.model.Order;
 import com.profi_shop.model.Store;
 import com.profi_shop.services.StoreAnalyticsService;
 import com.profi_shop.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -27,12 +33,15 @@ public class StoreController {
     }
 
     @PostMapping("/create-store")
-    public String createStore(@ModelAttribute StoreDTO storeDTO) {
+    public ResponseEntity<Map<String,String>> createStore(@ModelAttribute StoreDTO storeDTO) {
+        Map<String,String> response = new HashMap<>();
         try {
             storeService.createStore(storeDTO);
-            return "admin/store/createStore";
+            response.put("message","Магазин успешно создан");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return "redirect:/";
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -40,6 +49,8 @@ public class StoreController {
     public String storeDetails(@RequestParam("storeId") Long storeId,
                                @RequestParam(value = "dateFrom",required = false) Optional<Date> startDate,
                                @RequestParam(value = "dateTo",required = false) Optional<Date> endDate,
+                               @RequestParam(value = "page",required = false) Optional<Integer> page,
+                               @RequestParam(value = "sort",required = false) Optional<Integer> sort,
                                Model model) {
         Store store = storeService.getStoreById(storeId);
         int onlineSales = analyticsService.sumOfOnlineSalesByStore(storeId,
@@ -53,8 +64,12 @@ public class StoreController {
                 startDate.orElse(Date.valueOf(LocalDate.now().minusDays(30))),
                 endDate.orElse(Date.valueOf(LocalDate.now())));
 
+        Page<ProductQuantityDTO> products = analyticsService.getProductAndQuantityPage(storeId,page.orElse(0),sort.orElse(0));
+
+        model.addAttribute("products", products);
         model.addAttribute("onlineSales", onlineSales);
         model.addAttribute("offlineSales", offlineSales);
+        model.addAttribute("selectedSort", sort.orElse(0));
         model.addAttribute("canceledOrders", canceledOrders);
         model.addAttribute("startDate", startDate.orElse(Date.valueOf(LocalDate.now().minusDays(30))));
         model.addAttribute("endDate", endDate.orElse(Date.valueOf(LocalDate.now())));

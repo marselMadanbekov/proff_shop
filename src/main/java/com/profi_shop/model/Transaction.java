@@ -6,17 +6,18 @@ import lombok.Data;
 import java.sql.Date;
 import java.time.LocalDate;
 
-@Data
 @Entity
-@Table(name = "consumptions")
-public class Consumption {
+@Data
+public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer amount;
     @ManyToOne
-    private Store store;
-    private String description;
-    private int amount;
+    private Store sender;
+    @ManyToOne
+    private Store target;
     private Date date;
 
     @PrePersist

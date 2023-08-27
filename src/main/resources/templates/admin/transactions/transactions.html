@@ -223,194 +223,26 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0" th:text="${store.town}"></h4>
-                        </div>
-                        <div>
-                            <h4 th:text="'Касса : ' + ${store.balance}"></h4>
+                            <h4 class="font-weight-bold mb-0" th:text="'Транзакции магазина : ' + ${store.town}"></h4>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-7 grid-margin stretch-card">
-                    <div class="card border-bottom-0">
-                        <div class="card-body pb-0">
-                            <p class="card-title">Отчет</p>
-                            <p class="text-muted font-weight-light">Выберите начальную и конечную даты в которых
-                                хотели просмотреть отчет о продажах</p>
-                            <form id="dateForm">
-                                <input id="storeId" hidden th:value="${store.id}">
-                                <div class="d-flex flex-wrap justify-content-between mt-1">
-                                    <div class="d-flex">
-                                        <div class="coc-form">
-                                            <div class="coc-block-row">
-                                                <label class="text-muted font-weight-light" for="dateFrom">с</label>
-                                                <div class="coc-block">
-                                                    <input class="coc-input" type="date" name="startDate" id="dateFrom"
-                                                           th:value="${startDate}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="coc-form">
-                                            <div class="coc-block-row">
-                                                <label class="text-muted font-weight-light" for="dateTo">по</label>
-                                                <div class="coc-block">
-                                                    <input class="coc-input" type="date" name="endDate" id="dateTo"
-                                                           th:value="${endDate}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-sm btn-primary ml-1" type="submit">применить</button>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="table-responsive" style="margin-top: 5px;">
-                                <table class="table table-hover">
-                                    <tbody>
-                                    <tr>
-                                        <td>Онлайн продажи</td>
-                                        <td th:text="${onlineSales} + ' сом'"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Офлайн продажи</td>
-                                        <td th:text="${offlineSales} + ' сом'"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Отмененные заказы</td>
-                                        <td th:text="${canceledOrders} + ' шт'"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a th:href="'/admin/consumptions?storeId='+ ${store.id}">Расходы</a></td>
-                                        <td>1235 сом</td>
-                                    </tr>
-                                    <tr>
-                                        <td><a th:href="'/admin/transactions?storeId=' + ${store.id}">Транзакции</a></td>
-                                        <td>53275 сом</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <div>
-                                    <h4 class="card-title mt-1">Администратор</h4>
-                                </div>
-                                <div>
-                                    <h3 class="card-title mt-1" th:if="${store.admin == null}">Администратор не
-                                        назначен</h3>
-                                </div>
-                            </div>
-                            <div class="table-responsive" th:if="${store.admin != null}">
-                                <table class="table table-striped">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Name
-                                        </td>
-                                        <td th:text="${store.admin.firstname} + ' ' + ${store.admin.lastname}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Номер
-                                        </td>
-                                        <td th:text="${store.admin.phone_number}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Email
-                                        </td>
-                                        <td th:text="${store.admin.email}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
-                                <a class="btn btn-sm btn-success btn-rounded"
-                                   th:href="@{${'/admin/superAdmin/create-admin?storeId=' + store.id}}">New admin</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-5 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <div>
-                                    <h4 class="card-title mt-1">Расходы</h4>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Описание</th>
-                                        <th>Сумма</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Обед
-                                        </td>
-                                        <td>
-                                            200
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Ужин
-                                        </td>
-                                        <td>
-                                            300
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Завтрак
-                                        </td>
-                                        <td>
-                                            100
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Сегодняк
-                                        </td>
-                                        <td>
-                                            400
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <p class="card-title mb-0 mt-1">В магазине</p>
+                                <p class="card-title mb-0 mt-1">Все транзакции</p>
                                 <div class="form-group form-inline">
                                     <label class="mr-2">Сортировать по</label>
                                     <select class="form-control form-control-sm" id="sortSelect">
-                                        <option th:value="0" th:selected="${selectedSort == 0}">По возрастанию кол-ва
+                                        <option th:value="0" th:selected="${selectedSort == 0}">По дате : новые</option>
+                                        <option th:value="1" th:selected="${selectedSort == 1}">По дате : старые
                                         </option>
-                                        <option th:value="1" th:selected="${selectedSort == 1}">По убыванию кол-ва
+                                        <option th:value="2" th:selected="${selectedSort == 2}">По сумме : возрастание
+                                        </option>
+                                        <option th:value="3" th:selected="${selectedSort == 3}">По сумме : убывание
                                         </option>
                                     </select>
                                 </div>
@@ -419,49 +251,87 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Фото</th>
-                                        <th>Продукт</th>
-                                        <th>Размер</th>
-                                        <th>Стоимость</th>
-                                        <th>Количество</th>
+                                        <th>№</th>
+                                        <th>Отправитель</th>
+                                        <th>Получатель</th>
+                                        <th>Сумма</th>
+                                        <th>Дата</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="product : ${products}">
-                                        <td><img th:src="'/products/' + ${product.photo}"></td>
-                                        <td><a class="med-text"
-                                               th:href="'/admin/productDetails?productId=' + ${product.id}"
-                                               th:text="${product.name}"></a></td>
-                                        <td th:text="${product.size}"></td>
-                                        <td th:text="${product.price}"></td>
-                                        <td th:text="${product.quantity}"></td>
+                                    <tr th:each="transaction : ${transactions.getContent()}">
+                                        <td th:text="${transaction.id}"></td>
+                                        <td th:text="${transaction.sender.town}"></td>
+                                        <td th:text="${transaction.target.town}"></td>
+                                        <td th:text="${transaction.amount}"></td>
+                                        <td th:text="${transaction.date}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pagination-container">
+                            <div class="pagination-container" th:if="${transactions != null}">
                                 <div class="pagination">
-                                    <input hidden id="page" th:value="${products.number}">
                                     <ul>
-                                        <li th:if="${products.number > 0}" class="pagination-link" th:attr="page=${0}">
+                                        <li th:if="${transactions.number > 0}" class="pagination-link"
+                                            th:attr="page=${0}">
                                             <a><<</a>
                                         </li>
-                                        <li th:if="${products.number > 0}" class="pagination-link"
-                                            th:attr="page=${products.number - 1}"><a th:text="${products.number}"></a>
+                                        <li th:if="${transactions.number > 0}" class="pagination-link"
+                                            th:attr="page=${transactions.number - 1}"><a
+                                                th:text="${transactions.number}"></a>
                                         </li>
-                                        <li class="current"><a href="#" th:text="${products.number + 1}"></a></li>
-                                        <li th:if="${products.number + 1 < products.totalPages}" class="pagination-link"
-                                            th:attr="page=${products.number + 1}"><a href="#"
-                                                                                     th:text="${products.number + 2}"></a>
+                                        <li class="current"><a th:text="${transactions.number + 1}"></a></li>
+                                        <li th:if="${transactions.number + 1 < transactions.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${transactions.number + 1}"><a
+                                                th:text="${transactions.number + 2}"></a>
                                         </li>
-                                        <li th:if="${products.number + 2 < products.totalPages}" class="pagination-link"
-                                            th:attr="page=${products.number + 2}"><a href="#"
-                                                                                     th:text="${products.number + 3}"></a>
+                                        <li th:if="${transactions.number + 2 < transactions.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${transactions.number + 2}"><a
+                                                th:text="${transactions.number + 3}"></a>
                                         </li>
-                                        <li th:if="${products.number + 1 < products.totalPages}" class="pagination-link"
-                                            th:attr="page=${products.totalPages - 1}"><a href="#">>></a>
+                                        <li th:if="${transactions.number + 1< transactions.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${transactions.totalPages - 1}"><a>>></a>
                                         </li>
                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Создать новую транзакцию</h4>
+                            <form class="forms-sample" id="transactionForm">
+                                <input id="storeId" name="storeId" th:value="${store.id}" hidden>
+                                <div class="form-group">
+                                    <label for="senderStore">Отправитель</label>
+                                    <select class="form-control" name="senderStoreId" id="senderStore">
+                                        <option th:each="currentStore : ${stores}" th:value="${currentStore.id}"
+                                                th:text="${currentStore.town}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="targetStore">Получатель</label>
+                                    <select class="form-control" name="targetStoreId" id="targetStore">
+                                        <option th:each="currentStore : ${stores}" th:value="${currentStore.id}"
+                                                th:text="${currentStore.town}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">Сумма</label>
+                                    <input type="number" class="form-control" name="amount" id="amount"
+                                           placeholder="Сумма" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Создать</button>
+                            </form>
+                            <div id="progressModal" class="modal">
+                                <div class="modal-content">
+                                    <div class="progress-spinner"></div>
+                                    <p>Sending...</p>
                                 </div>
                             </div>
                         </div>
@@ -472,17 +342,19 @@
     </div>
 </div>
 <!-- container-scroller -->
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- plugins:js -->
 <script src="/static/vendors/base/vendor.bundle.base.js"></script>
-<script src="/static/vendors/chart.js/Chart.min.js"></script>
+<!-- Plugin js for this page-->
+<!-- inject:js -->
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/store/storeDetails.js"></script>
-
+<script src="/static/js/transactions/transactions.js"></script>
+<!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
 </body>
 
 </html>
+

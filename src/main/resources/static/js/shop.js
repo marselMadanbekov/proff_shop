@@ -26,39 +26,48 @@ document.addEventListener('DOMContentLoaded', function() {
     categoryItems.forEach(function(item) {
         item.addEventListener('click', function(event) {
             event.preventDefault();
+            let isCurrent = item.classList.contains('current');
             currentCategory = item.getAttribute("categoryId");
             // Выполните дополнительные действия, если нужно
             // Например, добавьте класс 'active' к выбранному элементу
             categoryItems.forEach(function(item) {
                 item.classList.remove('current');
             });
-            item.classList.add('current');
-            console.log('hello');
+            if (!isCurrent) {
+                item.classList.add('current');
+            }else
+                currentCategory = 0;
         });
     });
 
     brandItems.forEach(function (item){
         item.addEventListener('click', function (e){
             e.preventDefault();
+            let isCurrent = item.classList.contains('current');
             currentBrand = item.getAttribute('brand');
             brandItems.forEach(function (item){
                 item.classList.remove('current');
             })
-            item.classList.add('current');
-            console.log('hello');
-
+            if (!isCurrent) {
+                item.classList.add('current');
+            }else
+                currentBrand = null;
         })
     })
 
     tagItems.forEach(function (item){
         item.addEventListener('click',function (e){
             e.preventDefault();
+            let isCurrent = item.classList.contains('current');
+
             currentTag = item.getAttribute('tag');
             tagItems.forEach(function (item){
                 item.classList.remove('current');
             })
-            item.classList.add('current');
-            console.log('hello');
+            if (!isCurrent) {
+                item.classList.add('current');
+            }else
+                currentTag = null;
 
         })
     })
@@ -67,13 +76,15 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', function(event) {
             event.preventDefault();
             currentSize = item.getAttribute("size");
-            console.log(currentSize);
-
+            let isCurrent = item.classList.contains('current');
             sizeItems.forEach(function(item) {
                 item.classList.remove('current');
             });
-            item.classList.add('current');
-            console.log('hello');
+            if (!isCurrent) {
+                item.classList.add('current');
+            }else
+                currentSize = null;
+
         });
     });
 

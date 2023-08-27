@@ -1,9 +1,11 @@
 package com.profi_shop.services;
 
 import com.profi_shop.dto.StoreDTO;
+import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.Store;
 import com.profi_shop.repositories.StoreRepository;
+import com.profi_shop.validations.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +25,11 @@ public class StoreService {
         this.storeHouseService = storeHouseService;
     }
 
-    public void createStore(StoreDTO storeToCreate){
+    public void createStore(StoreDTO storeToCreate) throws InvalidDataException {
         Store store = new Store();
         store.setName(storeToCreate.getName());
         store.setTown(storeToCreate.getTown());
-        store.setPhone_number(storeToCreate.getPhone_number());
+        store.setPhone_number(Validator.validNumber(storeToCreate.getPhone_number()));
         store.setAddress(storeToCreate.getAddress());
         storeRepository.save(store);
     }

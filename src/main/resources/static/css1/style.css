@@ -58,6 +58,19 @@
 /* === Import template variables === */
 /*-------------------------------------------------------------------*/
 /* === SCSS Compass Functions === */
+
+.long-text {
+  max-width: 300px; /* Задайте желаемую максимальную ширину */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; /* Добавляет многоточие, если текст не помещается */
+}
+.med-text {
+  max-width: 150px; /* Задайте желаемую максимальную ширину */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; /* Добавляет многоточие, если текст не помещается */
+}
 .modal {
   display: none;
   position: fixed;

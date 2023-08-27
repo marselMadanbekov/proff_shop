@@ -17,4 +17,13 @@ public class Store {
     @OneToOne
     private User admin;
     private String phone_number;
+
+
+    public void balanceUp(Integer sum){
+        this.balance += sum;
+    }
+
+    public void balanceDown(Integer sum){
+        this.balance -= sum;
+    }
 }
