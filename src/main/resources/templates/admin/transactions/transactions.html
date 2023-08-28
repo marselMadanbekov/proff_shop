@@ -170,49 +170,55 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/dashboard">
                         <i class="ti-shield menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Главная</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
                         <i class="ti-shopping-cart-full menu-icon"></i>
-                        <span class="menu-title">Products</span>
+                        <span class="menu-title">Товары</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/categories">
                         <i class="ti-layout-list-post menu-icon"></i>
-                        <span class="menu-title">Categories</span>
+                        <span class="menu-title">Категории</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/orders">
                         <i class="ti-pie-chart menu-icon"></i>
-                        <span class="menu-title">Orders</span>
+                        <span class="menu-title">Заказы</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/stores">
                         <i class="ti-home menu-icon"></i>
-                        <span class="menu-title">Stores</span>
+                        <span class="menu-title">Магазины</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/stocks">
                         <i class="ti-gift menu-icon"></i>
-                        <span class="menu-title">Stocks</span>
+                        <span class="menu-title">Акции</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/shipments">
                         <i class="ti-truck menu-icon"></i>
-                        <span class="menu-title">Shipments</span>
+                        <span class="menu-title">Доставки</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/coupons">
                         <i class="ti-medall menu-icon"></i>
-                        <span class="menu-title">Coupons</span>
+                        <span class="menu-title">Купоны</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/superAdmin/main-store">
+                        <i class="ti-direction menu-icon"></i>
+                        <span class="menu-title">Головной офис</span>
                     </a>
                 </li>
             </ul>
@@ -229,20 +235,59 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-7 grid-margin stretch-card">
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Создать транзакцию</h4>
+                            <form class="form-inline justify-content-between" id="transactionForm">
+                                <input id="storeId" name="storeId" th:value="${store.id}" hidden>
+                                <div class="m-2">
+                                    <div class="mb-1">
+                                        <label for="senderStore">Отправитель</label>
+                                    </div>
+                                    <select class="form-control" name="senderStoreId" id="senderStore">
+                                        <option th:each="currentStore : ${stores}" th:value="${currentStore.id}"
+                                                th:text="${currentStore.town}"></option>
+                                    </select>
+                                </div>
+                                <div class="m-2">
+                                    <div class="mb-1">
+                                        <label for="targetStore">Получатель</label>
+                                    </div>
+                                    <select class="form-control" name="targetStoreId" id="targetStore">
+                                        <option value="0">Головной офис</option>
+                                        <option th:each="currentStore : ${stores}" th:value="${currentStore.id}"
+                                                th:text="${currentStore.town}"></option>
+                                    </select>
+                                </div>
+                                <div class="m-2">
+                                    <div class="mb-1">
+                                        <label for="amount">Сумма</label>
+                                    </div>
+                                    <input type="number" class="form-control" name="amount" id="amount"
+                                           placeholder="Сумма" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Создать</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap justify-content-between">
-                                <p class="card-title mb-0 mt-1">Все транзакции</p>
+                                <p class="card-title mb-0 mt-1">Отправленные транзакции</p>
                                 <div class="form-group form-inline">
                                     <label class="mr-2">Сортировать по</label>
                                     <select class="form-control form-control-sm" id="sortSelect">
-                                        <option th:value="0" th:selected="${selectedSort == 0}">По дате : новые</option>
-                                        <option th:value="1" th:selected="${selectedSort == 1}">По дате : старые
+                                        <option value="0" th:selected="${selectedSort == 0}">По дате : новые</option>
+                                        <option value="1" th:selected="${selectedSort == 1}">По дате : старые
                                         </option>
-                                        <option th:value="2" th:selected="${selectedSort == 2}">По сумме : возрастание
+                                        <option value="2" th:selected="${selectedSort == 2}">По сумме : возрастание
                                         </option>
-                                        <option th:value="3" th:selected="${selectedSort == 3}">По сумме : убывание
+                                        <option value="3" th:selected="${selectedSort == 3}">По сумме : убывание
                                         </option>
                                     </select>
                                 </div>
@@ -256,44 +301,52 @@
                                         <th>Получатель</th>
                                         <th>Сумма</th>
                                         <th>Дата</th>
+                                        <th>Статус</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="transaction : ${transactions.getContent()}">
+                                    <tr th:each="transaction : ${sendTransactions.getContent()}">
                                         <td th:text="${transaction.id}"></td>
                                         <td th:text="${transaction.sender.town}"></td>
-                                        <td th:text="${transaction.target.town}"></td>
+                                        <td th:if="${not transaction.toMainStore}"
+                                            th:text="${transaction.target.town}"></td>
+                                        <td th:if="${transaction.toMainStore}">Головной офис</td>
                                         <td th:text="${transaction.amount}"></td>
                                         <td th:text="${transaction.date}"></td>
+                                        <td>
+                                            <p class="badge badge-warning" th:if="${not transaction.allowed}">В
+                                                ОЖИДАНИИ</p>
+                                            <p class="badge badge-success" th:if="${transaction.allowed}">ОДОБРЕНО</p>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pagination-container" th:if="${transactions != null}">
+                            <div class="pagination-container" th:if="${sendTransactions != null}">
                                 <div class="pagination">
                                     <ul>
-                                        <li th:if="${transactions.number > 0}" class="pagination-link"
+                                        <li th:if="${sendTransactions.number > 0}" class="pagination-link"
                                             th:attr="page=${0}">
                                             <a><<</a>
                                         </li>
-                                        <li th:if="${transactions.number > 0}" class="pagination-link"
-                                            th:attr="page=${transactions.number - 1}"><a
-                                                th:text="${transactions.number}"></a>
+                                        <li th:if="${sendTransactions.number > 0}" class="pagination-link"
+                                            th:attr="page=${sendTransactions.number - 1}"><a
+                                                th:text="${sendTransactions.number}"></a>
                                         </li>
-                                        <li class="current"><a th:text="${transactions.number + 1}"></a></li>
-                                        <li th:if="${transactions.number + 1 < transactions.totalPages}"
+                                        <li class="current"><a th:text="${sendTransactions.number + 1}"></a></li>
+                                        <li th:if="${sendTransactions.number + 1 < sendTransactions.totalPages}"
                                             class="pagination-link"
-                                            th:attr="page=${transactions.number + 1}"><a
-                                                th:text="${transactions.number + 2}"></a>
+                                            th:attr="page=${sendTransactions.number + 1}"><a
+                                                th:text="${sendTransactions.number + 2}"></a>
                                         </li>
-                                        <li th:if="${transactions.number + 2 < transactions.totalPages}"
+                                        <li th:if="${sendTransactions.number + 2 < sendTransactions.totalPages}"
                                             class="pagination-link"
-                                            th:attr="page=${transactions.number + 2}"><a
-                                                th:text="${transactions.number + 3}"></a>
+                                            th:attr="page=${sendTransactions.number + 2}"><a
+                                                th:text="${sendTransactions.number + 3}"></a>
                                         </li>
-                                        <li th:if="${transactions.number + 1< transactions.totalPages}"
+                                        <li th:if="${sendTransactions.number + 1< sendTransactions.totalPages}"
                                             class="pagination-link"
-                                            th:attr="page=${transactions.totalPages - 1}"><a>>></a>
+                                            th:attr="page=${sendTransactions.totalPages - 1}"><a>>></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -301,37 +354,91 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5 grid-margin">
+            </div>
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Создать новую транзакцию</h4>
-                            <form class="forms-sample" id="transactionForm">
-                                <input id="storeId" name="storeId" th:value="${store.id}" hidden>
-                                <div class="form-group">
-                                    <label for="senderStore">Отправитель</label>
-                                    <select class="form-control" name="senderStoreId" id="senderStore">
-                                        <option th:each="currentStore : ${stores}" th:value="${currentStore.id}"
-                                                th:text="${currentStore.town}"></option>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <p class="card-title mb-0 mt-1">Поступившие транзакции</p>
+                                <div class="form-group form-inline">
+                                    <label class="mr-2">Сортировать по</label>
+                                    <select class="form-control form-control-sm" id="recSortSelect">
+                                        <option value="0" th:selected="${recSort == 0}">По дате : новые
+                                        </option>
+                                        <option value="1" th:selected="${recSort == 1}">По дате : старые
+                                        </option>
+                                        <option value="2" th:selected="${recSort == 2}">По сумме :
+                                            возрастание
+                                        </option>
+                                        <option value="3" th:selected="${recSort == 3}">По сумме : убывание
+                                        </option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="targetStore">Получатель</label>
-                                    <select class="form-control" name="targetStoreId" id="targetStore">
-                                        <option th:each="currentStore : ${stores}" th:value="${currentStore.id}"
-                                                th:text="${currentStore.town}"></option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="amount">Сумма</label>
-                                    <input type="number" class="form-control" name="amount" id="amount"
-                                           placeholder="Сумма" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary mr-2">Создать</button>
-                            </form>
-                            <div id="progressModal" class="modal">
-                                <div class="modal-content">
-                                    <div class="progress-spinner"></div>
-                                    <p>Sending...</p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>№</th>
+                                        <th>Отправитель</th>
+                                        <th>Получатель</th>
+                                        <th>Сумма</th>
+                                        <th>Дата</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="transaction : ${receivedTransactions.getContent()}">
+                                        <td th:text="${transaction.id}"></td>
+                                        <td th:text="${transaction.sender.town}"></td>
+                                        <td th:text="${transaction.target.town}"></td>
+                                        <td th:text="${transaction.amount}"></td>
+                                        <td th:text="${transaction.date}"></td>
+                                        <td>
+                                            <p class="badge badge-warning" th:if="${not transaction.allowed}">В
+                                                ОЖИДАНИИ</p>
+                                            <p class="badge badge-success" th:if="${transaction.allowed}">
+                                                ОДОБРЕНО</p>
+                                        </td>
+                                        <td th:if="${not transaction.allowed}">
+                                            <div>
+                                                <button class="btn btn-sm btn-primary allowTr"
+                                                        th:attr="transactionId=${transaction.id}">Одобрить
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container" th:if="${receivedTransactions != null}">
+                                <div class="pagination">
+                                    <ul>
+                                        <li th:if="${receivedTransactions.number > 0}" class="rec-pagination-link"
+                                            th:attr="page=${0}">
+                                            <a><<</a>
+                                        </li>
+                                        <li th:if="${receivedTransactions.number > 0}" class="rec-pagination-link"
+                                            th:attr="page=${receivedTransactions.number - 1}"><a
+                                                th:text="${receivedTransactions.number}"></a>
+                                        </li>
+                                        <li class="current"><a th:text="${receivedTransactions.number + 1}"></a></li>
+                                        <li th:if="${receivedTransactions.number + 1 < receivedTransactions.totalPages}"
+                                            class="rec-pagination-link"
+                                            th:attr="page=${receivedTransactions.number + 1}"><a
+                                                th:text="${receivedTransactions.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${receivedTransactions.number + 2 < receivedTransactions.totalPages}"
+                                            class="rec-pagination-link"
+                                            th:attr="page=${receivedTransactions.number + 2}"><a
+                                                th:text="${receivedTransactions.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${receivedTransactions.number + 1< receivedTransactions.totalPages}"
+                                            class="rec-pagination-link"
+                                            th:attr="page=${receivedTransactions.totalPages - 1}"><a>>></a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

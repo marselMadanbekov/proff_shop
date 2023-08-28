@@ -51,6 +51,7 @@ public class Text {
         data.put("MESSAGE_ORDER_NOTIFICATION","Поступил новый заказ, номер заказа - ORDER_NUMBER.");
         data.put("MESSAGE_REDIRECT_ORDER_NOTIFICATION","Новый перенаправленный заказ номер заказа - ORDER_NUMBER. Перенаправлен пользователем - SENDER");
         data.put("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER","Нельзя изменить статус отмененного заказа!");
+        data.put("MESSAGE_NEW_TRANSACTION","Новый перевод с филиала - SENDER , в филиал - TARGET в сумме ( AMOUNT ). Чтобы он вступил в силу вам нужно его одобрить. Чтобы одобрить перейдите в раздел ТРАНЗАКЦИИ");
 
         data.put("ERROR_TITLE_EMPTY","Вы не ввели название!");
         data.put("ERROR_DATE_FORMAT","Неправильный формат даты!");
@@ -69,6 +70,7 @@ public class Text {
         data.put("ERROR_PRODUCT_GROUP_NOT_FOUND","Карточка не найдена!");
         data.put("ERROR_NOTIFICATION_NOT_FOUND","Уведомление не найдено!");
         data.put("ERROR_ORDER_ITEM_NOT_FOUND","Элемент заказа не найден!");
+        data.put("ERROR_TRANSACTION_NOT_FOUND","Транзакция не найдена!");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 
@@ -88,9 +90,11 @@ public class Text {
         data.put("ERROR_PASSWORD_EMPTY","Пароль не должен быть пустым!");
         data.put("ERROR_USERNAME_EMPTY","Имя пользователя не может быть пустым!");
         data.put("ERROR_AGE_MUST_BE_BETWEEN_0_100","Возраст должен быть в диапазоне 0-100!");
-        data.put("ERROR_FOREIGN_BRANCH","Вы не можете призводить манипуляции над данным филиалом!");
+        data.put("ERROR_FOREIGN_BRANCH","Вы не можете производить манипуляции над данным филиалом!");
         data.put("ERROR_FOREIGN_ACCOUNT","Вы не можете производить манипуляции над чужим аккаунтом!");
         data.put("ERROR_ONLY_ADMIN_OF_SHOP","Только администратор конкретного филиала может создавать заказы!");
+        data.put("ERROR_FOREIGN_TRANSACTION","Вы не являетесь администратором данного филиала, и не можете изменять его транзакции!");
+        data.put("ERROR_ONLY_SUPER_ADMIN","У вас недостаточно прав для изменения. Действие только для владельца магазина!");
 
         data.put("ERROR_INVALID_NAME","В имени есть недопустимые символы!");
         data.put("ERROR_INVALID_AGE","Возраст введен неверно!");

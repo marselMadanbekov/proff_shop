@@ -20,6 +20,9 @@ public class Transaction {
     private Store target;
     private Date date;
 
+    private boolean allowed;
+    private boolean toMainStore;
+
     @PrePersist
     private void onCreate(){
         this.date = Date.valueOf(LocalDate.now());

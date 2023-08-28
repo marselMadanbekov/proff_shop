@@ -29,4 +29,8 @@ public class MainStore {
     public void deletePhone(String phone) {
         this.phone_numbers.remove(phone);
     }
+
+    public void balanceUp(int sum){
+        this.balance += sum;
+    }
 }

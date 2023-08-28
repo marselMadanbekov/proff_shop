@@ -166,4 +166,8 @@ public class UserService {
     public List<User> getAdmins() {
         return userRepository.findByRole(Role.ROLE_ADMIN);
     }
+
+    public User getSuperAdmin() {
+        return userRepository.findByRole(Role.ROLE_SUPER_ADMIN).get(0);
+    }
 }

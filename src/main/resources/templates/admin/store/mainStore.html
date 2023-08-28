@@ -150,49 +150,55 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/dashboard">
                         <i class="ti-shield menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Главная</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
                         <i class="ti-shopping-cart-full menu-icon"></i>
-                        <span class="menu-title">Products</span>
+                        <span class="menu-title">Товары</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/categories">
                         <i class="ti-layout-list-post menu-icon"></i>
-                        <span class="menu-title">Categories</span>
+                        <span class="menu-title">Категории</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/orders">
                         <i class="ti-pie-chart menu-icon"></i>
-                        <span class="menu-title">Orders</span>
+                        <span class="menu-title">Заказы</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/stores">
                         <i class="ti-home menu-icon"></i>
-                        <span class="menu-title">Stores</span>
+                        <span class="menu-title">Магазины</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/stocks">
                         <i class="ti-gift menu-icon"></i>
-                        <span class="menu-title">Stocks</span>
+                        <span class="menu-title">Акции</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/shipments">
                         <i class="ti-truck menu-icon"></i>
-                        <span class="menu-title">Shipments</span>
+                        <span class="menu-title">Доставки</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/coupons">
                         <i class="ti-medall menu-icon"></i>
-                        <span class="menu-title">Coupons</span>
+                        <span class="menu-title">Купоны</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/superAdmin/main-store">
+                        <i class="ti-direction menu-icon"></i>
+                        <span class="menu-title">Головной офис</span>
                     </a>
                 </li>
             </ul>
@@ -218,7 +224,7 @@
                         <div class="card-body">
                             <p class="card-title">Все номера</p>
                             <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table table-borderless report-table">
+                                <table class="table report-table">
                                     <thead>
                                     <th>Номер</th>
                                     <th>Удалить</th>
@@ -236,12 +242,12 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="card-footer">
-                                <form id="phoneForm" class="form-inline">
-                                    <div class="form-group">
-                                        <input type="text" name="phone" class="form-control" required>
-                                    </div>
-                                    <div class="form-group align-content-center justify-content-center">
+                            <hr>
+                            <div>
+                                <form id="phoneForm" class="form-group">
+                                    <label>Новый телефон</label>
+                                    <div class="d-flex">
+                                        <input type="text" name="phone" class="form-control form-control-sm mr-3" required>
                                         <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
                                     </div>
                                 </form>
@@ -254,56 +260,41 @@
                         <div class="card-body">
                             <p class="card-title">Информация</p>
                             <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table table-borderless report-table">
+                                <table class="table table-striped report-table">
                                     <tr>
-                                        <td>Город</td>
+                                        <td class="d-flex">
+                                            <i class="ti-map-alt mr-2 mt-1"></i>
+                                            <p class="m-0">Город</p>
+                                        </td>
                                         <td th:text="${mainStore.town}"></td>
-                                        <td>
-                                            <form class="form-inline" id="townForm">
-                                                <input class="form-control" name="town" required>
-                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
-                                            </form>
-                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Область</td>
+                                        <td class="d-flex">
+                                            <i class="ti-map mr-2 mt-1"></i>
+                                            <p class="m-0">Область</p>
+                                        </td>
                                         <td th:text="${mainStore.state}"></td>
-                                        <td>
-                                            <form class="form-inline" id="stateForm">
-                                                <input class="form-control" name="state" required>
-                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
-                                            </form>
-                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Инстаграм</td>
+                                        <td class="d-flex">
+                                            <i class="ti-instagram mr-2 mt-1"></i>
+                                            <p class="m-0">Инстаграм</p>
+                                        </td>
                                         <td th:text="${mainStore.instagram}"></td>
-                                        <td>
-                                            <form class="form-inline" id="instaForm">
-                                                <input class="form-control" name="instagram" required>
-                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
-                                            </form>
-                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Email</td>
+                                        <td class="d-flex">
+                                            <i class="ti-google mr-2 mt-1"></i>
+                                            <p class="m-0">Email</p>
+                                        </td>
                                         <td th:text="${mainStore.email}"></td>
-                                        <td>
-                                            <form class="form-inline" id="emailForm">
-                                                <input class="form-control" name="email" type="email" required>
-                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
-                                            </form>
-                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>Время работы</td>
-                                        <td th:text="${mainStore.working_time}"></td>
-                                        <td>
-                                            <form class="form-inline" id="workingTimeForm">
-                                                <input class="form-control" name="workTime" type="text" required>
-                                                <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
-                                            </form>
+                                        <td class="d-flex">
+                                            <i class="ti-alarm-clock mr-2 mt-1"></i>
+                                            <p class="m-0">Время работы</p>
                                         </td>
+                                        <td th:text="${mainStore.working_time}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -318,11 +309,153 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <p class="card-title mb-0 mt-1">Поступившие транзакции</p>
+                                <div class="form-group form-inline">
+                                    <label class="mr-2">Сортировать по</label>
+                                    <select class="form-control form-control-sm" id="sortSelect">
+                                        <option value="0" th:selected="${sort == 0}">По дате : новые
+                                        </option>
+                                        <option value="1" th:selected="${sort == 1}">По дате : старые
+                                        </option>
+                                        <option value="2" th:selected="${sort == 2}">По сумме :
+                                            возрастание
+                                        </option>
+                                        <option value="3" th:selected="${sort == 3}">По сумме : убывание
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>№</th>
+                                        <th>Отправитель</th>
+                                        <th>Получатель</th>
+                                        <th>Сумма</th>
+                                        <th>Дата</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="transaction : ${transactions.getContent()}">
+                                        <td th:text="${transaction.id}"></td>
+                                        <td th:text="${transaction.sender.town}"></td>
+                                        <td>Головной офис</td>
+                                        <td th:text="${transaction.amount}"></td>
+                                        <td th:text="${transaction.date}"></td>
+                                        <td>
+                                            <p class="badge badge-warning" th:if="${not transaction.allowed}">В
+                                                ОЖИДАНИИ</p>
+                                            <p class="badge badge-success" th:if="${transaction.allowed}">
+                                                ОДОБРЕНО</p>
+                                        </td>
+                                        <td th:if="${not transaction.allowed}">
+                                            <div>
+                                                <button class="btn btn-sm btn-primary allowTr"
+                                                        th:attr="transactionId=${transaction.id}">Одобрить
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container" th:if="${transactions != null}">
+                                <div class="pagination">
+                                    <ul>
+                                        <li th:if="${transactions.number > 0}" class="rec-pagination-link"
+                                            th:attr="page=${0}">
+                                            <a><<</a>
+                                        </li>
+                                        <li th:if="${transactions.number > 0}" class="rec-pagination-link"
+                                            th:attr="page=${transactions.number - 1}"><a
+                                                th:text="${transactions.number}"></a>
+                                        </li>
+                                        <li class="current"><a th:text="${transactions.number + 1}"></a></li>
+                                        <li th:if="${transactions.number + 1 < transactions.totalPages}"
+                                            class="rec-pagination-link"
+                                            th:attr="page=${transactions.number + 1}"><a
+                                                th:text="${transactions.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${transactions.number + 2 < transactions.totalPages}"
+                                            class="rec-pagination-link"
+                                            th:attr="page=${transactions.number + 2}"><a
+                                                th:text="${transactions.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${transactions.number + 1< transactions.totalPages}"
+                                            class="rec-pagination-link"
+                                            th:attr="page=${transactions.totalPages - 1}"><a>>></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Изменить параметры</h4>
+                            <div>
+                                <form class="form-group" id="townForm">
+                                    <label>Город</label>
+                                    <div class="d-flex">
+                                        <input class="form-control mr-3" name="town" required>
+                                        <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <form class="form-group" id="stateForm">
+                                    <label>Область</label>
+                                    <div class="d-flex">
+                                        <input class="form-control mr-3" name="state" required>
+                                        <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <form class="form-group" id="instaForm">
+                                    <label>Инстаграм</label>
+                                    <div class="d-flex">
+                                        <input class="form-control mr-3" name="instagram" required>
+                                        <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <form class="form-group" id="emailForm">
+                                    <label>Email</label>
+                                    <div class="d-flex">
+                                        <input class="form-control mr-3" name="email" type="email" required>
+                                        <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <form class="form-group" id="workingTimeForm">
+                                    <label>Город</label>
+                                    <div class="d-flex">
+                                        <input class="form-control mr-3" name="workTime" type="text" required>
+                                        <button type="submit" class="btn btn-sm btn-primary">Изменить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<!-- container-scroller -->
-
 <!-- plugins:js -->
 <script src="/static/vendors/base/vendor.bundle.base.js"></script>
 <!-- endinject -->

@@ -73,4 +73,8 @@ public class MainStoreService {
         mainStore.deletePhone(phone);
         mainStoreRepository.save(mainStore);
     }
+
+    public void save(MainStore mainStore){
+        mainStoreRepository.save(mainStore);
+    }
 }

@@ -1,6 +1,5 @@
 package com.profi_shop.controllers.adminControllers;
 
-import com.profi_shop.model.Consumption;
 import com.profi_shop.model.Store;
 import com.profi_shop.model.Transaction;
 import com.profi_shop.services.StoreService;
@@ -36,16 +35,21 @@ public class TransactionsController {
 
     @GetMapping("/transactions")
     public String transactions(@RequestParam("storeId") Long storeId,
-                               @RequestParam(value = "page", required = false) Optional<Integer> page,
-                               @RequestParam(value = "sort", required = false) Optional<Integer> sort,
+                               @RequestParam(value = "sendPage", required = false) Optional<Integer> page,
+                               @RequestParam(value = "recPage", required = false) Optional<Integer> recPage,
+                               @RequestParam(value = "sendSort", required = false) Optional<Integer> sort,
+                               @RequestParam(value = "recSort", required = false) Optional<Integer> recSort,
                                Model model){
         Store store = storeService.getStoreById(storeId);
-        Page<Transaction> transactions = transactionService.getPagedTransactionsByStore(storeId,page.orElse(0), sort.orElse(0));
+        Page<Transaction> sendTransactions = transactionService.getPagedSendTransactionsByStore(storeId,page.orElse(0), sort.orElse(0));
+        Page<Transaction> receivedTransactions = transactionService.getPagedReceivedTransactionsByStore(storeId,recPage.orElse(0),recSort.orElse(0));
         List<Store> stores = storeService.getAllStores();
         model.addAttribute("store", store);
         model.addAttribute("stores", stores);
-        model.addAttribute("transactions", transactions);
+        model.addAttribute("sendTransactions", sendTransactions);
+        model.addAttribute("receivedTransactions", receivedTransactions);
         model.addAttribute("selectedSort", sort.orElse(0));
+        model.addAttribute("recSort", recSort.orElse(0));
 
         return "admin/transactions/transactions";
     }
@@ -59,6 +63,20 @@ public class TransactionsController {
         try{
             transactionService.createTransaction(senderStoreId,targetStoreId,principal.getName(),amount);
             response.put("message", "Транзакция успешно создана");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/transactions/allow")
+    public ResponseEntity<Map<String,String>> allowTransactions(@RequestParam Long transactionId,
+                                                                Principal principal){
+        Map<String,String> response = new HashMap<>();
+        try{
+            transactionService.allowTransaction(transactionId,principal.getName());
+            response.put("message", "Транзакция успешно одобрена");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             response.put("error", e.getMessage());

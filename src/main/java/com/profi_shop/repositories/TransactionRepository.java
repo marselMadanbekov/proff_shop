@@ -10,4 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Page<Transaction> findBySender(Store store, Pageable pageable);
+
+    Page<Transaction> findByTarget(Store store, Pageable pageable);
+
+    Page<Transaction> findByToMainStore(boolean b, Pageable pageable);
 }
