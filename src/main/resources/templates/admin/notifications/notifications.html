@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -15,7 +15,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="/static/css1/style.css">
     <!-- endinject -->
-    <link rel="shortcut icon" href="/static/images/favicon.png" />
+    <link rel="shortcut icon" href="/static/images/favicon.png"/>
 </head>
 
 <body>
@@ -33,7 +33,8 @@
             </button>
             <ul class="navbar-nav navbar-nav-right">
                 <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="/admin/notifications">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown"
+                       href="/admin/notifications">
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
@@ -122,34 +123,74 @@
         </nav>
 
         <div class="content-wrapper">
-            <div class="col-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Create new Store</h4>
-                        <form id="storeForm" class="forms-sample">
-                            <div class="form-group">
-                                <label for="exampleInputName">Name</label>
-                                <input type="text" name="name" class="form-control" id="exampleInputName" placeholder="Name">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="font-weight-bold mb-0"
+                                th:text="'Уведомления пользователя : ' + ${username}"></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <p class="card-title mb-0 mt-1">Все уведомления</p>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail">Town</label>
-                                <input type="text" name="town" class="form-control" id="exampleInputEmail" placeholder="town">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Текст</th>
+                                        <th>Просмотрено</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="notification : ${notifications.getContent()}">
+                                        <td th:text="${notification.date}"></td>
+                                        <td>
+                                            <div class="notification-text" th:text="${notification.message}"></div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger viewed" th:if="${not notification.viewed}" th:attr="notificationId=${notification.id}"><i class="ti-eye"></i></button>
+                                            <p class="badge badge-success" th:if="${notification.viewed}"><i class="ti-eye"></i></p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPrimeCost">Address</label>
-                                <input type="text" name="address" class="form-control" id="exampleInputPrimeCost" placeholder="address">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPrice">Phone number</label>
-                                <input type="text" name="phone_number" class="form-control" id="exampleInputPrice" placeholder="phone number">
-                            </div>
-                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                            <button class="btn btn-light">Cancel</button>
-                        </form>
-                        <div id="progressModal" class="modal">
-                            <div class="modal-content">
-                                <div class="progress-spinner"></div>
-                                <p>Sending...</p>
+                            <div class="pagination-container" th:if="${notifications != null}">
+                                <div class="pagination">
+                                    <ul>
+                                        <li th:if="${notifications.number > 0}" class="pagination-link"
+                                            th:attr="page=${0}">
+                                            <a><<</a>
+                                        </li>
+                                        <li th:if="${notifications.number > 0}" class="pagination-link"
+                                            th:attr="page=${notifications.number - 1}"><a
+                                                th:text="${notifications.number}"></a>
+                                        </li>
+                                        <li class="current"><a th:text="${notifications.number + 1}"></a></li>
+                                        <li th:if="${notifications.number + 1 < notifications.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${notifications.number + 1}"><a
+                                                th:text="${notifications.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${notifications.number + 2 < notifications.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${notifications.number + 2}"><a
+                                                th:text="${notifications.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${notifications.number + 1< notifications.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${notifications.totalPages - 1}"><a>>></a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,20 +200,19 @@
     </div>
 </div>
 <!-- container-scroller -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- plugins:js -->
 <script src="/static/vendors/base/vendor.bundle.base.js"></script>
-<!-- endinject -->
 <!-- Plugin js for this page-->
-<script src="/static/vendors/chart.js/Chart.min.js"></script>
-<!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/store/storeCreate.js"></script>
 <script src="/static/js/notifications/notifications.js"></script>
-
+<!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
 </body>
 
 </html>
+

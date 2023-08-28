@@ -58,7 +58,10 @@
 /* === Import template variables === */
 /*-------------------------------------------------------------------*/
 /* === SCSS Compass Functions === */
-
+.notification-text {
+  word-wrap: break-word; /* Переносить длинные слова */
+  white-space: pre-line; /* Сохранять переносы строк */
+}
 .long-text {
   max-width: 300px; /* Задайте желаемую максимальную ширину */
   overflow: hidden;
