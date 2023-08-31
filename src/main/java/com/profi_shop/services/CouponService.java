@@ -1,39 +1,81 @@
 package com.profi_shop.services;
 
-import com.profi_shop.model.Coupon;
-import com.profi_shop.model.CouponTemplate;
-import com.profi_shop.model.User;
+import com.profi_shop.exceptions.SearchException;
+import com.profi_shop.model.*;
+import com.profi_shop.repositories.CartItemRepository;
+import com.profi_shop.repositories.CartRepository;
 import com.profi_shop.repositories.CouponRepository;
+import com.profi_shop.repositories.CouponTemplateRepository;
 import com.profi_shop.settings.Templates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Random;
 
 @Service
 public class CouponService {
     private final CouponRepository couponRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
+    private final CouponTemplateRepository couponTemplateRepository;
 
     @Autowired
-    public CouponService(CouponRepository couponRepository) {
+    public CouponService(CouponRepository couponRepository, CartItemRepository cartItemRepository, CartRepository cartRepository, CouponTemplateRepository couponTemplateRepository) {
         this.couponRepository = couponRepository;
+        this.cartItemRepository = cartItemRepository;
+        this.cartRepository = cartRepository;
+        this.couponTemplateRepository = couponTemplateRepository;
     }
 
-    public void createCoupon(User user, CouponTemplate couponTemplate){
+    public void createCoupon(Order order, CouponTemplate couponTemplate){
         Coupon coupon = new Coupon();
         coupon.setEnd_date(Date.valueOf(LocalDate.now().plusDays(couponTemplate.getDuration())));
-        coupon.setOwner(user);
+        coupon.setOwner(order.getUser());
+        coupon.setRoot(order);
         coupon.setParent(couponTemplate);
-        coupon.setDiscount(coupon.getDiscount());
+        coupon.setDiscount(couponTemplate.getDiscount());
         couponRepository.save(coupon);
-
+        setActivationCodeToCoupon(coupon);
     }
 
+    public void createCouponIfNeeded(Order order){
+        if(order.getUser() == null) return;
+        Coupon coupon = couponRepository.findByRoot(order).orElse(null);
+        if(coupon != null) return;
+        int amount = 0;
+        if(order.getShipment() == null) amount = order.getTotalPrice();
+        else amount = order.getTotalPrice() - order.getShipment().getCost();
 
+        CouponTemplate couponTemplate = couponTemplateRepository.findTopByMinAmountLessThanOrderByMinAmountDesc(amount).orElse(null);
+        if(couponTemplate == null)  return;
+
+        createCoupon(order,couponTemplate);
+    }
+
+    public Cart applyCouponToCart(Cart cart,Coupon coupon, boolean saving){
+        for(CartItem cartItem : cart.getCartItems()){
+            if(cartItem.getDiscount() == 0){
+                cartItem.setDiscount(coupon.getDiscount());
+                System.out.println("setting discount " + coupon.getDiscount());
+                cartItemRepository.save(cartItem);
+                System.out.println("after set discount " + cartItem.getDiscount());
+            }
+        }
+        cart.setCoupon(coupon);
+        if(saving)  cartRepository.save(cart);
+        return cart;
+    }
     private void setActivationCodeToCoupon(Coupon coupon){
-        String activationCode = Templates.COUPON_PREFIX + coupon.getParent().getId() + "-" + coupon.getId();
-        coupon.setActivation_code(activationCode);
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        String activationCode = Templates.COUPON_PREFIX + alphabet.charAt(random.nextInt(36)) + coupon.getId() + alphabet.charAt(random.nextInt(36));
+        coupon.setActivationCode(activationCode);
         couponRepository.save(coupon);
+    }
+
+    public Coupon findByActivationCode(String couponCode) {
+        return couponRepository.findByActivationCode(couponCode).orElseThrow(() -> new SearchException(SearchException.COUPON_NOT_FOUND));
     }
 }

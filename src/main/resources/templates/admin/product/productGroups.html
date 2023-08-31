@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -164,67 +164,71 @@
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-                                <p class="card-title mb-0" style="margin-top: 10px;">All Groups</p>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <p class="card-title mb-0 mt-1">Все карточки</p>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Фото</th>
-                                        <th>Название</th>
-                                        <th>Дата создания</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="productGroup : ${productGroups.getContent()}">
-                                        <td>
-                                            <img th:if="${not #lists.isEmpty(productGroup.products) }"
-                                                 th:src="@{'/products/' + ${productGroup.products.get(0).getPhotos().get(0)}}"/>
-                                        </td>
-                                        <td>
-                                            <a th:href="@{'/admin/productGroupDetails?groupId=' + ${productGroup.id}}">
-                                                <span th:text="${productGroup.name}"></span>
-                                            </a>
-                                        </td>
-                                        <td th:text="${productGroup.create_date}"></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger delete"
-                                                    th:attr="groupId=${productGroup.id}"><i class="ti-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <input hidden id="page" th:value="${productGroups.number}">
-                                    <ul>
-                                        <li th:if="${productGroups.number > 0}" class="pagination-link"
-                                            th:attr="page=${0}">
-                                            <a href="#"><<</a>
-                                        </li>
-                                        <li th:if="${productGroups.number > 0}" class="pagination-link"
-                                            th:attr="page=${productGroups.number - 1}"><a href="#"
-                                                                                          th:text="${productGroups.number}"></a>
-                                        </li>
-                                        <li class="current"><a href="#" th:text="${productGroups.number + 1}"></a></li>
-                                        <li th:if="${productGroups.number + 1 < productGroups.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${productGroups.number + 1}"><a href="#"
-                                                                                          th:text="${productGroups.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${productGroups.number + 2 < productGroups.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${productGroups.number + 2}"><a href="#"
-                                                                                          th:text="${productGroups.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${productGroups.number + 1< productGroups.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${productGroups.totalPages - 1}"><a href="#">>></a>
-                                        </li>
-                                    </ul>
+                            <h4 th:if="${productGroups.getContent().size() == 0}">Карточек нет</h4>
+                            <div th:if="${productGroups.getContent().size() > 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Фото</th>
+                                            <th>Название</th>
+                                            <th>Дата создания</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="productGroup : ${productGroups.getContent()}">
+                                            <td>
+                                                <img th:if="${not #lists.isEmpty(productGroup.products) }"
+                                                     th:src="@{'/products/' + ${productGroup.products.get(0).getPhotos().get(0)}}"/>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'/admin/productGroupDetails?groupId=' + ${productGroup.id}}">
+                                                    <span th:text="${productGroup.name}"></span>
+                                                </a>
+                                            </td>
+                                            <td th:text="${productGroup.create_date}"></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger delete"
+                                                        th:attr="groupId=${productGroup.id}"><i class="ti-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <input hidden id="page" th:value="${productGroups.number}">
+                                        <ul>
+                                            <li th:if="${productGroups.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a href="#"><<</a>
+                                            </li>
+                                            <li th:if="${productGroups.number > 0}" class="pagination-link"
+                                                th:attr="page=${productGroups.number - 1}"><a href="#"
+                                                                                              th:text="${productGroups.number}"></a>
+                                            </li>
+                                            <li class="current"><a href="#" th:text="${productGroups.number + 1}"></a>
+                                            </li>
+                                            <li th:if="${productGroups.number + 1 < productGroups.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${productGroups.number + 1}"><a href="#"
+                                                                                              th:text="${productGroups.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${productGroups.number + 2 < productGroups.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${productGroups.number + 2}"><a href="#"
+                                                                                              th:text="${productGroups.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${productGroups.number + 1< productGroups.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${productGroups.totalPages - 1}"><a href="#">>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

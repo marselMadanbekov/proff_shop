@@ -17,6 +17,7 @@ public class InvalidDataException extends Exception{
     public static final int INVALID_PASSWORD = 8;
     public static final int INVALID_PHOTO = 9;
     public static final int EMPTY_CART = 10;
+    public static final int INVALID_QUANTITY = 11;
 
     private final int code;
     public InvalidDataException(int code){
@@ -34,6 +35,7 @@ public class InvalidDataException extends Exception{
             case 8 -> Text.get("ERROR_INVALID_PASSWORD");
             case 9 -> Text.get("ERROR_INVALID_PHOTO");
             case 10 -> Text.get("ERROR_EMPTY_CART");
+            case 11 -> Text.get("ERROR_INVALID_QUANTITY");
             default -> null;
         };
     }

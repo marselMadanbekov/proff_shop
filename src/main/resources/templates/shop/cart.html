@@ -1,5 +1,5 @@
-<!doctype html>
-<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -242,212 +242,221 @@
 <!--shopping cart area start -->
 <div class="shopping_cart_area mt-100">
     <div class="container">
-        <form action="#">
-            <div class="row">
-                <h3 th:if="${cart.cartItems.size() == 0}">Корзина пуста</h3>
-                <div class="col-12">
-                    <div class="table_desc" th:if="${cart.cartItems.size() > 0}">
-                        <div>
-                            <i class="fa fa-user"></i><span> - Акция только для зарегистрированных пользователей</span>
+        <div class="row">
+            <h3 th:if="${cart.cartItems.size() == 0}">Корзина пуста</h3>
+            <div class="col-12">
+                <div class="table_desc" th:if="${cart.cartItems.size() > 0}">
+                    <div>
+                        <i class="fa fa-user"></i><span> - Акция только для зарегистрированных пользователей</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-check"></i><span> - Акция для каждого клиента</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-close"></i><span> - Акции нет</span>
+                    </div>
+                    <div class="cart_page table-responsive">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th class="product_remove">Удалить</th>
+                                <th class="product_remove">Акция</th>
+                                <th class="product_thumb">Фото</th>
+                                <th class="product_name">Название</th>
+                                <th class="product-price">Цена</th>
+                                <th class="product_quantity">Количество</th>
+                                <th class="product_total">Сумма</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${not(cart == null)}" th:each="cartItem: ${cart.cartItems}">
+                                <td class="product_remove"><a href="javascript:void(0)" class="cart_remove"
+                                                              th:attr="productId=${cartItem.product.id}, size=${cartItem.productVariation == null ? 0: cartItem.productVariation.size}"><i
+                                        class="fa fa-trash-o"></i></a>
+                                </td>
+                                <td><a href="javascript:void(0)"><i class="fa"
+                                                                    th:classappend="${cartItem.stockType == 0 ? 'fa-close' : ((cartItem.stockType == 1) ? 'fa-user' : 'fa-check')}"></i></a>
+                                </td>
+                                <td class="product_thumb"><a href="javascript:void(0)"><img
+                                        th:src="'/products/' + ${cartItem.product.getPhotos().get(0)}" alt=""></a>
+                                </td>
+                                <td class="product_name">
+                                    <a href="javascript:void(0)" th:text="${cartItem.product.name}"></a>
+                                    <a href="javascript:void(0)"
+                                       th:if="${cartItem.productVariation != null && cartItem.getProductVariation().size != 'Универсальный'}"
+                                       th:text="${' ( ' + cartItem.productVariation.size} + ' ) '"></a>
+                                </td>
+                                <td class="product-price" th:text="${cartItem.product.price} + 'сом'"></td>
+                                <td class="product_quantity"><label>Кол-во</label><input class="product_q" min="1"
+                                                                                         max="100"
+                                                                                         th:attr="productId=${cartItem.product.id}, productVariationId=${cartItem.productVariation != null ? cartItem.productVariation.id : 0}"
+                                                                                         th:value="${cartItem.quantity}"
+                                                                                         type="number"></td>
+                                <td class="product_total" th:text="${cartItem.getTotalAmount()} + 'сом'"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner" id="spinner"></div>
                         </div>
-                        <div>
-                            <i class="fa fa-check"></i><span> - Акция для каждого клиента</span>
-                        </div>
-                        <div>
-                            <i class="fa fa-close"></i><span> - Акции нет</span>
-                        </div>
-                        <div class="cart_page table-responsive">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th class="product_remove">Удалить</th>
-                                    <th class="product_remove">Акция</th>
-                                    <th class="product_thumb">Фото</th>
-                                    <th class="product_name">Название</th>
-                                    <th class="product-price">Цена</th>
-                                    <th class="product_quantity">Количество</th>
-                                    <th class="product_total">Сумма</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:if="${not(cart == null)}" th:each="cartItem: ${cart.cartItems}">
-                                    <td class="product_remove"><a href="javascript:void(0)" class="cart_remove"
-                                                                  th:attr="productId=${cartItem.product.id}, size=${cartItem.productVariation == null ? 0: cartItem.productVariation.size}"><i
-                                            class="fa fa-trash-o"></i></a>
-                                    </td>
-                                    <td><a href="javascript:void(0)"><i class="fa"
-                                                                        th:classappend="${cartItem.stockType == 0 ? 'fa-close' : ((cartItem.stockType == 1) ? 'fa-user' : 'fa-check')}"></i></a>
-                                    </td>
-                                    <td class="product_thumb"><a href="javascript:void(0)"><img
-                                            th:src="'/products/' + ${cartItem.product.getPhotos().get(0)}" alt=""></a>
-                                    </td>
-                                    <td class="product_name">
-                                        <a href="javascript:void(0)" th:text="${cartItem.product.name}"></a>
-                                        <a href="javascript:void(0)" th:if="${cartItem.productVariation != null}"
-                                           th:text="${' ( ' + cartItem.productVariation.size} + ' ) '"></a>
-                                    </td>
-                                    <td class="product-price" th:text="${cartItem.product.price} + 'сом'"></td>
-                                    <td class="product_quantity"><label>Кол-во</label><input class="product_q" min="1"
-                                                                                             max="100"
-                                                                                             th:attr="productId=${cartItem.product.id}, productVariationId=${cartItem.productVariation != null ? cartItem.productVariation.id : 0}"
-                                                                                             th:value="${cartItem.quantity}"
-                                                                                             type="number"></td>
-                                    <td class="product_total" th:text="${cartItem.amount} + 'сом'"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner" id="spinner"></div>
+                        <div id="modal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" id="closeModal">&times;</span>
+                                <p id="modalMessage"></p>
                             </div>
-                            <div id="modal" class="modal">
-                                <div class="modal-content">
-                                    <span class="close" id="closeModal">&times;</span>
-                                    <p id="modalMessage"></p>
-                                </div>
-                            </div>
                         </div>
-                        <div class="cart_submit">
-                            <button type="submit" id="update_cart">update cart</button>
-                        </div>
+                    </div>
+                    <div class="cart_submit">
+                        <button type="submit" id="update_cart">update cart</button>
                     </div>
                 </div>
             </div>
-            <!--coupon code area start-->
-            <div class="Checkout_section  mt-50" id="accordion" th:if="${cart.cartItems.size() > 0}">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <h3>Оформление заказа</h3>
-                            <div class="user-actions">
-                                <h3>
-                                    <i class="fa fa-file-o" aria-hidden="true"></i>
-                                    У вас есть купон?
-                                    <a class="Returning" href="#" data-toggle="collapse" data-target="#checkout_coupon"
-                                       aria-expanded="true">Нажмите здесь чтобы применить</a>
+        </div>
+        <!--coupon code area start-->
+        <div class="Checkout_section  mt-50" id="accordion" th:hidden="${cart.cartItems.size() == 0}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Оформление заказа</h3>
+                        <div class="user-actions">
+                            <h3>
+                                <i class="fa fa-file-o" aria-hidden="true"></i>
+                                У вас есть купон?
+                                <a class="Returning" href="#" data-toggle="collapse" data-target="#checkout_coupon"
+                                   aria-expanded="true">Нажмите здесь чтобы применить</a>
 
-                                </h3>
-                                <div id="checkout_coupon" class="collapse" data-parent="#accordion">
-                                    <div class="checkout_info coupon_info">
-                                        <form action="#">
-                                            <input placeholder="Coupon code" type="text">
-                                            <button type="submit">Применить</button>
-                                        </form>
-                                    </div>
+                            </h3>
+                            <div id="checkout_coupon" class="collapse" data-parent="#accordion">
+                                <div class="checkout_info coupon_info">
+                                    <form id="couponForm">
+                                        <input placeholder="Coupon code" name="couponCode" type="text">
+                                        <button type="submit">Применить</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="checkout_form">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6">
-                                <form id="orderForm">
-                                    <h3>Your order</h3>
-                                    <div class="order_table table-responsive">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th>Товар</th>
-                                                <th>Сумма</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:each="cartItem: ${cart.cartItems}">
-                                                <td th:if="${cartItem.productVariation == null}"
-                                                    th:text="${cartItem.product.name} + ' × ' + ${cartItem.quantity}"></td>
-                                                <td th:if="${cartItem.productVariation != null}"
-                                                    th:text="${cartItem.product.name} + ' ( ' + ${cartItem.productVariation.size} + ' ) ' + ' × ' + ${cartItem.quantity}"></td>
-                                                <td th:text="${cartItem.amount} + ' сом'"></td>
-                                            </tr>
+                </div>
+                <div class="checkout_form">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <form id="orderForm">
+                                <h3>Your order</h3>
+                                <div class="order_table table-responsive">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Товар</th>
+                                            <th>Сумма</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="cartItem: ${cart.cartItems}">
+                                            <td th:if="${cartItem.productVariation == null}"
+                                                th:text="${cartItem.product.name} + ' × ' + ${cartItem.quantity}"></td>
+                                            <td th:if="${cartItem.productVariation != null}"
+                                                th:text="${cartItem.product.name} + ' ( ' + ${cartItem.productVariation.size} + ' ) ' + ' × ' + ${cartItem.quantity}"></td>
+                                            <td th:text="${cartItem.getTotalAmount()} + ' сом'"></td>
+                                        </tr>
 
-                                            </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <th>Сумма</th>
-                                                <td id="cartSubtotal" th:text="${cart.cartAmount()} + ' сом'"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Shipping</th>
-                                                <td id="shippingPrice"><strong>0 сом</strong></td>
-                                            </tr>
-                                            <tr class="order_total">
-                                                <th>Итого</th>
-                                                <td id="orderTotal"><strong
-                                                        th:text="${cart.cartAmount()} + ' сом'"></strong></td>
-                                            </tr>
-                                            </tfoot>
-                                        </table>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Сумма без скидок</th>
+                                            <td id="cartSubtotal" th:text="${cart.cartAmount()} + ' сом'"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="d-flex justify-content-center">
+                                                <a id="remove-coupon">
+                                                    <i class="fa fa-trash mr-2 mt-1"
+                                                       th:hidden="${cart.coupon == null}"></i>
+                                                </a>
+                                                <p>Скидка по купону</p>
+                                            </th>
+                                            <td id="couponDiscount"
+                                                th:text="${cart.coupon == null ? '0' : cart.coupon.discount} + ' %'"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Доставка</th>
+                                            <td id="shippingPrice"><strong>0 сом</strong></td>
+                                        </tr>
+                                        <tr class="order_total">
+                                            <th>Итого (с учетом скидок)</th>
+                                            <td id="orderTotal"><strong
+                                                    th:text="${cart.cartAmountWithDiscount()} + ' сом'"></strong></td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <form id="orderDetails">
+                                <h3>Детали заказа</h3>
+                                <div class="row">
+                                    <div class="col-lg-6 mb-20">
+                                        <label>Имя<span>*</span></label>
+                                        <input type="text" name="firstname" id="firstname" required>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <form id="orderDetails">
-                                    <h3>Детали заказа</h3>
-                                    <div class="row">
-                                        <div class="col-lg-6 mb-20">
-                                            <label>Имя<span>*</span></label>
-                                            <input type="text" name="firstname" id="firstname" required>
-                                        </div>
-                                        <div class="col-lg-6 mb-20">
-                                            <label>Фамилия<span>*</span></label>
-                                            <input type="text" name="lastname" id="lastname" required>
-                                        </div>
-                                        <div class="col-lg-6 mb-20">
-                                            <label>Номер телефона<span>*</span></label>
-                                            <input type="text" name="phone_number" id="phone_number" required>
-                                        </div>
-                                        <div class="col-lg-6 mb-20">
-                                            <label>Адрес электронной почты (e-mail) <span>*</span></label>
-                                            <input type="email" name="email" id="email" required>
-                                        </div>
+                                    <div class="col-lg-6 mb-20">
+                                        <label>Фамилия<span>*</span></label>
+                                        <input type="text" name="lastname" id="lastname" required>
                                     </div>
-                                    <div class="col-12 mb-20">
-                                        <input id="shipment" type="checkbox" data-toggle="collapse"
-                                               data-target="#collapseOne"/>
-                                        <label for="shipment" data-toggle="collapse" data-target="#collapseOne"
-                                               aria-controls="collapseOne">Заказать доставку?</label>
-                                        <a href="/checkout">/ Сброс</a>
-                                        <div id="collapseOne" class="collapse one" data-parent="#accordion">
-                                            <div class="card-body1">
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="spinner" id="spinner1"></div>
-                                                </div>
-                                                <div class="col-12 mb-20">
-                                                    <label for="state">Region <span>*</span></label>
-                                                    <select class="form-select form-select-sm" name="state" id="state">
-                                                        <option value=""></option>
-                                                        <option th:each="state: ${states}" th:value="${state}"
-                                                                th:text="${state}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 mb-20">
-                                                    <label for="town">City <span>*</span></label>
-                                                    <select class="form-select form-select-sm" name="town" id="town">
-                                                        <option value=""></option>
-                                                        <option th:each="town:${towns}" th:value="${town}"
-                                                                th:text="${town}"></option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 mb-20">
-                                                    <label>Street address<span>*</span></label>
-                                                    <input placeholder="House number and street name" type="text">
-                                                </div>
-                                                <div class="order_button">
-                                                    <button type="button" id="scost">Посчитать</button>
-                                                </div>
+                                    <div class="col-lg-6 mb-20">
+                                        <label>Номер телефона<span>*</span></label>
+                                        <input type="text" name="phone_number" id="phone_number" required>
+                                    </div>
+                                    <div class="col-lg-6 mb-20">
+                                        <label>Адрес электронной почты (e-mail) <span>*</span></label>
+                                        <input type="email" name="email" id="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <input id="shipment" type="checkbox" data-toggle="collapse"
+                                           data-target="#collapseOne"/>
+                                    <label for="shipment" data-toggle="collapse" data-target="#collapseOne"
+                                           aria-controls="collapseOne">Заказать доставку?</label>
+                                    <a href="/checkout">/ Сброс</a>
+                                    <div id="collapseOne" class="collapse one" data-parent="#accordion">
+                                        <div class="card-body1">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="spinner" id="spinner1"></div>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <label for="state">Region <span>*</span></label>
+                                                <select class="form-select form-select-sm" name="state" id="state">
+                                                    <option value=""></option>
+                                                    <option th:each="state: ${states}" th:value="${state}"
+                                                            th:text="${state}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <label for="town">City <span>*</span></label>
+                                                <select class="form-select form-select-sm" name="town" id="town">
+                                                    <option value=""></option>
+                                                    <option th:each="town:${towns}" th:value="${town}"
+                                                            th:text="${town}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <label>Street address<span>*</span></label>
+                                                <input placeholder="House number and street name" type="text">
+                                            </div>
+                                            <div class="order_button">
+                                                <button type="button" id="scost">Посчитать</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="order_button">
-                                        <button type="submit" id="order">Заказать</button>
-                                    </div>
-                                </form>
-                            </div>
-
+                                </div>
+                                <div class="order_button">
+                                    <button type="submit" id="order">Заказать</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 <!--shopping cart area end -->
@@ -594,6 +603,7 @@
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
 <script src="/static/js/cart/cartpage.js"></script>
+<script src="/static/js/cart/applyCoupon.js"></script>
 <script src="/static/js/checkout.js"></script>
 
 <!-- Main JS -->

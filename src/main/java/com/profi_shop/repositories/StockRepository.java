@@ -26,4 +26,7 @@ public interface StockRepository extends JpaRepository<Stock,Long> {
     Page<Stock> findActiveStocks(@Param("currentDate") LocalDate currentDate,Pageable pageable);
     @Query("SELECT s FROM Stock s WHERE s.endDate < :currentDate AND s.startDate > :currentDate")
     Page<Stock> findInActiveStocks(@Param("currentDate") LocalDate currentDate,Pageable pageable);
+
+    @Query("SELECT p FROM Stock s JOIN s.participants p WHERE s.id = :stockId")
+    Page<Product> findParticipantsForStock(@Param("stockId") Long stockId, Pageable pageable);
 }

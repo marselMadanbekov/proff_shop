@@ -2,16 +2,16 @@ package com.profi_shop.services;
 
 import com.profi_shop.exceptions.AccessDeniedException;
 import com.profi_shop.exceptions.SearchException;
-import com.profi_shop.model.Notification;
-import com.profi_shop.model.Store;
-import com.profi_shop.model.User;
+import com.profi_shop.model.*;
 import com.profi_shop.repositories.NotificationRepository;
+import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.services.email.EmailServiceImpl;
 import com.profi_shop.settings.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +23,7 @@ public class NotificationService {
 
     private final UserService userService;
     private final EmailServiceImpl emailService;
+
 
     @Autowired
     public NotificationService(NotificationRepository notificationRepository, UserService userService, EmailServiceImpl emailService) {
@@ -103,7 +104,7 @@ public class NotificationService {
 
     public Page<Notification> getPagedNotificationsByUsername(String name, Integer page, Boolean flag) {
         User user = userService.getUserByUsername(name);
-        Pageable pageable = PageRequest.of(page, 15);
+        Pageable pageable = PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC,"date"));
         if(flag)
             return notificationRepository.findByUserAndViewed(user,false,pageable);
         return notificationRepository.findByUser(user,pageable);
@@ -118,5 +119,24 @@ public class NotificationService {
 
         notification.setViewed(true);
         notificationRepository.save(notification);
+    }
+
+    public void createNotEnoughNotificationInOneTargetStoreOfOrder(Store acceptor, Store donor, ProductVariation productVariation) {
+        String message = "В филиале - " + acceptor.getTown() + " , недостаточно товара " +
+                productVariation.getParent().getName() + " с размером ( " + productVariation.getSize() + " ). " +
+                "Товар будет вычтен из склада " + donor.getTown();
+
+        Notification acceptorNotification = new Notification();
+        acceptorNotification.setViewed(false);
+        acceptorNotification.setUser(acceptor.getAdmin());
+        acceptorNotification.setMessage(message);
+
+        Notification donorNotification = new Notification();
+        donorNotification.setViewed(false);
+        donorNotification.setUser(donor.getAdmin());
+        donorNotification.setMessage(message);
+
+        notificationRepository.save(acceptorNotification);
+        notificationRepository.save(donorNotification);
     }
 }

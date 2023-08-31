@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final CouponService couponService;
     private final OrderItemRepository orderItemRepository;
     private final ProductVariationRepository productVariationRepository;
     private final ProductRepository productRepository;
@@ -33,8 +34,9 @@ public class OrderService {
     private final CartService cartService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, ProductVariationRepository productVariationRepository, ProductRepository productRepository, ShipmentRepository shipmentRepository, StoreRepository storeRepository, NotificationService notificationService, StoreHouseRepository storeHouseRepository, UserRepository userRepository, CartService cartService) {
+    public OrderService(OrderRepository orderRepository, CouponService couponService, OrderItemRepository orderItemRepository, ProductVariationRepository productVariationRepository, ProductRepository productRepository, ShipmentRepository shipmentRepository, StoreRepository storeRepository, NotificationService notificationService, StoreHouseRepository storeHouseRepository, UserRepository userRepository, CartService cartService) {
         this.orderRepository = orderRepository;
+        this.couponService = couponService;
         this.orderItemRepository = orderItemRepository;
         this.productVariationRepository = productVariationRepository;
         this.productRepository = productRepository;
@@ -131,11 +133,11 @@ public class OrderService {
             orderItem.setProduct(cartItem.getProduct());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setProductVariation(cartItem.getProductVariation());
-            orderItem.setPrice(cartItem.getAmount());
+            orderItem.setPrice(cartItem.getAmountWithDiscount());
             orderItemRepository.save(orderItem);
             order.addOrderItem(orderItem);
         }
-        totalPrice += cart.cartAmount();
+        totalPrice += cart.cartAmountWithDiscount();
         order.setTotalPrice(totalPrice);
         order.setStore(chooseStoreToOrder(cart.getCartItems()));
         return orderRepository.save(order);
@@ -218,6 +220,12 @@ public class OrderService {
         return orderItemRepository.findById(orderItemId).orElseThrow(() -> new SearchException(SearchException.ORDER_ITEM_NOT_FOUND));
     }
 
+    private void checkOrderItemEnough(OrderItem orderItem) throws NotEnoughException {
+        int countOnStore = countOfProductVariationInStore(orderItem.getProductVariation());
+        if(countOnStore >= orderItem.getQuantity()) return;
+        throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + orderItem.getProductVariation().getSize() + " ) ", countOnStore);
+    }
+
     public void updateOrderItemSizes(List<OrderUpdateRequest> orderItems) throws NotEnoughException, ExistException {
         for (OrderUpdateRequest oi : orderItems) {
             if (oi.getOrderItemId() == null || oi.getProductVariationId() == null) continue;
@@ -228,9 +236,8 @@ public class OrderService {
             if (isOrderContainsProductVariation(pv, orderItem))
                 throw new ExistException(ExistException.ORDER_ITEM_EXISTS);
 
-            int count = countOfProductVariationInStore(pv);
-            if (count < orderItem.getQuantity())
-                throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + pv.getSize() + " ) ", count);
+            checkOrderItemEnough(orderItem);
+
             orderItem.setProductVariation(pv);
             orderItemRepository.save(orderItem);
         }
@@ -261,22 +268,55 @@ public class OrderService {
 
     public void orderStatusUp(Long orderId) throws Exception {
         Order order = getOrderById(orderId);
-        if(order.getStatus().equals(OrderStatus.CANCELED))  throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
+        if (order.getStatus().equals(OrderStatus.CANCELED))
+            throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
         order.setStatus(OrderStatus.values()[order.getStatus().ordinal() + 1]);
         if (order.getStatus().equals(OrderStatus.PAID)) {
             Store store = order.getStore();
+            for (OrderItem orderItem : order.getOrderItems()) {
+                checkOrderItemEnough(orderItem);
+                ProductVariation productVariation = orderItem.getProductVariation();
+                if (productVariation == null)
+                    throw new Exception("Не указан размер для продукта " + orderItem.getProduct().getName() + " . Для воспроизведения оплаты выберите размер.");
+                StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(productVariation, order.getStore());
+                if (orderItem.getQuantity() <= storeHouse.getQuantity()) {
+                    storeHouse.quantityDown(orderItem.getQuantity());
+                } else {
+                    List<StoreHouse> donors = getOptimalStoreHousesByProductAndStore(productVariation, store, orderItem.getQuantity());
+                    int quantity = orderItem.getQuantity() - storeHouse.getQuantity();
+
+                    storeHouse.setQuantity(0);
+                    for (StoreHouse donor : donors) {
+                        if (quantity > donor.getQuantity()) {
+                            quantity -= donor.getQuantity();
+                            donor.setQuantity(0);
+                            notificationService.createNotEnoughNotificationInOneTargetStoreOfOrder(store, donor.getStore(), productVariation);
+                        } else {
+                            notificationService.createNotEnoughNotificationInOneTargetStoreOfOrder(store, donor.getStore(), productVariation);
+                            donor.quantityDown(quantity);
+                            break;
+                        }
+                        storeHouseRepository.save(donor);
+                    }
+                    storeHouseRepository.save(storeHouse);
+                }
+            }
             if (order.getShipment() == null) store.balanceUp(order.getTotalPrice());
             else store.balanceUp(order.getTotalPrice() - order.getShipment().getCost());
+            couponService.createCouponIfNeeded(order);
         }
         orderRepository.save(order);
     }
 
+
+
     public void orderStatusDown(Long orderId) throws Exception {
         Order order = getOrderById(orderId);
-        if(order.getStatus().equals(OrderStatus.CANCELED))  throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
+        if (order.getStatus().equals(OrderStatus.CANCELED))
+            throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
         if (order.getStatus().equals(OrderStatus.PAID)) {
             Store store = order.getStore();
-            if(order.getShipment() == null) store.balanceDown(order.getTotalPrice());
+            if (order.getShipment() == null) store.balanceDown(order.getTotalPrice());
             else store.balanceDown((order.getTotalPrice() - order.getShipment().getCost()));
         }
         order.setStatus(OrderStatus.values()[order.getStatus().ordinal() - 1]);
@@ -295,6 +335,32 @@ public class OrderService {
         } else {
             throw new Exception("Нельзя уменьшить количество товара оно минимально");
         }
+    }
+
+    private StoreHouse getStoreHouseByProductVariationAndStore(ProductVariation productVariation, Store store) {
+        return storeHouseRepository.findByProductAndStore(productVariation, store).orElseThrow(() -> new SearchException(SearchException.STORE_HOUSE_NOT_FOUND));
+    }
+
+    private List<StoreHouse> getOptimalStoreHousesByProductAndStore(ProductVariation productVariation, Store acceptor, int count) {
+        List<StoreHouse> allStoreHouses = storeHouseRepository.findStoreHouseByProduct(productVariation);
+        StoreHouse targetStoreHouse = getStoreHouseByProductVariationAndStore(productVariation, acceptor);
+        count -= targetStoreHouse.getQuantity();
+        allStoreHouses.remove(targetStoreHouse);
+        allStoreHouses.sort((s1, s2) -> Integer.compare(s2.getQuantity(), s1.getQuantity()));
+
+        List<StoreHouse> donors = new ArrayList<>();
+        for (StoreHouse donor : allStoreHouses) {
+            if (donor.getQuantity() > count) {
+                donors.add(donor);
+                break;
+            }
+            if (donor.getQuantity() > 0) {
+                donors.add(donor);
+                count -= donor.getQuantity();
+            }
+            if (count <= 0) break;
+        }
+        return donors;
     }
 
     public void itemQuantityUp(Long orderItemId) throws Exception {
@@ -376,8 +442,25 @@ public class OrderService {
         return storeRepository.findById(targetStoreId).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
     }
 
-    public void cancelOrder(Long orderId) {
+    public void cancelOrder(Long orderId, String username) {
+        User user = getUserByUsername(username);
+
         Order order = getOrderById(orderId);
+        Store store = order.getStore();
+
+        if (order.getStatus().ordinal() >= OrderStatus.PAID.ordinal()) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                ProductVariation pv = orderItem.getProductVariation();
+                StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(pv, store);
+                storeHouse.quantityUp(orderItem.getQuantity());
+            }
+
+            if (order.getShipment() == null)
+                store.balanceDown(order.getTotalPrice());
+            else
+                store.balanceDown(order.getTotalPrice() - order.getShipment().getCost());
+
+        }
         order.setStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
     }

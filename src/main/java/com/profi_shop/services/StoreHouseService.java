@@ -1,5 +1,6 @@
 package com.profi_shop.services;
 
+import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.ProductVariation;
 import com.profi_shop.model.Store;
@@ -35,7 +36,8 @@ public class StoreHouseService {
         }
     }
 
-    public void quantityUp(Long storeId, Long productId, int quantity) {
+    public void quantityUp(Long storeId, Long productId, int quantity) throws InvalidDataException {
+        if(quantity <= 0 )  throw new InvalidDataException(InvalidDataException.INVALID_QUANTITY);
         ProductVariation product = getProductVariationById(productId);
         Store store = getStoreById(storeId);
         StoreHouse storeHouse = getStoreHouseByProductAndStore(product,store);

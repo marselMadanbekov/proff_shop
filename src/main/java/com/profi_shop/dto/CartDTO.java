@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Data
 public class CartDTO {
+    private Long couponId;
     private List<CartItemDTO> cartItems = new ArrayList<>();
     public void addItem(CartItemDTO item){
         this.cartItems.add(item);

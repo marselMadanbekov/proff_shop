@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -199,71 +199,75 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Номер</th>
-                                        <th>Сумма</th>
-                                        <th>Дата</th>
-                                        <th>Статус</th>
-                                        <th>Магазин</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="order : ${orders.getContent()}">
-                                        <td><a th:href="@{'/admin/orderDetails?orderId=' + ${order.id}}"
-                                               th:text="${order.id}"></a></td>
-                                        <td th:text="${order.phone_number}"></td>
-                                        <td th:text="${order.totalPrice}"></i></td>
-                                        <td th:text="${order.date}"></td>
-                                        <td>
+                            <p class="card-title" th:if="${orders.getContent().size() == 0}">Заказов пока нет</p>
+                            <div th:if="${orders.getContent().size() > 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>№</th>
+                                            <th>Номер</th>
+                                            <th>Сумма</th>
+                                            <th>Дата</th>
+                                            <th>Статус</th>
+                                            <th>Магазин</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="order : ${orders.getContent()}">
+                                            <td><a th:href="@{'/admin/orderDetails?orderId=' + ${order.id}}"
+                                                   th:text="${order.id}"></a></td>
+                                            <td th:text="${order.phone_number}"></td>
+                                            <td th:text="${order.totalPrice}"></i></td>
+                                            <td th:text="${order.date}"></td>
+                                            <td>
 
-                                            <div>
+                                                <div>
                                                 <span th:if="${order.status.ordinal() == 0}"
                                                       class="badge badge-dark">ОТМЕНЕН</span>
-                                                <span th:if="${order.status.ordinal() == 1}"
-                                                      class="badge badge-danger">ЗАПРОС</span>
-                                                <span th:if="${order.status.ordinal() == 2}"
-                                                      class="badge badge-primary">ЖДЕТ ОПЛАТЫ</span>
-                                                <span th:if="${order.status.ordinal() == 3}"
-                                                      class="badge badge-warning">ОПЛАЧЕНО</span>
-                                                <span th:if="${order.status.ordinal() == 4}"
-                                                      class="badge badge-info">В ПУТИ</span>
-                                                <span th:if="${order.status.ordinal() == 5}"
-                                                      class="badge badge-success">ЗАВЕРШЕН</span>
-                                            </div>
+                                                    <span th:if="${order.status.ordinal() == 1}"
+                                                          class="badge badge-danger">ЗАПРОС</span>
+                                                    <span th:if="${order.status.ordinal() == 2}"
+                                                          class="badge badge-primary">ЖДЕТ ОПЛАТЫ</span>
+                                                    <span th:if="${order.status.ordinal() == 3}"
+                                                          class="badge badge-warning">ОПЛАЧЕНО</span>
+                                                    <span th:if="${order.status.ordinal() == 4}"
+                                                          class="badge badge-info">В ПУТИ</span>
+                                                    <span th:if="${order.status.ordinal() == 5}"
+                                                          class="badge badge-success">ЗАВЕРШЕН</span>
+                                                </div>
 
-                                        </td>
-                                        <td th:text="${order.store.town}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <input hidden id="page" th:value="${orders.number}">
-                                    <ul>
-                                        <li th:if="${orders.number > 0}" class="pagination-link" th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${orders.number > 0}" class="pagination-link"
-                                            th:attr="page=${orders.number - 1}"><a th:text="${orders.number}"></a>
-                                        </li>
-                                        <li class="current"><a href="#" th:text="${orders.number + 1}"></a></li>
-                                        <li th:if="${orders.number + 1 < orders.totalPages}" class="pagination-link"
-                                            th:attr="page=${orders.number + 1}"><a href="#"
-                                                                                   th:text="${orders.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${orders.number + 2 < orders.totalPages}" class="pagination-link"
-                                            th:attr="page=${orders.number + 2}"><a href="#"
-                                                                                   th:text="${stocks.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${orders.number + 1 < orders.totalPages}" class="pagination-link"
-                                            th:attr="page=${orders.totalPages - 1}"><a href="#">>></a>
-                                        </li>
-                                    </ul>
+                                            </td>
+                                            <td th:text="${order.store.town}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <input hidden id="page" th:value="${orders.number}">
+                                        <ul>
+                                            <li th:if="${orders.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${orders.number > 0}" class="pagination-link"
+                                                th:attr="page=${orders.number - 1}"><a th:text="${orders.number}"></a>
+                                            </li>
+                                            <li class="current"><a href="#" th:text="${orders.number + 1}"></a></li>
+                                            <li th:if="${orders.number + 1 < orders.totalPages}" class="pagination-link"
+                                                th:attr="page=${orders.number + 1}"><a href="#"
+                                                                                       th:text="${orders.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${orders.number + 2 < orders.totalPages}" class="pagination-link"
+                                                th:attr="page=${orders.number + 2}"><a href="#"
+                                                                                       th:text="${stocks.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${orders.number + 1 < orders.totalPages}" class="pagination-link"
+                                                th:attr="page=${orders.totalPages - 1}"><a href="#">>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

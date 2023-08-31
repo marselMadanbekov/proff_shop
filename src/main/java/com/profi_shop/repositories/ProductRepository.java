@@ -16,6 +16,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Long> {
     Page<Product> findAllByName(String name, Pageable pageable);
 
+    Page<Product> findByNameLike(String name, Pageable pageable);
     List<Product> findAllByCategory(Category category);
 
     Page<Product> findAllByCategoryAndColor(Pageable pageable, Category category, String color);

@@ -2,6 +2,7 @@ package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.Cart;
+import com.profi_shop.model.CartItem;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.requests.CartUpdateRequest;
 import com.profi_shop.services.CartService;
@@ -48,12 +49,14 @@ public class CartController {
         } else {
             cart = cartService.getCartByUsername(principal.getName());
         }
+
         List<Category> categories = categoryService.getMainCategories();
         List<String> states = shipmentService.getUniqueStates();
         List<String> towns = shipmentService.getUniqueTowns();
 
         model.addAttribute("cart", cart);
         model.addAttribute("states", states);
+        model.addAttribute("towns", towns);
         model.addAttribute("categories", categories);
         model.addAttribute("cart", cart);
         return "shop/cart";
@@ -83,13 +86,14 @@ public class CartController {
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
+
     @PostMapping("/addByVariation")
     public ResponseEntity<Map<String, String>> addToCartByVariationQuantity(@RequestParam("productId") Long productId,
-                                                         @RequestParam("variationId") Long variationId,
-                                                         @RequestParam("quantity") Integer quantity,
-                                                         HttpServletRequest request,
-                                                         HttpServletResponse response,
-                                                         Principal principal) {
+                                                                            @RequestParam("variationId") Long variationId,
+                                                                            @RequestParam("quantity") Integer quantity,
+                                                                            HttpServletRequest request,
+                                                                            HttpServletResponse response,
+                                                                            Principal principal) {
         Map<String, String> responseMessage = new HashMap<>();
         Cart cart;
         try {
@@ -98,7 +102,7 @@ public class CartController {
                 cartService.saveCartToCookie(cart, response);
                 responseMessage.put("message", "Продукт успешно добавлен в корзину");
             } else {
-                cart = cartService.addProductToCartProductByVariationAndQuantity(principal.getName(), productId,variationId, quantity);
+                cart = cartService.addProductToCartProductByVariationAndQuantity(principal.getName(), productId, variationId, quantity);
                 responseMessage.put("message", "Продукт успешно добавлен в корзину");
             }
         } catch (Exception e) {
@@ -106,6 +110,51 @@ public class CartController {
             return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    @PostMapping("/apply-coupon")
+    public ResponseEntity<Map<String, String>> applyCoupon(@RequestParam String couponCode,
+                                                           HttpServletRequest request,
+                                                           HttpServletResponse responsem,
+                                                           Principal principal) {
+        Map<String, String> response = new HashMap<>();
+        Cart cart = null;
+        try {
+            if (principal == null) {
+                cart = cartService.applyCoupon(request, couponCode);
+                cartService.saveCartToCookie(cart, responsem);
+                response.put("message", "Купон успешно применен!");
+            } else {
+                cart = cartService.applyCoupon(principal.getName(), couponCode);
+                response.put("message", "Купон успешно применен!");
+            }
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/remove-coupon")
+    public ResponseEntity<Map<String, String>> removeCoupon(HttpServletRequest request,
+                                                            HttpServletResponse responsem,
+                                                            Principal principal) {
+        Map<String, String> response = new HashMap<>();
+        Cart cart = null;
+        try {
+            if (principal == null) {
+                cart = cartService.removeCoupon(request);
+                cartService.saveCartToCookie(cart, responsem);
+                response.put("message", "Купон успешно удален!");
+            } else {
+                cartService.removeCoupon(principal.getName());
+                response.put("message", "Купон успешно удален!");
+            }
+        } catch (Exception e) {
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/remove")
@@ -118,7 +167,7 @@ public class CartController {
         Cart cart;
         if (principal == null) {
             try {
-                cart = cartService.removeProductFromCart(request, productId,size);
+                cart = cartService.removeProductFromCart(request, productId, size);
                 cartService.saveCartToCookie(cart, response);
                 responseMessage.put("message", "Продукт успешно удален из корзины");
                 return new ResponseEntity<>(responseMessage, HttpStatus.OK);
@@ -127,7 +176,7 @@ public class CartController {
                 return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
             }
         } else {
-            cart = cartService.removeProductFromCart(principal.getName(), productId,size);
+            cart = cartService.removeProductFromCart(principal.getName(), productId, size);
             responseMessage.put("message", "Продукт успешно удален из корзины");
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);

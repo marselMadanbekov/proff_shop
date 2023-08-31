@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -125,26 +125,25 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Create new Store</h4>
+                        <h4 class="card-title">Создать новый магазин</h4>
                         <form id="storeForm" class="forms-sample">
                             <div class="form-group">
-                                <label for="exampleInputName">Name</label>
+                                <label for="exampleInputName">Название</label>
                                 <input type="text" name="name" class="form-control" id="exampleInputName" placeholder="Name">
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail">Town</label>
+                                <label for="exampleInputEmail">Город</label>
                                 <input type="text" name="town" class="form-control" id="exampleInputEmail" placeholder="town">
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputPrimeCost">Address</label>
+                                <label for="exampleInputPrimeCost">Адрес</label>
                                 <input type="text" name="address" class="form-control" id="exampleInputPrimeCost" placeholder="address">
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputPrice">Phone number</label>
+                                <label for="exampleInputPrice">Номер телефона</label>
                                 <input type="text" name="phone_number" class="form-control" id="exampleInputPrice" placeholder="phone number">
                             </div>
-                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                            <button class="btn btn-light">Cancel</button>
+                            <button type="submit" class="btn btn-primary mr-2">Создать</button>
                         </form>
                         <div id="progressModal" class="modal">
                             <div class="modal-content">

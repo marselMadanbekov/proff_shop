@@ -21,10 +21,14 @@ function updateProductsTable(data) {
         const row = `
     <tr>
       <td class="justify-content-center">
+      <div class="d-flex ml-1">
         <input style="width: 10px" type="checkbox" data-product-id="${product.id}" onclick="handleProductSelection(this)" ${isChecked}>
+      </div>
       </td>
       <td class="justify-content-center">
+      <div class="d-flex ml-1">
         <input style="width: 10px" type="checkbox" ${product.discount > 0 ? 'checked' : ''} disabled>
+      </div>
       </td>
       <td>
         ${photoUrl ? `<img src="${photoUrl}">` : ''}
@@ -131,9 +135,9 @@ function updateCategoryPagination(data) {
 function loadNewProducts(pageNumber) {
     let baseURL = '/admin/filter?';
     let queryParams = '';
-    if(size !== null && size !== '')
+    if (size !== null && size !== '')
         queryParams += 'size=' + encodeURIComponent(size) + '&';
-    if(pageNumber !== null && pageNumber !== '')
+    if (pageNumber !== null && pageNumber !== '')
         queryParams += 'page=' + encodeURIComponent(pageNumber);
     queryParams += '&minPrice=' + encodeURIComponent(minPrice);
     queryParams += '&maxPrice=' + encodeURIComponent(maxPrice);
@@ -216,7 +220,7 @@ $(document).on("click", "#filter", function (e) {
 loadNewProducts(0);
 loadNewCategories(0);
 
-stockForm.addEventListener('submit',function (e){
+stockForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const startDate = $('#startDate').val(); // Значение начальной даты из элемента с id "start-date"
     const endDate = $('#endDate').val(); // Значение конечной даты из элемента с id "end-date"

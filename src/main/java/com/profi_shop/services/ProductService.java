@@ -80,7 +80,7 @@ public class ProductService {
             throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
         }
         if (productToCreate.getSize() == null || productToCreate.getSize().isEmpty()) {
-            addVariationToProduct(product.getId(), "DEFAULT", productToCreate.getSku());
+            addVariationToProduct(product.getId(), "Универсальный", productToCreate.getSku());
         } else {
             addVariationToProduct(product.getId(), productToCreate.getSize(), productToCreate.getSku());
         }
@@ -119,7 +119,7 @@ public class ProductService {
         if (request.equals("")) {
             return productRepository.findAll(PageRequest.of(page, 9));
         }
-        return productRepository.findAllByName(request, PageRequest.of(page, 9));
+        return productRepository.findByNameLike(request, PageRequest.of(page, 9));
     }
 
     public void addPhotoToProductById(Long productId, MultipartFile photo) throws IOException {

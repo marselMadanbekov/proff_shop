@@ -145,10 +145,11 @@ public class OrderController {
     }
 
     @PostMapping("/order/delete")
-    public ResponseEntity<Map<String, String>> cancelOrder(@RequestParam Long orderId){
+    public ResponseEntity<Map<String, String>> cancelOrder(@RequestParam Long orderId,
+                                                           Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.cancelOrder(orderId);
+            orderService.cancelOrder(orderId,principal.getName());
             response.put("message","Заказ успешно отменен");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){

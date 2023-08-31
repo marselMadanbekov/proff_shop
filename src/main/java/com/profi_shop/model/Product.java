@@ -39,6 +39,7 @@ public class Product {
     private List<String> tags = new ArrayList<>();
 
     private String brand;
+    @Column(columnDefinition = "text")
     private String description;
     @ManyToOne
     private Category category;

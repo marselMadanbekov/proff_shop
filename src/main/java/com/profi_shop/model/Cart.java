@@ -26,6 +26,9 @@ public class Cart {
 
     private Date last_update;
 
+    @OneToOne
+    private Coupon coupon;
+
     @PrePersist
     private void onCreate(){
         this.last_update = Date.valueOf(LocalDate.now());
@@ -35,9 +38,6 @@ public class Cart {
         this.last_update = Date.valueOf(LocalDate.now());
     }
 
-    public boolean needForUpdating(){
-        return LocalDate.now().minusDays(1).isAfter(last_update.toLocalDate());
-    }
     public Cart(){
         updated();
     }
@@ -76,7 +76,20 @@ public class Cart {
 
     public int cartAmount(){
         return cartItems.stream()
-                .mapToInt(CartItem::getAmount) // Получаем поток числовых значений
+                .mapToInt(CartItem::getTotalAmount) // Получаем поток числовых значений
                 .sum();
+    }
+
+    public int cartAmountWithDiscount(){
+        return cartItems.stream()
+                .mapToInt(CartItem::getAmountWithDiscount) // Получаем поток числовых значений
+                .sum();
+    }
+
+    public boolean isCouponApplicable(){
+        for(CartItem cartItem: cartItems){
+            if(cartItem.getDiscount() == 0) return true;
+        }
+        return false;
     }
 }

@@ -3,6 +3,7 @@ package com.profi_shop.services;
 import com.profi_shop.dto.StoreDTO;
 import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
+import com.profi_shop.model.Stock;
 import com.profi_shop.model.Store;
 import com.profi_shop.repositories.StoreRepository;
 import com.profi_shop.validations.Validator;
@@ -45,5 +46,10 @@ public class StoreService {
 
     public Store getStoreById(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
+    }
+
+    public void deleteStore(Long storeId) {
+        Store store = getStoreById(storeId);
+        storeRepository.delete(store);
     }
 }

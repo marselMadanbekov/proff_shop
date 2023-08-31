@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -174,79 +174,87 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <p class="card-title mb-0 mt-1">Отправленные транзакции</p>
-                                <div class="form-group form-inline">
-                                    <label class="mr-2">Сортировать по</label>
-                                    <select class="form-control form-control-sm" id="sortSelect">
-                                        <option value="0" th:selected="${selectedSort == 0}">По дате : новые</option>
-                                        <option value="1" th:selected="${selectedSort == 1}">По дате : старые
-                                        </option>
-                                        <option value="2" th:selected="${selectedSort == 2}">По сумме : возрастание
-                                        </option>
-                                        <option value="3" th:selected="${selectedSort == 3}">По сумме : убывание
-                                        </option>
-                                    </select>
+                            <div th:hidden="${sendTransactions.getContent().size() == 0}">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <p class="card-title mb-0 mt-1">Отправленные транзакции</p>
+                                    <div class="form-group form-inline"
+                                         th:hidden="${sendTransactions.getContent().size() == 0}">
+                                        <label class="mr-2">Сортировать по</label>
+                                        <select class="form-control form-control-sm" id="sortSelect">
+                                            <option value="0" th:selected="${selectedSort == 0}">По дате : новые
+                                            </option>
+                                            <option value="1" th:selected="${selectedSort == 1}">По дате : старые
+                                            </option>
+                                            <option value="2" th:selected="${selectedSort == 2}">По сумме : возрастание
+                                            </option>
+                                            <option value="3" th:selected="${selectedSort == 3}">По сумме : убывание
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>№</th>
+                                            <th>Отправитель</th>
+                                            <th>Получатель</th>
+                                            <th>Сумма</th>
+                                            <th>Дата</th>
+                                            <th>Статус</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="transaction : ${sendTransactions.getContent()}">
+                                            <td th:text="${transaction.id}"></td>
+                                            <td th:text="${transaction.sender.town}"></td>
+                                            <td th:if="${not transaction.toMainStore}"
+                                                th:text="${transaction.target.town}"></td>
+                                            <td th:if="${transaction.toMainStore}">Головной офис</td>
+                                            <td th:text="${transaction.amount}"></td>
+                                            <td th:text="${transaction.date}"></td>
+                                            <td>
+                                                <p class="badge badge-warning" th:if="${not transaction.allowed}">В
+                                                    ОЖИДАНИИ</p>
+                                                <p class="badge badge-success" th:if="${transaction.allowed}">
+                                                    ОДОБРЕНО</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container" th:if="${sendTransactions != null}">
+                                    <div class="pagination">
+                                        <ul>
+                                            <li th:if="${sendTransactions.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${sendTransactions.number > 0}" class="pagination-link"
+                                                th:attr="page=${sendTransactions.number - 1}"><a
+                                                    th:text="${sendTransactions.number}"></a>
+                                            </li>
+                                            <li class="current"><a th:text="${sendTransactions.number + 1}"></a></li>
+                                            <li th:if="${sendTransactions.number + 1 < sendTransactions.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${sendTransactions.number + 1}"><a
+                                                    th:text="${sendTransactions.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${sendTransactions.number + 2 < sendTransactions.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${sendTransactions.number + 2}"><a
+                                                    th:text="${sendTransactions.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${sendTransactions.number + 1< sendTransactions.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${sendTransactions.totalPages - 1}"><a>>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Отправитель</th>
-                                        <th>Получатель</th>
-                                        <th>Сумма</th>
-                                        <th>Дата</th>
-                                        <th>Статус</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="transaction : ${sendTransactions.getContent()}">
-                                        <td th:text="${transaction.id}"></td>
-                                        <td th:text="${transaction.sender.town}"></td>
-                                        <td th:if="${not transaction.toMainStore}"
-                                            th:text="${transaction.target.town}"></td>
-                                        <td th:if="${transaction.toMainStore}">Головной офис</td>
-                                        <td th:text="${transaction.amount}"></td>
-                                        <td th:text="${transaction.date}"></td>
-                                        <td>
-                                            <p class="badge badge-warning" th:if="${not transaction.allowed}">В
-                                                ОЖИДАНИИ</p>
-                                            <p class="badge badge-success" th:if="${transaction.allowed}">ОДОБРЕНО</p>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container" th:if="${sendTransactions != null}">
-                                <div class="pagination">
-                                    <ul>
-                                        <li th:if="${sendTransactions.number > 0}" class="pagination-link"
-                                            th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${sendTransactions.number > 0}" class="pagination-link"
-                                            th:attr="page=${sendTransactions.number - 1}"><a
-                                                th:text="${sendTransactions.number}"></a>
-                                        </li>
-                                        <li class="current"><a th:text="${sendTransactions.number + 1}"></a></li>
-                                        <li th:if="${sendTransactions.number + 1 < sendTransactions.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${sendTransactions.number + 1}"><a
-                                                th:text="${sendTransactions.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${sendTransactions.number + 2 < sendTransactions.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${sendTransactions.number + 2}"><a
-                                                th:text="${sendTransactions.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${sendTransactions.number + 1< sendTransactions.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${sendTransactions.totalPages - 1}"><a>>></a>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div th:hidden="${sendTransactions.getContent().size() > 0}">
+                                <h4 class="card-title">Нет отправленных транзакций</h4>
                             </div>
                         </div>
                     </div>
@@ -256,87 +264,93 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <p class="card-title mb-0 mt-1">Поступившие транзакции</p>
-                                <div class="form-group form-inline">
-                                    <label class="mr-2">Сортировать по</label>
-                                    <select class="form-control form-control-sm" id="recSortSelect">
-                                        <option value="0" th:selected="${recSort == 0}">По дате : новые
-                                        </option>
-                                        <option value="1" th:selected="${recSort == 1}">По дате : старые
-                                        </option>
-                                        <option value="2" th:selected="${recSort == 2}">По сумме :
-                                            возрастание
-                                        </option>
-                                        <option value="3" th:selected="${recSort == 3}">По сумме : убывание
-                                        </option>
-                                    </select>
+                            <div th:hidden="${receivedTransactions.getContent().size() == 0}">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <p class="card-title mb-0 mt-1">Поступившие транзакции</p>
+                                    <div class="form-group form-inline">
+                                        <label class="mr-2">Сортировать по</label>
+                                        <select class="form-control form-control-sm" id="recSortSelect">
+                                            <option value="0" th:selected="${recSort == 0}">По дате : новые
+                                            </option>
+                                            <option value="1" th:selected="${recSort == 1}">По дате : старые
+                                            </option>
+                                            <option value="2" th:selected="${recSort == 2}">По сумме :
+                                                возрастание
+                                            </option>
+                                            <option value="3" th:selected="${recSort == 3}">По сумме : убывание
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>№</th>
+                                            <th>Отправитель</th>
+                                            <th>Получатель</th>
+                                            <th>Сумма</th>
+                                            <th>Дата</th>
+                                            <th>Статус</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="transaction : ${receivedTransactions.getContent()}">
+                                            <td th:text="${transaction.id}"></td>
+                                            <td th:text="${transaction.sender.town}"></td>
+                                            <td th:text="${transaction.target.town}"></td>
+                                            <td th:text="${transaction.amount}"></td>
+                                            <td th:text="${transaction.date}"></td>
+                                            <td>
+                                                <p class="badge badge-warning" th:if="${not transaction.allowed}">В
+                                                    ОЖИДАНИИ</p>
+                                                <p class="badge badge-success" th:if="${transaction.allowed}">
+                                                    ОДОБРЕНО</p>
+                                            </td>
+                                            <td th:if="${not transaction.allowed}">
+                                                <div>
+                                                    <button class="btn btn-sm btn-primary allowTr"
+                                                            th:attr="transactionId=${transaction.id}">Одобрить
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container" th:hidden="${receivedTransactions == null}">
+                                    <div class="pagination">
+                                        <ul>
+                                            <li th:if="${receivedTransactions.number > 0}" class="rec-pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${receivedTransactions.number > 0}" class="rec-pagination-link"
+                                                th:attr="page=${receivedTransactions.number - 1}"><a
+                                                    th:text="${receivedTransactions.number}"></a>
+                                            </li>
+                                            <li class="current"><a th:text="${receivedTransactions.number + 1}"></a>
+                                            </li>
+                                            <li th:if="${receivedTransactions.number + 1 < receivedTransactions.totalPages}"
+                                                class="rec-pagination-link"
+                                                th:attr="page=${receivedTransactions.number + 1}"><a
+                                                    th:text="${receivedTransactions.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${receivedTransactions.number + 2 < receivedTransactions.totalPages}"
+                                                class="rec-pagination-link"
+                                                th:attr="page=${receivedTransactions.number + 2}"><a
+                                                    th:text="${receivedTransactions.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${receivedTransactions.number + 1< receivedTransactions.totalPages}"
+                                                class="rec-pagination-link"
+                                                th:attr="page=${receivedTransactions.totalPages - 1}"><a>>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Отправитель</th>
-                                        <th>Получатель</th>
-                                        <th>Сумма</th>
-                                        <th>Дата</th>
-                                        <th>Статус</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="transaction : ${receivedTransactions.getContent()}">
-                                        <td th:text="${transaction.id}"></td>
-                                        <td th:text="${transaction.sender.town}"></td>
-                                        <td th:text="${transaction.target.town}"></td>
-                                        <td th:text="${transaction.amount}"></td>
-                                        <td th:text="${transaction.date}"></td>
-                                        <td>
-                                            <p class="badge badge-warning" th:if="${not transaction.allowed}">В
-                                                ОЖИДАНИИ</p>
-                                            <p class="badge badge-success" th:if="${transaction.allowed}">
-                                                ОДОБРЕНО</p>
-                                        </td>
-                                        <td th:if="${not transaction.allowed}">
-                                            <div>
-                                                <button class="btn btn-sm btn-primary allowTr"
-                                                        th:attr="transactionId=${transaction.id}">Одобрить
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container" th:if="${receivedTransactions != null}">
-                                <div class="pagination">
-                                    <ul>
-                                        <li th:if="${receivedTransactions.number > 0}" class="rec-pagination-link"
-                                            th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${receivedTransactions.number > 0}" class="rec-pagination-link"
-                                            th:attr="page=${receivedTransactions.number - 1}"><a
-                                                th:text="${receivedTransactions.number}"></a>
-                                        </li>
-                                        <li class="current"><a th:text="${receivedTransactions.number + 1}"></a></li>
-                                        <li th:if="${receivedTransactions.number + 1 < receivedTransactions.totalPages}"
-                                            class="rec-pagination-link"
-                                            th:attr="page=${receivedTransactions.number + 1}"><a
-                                                th:text="${receivedTransactions.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${receivedTransactions.number + 2 < receivedTransactions.totalPages}"
-                                            class="rec-pagination-link"
-                                            th:attr="page=${receivedTransactions.number + 2}"><a
-                                                th:text="${receivedTransactions.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${receivedTransactions.number + 1< receivedTransactions.totalPages}"
-                                            class="rec-pagination-link"
-                                            th:attr="page=${receivedTransactions.totalPages - 1}"><a>>></a>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div th:hidden="${receivedTransactions.getContent().size() > 0}">
+                                <h4 class="card-title">Нет полученных транзакций</h4>
                             </div>
                         </div>
                     </div>

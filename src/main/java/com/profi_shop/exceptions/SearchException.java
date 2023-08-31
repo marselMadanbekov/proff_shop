@@ -23,6 +23,8 @@ public class SearchException extends RuntimeException{
     public static final int NOTIFICATION_NOT_FOUND = 13;
     public static final int ORDER_ITEM_NOT_FOUND = 14;
     public static final int TRANSACTION_NOT_FOUND = 15;
+    public static final int STORE_HOUSE_NOT_FOUND = 16;
+    public static final int COUPON_NOT_FOUND = 17;
 
 
     private final int code;
@@ -50,6 +52,8 @@ public class SearchException extends RuntimeException{
             case 13 -> Text.get("ERROR_NOTIFICATION_NOT_FOUND");
             case 14 -> Text.get("ERROR_ORDER_ITEM_NOT_FOUND");
             case 15 -> Text.get("ERROR_TRANSACTION_NOT_FOUND");
+            case 16 -> Text.get("ERROR_STORE_HOUSE_NOT_FOUND");
+            case 17 -> Text.get("ERROR_COUPON_NOT_FOUND");
             default -> "";
         };
     }

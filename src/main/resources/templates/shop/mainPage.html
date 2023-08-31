@@ -73,7 +73,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="call-support">
+                    <div class="call-support" th:if="${mainStore.phone_numbers.size() > 0}">
                         <p>Тех. поддержка: <a th:text="${mainStore.phone_numbers.get(0)}"></a></p>
                     </div>
                     <div id="menu" class="text-left ">
@@ -209,7 +209,7 @@
                         <!--main menu end-->
                     </div>
                     <div class="col-lg-3">
-                        <div class="call-support">
+                        <div class="call-support" th:if="${mainStore.phone_numbers.size() > 0}">
                             <p>Тех поддержка: <a th:text="${mainStore.phone_numbers.get(0)}"></a></p>
                         </div>
                     </div>

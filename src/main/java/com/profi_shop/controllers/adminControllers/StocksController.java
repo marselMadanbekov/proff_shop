@@ -2,11 +2,13 @@ package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.model.Category;
+import com.profi_shop.model.Product;
 import com.profi_shop.model.Stock;
 import com.profi_shop.model.requests.StockRequest;
 import com.profi_shop.services.CategoryService;
 import com.profi_shop.services.ProductService;
 import com.profi_shop.services.StockService;
+import com.profi_shop.services.StoreService;
 import com.profi_shop.services.facade.ProductFacade;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -48,6 +50,30 @@ public class StocksController {
         return "admin/stock/stocksPage";
     }
 
+    @GetMapping("/stock-details")
+    public String stockDetails(@RequestParam Long stockId,
+                               @RequestParam(value = "page", required = false) Optional<Integer> page,
+                               Model model){
+        Stock stock = stockService.getStockById(stockId);
+        Page<Product> products = stockService.getPagedParticipantsByStockId(stockId,page.orElse(0));
+        model.addAttribute("stock", stock);
+        model.addAttribute("participants", products);
+        return "admin/stock/stockDetails";
+    }
+
+    @PostMapping("/stocks/remove-participant")
+    public ResponseEntity<Map<String,String>> removeParticipant(@RequestParam Long stockId,
+                                                                @RequestParam Long productId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            stockService.removeParticipantFromStock(stockId, productId);
+            response.put("message", "Товар успешно удален из акции");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/createStock")
     public String createStock(@RequestParam("productPage") Optional<Integer> productPage,
                               @RequestParam("categoryPage") Optional<Integer> categoryPage,

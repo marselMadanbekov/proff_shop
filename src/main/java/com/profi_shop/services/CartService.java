@@ -23,8 +23,8 @@ import java.util.Objects;
 @Service
 public class CartService {
     private final CartRepository cartRepository;
-
     private final UserRepository userRepository;
+    private final CouponService couponService;
 
     private final ProductRepository productRepository;
 
@@ -40,8 +40,9 @@ public class CartService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public CartService(CartRepository cartRepository, UserRepository userRepository, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, StoreHouseRepository storeHouseRepository, CartFacade cartFacade, PriceService priceService, StockRepository stockRepository) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, CouponService couponService, ProductRepository productRepository, CartItemRepository cartItemRepository, ProductVariationRepository productVariationRepository, StoreHouseRepository storeHouseRepository, CartFacade cartFacade, PriceService priceService, StockRepository stockRepository) {
         this.cartRepository = cartRepository;
+        this.couponService = couponService;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
@@ -55,18 +56,9 @@ public class CartService {
     public Cart getCartByUsername(String username) {
         User user = getUserByUsername(username);
         Cart cart = cartRepository.findByUser(user).orElse(new Cart(user));
-        for (CartItem cartItem : cart.getCartItems()) {
-            Stock stock = getStockByProduct(cartItem.getProduct());
-            if (stock == null) cartItem.setStockType(0);
-            else if (stock.isActive()) {
-                if (stock.isFor_authenticated()) cartItem.setStockType(1);
-                else cartItem.setStockType(2);
-            } else cartItem.setStockType(0);
-            cartItem.setDiscount(priceService.getDiscountForProductForUser(cartItem.getProduct(), true));
-            cartItemRepository.save(cartItem);
-        }
-        return cartRepository.save(cart);
+        return cartRepository.save(getActualStateOfCart(cart));
     }
+
 
     public Cart getCartByRequestCookies(HttpServletRequest request) throws ExistException {
         Cookie[] cookies = request.getCookies();
@@ -87,6 +79,41 @@ public class CartService {
         return new Cart();
     }
 
+    private Cart getActualStateOfCart(Cart cart) {
+        if (cart.getCoupon() != null && cart.getCoupon().isActive()) {
+            for (CartItem cartItem : cart.getCartItems()) {
+                Stock stock = getStockByProduct(cartItem.getProduct());
+                if (stock == null) {
+                    cartItem.setStockType(0);
+                    cartItem.setDiscount(cart.getCoupon().getDiscount());
+                } else if (stock.isActive()) {
+                    if (stock.isFor_authenticated()) cartItem.setStockType(1);
+                    else cartItem.setStockType(2);
+                } else cartItem.setStockType(0);
+                int discount = priceService.getDiscountForProductForUser(cartItem.getProduct(), true);
+                if (discount == 0)
+                    cartItem.setDiscount(cart.getCoupon().getDiscount());
+                else
+                    cartItem.setDiscount(discount);
+                cartItemRepository.save(cartItem);
+            }
+        } else {
+            for (CartItem cartItem : cart.getCartItems()) {
+                Stock stock = getStockByProduct(cartItem.getProduct());
+                if (stock == null) {
+                    cartItem.setStockType(0);
+                } else if (stock.isActive()) {
+                    if (stock.isFor_authenticated()) cartItem.setStockType(1);
+                    else cartItem.setStockType(2);
+                } else cartItem.setStockType(0);
+                int discount = priceService.getDiscountForProductForUser(cartItem.getProduct(), true);
+                cartItem.setDiscount(discount);
+                cartItemRepository.save(cartItem);
+            }
+        }
+        return cart;
+    }
+
     public Cart addProductToCart(String username, Long productId) throws ExistException, NotEnoughException {
         Cart cart = getCartByUsername(username);
         Product product = getProductById(productId);
@@ -96,6 +123,9 @@ public class CartService {
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
+            if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+                cartItem.setDiscount(cart.getCoupon().getDiscount());
+            }
             List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
             if (productVariations.size() == 1) {
                 cartItem.setProductVariation(productVariations.get(0));
@@ -116,6 +146,9 @@ public class CartService {
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
         cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
+        if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+            cartItem.setDiscount(cart.getCoupon().getDiscount());
+        }
         if (variationId > 0) {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
@@ -140,6 +173,9 @@ public class CartService {
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
+            if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+                cartItem.setDiscount(cart.getCoupon().getDiscount());
+            }
             List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
             if (productVariations.size() == 1) {
                 cartItem.setProductVariation(productVariations.get(0));
@@ -158,6 +194,9 @@ public class CartService {
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
         cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
+        if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+            cartItem.setDiscount(cart.getCoupon().getDiscount());
+        }
         if (variationId > 0) {
             ProductVariation productVariation = getProductVariationById(variationId);
             cartItem.setProductVariation(productVariation);
@@ -229,6 +268,7 @@ public class CartService {
     public void cartUpdateForAuthUser(String username, List<CartUpdateRequest> cartItems) throws NotEnoughException {
         Cart cart = getCartByUsername(username);
         cartUpdate(cart, cartItems);
+        cartRepository.save(cart);
     }
 
     private Cart cartUpdate(Cart cart, List<CartUpdateRequest> cartItems) throws NotEnoughException {
@@ -274,5 +314,48 @@ public class CartService {
             count += storeHouse.getQuantity();
         }
         return count;
+    }
+
+    public Cart applyCoupon(HttpServletRequest request, String couponCode) throws Exception {
+        Coupon coupon = getCouponByCode(couponCode);
+        Cart cart = getCartByRequestCookies(request);
+        if (cart.isCouponApplicable()) {
+            for (CartItem cartItem : cart.getCartItems()) {
+                if (cartItem.getDiscount() == 0) {
+                    System.out.println("coupon discount = " + coupon.getDiscount());
+                    cartItem.setDiscount(coupon.getDiscount());
+                }
+            }
+            cart.setCoupon(coupon);
+            return cart;
+        } else
+            throw new Exception("Невозможно применить купон на акционные товары!");
+    }
+
+    public Cart applyCoupon(String username, String couponCode) throws Exception {
+        Coupon coupon = getCouponByCode(couponCode);
+        Cart cart = getCartByUsername(username);
+        if (cart.isCouponApplicable()) {
+            couponService.applyCouponToCart(cart, coupon, true);
+        } else
+            throw new Exception("Невозможно применить купон на акционные товары!");
+
+        return cart;
+    }
+
+    private Coupon getCouponByCode(String couponCode) {
+        return couponService.findByActivationCode(couponCode);
+    }
+
+    public void removeCoupon(String name) {
+        Cart cart = getCartByUsername(name);
+        cart.setCoupon(null);
+        cartRepository.save(cart);
+    }
+
+    public Cart removeCoupon(HttpServletRequest request) throws ExistException {
+        Cart cart = getCartByRequestCookies(request);
+        cart.setCoupon(null);
+        return cart;
     }
 }

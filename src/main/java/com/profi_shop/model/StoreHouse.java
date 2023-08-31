@@ -21,4 +21,12 @@ public class StoreHouse {
         this.product = product;
         this.store = store;
     }
+
+    public void quantityDown(int quantity) {
+        this.quantity -= quantity;
+    }
+
+    public void quantityUp(int quantity){
+        this.quantity += quantity;
+    }
 }

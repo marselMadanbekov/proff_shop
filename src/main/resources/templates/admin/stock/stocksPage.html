@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -139,57 +139,69 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Тип</th>
-                                        <th>Скидка</th>
-                                        <th>Начало</th>
-                                        <th>Конец</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="stock: ${stocks}">
-                                        <td th:text="${stock.id}"></td>
-                                        <td th:text="${stock.type}"></td>
-                                        <td class="text-danger" th:text="${stock.discount}"><i class="ti-arrow-down"></i></td>
-                                        <td th:text="${stock.startDate}"></td>
-                                        <td th:text="${stock.endDate}"></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger"
-                                                    type="button"
-                                                    th:data-stock-id="${stock.id}"
-                                                    onclick="deleteStock(this.getAttribute('data-stock-id'))">деактивировать</button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div th:if="${stocks.getContent().size() == 0}">
+                                <p class="card-title">Акций нет</p>
                             </div>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <input hidden id="page" th:value="${stocks.number}">
-                                    <ul>
-                                        <li th:if="${stocks.number > 0}" class="pagination-link" th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${stocks.number > 0}" class="pagination-link"
-                                            th:attr="page=${stocks.number - 1}"><a th:text="${stocks.number}"></a>
-                                        </li>
-                                        <li class="current"><a href="#" th:text="${stocks.number + 1}"></a></li>
-                                        <li th:if="${stocks.number + 1 < stocks.totalPages}" class="pagination-link"
-                                            th:attr="page=${stocks.number + 1}"><a href="#"
-                                                                                     th:text="${stocks.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${stocks.number + 2 < stocks.totalPages}" class="pagination-link"
-                                            th:attr="page=${stocks.number + 2}"><a href="#"
-                                                                                     th:text="${stocks.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${stocks.number + 1 < stocks.totalPages}" class="pagination-link"
-                                            th:attr="page=${stocks.totalPages - 1}"><a href="#">>></a>
-                                        </li>
-                                    </ul>
+                            <div th:if="${stocks.getContent().size() > 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>№</th>
+                                            <th>Тип</th>
+                                            <th>Скидка</th>
+                                            <th>Начало</th>
+                                            <th>Конец</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="stock: ${stocks}">
+                                            <td>
+                                                <a th:text="${stock.id}"
+                                                   th:href="'/admin/stock-details?stockId=' + ${stock.id}"></a>
+                                            </td>
+                                            <td th:text="${stock.type}"></td>
+                                            <td class="text-danger" th:text="${stock.discount}"><i
+                                                    class="ti-arrow-down"></i></td>
+                                            <td th:text="${stock.startDate}"></td>
+                                            <td th:text="${stock.endDate}"></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger"
+                                                        type="button"
+                                                        th:data-stock-id="${stock.id}"
+                                                        onclick="deleteStock(this.getAttribute('data-stock-id'))">
+                                                    деактивировать
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <input hidden id="page" th:value="${stocks.number}">
+                                        <ul>
+                                            <li th:if="${stocks.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${stocks.number > 0}" class="pagination-link"
+                                                th:attr="page=${stocks.number - 1}"><a th:text="${stocks.number}"></a>
+                                            </li>
+                                            <li class="current"><a href="#" th:text="${stocks.number + 1}"></a></li>
+                                            <li th:if="${stocks.number + 1 < stocks.totalPages}" class="pagination-link"
+                                                th:attr="page=${stocks.number + 1}"><a href="#"
+                                                                                       th:text="${stocks.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${stocks.number + 2 < stocks.totalPages}" class="pagination-link"
+                                                th:attr="page=${stocks.number + 2}"><a href="#"
+                                                                                       th:text="${stocks.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${stocks.number + 1 < stocks.totalPages}" class="pagination-link"
+                                                th:attr="page=${stocks.totalPages - 1}"><a href="#">>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

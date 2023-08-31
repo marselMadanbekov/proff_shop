@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -138,7 +138,8 @@
                         <div class="card-body">
                             <p class="card-title">Все размеры</p>
                             <div class="table-responsive mb-3 mb-md-0">
-                                <table class="table table-borderless report-table">
+                                <p class="card-title" th:if="${product.getProductVariations().size() == 0}">Размеры для товара не указаны</p>
+                                <table class="table table-borderless report-table" th:if="${product.getProductVariations().size() > 0}">
                                     <thead>
                                     <th>Размер</th>
                                     <th>Всего</th>

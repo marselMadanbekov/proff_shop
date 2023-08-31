@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -135,62 +135,73 @@
                 <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <p class="card-title mb-0 mt-1">Все расходы</p>
-                                <div class="form-group form-inline">
-                                    <label class="mr-2">Сортировать по</label>
-                                    <select class="form-control form-control-sm" id="sortSelect">
-                                        <option th:value="0" th:selected="${selectedSort == 0}">По дате : новые</option>
-                                        <option th:value="1" th:selected="${selectedSort == 1}">По дате : старые</option>
-                                        <option th:value="2" th:selected="${selectedSort == 2}">По сумме : возрастание</option>
-                                        <option th:value="3" th:selected="${selectedSort == 3}">По сумме : убывание</option>
-                                    </select>
+                            <p class="card-title mb-0 mt-1" th:hidden="${consumptions.getContent().size() > 0}">Расходов
+                                нет</p>
+                            <div th:hidden="${consumptions.getContent().size() == 0}">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <p class="card-title mb-0 mt-1">Все расходы</p>
+                                    <div class="form-group form-inline">
+                                        <label class="mr-2">Сортировать по</label>
+                                        <select class="form-control form-control-sm" id="sortSelect">
+                                            <option th:value="0" th:selected="${selectedSort == 0}">По дате : новые
+                                            </option>
+                                            <option th:value="1" th:selected="${selectedSort == 1}">По дате : старые
+                                            </option>
+                                            <option th:value="2" th:selected="${selectedSort == 2}">По сумме :
+                                                возрастание
+                                            </option>
+                                            <option th:value="3" th:selected="${selectedSort == 3}">По сумме :
+                                                убывание
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Сумма</th>
-                                        <th>Описание</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="consumption : ${consumptions.getContent()}">
-                                        <td th:text="${consumption.id}"></td>
-                                        <td th:text="${consumption.amount}"></td>
-                                        <td th:text="${consumption.description}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container" th:if="${consumptions != null}">
-                                <div class="pagination">
-                                    <ul>
-                                        <li th:if="${consumptions.number > 0}" class="pagination-link"
-                                            th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${consumptions.number > 0}" class="pagination-link"
-                                            th:attr="page=${consumptions.number - 1}"><a
-                                                th:text="${consumptions.number}"></a>
-                                        </li>
-                                        <li class="current"><a th:text="${consumptions.number + 1}"></a></li>
-                                        <li th:if="${consumptions.number + 1 < consumptions.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${consumptions.number + 1}"><a
-                                                th:text="${consumptions.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${consumptions.number + 2 < consumptions.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${consumptions.number + 2}"><a th:text="${consumptions.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${consumptions.number + 1< consumptions.totalPages}"
-                                            class="pagination-link"
-                                            th:attr="page=${consumptions.totalPages - 1}"><a>>></a>
-                                        </li>
-                                    </ul>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>№</th>
+                                            <th>Сумма</th>
+                                            <th>Описание</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="consumption : ${consumptions.getContent()}">
+                                            <td th:text="${consumption.id}"></td>
+                                            <td th:text="${consumption.amount}"></td>
+                                            <td th:text="${consumption.description}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container" th:if="${consumptions != null}">
+                                    <div class="pagination">
+                                        <ul>
+                                            <li th:if="${consumptions.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${consumptions.number > 0}" class="pagination-link"
+                                                th:attr="page=${consumptions.number - 1}"><a
+                                                    th:text="${consumptions.number}"></a>
+                                            </li>
+                                            <li class="current"><a th:text="${consumptions.number + 1}"></a></li>
+                                            <li th:if="${consumptions.number + 1 < consumptions.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${consumptions.number + 1}"><a
+                                                    th:text="${consumptions.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${consumptions.number + 2 < consumptions.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${consumptions.number + 2}"><a
+                                                    th:text="${consumptions.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${consumptions.number + 1< consumptions.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${consumptions.totalPages - 1}"><a>>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

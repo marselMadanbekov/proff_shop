@@ -5,10 +5,7 @@ deleteStock = function (stockId) {
             url: '/admin/stock/delete?stockId=' + stockId,
             type: 'POST',
             success: function (response) {
-                // Обработка успешного удаления
-                alert('акция успешно удалена');
-
-                // Дополнительные действия при успешном удалении категории
+                window.location.reload();
             },
             error: function (xhr, status, error) {
                 // Обработка ошибки удаления

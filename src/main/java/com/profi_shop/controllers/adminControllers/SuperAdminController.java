@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,18 @@ public class SuperAdminController {
         return "admin/store/mainStore";
     }
 
+    @PostMapping("/delete-store")
+    public ResponseEntity<Map<String,String>> deleteStore(@RequestParam Long storeId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            storeService.deleteStore(storeId);
+            response.put("message", "Магазин успешно удален");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
     @PostMapping("/add-phone")
     public ResponseEntity<Map<String,String>> addPhone(@RequestParam String phone){
         Map<String,String> response = new HashMap<>();
@@ -150,12 +163,20 @@ public class SuperAdminController {
     }
 
     @PostMapping("/create-admin")
-    public ResponseEntity<String> createAdmin(@Valid AdminCreateRequest adminCreateRequest){
+    public ResponseEntity<Map<String,String>> createAdmin(@Valid AdminCreateRequest adminCreateRequest,
+                                              BindingResult bindingResult){
+        Map<String,String> response = new HashMap<>();
+        if(bindingResult.hasErrors()){
+            response.put("error",bindingResult.toString());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         try{
             userService.createAdmin(adminCreateRequest);
-            return new ResponseEntity<>(HttpStatus.OK);
+            response.put("message", "Администратор успешно создан");
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
     }
 }

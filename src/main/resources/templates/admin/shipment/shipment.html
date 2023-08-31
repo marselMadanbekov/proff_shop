@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -136,53 +136,62 @@
                     <div class="card">
                         <div class="card-body">
                             <p class="card-title">Все доставки</p>
-                            <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Область</th>
-                                        <th>Город</th>
-                                        <th>Стоимость</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="shipment : ${shipments.getContent()}">
-                                        <td th:text="${shipment.state}"></td>
-                                        <td th:text="${shipment.town}"></td>
-                                        <td th:text="${shipment.cost}"></td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                    th:data-shipmentId="${shipment.id}"
-                                                    onclick="deleteShipment(this.getAttribute('data-shipmentId'))">
-                                                Удалить
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <input hidden id="page" th:value="${shipments.number}">
-                                    <ul>
-                                        <li th:if="${shipments.number > 0}" class="pagination-link" th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${shipments.number > 0}" class="pagination-link"
-                                            th:attr="page=${shipments.number - 1}"><a th:text="${shipments.number}"></a>
-                                        </li>
-                                        <li class="current"><a th:text="${shipments.number + 1}"></a></li>
-                                        <li th:if="${shipments.number + 1 < shipments.totalPages}" class="pagination-link"
-                                            th:attr="page=${shipments.number + 1}"><a th:text="${shipments.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${shipments.number + 2 < shipments.totalPages}" class="pagination-link"
-                                            th:attr="page=${shipments.number + 2}"><a th:text="${shipments.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${shipments.number + 1< shipments.totalPages}" class="pagination-link"
-                                            th:attr="page=${shipments.totalPages - 1}"><a >>></a>
-                                        </li>
-                                    </ul>
+                            <h4 th:if="${shipments.getContent().size() == 0}">Доставок нет</h4>
+                            <div th:if="${shipments.getContent().size() > 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Область</th>
+                                            <th>Город</th>
+                                            <th>Стоимость</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="shipment : ${shipments.getContent()}">
+                                            <td th:text="${shipment.state}"></td>
+                                            <td th:text="${shipment.town}"></td>
+                                            <td th:text="${shipment.cost}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                        th:data-shipmentId="${shipment.id}"
+                                                        onclick="deleteShipment(this.getAttribute('data-shipmentId'))">
+                                                    Удалить
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <input hidden id="page" th:value="${shipments.number}">
+                                        <ul>
+                                            <li th:if="${shipments.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${shipments.number > 0}" class="pagination-link"
+                                                th:attr="page=${shipments.number - 1}"><a
+                                                    th:text="${shipments.number}"></a>
+                                            </li>
+                                            <li class="current"><a th:text="${shipments.number + 1}"></a></li>
+                                            <li th:if="${shipments.number + 1 < shipments.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${shipments.number + 1}"><a
+                                                    th:text="${shipments.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${shipments.number + 2 < shipments.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${shipments.number + 2}"><a
+                                                    th:text="${shipments.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${shipments.number + 1< shipments.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${shipments.totalPages - 1}"><a>>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

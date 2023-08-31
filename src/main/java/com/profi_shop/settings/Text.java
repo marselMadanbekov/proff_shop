@@ -71,6 +71,8 @@ public class Text {
         data.put("ERROR_NOTIFICATION_NOT_FOUND","Уведомление не найдено!");
         data.put("ERROR_ORDER_ITEM_NOT_FOUND","Элемент заказа не найден!");
         data.put("ERROR_TRANSACTION_NOT_FOUND","Транзакция не найдена!");
+        data.put("ERROR_STORE_HOUSE_NOT_FOUND","Склад не найден!");
+        data.put("ERROR_COUPON_NOT_FOUND","Купон не найден!");
 
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 
@@ -97,6 +99,7 @@ public class Text {
         data.put("ERROR_ONLY_SUPER_ADMIN","У вас недостаточно прав для изменения. Действие только для владельца магазина!");
 
         data.put("ERROR_INVALID_NAME","В имени есть недопустимые символы!");
+        data.put("ERROR_INVALID_QUANTITY","Количество должно быть строго больше 0!");
         data.put("ERROR_INVALID_AGE","Возраст введен неверно!");
         data.put("ERROR_INVALID_EMAIL","Возраст введен неверно!");
         data.put("ERROR_INVALID_TIME_FORMAT","Время введено неверно");

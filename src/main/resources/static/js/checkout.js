@@ -6,6 +6,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const orderDetails = document.getElementById('orderDetails');
 
+    const applyCouponForm = document.getElementById('couponForm');
+    const removeCoupon = document.getElementById('remove-coupon');
+    removeCoupon.addEventListener('click',function (e){
+        e.preventDefault();
+        $.ajax({
+            url: "/cart/remove-coupon",
+            type: "POST",
+            success: function (response) {
+                $("#spinner").hide();
+                showModal('Купон успешно применен', response.message);
+            },
+            error: function (xhr, status, error) {
+                $("#spinner").hide();
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        showModal('Error', errorData.error);
+                    } else {
+                        showModal('Error', 'An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    showModal('Error', 'An error occurred while processing the request.');
+                }
+            }
+        });
+    })
+
+    applyCouponForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+            url: "/cart/apply-coupon",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $("#spinner").hide();
+                showModal('Купон успешно применен', response.message);
+            },
+            error: function (xhr, status, error) {
+                $("#spinner").hide();
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        showModal('Error', errorData.error);
+                    } else {
+                        showModal('Error', 'An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    showModal('Error', 'An error occurred while processing the request.');
+                }
+            }
+        });
+    })
+
     orderDetails.addEventListener('submit', function (e){
         e.preventDefault();
         const formData = new FormData(this);
@@ -80,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const shippingPriceElement = document.getElementById('shippingPrice');
                 shippingPriceElement.innerHTML = `<strong>${data} сом</strong>`;
 
-                const cartSubtotal = parseFloat(document.getElementById('cartSubtotal').textContent);
+                const cartSubtotal = parseFloat(document.getElementById('orderTotal').textContent);
                 const orderTotalElement = document.getElementById('orderTotal');
                 const newOrderTotal = cartSubtotal + data;
                 orderTotalElement.innerHTML = `<strong>${newOrderTotal} сом</strong>`;

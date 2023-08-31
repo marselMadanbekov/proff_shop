@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -136,55 +136,64 @@
                     <div class="card">
                         <div class="card-body">
                             <p class="card-title">Все купоны</p>
-                            <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Дата создания</th>
-                                        <th>Минимальная сумма</th>
-                                        <th>Срок действия</th>
-                                        <th>скидка</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="coupon : ${coupons.getContent()}">
-                                        <td th:text="${coupon.created_date}"></td>
-                                        <td th:text="${coupon.minAmount}"></td>
-                                        <td th:text="${coupon.duration}"></td>
-                                        <td th:text="${coupon.discount}"></td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                    th:data-shipmentId="${coupon.id}"
-                                                    onclick="deleteShipment(this.getAttribute('data-shipmentId'))">
-                                                Удалить
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <input hidden id="page" th:value="${coupons.number}">
-                                    <ul>
-                                        <li th:if="${coupons.number > 0}" class="pagination-link" th:attr="page=${0}">
-                                            <a><<</a>
-                                        </li>
-                                        <li th:if="${coupons.number > 0}" class="pagination-link"
-                                            th:attr="page=${coupons.number - 1}"><a th:text="${coupons.number}"></a>
-                                        </li>
-                                        <li class="current"><a th:text="${coupons.number + 1}"></a></li>
-                                        <li th:if="${coupons.number + 1 < coupons.totalPages}" class="pagination-link"
-                                            th:attr="page=${coupons.number + 1}"><a th:text="${coupons.number + 2}"></a>
-                                        </li>
-                                        <li th:if="${coupons.number + 2 < coupons.totalPages}" class="pagination-link"
-                                            th:attr="page=${coupons.number + 2}"><a th:text="${coupons.number + 3}"></a>
-                                        </li>
-                                        <li th:if="${coupons.number + 1< coupons.totalPages}" class="pagination-link"
-                                            th:attr="page=${coupons.totalPages - 1}"><a>>></a>
-                                        </li>
-                                    </ul>
+                            <p class="card-title" th:if="${coupons.getContent().size() == 0}">Купонов нет</p>
+
+                            <div th:if="${coupons.getContent().size() > 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Дата создания</th>
+                                            <th>Минимальная сумма</th>
+                                            <th>Срок действия</th>
+                                            <th>скидка</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="coupon : ${coupons.getContent()}">
+                                            <td th:text="${coupon.created_date}"></td>
+                                            <td th:text="${coupon.minAmount}"></td>
+                                            <td th:text="${coupon.duration}"></td>
+                                            <td th:text="${coupon.discount}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                        th:data-shipmentId="${coupon.id}"
+                                                        onclick="deleteShipment(this.getAttribute('data-shipmentId'))">
+                                                    Удалить
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <input hidden id="page" th:value="${coupons.number}">
+                                        <ul>
+                                            <li th:if="${coupons.number > 0}" class="pagination-link"
+                                                th:attr="page=${0}">
+                                                <a><<</a>
+                                            </li>
+                                            <li th:if="${coupons.number > 0}" class="pagination-link"
+                                                th:attr="page=${coupons.number - 1}"><a th:text="${coupons.number}"></a>
+                                            </li>
+                                            <li class="current"><a th:text="${coupons.number + 1}"></a></li>
+                                            <li th:if="${coupons.number + 1 < coupons.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${coupons.number + 1}"><a
+                                                    th:text="${coupons.number + 2}"></a>
+                                            </li>
+                                            <li th:if="${coupons.number + 2 < coupons.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${coupons.number + 2}"><a
+                                                    th:text="${coupons.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${coupons.number + 1< coupons.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${coupons.totalPages - 1}"><a>>></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

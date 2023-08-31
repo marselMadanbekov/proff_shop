@@ -48,7 +48,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -174,23 +174,23 @@
                                     <tbody>
                                     <tr>
                                         <td>Онлайн продажи</td>
-                                        <td th:text="${onlineSales} + ' сом'"></td>
+                                        <td th:text="${storeInfo.onlineSales} + ' сом'"></td>
                                     </tr>
                                     <tr>
                                         <td>Офлайн продажи</td>
-                                        <td th:text="${offlineSales} + ' сом'"></td>
+                                        <td th:text="${storeInfo.offlineSales} + ' сом'"></td>
                                     </tr>
                                     <tr>
                                         <td>Отмененные заказы</td>
-                                        <td th:text="${canceledOrders} + ' шт'"></td>
+                                        <td th:text="${storeInfo.canceledOrders} + ' шт'"></td>
                                     </tr>
                                     <tr>
                                         <td><a th:href="'/admin/consumptions?storeId='+ ${store.id}">Расходы</a></td>
-                                        <td>1235 сом</td>
+                                        <td th:text="${storeInfo.consumptionsAmount + ' сом'}"></td>
                                     </tr>
                                     <tr>
                                         <td><a th:href="'/admin/transactions?storeId=' + ${store.id}">Транзакции</a></td>
-                                        <td>53275 сом</td>
+                                        <td th:text="${storeInfo.transactionsAmount + ' сом'}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -244,65 +244,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-5 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <div>
-                                    <h4 class="card-title mt-1">Расходы</h4>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Описание</th>
-                                        <th>Сумма</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Обед
-                                        </td>
-                                        <td>
-                                            200
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Ужин
-                                        </td>
-                                        <td>
-                                            300
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Завтрак
-                                        </td>
-                                        <td>
-                                            100
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Сегодняк
-                                        </td>
-                                        <td>
-                                            400
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-9 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
@@ -319,7 +260,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-sm table-hover">
                                     <thead>
                                     <tr>
                                         <th>Фото</th>

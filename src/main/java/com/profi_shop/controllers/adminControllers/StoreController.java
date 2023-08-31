@@ -1,6 +1,7 @@
 package com.profi_shop.controllers.adminControllers;
 
 import com.profi_shop.dto.ProductQuantityDTO;
+import com.profi_shop.dto.StoreAnalyticsDTO;
 import com.profi_shop.dto.StoreDTO;
 import com.profi_shop.model.Order;
 import com.profi_shop.model.Store;
@@ -53,24 +54,17 @@ public class StoreController {
                                @RequestParam(value = "sort",required = false) Optional<Integer> sort,
                                Model model) {
         Store store = storeService.getStoreById(storeId);
-        int onlineSales = analyticsService.sumOfOnlineSalesByStore(storeId,
+
+        StoreAnalyticsDTO storeInfo = analyticsService.getStoreAnalytics(storeId,
                 startDate.orElse(Date.valueOf(LocalDate.now().minusDays(30))),
                 endDate.orElse(Date.valueOf(LocalDate.now())));
 
-        int offlineSales = analyticsService.sumOfOfflineSalesByStore(storeId,
-                startDate.orElse(Date.valueOf(LocalDate.now().minusDays(30))),
-                endDate.orElse(Date.valueOf(LocalDate.now())));
-        int canceledOrders = analyticsService.countOfCanceledOrdersByStore(storeId,
-                startDate.orElse(Date.valueOf(LocalDate.now().minusDays(30))),
-                endDate.orElse(Date.valueOf(LocalDate.now())));
 
         Page<ProductQuantityDTO> products = analyticsService.getProductAndQuantityPage(storeId,page.orElse(0),sort.orElse(0));
 
         model.addAttribute("products", products);
-        model.addAttribute("onlineSales", onlineSales);
-        model.addAttribute("offlineSales", offlineSales);
+        model.addAttribute("storeInfo", storeInfo);
         model.addAttribute("selectedSort", sort.orElse(0));
-        model.addAttribute("canceledOrders", canceledOrders);
         model.addAttribute("startDate", startDate.orElse(Date.valueOf(LocalDate.now().minusDays(30))));
         model.addAttribute("endDate", endDate.orElse(Date.valueOf(LocalDate.now())));
         model.addAttribute("store", store);

@@ -24,7 +24,7 @@
     consumptionForm.addEventListener('submit', function (e){
         e.preventDefault();
         let formData = new FormData(this);
-        if (confirm('Вы уверены, что хотите удалить категорию?')) {
+        if (confirm('Вы уверены, что создать расход?')) {
             // console.log('deleting category')
             // Выполнение AJAX-запроса на удаление категории с использованием jQuery
             $.ajax({

@@ -45,7 +45,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -122,46 +122,48 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Create new Product</h4>
+                        <h4 class="card-title">Создать нового администратора</h4>
                         <form id="productForm" class="forms-sample" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="selectedStore">Магазин</label>
                                 <select class="form-control" name="storeId" id="selectedStore">
-                                    <option th:each="store : ${stores}" th:selected="${selectedStore == store.id}" th:value="${store.id}" th:text="${store.name}"></option>
+                                    <option th:each="store : ${stores}" th:selected="${selectedStore == store.id}"
+                                            th:value="${store.id}" th:text="${store.name}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="firstname">Имя</label>
                                 <input type="text" name="firstname" class="form-control" id="firstname"
-                                       placeholder="Имя">
+                                       placeholder="Имя" required>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Фамилия</label>
-                                <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Фамилия">
+                                <input type="text" name="lastname" class="form-control" id="lastname"
+                                       placeholder="Фамилия" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <label for="username">Логин</label>
                                 <input type="text" name="username" class="form-control" id="username"
-                                       placeholder="Логин">
+                                       placeholder="Логин" required>
                             </div>
                             <div class="form-group">
                                 <label for="phone_number">Номер телефона</label>
                                 <input type="text" name="phone_number" class="form-control" id="phone_number"
-                                       placeholder="Номер телефона">
+                                       placeholder="Номер телефона" required>
                             </div>
                             <div class="form-group">
                                 <label for="password">Пароль</label>
                                 <input type="password" name="password" class="form-control" id="password"
-                                       placeholder="Пароль">
+                                       placeholder="Пароль" required>
                             </div>
                             <div class="form-group">
                                 <label for="password">Повторите пароль</label>
                                 <input type="password" name="confirm_password" class="form-control"
-                                       id="confirm_password" placeholder="Подтвердите пароль">
+                                       id="confirm_password" placeholder="Подтвердите пароль" required>
                             </div>
                             <button type="submit" class="btn btn-primary mr-2">Submit</button>
                             <button class="btn btn-light">Cancel</button>

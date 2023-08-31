@@ -82,8 +82,13 @@ public class StockService {
         stockRepository.delete(stock);
     }
 
-    private Stock getStockById(Long stockId) {
+    public Stock getStockById(Long stockId) {
         return stockRepository.findById(stockId).orElseThrow(() -> new SearchException(SearchException.STOCK_NOT_FOUND));
+    }
+
+    public Page<Product> getPagedParticipantsByStockId(Long stockId, Integer page){
+        Pageable pageable = PageRequest.of(page,15);
+        return stockRepository.findParticipantsForStock(stockId, pageable);
     }
 
     public Page<Stock> getPagedStocks(int page) {
@@ -103,5 +108,16 @@ public class StockService {
             case 2: return stockRepository.findInActiveStocks(LocalDate.now(),pageable);
             default: return stockRepository.findAll(pageable);
         }
+    }
+
+    public void removeParticipantFromStock(Long stockId, Long productId) {
+        Stock stock = getStockById(stockId);
+        Product product = getProductById(productId);
+        stock.removeParticipant(product);
+        stockRepository.save(stock);
+    }
+
+    private Product getProductById(Long productId){
+        return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 }

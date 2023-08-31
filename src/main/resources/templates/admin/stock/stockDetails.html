@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <!-- Required meta tags -->
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>RoyalUI Admin</title>
@@ -126,52 +126,110 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">Магазины</h4>
+                            <h4 class="font-weight-bold mb-0" th:text="'Детали акции номер : ' + ${stock.id}"></h4>
                         </div>
-                        <a href="/admin/createStore" type="button"
-                           class="nav-link btn btn-primary btn-icon-text btn-rounded">
-                            <i class="ti-plus btn-icon-prepend"></i>Создать магазин
-                        </a>
+                        <div>
+                            <p class="badge badge-danger" th:if="${!stock.isActive()}">НЕ АКТИВНА</p>
+                            <p class="badge badge-success" th:if="${stock.isActive()}">АКТИВНА</p>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Дата начала</p>
+                            <div
+                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"
+                                    th:text="${stock.startDate}"></h4>
+                                <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Дата завершения</p>
+                            <div
+                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0" th:text="${stock.endDate}"></h4>
+                                <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Тип акции</p>
+                            <div
+                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"
+                                    th:text="${stock.type.ordinal() == 0 ? 'по категориям' : 'по товарам'}"></h4>
+                                <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-title text-md-center text-xl-left">Скидка</p>
+                            <div
+                                    class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                                <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0"
+                                    th:text="${stock.discount} + '%'"></h4>
+                                <i class="ti-gift icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <p class="card-title">Все магазины</p>
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <p class="card-title mb-0 mt-1">Все товары</p>
                             </div>
-                            <h4 th:if="${stores.getContent().size() == 0}">Нет магазинов</h4>
-                            <div th:if="${stores.getContent().size() > 0}">
-                                <div class="table-responsive" >
-                                    <table class="table table-hover">
+                            <h4 th:if="${participants.getContent().size() == 0}">Товаров у акции нет</h4>
+                            <div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
                                         <thead>
                                         <tr>
-                                            <th>Название</th>
-                                            <th>Город</th>
-                                            <th>Адрес</th>
-                                            <th>Номер телефона</th>
-                                            <th>в кассе</th>
-                                            <th>Админ</th>
+                                            <th>Фото</th>
+                                            <th>Продукт</th>
+                                            <th>Цвет</th>
+                                            <th>Категория</th>
+                                            <th>Стоимость</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="store : ${stores.getContent()}">
-                                            <td><a th:href="@{${'/admin/storeDetails?storeId=' + store.id}}"
-                                                   th:text="${store.name}">
-                                            </a></td>
-                                            <td><a th:href="@{${'/admin/storeDetails?storeId=' + store.id}}"
-                                                   th:text="${store.town}">
-                                            </a></td>
-                                            <td th:text="${store.address}"></td>
-                                            <td th:text="${store.phone_number}"></td>
-                                            <td th:text="${store.balance}"></td>
-                                            <td th:text="${store.admin == null ? 'Нет' : store.admin.firstname}"></td>
+                                        <tr th:each="product : ${participants.getContent()}">
+                                            <td>
+                                                <img th:if="${not #lists.isEmpty(product.photos)}"
+                                                     th:src="@{'/products/' + ${product.getPhotos().get(0)}}"/>
+                                            </td>
+                                            <td>
+                                                <a class="notification-text"
+                                                   th:href="@{'/admin/productDetails?productId=' + ${product.id}}">
+                                                    <span th:text="${product.name}"></span>
+                                                </a>
+                                            </td>
+                                            <td th:text="${product.color}"></td>
+                                            <td th:text="${product.category == null ? '': product.category.name}"></td>
+                                            <td th:text="${product.price}"></td>
                                             <td>
                                                 <div>
-                                                    <button class="btn btn-sm btn-danger deleteStore" th:attr="storeId=${store.id}"><i class="ti-trash"></i></button>
+                                                    <button class="btn btn-sm btn-danger removeFromStock"
+                                                            th:attr="productId=${product.id}, stockId=${stock.id}"><i
+                                                            class="ti-trash"></i></button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -180,26 +238,32 @@
                                 </div>
                                 <div class="pagination-container">
                                     <div class="pagination">
-                                        <input hidden id="page" th:value="${stores.number}">
+                                        <input hidden id="page" th:value="${participants.number}">
                                         <ul>
-                                            <li th:if="${stores.number > 0}" class="pagination-link"
+                                            <li th:if="${participants.number > 0}" class="pagination-link"
                                                 th:attr="page=${0}">
-                                                <a><<</a>
+                                                <a
+                                                        href="#"><<</a>
                                             </li>
-                                            <li th:if="${stores.number > 0}" class="pagination-link"
-                                                th:attr="page=${stores.number - 1}"><a th:text="${stores.number}"></a>
+                                            <li th:if="${participants.number > 0}" class="pagination-link"
+                                                th:attr="page=${participants.number - 1}"><a href="#"
+                                                                                             th:text="${participants.number}"></a>
                                             </li>
-                                            <li class="current"><a th:text="${stores.number + 1}"></a></li>
-                                            <li th:if="${stores.number + 1 < stores.totalPages}" class="pagination-link"
-                                                th:attr="page=${stores.number + 1}"><a
-                                                    th:text="${stores.number + 2}"></a>
+                                            <li class="current"><a href="#" th:text="${participants.number + 1}"></a>
                                             </li>
-                                            <li th:if="${stores.number + 2 < stores.totalPages}" class="pagination-link"
-                                                th:attr="page=${stores.number + 2}"><a
-                                                    th:text="${stores.number + 3}"></a>
+                                            <li th:if="${participants.number + 1 < participants.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${participants.number + 1}"><a href="#"
+                                                                                             th:text="${participants.number + 2}"></a>
                                             </li>
-                                            <li th:if="${stores.number + 1< stores.totalPages}" class="pagination-link"
-                                                th:attr="page=${stores.totalPages - 1}"><a>>></a>
+                                            <li th:if="${participants.number + 2 < participants.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${participants.number + 2}"><a href="#"
+                                                                                             th:text="${participants.number + 3}"></a>
+                                            </li>
+                                            <li th:if="${participants.number + 1< participants.totalPages}"
+                                                class="pagination-link"
+                                                th:attr="page=${participants.totalPages - 1}"><a href="#">>></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -224,9 +288,8 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/store/deleteStore.js"></script>
 <script src="/static/js/notifications/notifications.js"></script>
-<!-- endinject -->
+<script src="/static/js/stocks/stockDetails.js"></script>
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->

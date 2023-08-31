@@ -51,6 +51,24 @@ public class AuthController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            SecurityContextHolder.clearContext();
+        }
+
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("jwtToken")) {
+                cookie.setMaxAge(0);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
+        }
+        return "redirect:/auth/login";
+    }
+
     @GetMapping("/login")
     public String login(@RequestParam(value = "message",required = false) Optional<String> message,
                         Model model){
