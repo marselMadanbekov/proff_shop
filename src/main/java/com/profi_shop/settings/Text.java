@@ -74,6 +74,11 @@ public class Text {
         data.put("ERROR_STORE_HOUSE_NOT_FOUND","Склад не найден!");
         data.put("ERROR_COUPON_NOT_FOUND","Купон не найден!");
 
+
+        data.put("ERROR_COUPON_ALREADY_USED","Купон ранее был использован и недоступен для повторного использования!");
+        data.put("ERROR_COUPON_EXPIRED","Срок годности купона истек!");
+        data.put("ERROR_COUPON_NOT_APPLICABLE_TO_DISCOUNTED_PRODUCTS","Скидка купона не распространяетс на товары, которые имеют акционные скидки! Используйте купон если есть хотя бы один товар без начальной скидки");
+
         data.put("USER_NOT_AUTHENTICATED","Пользователь не аутентифицирован");
 
 

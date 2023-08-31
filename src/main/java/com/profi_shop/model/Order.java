@@ -26,6 +26,8 @@ public class Order {
     private String phone_number;
     private OrderStatus status;
     private ShipmentType shipmentType;
+    @OneToOne
+    private Coupon coupon;
     @ManyToOne
     private Store store;
     @OneToMany

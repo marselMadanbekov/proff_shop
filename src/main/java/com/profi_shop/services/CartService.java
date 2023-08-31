@@ -3,6 +3,7 @@ package com.profi_shop.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profi_shop.dto.CartDTO;
+import com.profi_shop.exceptions.CouponException;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.NotEnoughException;
 import com.profi_shop.exceptions.SearchException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -318,27 +320,32 @@ public class CartService {
 
     public Cart applyCoupon(HttpServletRequest request, String couponCode) throws Exception {
         Coupon coupon = getCouponByCode(couponCode);
+        if(!couponService.isCouponAvailable(coupon))
+            throw new CouponException(CouponException.COUPON_ALREADY_USED);
+        if(!coupon.isActive())
+            throw new CouponException(coupon.getEnd_date());
         Cart cart = getCartByRequestCookies(request);
         if (cart.isCouponApplicable()) {
-            for (CartItem cartItem : cart.getCartItems()) {
-                if (cartItem.getDiscount() == 0) {
-                    System.out.println("coupon discount = " + coupon.getDiscount());
+            for (CartItem cartItem : cart.getCartItems())
+                if (cartItem.getDiscount() == 0)
                     cartItem.setDiscount(coupon.getDiscount());
-                }
-            }
             cart.setCoupon(coupon);
             return cart;
         } else
-            throw new Exception("Невозможно применить купон на акционные товары!");
+            throw new CouponException(CouponException.COUPON_NOT_APPLICABLE_TO_DISCOUNTED_PRODUCTS);
     }
 
     public Cart applyCoupon(String username, String couponCode) throws Exception {
         Coupon coupon = getCouponByCode(couponCode);
+        if(!couponService.isCouponAvailable(coupon))
+            throw new CouponException(CouponException.COUPON_ALREADY_USED);
+        if(!coupon.isActive())
+            throw new CouponException(coupon.getEnd_date());
         Cart cart = getCartByUsername(username);
         if (cart.isCouponApplicable()) {
             couponService.applyCouponToCart(cart, coupon, true);
         } else
-            throw new Exception("Невозможно применить купон на акционные товары!");
+            throw new CouponException(CouponException.COUPON_NOT_APPLICABLE_TO_DISCOUNTED_PRODUCTS);
 
         return cart;
     }

@@ -270,51 +270,67 @@
                             <p th:text="${user.firstname} + ' ' + ${user.lastname}"></p>
                         </div>
                         <div class="tab-pane fade" id="orders">
-                            <h3>Orders</h3>
+                            <h3>Заказы</h3>
                             <div class="table-responsive">
-                                <table class="table">
+                                <h4 th:if="${orders.size() == 0}">Заказов нет</h4>
+                                <table class="table" th:if="${orders.size() > 0}">
                                     <thead>
                                     <tr>
-                                        <th>Order</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Total</th>
-                                        <th>Actions</th>
+                                        <th>№</th>
+                                        <th>Дата</th>
+                                        <th>Статус</th>
+                                        <th>Сумма</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>May 10, 2018</td>
-                                        <td><span class="success">Completed</span></td>
-                                        <td>$25.00 for 1 item</td>
-                                        <td><a href="cart.html" class="view">view</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>May 10, 2018</td>
-                                        <td>Processing</td>
-                                        <td>$17.00 for 1 item</td>
-                                        <td><a href="cart.html" class="view">view</a></td>
+                                    <tr th:each="order : ${orders}">
+                                        <td th:text="${order.id}"></td>
+                                        <td th:text="${order.date}"></td>
+                                        <td>
+                                            <div>
+                                                <span th:if="${order.status.ordinal() == 0}"
+                                                      class="badge1 badge-dark">ОТМЕНЕН</span>
+                                                <span th:if="${order.status.ordinal() == 1}"
+                                                      class="badge1 badge-danger">ЗАПРОС</span>
+                                                <span th:if="${order.status.ordinal() == 2}"
+                                                      class="badge1 badge-primary">ЖДЕТ ОПЛАТЫ</span>
+                                                <span th:if="${order.status.ordinal() == 3}"
+                                                      class="badge1 badge-warning">ЖДЕТ ОТПРАВКИ</span>
+                                                <span th:if="${order.status.ordinal() == 4}"
+                                                      class="badge1 badge-info">В ПУТИ</span>
+                                                <span th:if="${order.status.ordinal() == 5}"
+                                                      class="badge1 badge-success">ЗАВЕРШЕН</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${order.totalPrice} + 'сом'"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="tab-pane" id="address">
-                            <p>The following addresses will be used on the checkout page by default.</p>
-                            <h4 class="billing-address">Billing address</h4>
-                            <a href="#" class="view">Edit</a>
-                            <p><strong>Bobby Jackson</strong></p>
-                            <address>
-                                <span><strong>City:</strong> Seattle</span>,
-                                <br>
-                                <span><strong>State:</strong> Washington(WA)</span>,
-                                <br>
-                                <span><strong>ZIP:</strong> 98101</span>,
-                                <br>
-                                <span><strong>Country:</strong> USA</span>
-                            </address>
+                            <h3 class="billing-address">Мои купоны</h3>
+                            <h4 th:if="${coupons.size() == 0}">Купонов нет</h4>
+                            <div class="table-responsive" th:if="${coupons.size() > 0}">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Код активации</th>
+                                        <th>Вступил в силу</th>
+                                        <th>Годен до</th>
+                                        <th>Размер скидки</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="coupon : ${coupons}">
+                                        <td th:text="${coupon.activationCode}"></td>
+                                        <td th:text="${coupon.start_date}"></td>
+                                        <td th:text="${coupon.end_date}"></td>
+                                        <td th:text="${coupon.discount} + '%'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="account-details">
                             <h3>Account details </h3>

@@ -2,31 +2,33 @@ package com.profi_shop.services;
 
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
-import com.profi_shop.repositories.CartItemRepository;
-import com.profi_shop.repositories.CartRepository;
-import com.profi_shop.repositories.CouponRepository;
-import com.profi_shop.repositories.CouponTemplateRepository;
+import com.profi_shop.repositories.*;
 import com.profi_shop.settings.Templates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
 
 @Service
 public class CouponService {
     private final CouponRepository couponRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final CouponTemplateRepository couponTemplateRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CouponService(CouponRepository couponRepository, CartItemRepository cartItemRepository, CartRepository cartRepository, CouponTemplateRepository couponTemplateRepository) {
+    public CouponService(CouponRepository couponRepository, CartItemRepository cartItemRepository, OrderRepository orderRepository, CartRepository cartRepository, CouponTemplateRepository couponTemplateRepository, UserRepository userRepository) {
         this.couponRepository = couponRepository;
         this.cartItemRepository = cartItemRepository;
+        this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.couponTemplateRepository = couponTemplateRepository;
+        this.userRepository = userRepository;
     }
 
     public void createCoupon(Order order, CouponTemplate couponTemplate){
@@ -54,6 +56,9 @@ public class CouponService {
         createCoupon(order,couponTemplate);
     }
 
+    public boolean isCouponAvailable(Coupon coupon){
+        return orderRepository.findByCoupon(coupon) == null;
+    }
     public Cart applyCouponToCart(Cart cart,Coupon coupon, boolean saving){
         for(CartItem cartItem : cart.getCartItems()){
             if(cartItem.getDiscount() == 0){
@@ -77,5 +82,14 @@ public class CouponService {
 
     public Coupon findByActivationCode(String couponCode) {
         return couponRepository.findByActivationCode(couponCode).orElseThrow(() -> new SearchException(SearchException.COUPON_NOT_FOUND));
+    }
+
+    public List<Coupon> findCouponsByUsername(String name) {
+        User user = getUserByUsername(name);
+        return couponRepository.findByOwner(user);
+    }
+
+    private User getUserByUsername(String name) {
+        return userRepository.findUserByUsername(name).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
 }

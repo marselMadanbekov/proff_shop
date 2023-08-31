@@ -2,8 +2,12 @@ package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.auth.requests.SignUpRequest;
 import com.profi_shop.model.Category;
+import com.profi_shop.model.Coupon;
+import com.profi_shop.model.Order;
 import com.profi_shop.model.User;
 import com.profi_shop.services.CategoryService;
+import com.profi_shop.services.CouponService;
+import com.profi_shop.services.OrderService;
 import com.profi_shop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +28,14 @@ import java.util.Map;
 public class AccountController {
     private final UserService userService;
     private final CategoryService categoryService;
-
+    private final CouponService couponService;
+    private final OrderService orderService;
     @Autowired
-    public AccountController(UserService userService, CategoryService categoryService) {
+    public AccountController(UserService userService, CategoryService categoryService, CouponService couponService, OrderService orderService) {
         this.userService = userService;
         this.categoryService = categoryService;
+        this.couponService = couponService;
+        this.orderService = orderService;
     }
 
     @GetMapping("")
@@ -36,7 +43,13 @@ public class AccountController {
                             Model model){
         User user = userService.getUserByUsername(principal.getName());
         List<Category> categories = categoryService.getMainCategories();
+
+        List<Coupon> coupons = couponService.findCouponsByUsername(principal.getName());
+        List<Order> recentOrders = orderService.getRecentOrdersByUsername(principal.getName());
+
+        model.addAttribute("orders", recentOrders);
         model.addAttribute("user", user);
+        model.addAttribute("coupons", coupons);
         model.addAttribute("categories", categories);
         return "shop/account";
     }

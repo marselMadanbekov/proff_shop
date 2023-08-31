@@ -195,6 +195,43 @@ figure {
 /*--
     - Background color
 -----------------------------------------*/
+.badge-dark {
+  color: #fff;
+  background-color: #282f3a;
+}
+.badge-danger {
+  color: #fff;
+  background-color: #ff4747;
+}
+.badge-warning {
+  color: #212529;
+  background-color: #f5a623;
+}
+.badge-info {
+  color: #212529;
+  background-color: #68afff;
+}
+
+.badge-success {
+  color: #fff;
+  background-color: #71c016;
+}
+.badge-primary {
+  color: #fff;
+  background-color: #248afd;
+}
+.badge1 {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 .bg-white {
   background-color: #ffffff;
 }

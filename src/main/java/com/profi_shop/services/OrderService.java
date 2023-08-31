@@ -32,9 +32,10 @@ public class OrderService {
     private final StoreHouseRepository storeHouseRepository;
     private final UserRepository userRepository;
     private final CartService cartService;
+    private final PriceService priceService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CouponService couponService, OrderItemRepository orderItemRepository, ProductVariationRepository productVariationRepository, ProductRepository productRepository, ShipmentRepository shipmentRepository, StoreRepository storeRepository, NotificationService notificationService, StoreHouseRepository storeHouseRepository, UserRepository userRepository, CartService cartService) {
+    public OrderService(OrderRepository orderRepository, CouponService couponService, OrderItemRepository orderItemRepository, ProductVariationRepository productVariationRepository, ProductRepository productRepository, ShipmentRepository shipmentRepository, StoreRepository storeRepository, NotificationService notificationService, StoreHouseRepository storeHouseRepository, UserRepository userRepository, CartService cartService, PriceService priceService) {
         this.orderRepository = orderRepository;
         this.couponService = couponService;
         this.orderItemRepository = orderItemRepository;
@@ -46,14 +47,15 @@ public class OrderService {
         this.storeHouseRepository = storeHouseRepository;
         this.userRepository = userRepository;
         this.cartService = cartService;
+        this.priceService = priceService;
     }
 
     public Page<Order> getFilteredOrders(Integer status, Integer sort, Long storeId, Integer page) {
         Pageable pageable;
-        if (sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "totalPrice"));
-        else if (sort == 1) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "totalPrice"));
-        else if (sort == 2) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "date"));
-        else pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "date"));
+        if (sort == 0) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "date"));
+        else if (sort == 1) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "date"));
+        else if (sort == 2) pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "totalPrice"));
+        else pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "totalPrice"));
 
         Store store = null;
         if (!storeId.equals(0L))
@@ -81,14 +83,14 @@ public class OrderService {
         }
     }
 
-    public void createOrderByUnknown(OrderRequest orderRequest, HttpServletRequest request) throws InvalidDataException, NotEnoughException, ExistException {
+    public void createOrderByUnknown(OrderRequest orderRequest, HttpServletRequest request) throws Exception {
         Cart cart = cartService.getCartByRequestCookies(request);
         Order order = createBaseOrder(orderRequest, cart);
         orderRepository.save(order);
         notificationService.createLocalNewOrderNotification(order.getStore().getAdmin(), order.getId());
     }
 
-    public void createOrderByUsername(OrderRequest orderRequest, String username) throws InvalidDataException, NotEnoughException, ExistException {
+    public void createOrderByUsername(OrderRequest orderRequest, String username) throws Exception {
         User user = getUserByUsername(username);
         Cart cart = cartService.getCartByUsername(username);
         Order order = createBaseOrder(orderRequest, cart);
@@ -98,7 +100,7 @@ public class OrderService {
 
     }
 
-    private Order createBaseOrder(OrderRequest orderRequest, Cart cart) throws InvalidDataException, NotEnoughException, ExistException {
+    private Order createBaseOrder(OrderRequest orderRequest, Cart cart) throws Exception {
         Order order = new Order();
 
         int totalPrice = 0;
@@ -136,6 +138,12 @@ public class OrderService {
             orderItem.setPrice(cartItem.getAmountWithDiscount());
             orderItemRepository.save(orderItem);
             order.addOrderItem(orderItem);
+        }
+
+        if(cart.getCoupon() != null){
+            if(couponService.isCouponAvailable(cart.getCoupon()))
+                throw new CouponException(CouponException.COUPON_ALREADY_USED);
+            order.setCoupon(cart.getCoupon());
         }
         totalPrice += cart.cartAmountWithDiscount();
         order.setTotalPrice(totalPrice);
@@ -403,15 +411,19 @@ public class OrderService {
 
     public void addProductToOrder(Long orderId, Long productId) throws ExistException, NotEnoughException {
         Order order = getOrderById(orderId);
+        boolean orderOfAuthenticated = order.getUser() != null;
         Product product = getProductById(productId);
         if (countOfProductInStore(product) < 1) {
             throw new NotEnoughException(product.getName(), 0);
         }
-
+        int discount = priceService.getDiscountForProductForUser(product,orderOfAuthenticated);
+        if(discount == 0 && order.getCoupon() != null){
+            discount = order.getCoupon().getDiscount();
+        }
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product);
         orderItem.setQuantity(1);
-        orderItem.setPrice(product.getPrice());
+        orderItem.setPrice((int) (product.getPrice() - (product.getPrice() * discount) / 100.0));
 
         List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
         if (productVariations.size() == 1) {
@@ -463,5 +475,9 @@ public class OrderService {
         }
         order.setStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
+    }
+
+    public List<Order> getRecentOrdersByUsername(String name) {
+        return orderRepository.findTop10ByUserOrderByDateDesc(getUserByUsername(name));
     }
 }

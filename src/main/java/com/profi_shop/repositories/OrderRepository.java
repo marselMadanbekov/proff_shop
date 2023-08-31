@@ -1,8 +1,6 @@
 package com.profi_shop.repositories;
 
-import com.profi_shop.model.Order;
-import com.profi_shop.model.OrderItem;
-import com.profi_shop.model.Store;
+import com.profi_shop.model.*;
 import com.profi_shop.model.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -65,4 +64,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             " and (o.firstname IS NULL) " +
             " and (o.status = :status)")
     Page<Order> getPageOfflineSales(Store store, Pageable pageable, OrderStatus status);
+
+    Order findByCoupon(Coupon coupon);
+
+    List<Order> findTop10ByUserOrderByDateDesc(User user);
 }

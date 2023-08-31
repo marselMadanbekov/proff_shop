@@ -21,6 +21,6 @@ public class ProductVariation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductVariation productVariation = (ProductVariation) o;
-        return this.size.equals(productVariation.getSize());
+        return this.size.equals(productVariation.getSize()) && this.parent.equals(productVariation.parent);
     }
 }
