@@ -62,52 +62,38 @@
                         <form id="search-form1">
                             <div class="hover_category">
                                 <select class="select_option" name="select" id="search-category1">
-                                    <option selected value="0">All Categories</option>
+                                    <option selected value="0">Все категории</option>
                                     <option th:each="category:${categories}" th:value="${category.id}"
                                             th:text="${category.name}"></option>
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Search product..." type="text" id="search-text1"
+                                <input placeholder="Поиск товара..." type="text" id="search-text1"
                                        th:value="${query}">
                                 <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
                     </div>
                     <div class="call-support">
-                        <p>Тех. поддержка: <a href="tel:0123456789">0123456789</a></p>
+                        <p>Тех. поддержка: <a></a></p>
                     </div>
                     <div id="menu" class="text-left ">
                         <ul class="offcanvas_main_menu">
                             <li class="menu-item-has-children">
-                                <a href="/shop">Shop</a>
+                                <a href="/shop">Каталог</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="blog.html">blog</a>
+                                <a href="/home/stocks">Акции</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/account">my account</a>
+                                <a href="/account">Личный кабинет</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="about.html">about Us</a>
+                                <a href="/about">Контакты</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="contact.html"> Contact Us</a>
+                                <a href="/auth/login">Войти</a>
                             </li>
-                            <li class="menu-item-has-children">
-                                <a href="/login">Войти</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="offcanvas_footer">
-                        <span><a href="#"><i class="fa fa-envelope-o"></i> demo@example.com</a></span>
-                        <ul>
-                            <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li class="pinterest"><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                            <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -133,14 +119,13 @@
                                 <form id="search-form">
                                     <div class="hover_category">
                                         <select class="select_option" name="select" id="search-category">
-                                            <option selected value="0">All Categories</option>
+                                            <option selected value="0">Все категории</option>
                                             <option th:each="category:${categories}" th:value="${category.id}"
                                                     th:text="${category.name}"></option>
                                         </select>
                                     </div>
                                     <div class="search_box">
-                                        <input placeholder="Search product..." type="text" id="search-text"
-                                               th:value="${query}">
+                                        <input placeholder="Поиск товара..." type="text" id="search-text">
                                         <button type="submit" id="search-button"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
@@ -150,11 +135,12 @@
                                     <a href="/account"><i class="icon-users"></i></a>
                                 </div>
                                 <div class="header_account-list header_wishlist">
-                                    <a href="/wishlist"><i class="icon-heart"></i><span class="item_count">3</span></a>
+                                    <a href="/wishlist"><i class="icon-heart"></i><span class="item_count"
+                                                                                        style="display: none"></span></a>
                                 </div>
                                 <div class="header_account-list  mini_cart_wrapper">
                                     <a href="/cart"><i class="icon-shopping-bag"></i><span
-                                            class="item_count">2</span></a>
+                                            class="item_count" style="display: none;"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +154,7 @@
                     <div class="col-lg-3">
                         <div class="categories_menu">
                             <div class="categories_title">
-                                <h2 class="categori_toggle">Categories</h2>
+                                <h2 class="categori_toggle">Категории</h2>
                             </div>
                             <div class="categories_menu_toggle">
                                 <ul>
@@ -183,6 +169,7 @@
                                                 <li th:each="subCategory : ${category.subCategories}">
                                                     <a th:href="${'/shop?categoryId=' + subCategory.id}"
                                                        th:text="${subCategory.name}"></a>
+                                                    <hr>
                                                 </li>
                                             </ul>
                                         </ul>
@@ -196,15 +183,14 @@
                         <div class="main_menu menu_position">
                             <nav>
                                 <ul>
-                                    <li class="mega_items"><a href="/home">home</i></a>
+                                    <li class="mega_items"><a href="/home">Главная</i></a>
                                     </li>
-                                    <li class="mega_items"><a class="active" href="/shop">shop</i></a>
+                                    <li class="mega_items"><a class="active" href="/shop">Каталог</i></a>
                                     </li>
-                                    <li><a href="blog.html">blog</i></a>
+                                    <li><a href="/home/stocks">Акции</i></a>
                                     </li>
-                                    <li><a href="about.html">About Us</i></a>
+                                    <li><a href="/about">Контакты</i></a>
                                     </li>
-                                    <li><a href="contact.html"> Contact Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -212,7 +198,7 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="call-support">
-                            <p>Call Support: <a href="tel:0123456789">0123456789</a></p>
+                            <p>Тех. поддержка: <a></a></p>
                         </div>
                     </div>
                 </div>
@@ -229,10 +215,10 @@
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb_content">
-                    <h3>Shop</h3>
+                    <h3>Каталог</h3>
                     <ul>
-                        <li><a href="/home">home</a></li>
-                        <li>shop</li>
+                        <li><a href="/home">Главная</a></li>
+                        <li>Каталог</li>
                     </ul>
                 </div>
             </div>
@@ -254,7 +240,8 @@
                             <small th:text="${selectedCategoryId}"></small>
                             <input hidden th:value="${selectedCategoryId}" id="currentCategory">
                             <ul>
-                                <a href="javascript:void(0)" class="category-item" th:attr="categoryId=${0}" th:classappend="${selectedCategoryId == 0 ? 'current' : ''}">Все</a>
+                                <a href="javascript:void(0)" class="category-item" th:attr="categoryId=${0}"
+                                   th:classappend="${selectedCategoryId == 0 ? 'current' : ''}">Все</a>
                                 <li th:class="'widget_sub_categories sub_categories' + ${index.index+1}"
                                     th:each="category,index : ${categories}">
                                     <a href="javascript:void(0)" th:text="${category.name}" class="main-category"
@@ -262,7 +249,8 @@
                                     <ul th:class="'widget_dropdown_categories dropdown_categories' + ${index.index+1}"
                                         th:if="${category.subCategories}">
                                         <li th:each="subCategory : ${category.subCategories}">
-                                            <a class="category-item" th:classappend="${selectedCategoryId == subCategory.id ? 'current' : ''}"
+                                            <a class="category-item"
+                                               th:classappend="${selectedCategoryId == subCategory.id ? 'current' : ''}"
                                                th:text="${subCategory.name}" th:attr="categoryId=${category.id}"></a>
                                         </li>
                                     </ul>
@@ -299,7 +287,8 @@
                             <input th:value="${selectedBrand}" id="currentBrand" hidden>
                             <ul th:each="brand:${brands}">
                                 <li>
-                                    <a class="brand-item" th:classappend="${brand == selectedBrand ? 'current':''}" th:attr="brand=${brand}" th:text="${brand}"></a>
+                                    <a class="brand-item" th:classappend="${brand == selectedBrand ? 'current':''}"
+                                       th:attr="brand=${brand}" th:text="${brand}"></a>
                                 </li>
                             </ul>
                         </div>
@@ -307,7 +296,9 @@
                             <h3>Теги</h3>
                             <input th:value="${selectedTag}" id="currentTag" hidden>
                             <div class="tag_cloud">
-                                <a class="tag-item" th:classappend="${selectedTag == tag ? 'current' : ''}" th:attr="tag=${tag}" href="javascript:void(0)" th:each="tag: ${tags}" th:text="${tag}"></a>
+                                <a class="tag-item" th:classappend="${selectedTag == tag ? 'current' : ''}"
+                                   th:attr="tag=${tag}" href="javascript:void(0)" th:each="tag: ${tags}"
+                                   th:text="${tag}"></a>
                             </div>
                         </div>
                         <div class="widget_list tags_widget">
@@ -321,46 +312,43 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-dark btn-rounded" id="filter">Применить</button>
-                            <button type="submit" class="btn btn-light btn-rounded" ><a href="/shop">Сброс</a></button>
+                            <button type="submit" class="btn btn-light btn-rounded"><a href="/shop">Сброс</a></button>
                         </div>
                     </div>
                 </aside>
                 <!--sidebar widget end-->
             </div>
+
             <div class="col-lg-9 col-md-12">
-                <!--shop wrapper start-->
-                <!--shop toolbar start-->
-                <div class="shop_toolbar_wrapper">
+                <div class="error_form" th:hidden="${products.getContent().size() > 0}">
+                    <h2>Товаров по таким критериям нет</h2>
+                    <a href="/shop">Назад в каталог</a>
+                </div>
+                <div class="shop_toolbar_wrapper" th:hidden="${products.getContent().size() == 0}">
                     <div class="shop_toolbar_btn">
 
-                        <button data-role="grid_3" type="button" class="active btn-grid-3" data-toggle="tooltip"
+                        <button data-role="grid_3" type="button" class="btn-grid-3" data-toggle="tooltip"
                                 title="3"></button>
 
                         <button data-role="grid_4" type="button" class=" btn-grid-4" data-toggle="tooltip"
                                 title="4"></button>
 
-                        <button data-role="grid_list" type="button" class="btn-list" data-toggle="tooltip"
+                        <button data-role="grid_list" type="button" class="btn-list active" data-toggle="tooltip"
                                 title="List"></button>
                     </div>
                     <div class="select_option1">
-                        <select name="orderby" id="short">
+                        <select class="form-select" name="orderby" id="short">
                             <option value="0" th:selected="${sortType == 0}">
-                                None sort
-                            </option>
+                                По дате создания
                             <option value="1" th:selected="${sortType == 1}">
-                                sort by newness
+                                По возрастанию цены
                             <option value="2" th:selected="${sortType == 2}">
-                                Sort by price: low to high
-                            <option value="3" th:selected="${sortType == 3}">
-                                Sort by price: high to low
+                                По убыванию цены
                             </option>
-                            <option value="4" th:selected="${sortType == 4}">
-                                Product Name: Z
+                            <option value="3" th:selected="${sortType == 3}">
+                                По алфавиту
                             </option>
                         </select>
-                    </div>
-                    <div class="page_amount">
-                        <p>Showing 1–9 of 21 results</p>
                     </div>
                 </div>
                 <!--shop toolbar end-->
@@ -376,16 +364,13 @@
                                     <div class="label_product" th:if="${product.discount > 0}">
                                         <span class="label_sale" th:text="'-' + ${product.discount} + '%'"></span>
                                     </div>
-                                    <div class="label_product">
-                                        <span class="label_sale1" th:style="'background:' + ${product.color}"></span>
-                                    </div>
                                     <div class="action_links">
                                         <ul>
                                             <li class="add_to_cart" th:attr="productId=${product.id}"><a
-                                                    title="Add to cart"><i
+                                                    title="В корзину"><i
                                                     class="icon-shopping-bag"></i></a></li>
                                             <li class="wishlist add_to_wishlist" th:attr="productId=${product.id}"><a
-                                                    title="Add to Wishlist"><i
+                                                    title="В избранное"><i
                                                     class="icon-heart"></i></a></li>
                                         </ul>
                                     </div>
@@ -394,11 +379,21 @@
                                     <div class="product_price_rating">
                                         <div class="product_rating">
                                             <ul>
-                                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                                <li><a href="#"><i class="icon-star"></i></a></li>
-                                                <li><a href="#"><i class="icon-star"></i></a></li>
+                                                <li><a href="#"><i
+                                                    th:class="${product.averageRating > 0 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                                </li>
+                                                <li><a href="#"><i
+                                                        th:class="${product.averageRating > 1 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                                </li>
+                                                <li><a href="#"><i
+                                                        th:class="${product.averageRating > 2 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                                </li>
+                                                <li><a href="#"><i
+                                                        th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                                </li>
+                                                <li><a href="#"><i
+                                                        th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <h4 class="product_name"><a
@@ -417,11 +412,21 @@
                                 <div class="product_content list_content">
                                     <div class="product_rating">
                                         <ul>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
+                                            <li><a href="#"><i
+                                                th:class="${product.averageRating > 0 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                            </li>
+                                            <li><a href="#"><i
+                                                    th:class="${product.averageRating > 1 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                            </li>
+                                            <li><a href="#"><i
+                                                    th:class="${product.averageRating > 2 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                            </li>
+                                            <li><a href="#"><i
+                                                    th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                            </li>
+                                            <li><a href="#"><i
+                                                    th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a>
+                                            </li>
                                         </ul>
                                     </div>
                                     <h4 class="product_name"><a
@@ -442,10 +447,9 @@
                                     <div class="action_links list_action_right">
                                         <ul>
                                             <li class="add_to_cart" th:attr="productId=${product.id}"><a
-                                                    title="Add to cart">Add to
-                                                cart</a></li>
+                                                    title="В корзину">Добавить в корзину</a></li>
                                             <li class="wishlist add_to_wishlist" th:attr="productId=${product.id}"><a
-                                                    title="Add to Wishlist"><i
+                                                    title="В избранное"><i
                                                     class="icon-heart"></i></a></li>
                                         </ul>
                                     </div>
@@ -455,7 +459,7 @@
                     </div>
                 </div>
 
-                <div class="shop_toolbar t_bottom">
+                <div class="shop_toolbar t_bottom" th:if="${products.totalPages > 1}">
                     <div class="pagination">
                         <ul>
                             <li th:if="${products.number > 0}" class="pagination-link" th:attr="page=${0}"><a href="#"><<</a>
@@ -481,8 +485,6 @@
                         <p id="modalMessage"></p>
                     </div>
                 </div>
-                <!--shop toolbar end-->
-                <!--shop wrapper end-->
             </div>
         </div>
     </div>
@@ -496,23 +498,17 @@
             <div class="row">
                 <div class="col-lg-2 col-md-4 col-sm-6">
                     <div class="widgets_container contact_us">
-                        <h3>Opening Time</h3>
-                        <p><span>Mon - Fri:</span> 8AM - 10PM</p>
-                        <p><span>Sat:</span> 9AM-8PM</p>
-                        <p><span>Suns:</span> 14hPM-18hPM</p>
-                        <p><b>We Work All The Holidays</b></p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-6">
                     <div class="widgets_container widget_menu">
-                        <h3>Information</h3>
+                        <h3>Информация</h3>
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="about.html">About Us</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="faq.html">Frequently Questions</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="/about">Контакты</a></li>
+                                <li><a href="/cart">Корзина</a></li>
+                                <li><a href="faq.html">Частые вопросы</a></li>
+                                <li><a href="/wishlist">Избранное</a></li>
                             </ul>
                         </div>
                     </div>
@@ -522,56 +518,26 @@
                         <div class="footer_logo">
                             <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
                         </div>
-                        <div class="footer_widgetnav_menu">
-                            <ul>
-                                <li><a href="#">Payment</a></li>
-                                <li><a href="#">Affiliates</a></li>
-                                <li><a href="#">Contact</a></li>
-                                <li><a href="#">Internet</a></li>
-                            </ul>
+                        <div>
+                            <div class="justify-content-center d-flex mt-3">
+                                <p class="copyright-text">&copy; 2023 <a href="/home">ProffShop</a>
+                            </div>
                         </div>
-                        <div class="footer_social">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="footer_app">
-                            <ul>
-                                <li><a href="#"><img src="/static/img/icon/icon-app.jpg" alt=""></a></li>
-                                <li><a href="#"><img src="/static/img/icon/icon1-app.jpg" alt=""></a></li>
-                            </ul>
+                        <div>
+                            <div class="widgets_container contact_us d-flex justify-content-center">
+                                <p></p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-6">
                     <div class="widgets_container widget_menu">
-                        <h3>My Account</h3>
+                        <h3>Мой аккаунт</h3>
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="/account">My Account</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="cart.html">Shopping cart</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="/shop">Shop</a></li>
-                                <li><a href="#">Order History</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="widgets_container widget_menu">
-                        <h3>Customer Service</h3>
-                        <div class="footer_menu">
-                            <ul>
-                                <li><a href="contact.html">Contact Us</a></li>
-                                <li><a href="#">Terms of use</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="contact.html">Site Map</a></li>
-                                <li><a href="/account">My Account</a></li>
-                                <li><a href="#">Returns</a></li>
+                                <li><a href="/account">Личный кабинет</a></li>
+                                <li><a href="/cart">Корзина</a></li>
+                                <li><a href="/shop">Каталог</a></li>
                             </ul>
                         </div>
                     </div>
@@ -614,6 +580,8 @@
 <script src="/static/js/searchProduct.js"></script>
 <script src="/static/js/cart/cart.js"></script>
 <script src="/static/js/wishlist/wishlist.js"></script>
+<script src="/static/js/general/generalInfo.js"></script>
+<script src="/static/js/searchProduct.js"></script>
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>
 

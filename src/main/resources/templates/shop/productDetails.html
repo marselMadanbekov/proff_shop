@@ -62,52 +62,38 @@
                         <form id="search-form1">
                             <div class="hover_category">
                                 <select class="select_option" name="select" id="search-category1">
-                                    <option selected value="0">All Categories</option>
+                                    <option selected value="0">Все категории</option>
                                     <option th:each="category:${categories}" th:value="${category.id}"
                                             th:text="${category.name}"></option>
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Search product..." type="text" id="search-text1"
+                                <input placeholder="Поиск товара..." type="text" id="search-text1"
                                        th:value="${query}">
                                 <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
                     </div>
                     <div class="call-support">
-                        <p>Тех. поддержка: <a href="tel:0123456789">0123456789</a></p>
+                        <p>Тех. поддержка: <a></a></p>
                     </div>
                     <div id="menu" class="text-left ">
                         <ul class="offcanvas_main_menu">
                             <li class="menu-item-has-children">
-                                <a href="/shop">Shop</a>
+                                <a href="/shop">Каталог</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="blog.html">blog</a>
+                                <a href="/home/stocks">Акции</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="/account">my account</a>
+                                <a href="/account">Личный кабинет</a>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="about.html">about Us</a>
-                            </li>
-                            <li class="menu-item-has-children">
-                                <a href="contact.html"> Contact Us</a>
+                                <a href="/about">Контакты</a>
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="/auth/login">Войти</a>
                             </li>
-                        </ul>
-                    </div>
-
-                    <div class="offcanvas_footer">
-                        <span><a href="#"><i class="fa fa-envelope-o"></i> demo@example.com</a></span>
-                        <ul>
-                            <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li class="pinterest"><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                            <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -133,13 +119,13 @@
                                 <form id="search-form">
                                     <div class="hover_category">
                                         <select class="select_option" name="select" id="search-category">
-                                            <option selected value="0">All Categories</option>
+                                            <option selected value="0">Все категории</option>
                                             <option th:each="category:${categories}" th:value="${category.id}"
                                                     th:text="${category.name}"></option>
                                         </select>
                                     </div>
                                     <div class="search_box">
-                                        <input placeholder="Search product..." type="text" id="search-text">
+                                        <input placeholder="Поиск товара..." type="text" id="search-text">
                                         <button type="submit" id="search-button"><i class="icon-search"></i></button>
                                     </div>
                                 </form>
@@ -149,11 +135,11 @@
                                     <a href="/account"><i class="icon-users"></i></a>
                                 </div>
                                 <div class="header_account-list header_wishlist">
-                                    <a href="/wishlist"><i class="icon-heart"></i><span class="item_count">3</span></a>
+                                    <a href="/wishlist"><i class="icon-heart"></i><span class="item_count" style="display: none"></span></a>
                                 </div>
                                 <div class="header_account-list  mini_cart_wrapper">
                                     <a href="/cart"><i class="icon-shopping-bag"></i><span
-                                            class="item_count">2</span></a>
+                                            class="item_count" style="display: none;"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +153,7 @@
                     <div class="col-lg-3">
                         <div class="categories_menu">
                             <div class="categories_title">
-                                <h2 class="categori_toggle">Categories</h2>
+                                <h2 class="categori_toggle">Категории</h2>
                             </div>
                             <div class="categories_menu_toggle">
                                 <ul>
@@ -182,6 +168,7 @@
                                                 <li th:each="subCategory : ${category.subCategories}">
                                                     <a th:href="${'/shop?categoryId=' + subCategory.id}"
                                                        th:text="${subCategory.name}"></a>
+                                                    <hr>
                                                 </li>
                                             </ul>
                                         </ul>
@@ -195,15 +182,14 @@
                         <div class="main_menu menu_position">
                             <nav>
                                 <ul>
-                                    <li class="mega_items"><a class="active" href="/home">home</i></a>
+                                    <li class="mega_items"><a href="/home">Главная</i></a>
                                     </li>
-                                    <li class="mega_items"><a href="/shop">shop</i></a>
+                                    <li class="mega_items"><a class="active" href="/shop">Каталог</i></a>
                                     </li>
-                                    <li><a href="blog.html">blog</i></a>
+                                    <li><a href="/home/stocks">Акции</i></a>
                                     </li>
-                                    <li><a href="about.html">About Us</i></a>
+                                    <li><a href="/about">Контакты</i></a>
                                     </li>
-                                    <li><a href="contact.html"> Contact Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -211,7 +197,7 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="call-support">
-                            <p>Call Support: <a href="tel:0123456789">0123456789</a></p>
+                            <p>Тех. поддержка: <a></a></p>
                         </div>
                     </div>
                 </div>
@@ -228,8 +214,8 @@
             <div class="col-12">
                 <div class="breadcrumb_content">
                     <ul>
-                        <li><a href="/home">home</a></li>
-                        <li>product details</li>
+                        <li><a href="/shop">Каталог</a></li>
+                        <li>Детали товара</li>
                     </ul>
                 </div>
             </div>
@@ -298,10 +284,7 @@
 
                         <div class="product_variant color">
                             <h3>Свойства</h3>
-                            <label>Цвет</label>
-                            <ul>
-                                <li th:style="'background:' + ${product.color}"><a ></a></li>
-                            </ul>
+                            <label th:text="'Цвет : ' + ${product.color}"></label>
                         </div>
                         <div class="product_variant size">
                             <label>Размеры</label>
@@ -382,15 +365,6 @@
                                         </tbody>
                                     </table>
                                 </form>
-                            </div>
-                            <div class="product_info_content">
-                                <p>Fashion has been creating well-designed collections since 2010. The brand offers
-                                    feminine designs delivering stylish separates and statement dresses which have
-                                    since evolved into a full ready-to-wear collection in which every item is a
-                                    vital part of a woman's wardrobe. The result? Cool, easy, chic looks with
-                                    youthful elegance and unmistakable signature style. All the beautiful pieces are
-                                    made in Italy and manufactured with the greatest attention. Now Fashion extends
-                                    to a range of accessories including shoes, hats, belts and more!</p>
                             </div>
                         </div>
 
@@ -1033,23 +1007,17 @@
             <div class="row">
                 <div class="col-lg-2 col-md-4 col-sm-6">
                     <div class="widgets_container contact_us">
-                        <h3>Opening Time</h3>
-                        <p><span>Mon - Fri:</span> 8AM - 10PM</p>
-                        <p><span>Sat:</span> 9AM-8PM</p>
-                        <p><span>Suns:</span> 14hPM-18hPM</p>
-                        <p><b>We Work All The Holidays</b></p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-6">
                     <div class="widgets_container widget_menu">
-                        <h3>Information</h3>
+                        <h3>Информация</h3>
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="about.html">About Us</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="faq.html">Frequently Questions</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
+                                <li><a href="/about">Контакты</a></li>
+                                <li><a href="/cart">Корзина</a></li>
+                                <li><a href="faq.html">Частые вопросы</a></li>
+                                <li><a href="/wishlist">Избранное</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1059,78 +1027,28 @@
                         <div class="footer_logo">
                             <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
                         </div>
-                        <div class="footer_widgetnav_menu">
-                            <ul>
-                                <li><a href="#">Payment</a></li>
-                                <li><a href="#">Affiliates</a></li>
-                                <li><a href="#">Contact</a></li>
-                                <li><a href="#">Internet</a></li>
-                            </ul>
+                        <div>
+                            <div class="justify-content-center d-flex mt-3">
+                                <p class="copyright-text">&copy; 2023 <a href="/home">ProffShop</a>
+                            </div>
                         </div>
-                        <div class="footer_social">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="footer_app">
-                            <ul>
-                                <li><a href="#"><img src="/static/img/icon/icon-app.jpg" alt=""></a></li>
-                                <li><a href="#"><img src="/static/img/icon/icon1-app.jpg" alt=""></a></li>
-                            </ul>
+                        <div>
+                            <div class="widgets_container contact_us d-flex justify-content-center">
+                                <p></p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-6">
                     <div class="widgets_container widget_menu">
-                        <h3>My Account</h3>
+                        <h3>Мой аккаунт</h3>
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="/account">My Account</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="cart.html">Shopping cart</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="/shop">Shop</a></li>
-                                <li><a href="#">Order History</a></li>
+                                <li><a href="/account">Личный кабинет</a></li>
+                                <li><a href="/cart">Корзина</a></li>
+                                <li><a href="/shop">Каталог</a></li>
                             </ul>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="widgets_container widget_menu">
-                        <h3>Customer Service</h3>
-                        <div class="footer_menu">
-                            <ul>
-                                <li><a href="contact.html">Contact Us</a></li>
-                                <li><a href="#">Terms of use</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="contact.html">Site Map</a></li>
-                                <li><a href="/account">My Account</a></li>
-                                <li><a href="#">Returns</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer_bottom">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="copyright_area">
-                        <p class="copyright-text">&copy; 2021 <a href="/home">Lukani</a>. Made with <i
-                                class="fa fa-heart text-danger"></i> by <a href="https://hasthemes.com/"
-                                                                           target="_blank">HasThemes</a></p>
-
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="footer_payment">
-                        <a href="#"><img src="/static/img/icon/payment.png" alt=""></a>
                     </div>
                 </div>
             </div>
@@ -1170,6 +1088,9 @@
 <script src="/static/js/jquery/plugins.js"></script>
 <script src="/static/js/products/productReview.js"></script>
 <script src="/static/js/products/shopProductDetails.js"></script>
+<script src="/static/js/general/generalInfo.js"></script>
+<script src="/static/js/searchProduct.js"></script>
+
 
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>

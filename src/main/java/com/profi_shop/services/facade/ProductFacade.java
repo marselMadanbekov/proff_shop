@@ -65,7 +65,9 @@ public class ProductFacade {
         productDTO.setName(product.getName());
         productDTO.setPhotos(product.getPhotos());
         productDTO.setPrice(product.getPrice());
+        productDTO.setRating(reviewService.getAverageReviewByProduct(product));
         productDTO.setDiscount(getDiscountByProduct(product));
+        productDTO.setDescription(product.getDescription());
         productDTO.setNewPrice(getNewPriceByPriceAndDiscount(product.getPrice(),productDTO.getDiscount()));
         productDTO.setOldPrice(product.getPrice());
         return productDTO;

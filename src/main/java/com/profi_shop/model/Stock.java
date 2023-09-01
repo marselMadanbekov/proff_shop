@@ -44,7 +44,9 @@ public class Stock {
     }
 
     public boolean isActive(){
-        return startDate.before(Date.valueOf(LocalDate.now())) && endDate.after(Date.valueOf(LocalDate.now()));
+        LocalDate currentDate = LocalDate.now();
+        return startDate.toLocalDate().compareTo(currentDate) <= 0 &&
+                endDate.toLocalDate().compareTo(currentDate) >= 0;
     }
 
     public void removeParticipant(Product product) {

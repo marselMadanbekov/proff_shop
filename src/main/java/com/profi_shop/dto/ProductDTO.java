@@ -10,6 +10,8 @@ public class ProductDTO {
     private String name;
     private int price;
     private List<String> photos;
+    private int rating;
+    private String description;
     private int discount;
     private int newPrice;
     private int oldPrice;

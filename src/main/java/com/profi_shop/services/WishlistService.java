@@ -57,4 +57,8 @@ public class WishlistService {
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 
+    public int getWishlistCountByUsername(String name) {
+        Wishlist wishlist = getByUsername(name);
+        return wishlist.getProducts().size();
+    }
 }

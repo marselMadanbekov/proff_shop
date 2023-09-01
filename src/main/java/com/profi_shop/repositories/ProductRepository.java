@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -43,4 +44,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             String brand,
             Pageable pageable
     );
+
+    @Query("SELECT p FROM Product p WHERE p IN (SELECT s.participants FROM Stock s WHERE s.startDate <= CURRENT_DATE AND s.endDate >= CURRENT_DATE)")
+    Page<Product> findProductsInActiveStocks(Pageable pageable);
 }

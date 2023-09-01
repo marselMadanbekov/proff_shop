@@ -86,6 +86,20 @@ public class ProductService {
         }
     }
 
+    public Page<Product> productsByActiveStocks(int page, int sort){
+        Pageable pageable;
+        if (sort != 0) {
+            if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
+            else if (sort == 2) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "price"));
+            else if (sort == 3) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "price"));
+            else pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "name"));
+        } else {
+            pageable = PageRequest.of(page, 9);
+        }
+
+        return productRepository.findProductsInActiveStocks(pageable);
+    }
+
     public Page<Product> productsFilteredPage(int page, Long categoryId, String size, String query, int minPrice, int maxPrice, int sort, String tag, String brand) {
         Pageable pageable;
         if (sort != 0) {

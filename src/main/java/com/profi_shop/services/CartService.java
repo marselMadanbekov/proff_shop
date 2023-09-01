@@ -365,4 +365,13 @@ public class CartService {
         cart.setCoupon(null);
         return cart;
     }
+
+    public int getCartCount(HttpServletRequest request) throws ExistException {
+        Cart cart = getCartByRequestCookies(request);
+        return cart.getCartItems().size();
+    }
+    public int getCartCount(String username){
+        Cart cart = getCartByUsername(username);
+        return cart.getCartItems().size();
+    }
 }

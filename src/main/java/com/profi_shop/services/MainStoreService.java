@@ -4,6 +4,7 @@ import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.model.MainStore;
 import com.profi_shop.repositories.MainStoreRepository;
 import com.profi_shop.validations.Validator;
+import com.sun.tools.javac.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,5 +77,15 @@ public class MainStoreService {
 
     public void save(MainStore mainStore){
         mainStoreRepository.save(mainStore);
+    }
+
+    public String getCallSupportNumber() {
+        MainStore mainStore = getMainStore();
+        return mainStore.getPhone_numbers().get(0);
+    }
+
+    public String getWorkTime() {
+        MainStore mainStore = getMainStore();
+        return mainStore.getWorking_time();
     }
 }
