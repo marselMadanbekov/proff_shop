@@ -9,7 +9,6 @@ import com.profi_shop.model.ProductVariation;
 import com.profi_shop.model.requests.ProductCreateRequest;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.ProductVariationRepository;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -68,7 +67,7 @@ public class ProductService {
         else product.setColor(null);
 
         try {
-            String firstPhoto = photoService.savePhoto(productToCreate.getPhoto());
+            String firstPhoto = photoService.saveProductPhoto(productToCreate.getPhoto());
             product.getPhotos().add(firstPhoto);
         } catch (IOException e) {
             throw new InvalidDataException(InvalidDataException.INVALID_PHOTO);
@@ -138,7 +137,7 @@ public class ProductService {
 
     public void addPhotoToProductById(Long productId, MultipartFile photo) throws IOException {
         Product product = getProductById(productId);
-        String newPhoto = photoService.savePhoto(photo);
+        String newPhoto = photoService.saveProductPhoto(photo);
         product.addPhoto(newPhoto);
         productRepository.save(product);
     }

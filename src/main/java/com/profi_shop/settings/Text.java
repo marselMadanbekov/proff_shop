@@ -73,6 +73,7 @@ public class Text {
         data.put("ERROR_TRANSACTION_NOT_FOUND","Транзакция не найдена!");
         data.put("ERROR_STORE_HOUSE_NOT_FOUND","Склад не найден!");
         data.put("ERROR_COUPON_NOT_FOUND","Купон не найден!");
+        data.put("ERROR_FAQ_NOT_FOUND","Часто задаваемый вопрос не найден!");
 
 
         data.put("ERROR_COUPON_ALREADY_USED","Купон ранее был использован и недоступен для повторного использования!");

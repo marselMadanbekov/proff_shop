@@ -1,6 +1,7 @@
 package com.profi_shop.controllers.generalControllers;
 
 import com.profi_shop.model.Category;
+import com.profi_shop.model.Faq;
 import com.profi_shop.model.Store;
 import com.profi_shop.services.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,14 +25,16 @@ public class MainPageController {
     private final WishlistService wishlistService;
     private final CategoryService categoryService;
     private final MainStoreService mainStoreService;
+    private final FaqService faqService;
     private final StoreService storeService;
 
     @Autowired
-    public MainPageController(CartService cartService, WishlistService wishlistService, CategoryService categoryService, MainStoreService mainStoreService, StoreService storeService) {
+    public MainPageController(CartService cartService, WishlistService wishlistService, CategoryService categoryService, MainStoreService mainStoreService, FaqService faqService, StoreService storeService) {
         this.cartService = cartService;
         this.wishlistService = wishlistService;
         this.categoryService = categoryService;
         this.mainStoreService = mainStoreService;
+        this.faqService = faqService;
         this.storeService = storeService;
     }
 
@@ -68,5 +71,12 @@ public class MainPageController {
         model.addAttribute("stores", stores);
         model.addAttribute("categories", categories);
         return "shop/about";
+    }
+
+    @GetMapping("/faq")
+    public String faq(Model model){
+        List<Faq> faqs = faqService.getAllFaqs();
+        model.addAttribute("faqs", faqs);
+        return "shop/faq";
     }
 }

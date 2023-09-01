@@ -25,6 +25,7 @@ public class SearchException extends RuntimeException{
     public static final int TRANSACTION_NOT_FOUND = 15;
     public static final int STORE_HOUSE_NOT_FOUND = 16;
     public static final int COUPON_NOT_FOUND = 17;
+    public static final int FAQ_NOT_FOUND = 18;
 
 
     private final int code;
@@ -54,6 +55,7 @@ public class SearchException extends RuntimeException{
             case 15 -> Text.get("ERROR_TRANSACTION_NOT_FOUND");
             case 16 -> Text.get("ERROR_STORE_HOUSE_NOT_FOUND");
             case 17 -> Text.get("ERROR_COUPON_NOT_FOUND");
+            case 18 -> Text.get("ERROR_FAQ_NOT_FOUND");
             default -> "";
         };
     }

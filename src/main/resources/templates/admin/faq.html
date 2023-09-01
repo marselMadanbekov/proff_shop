@@ -33,7 +33,8 @@
             </button>
             <ul class="navbar-nav navbar-nav-right">
                 <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="/admin/notifications">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown"
+                       href="/admin/notifications">
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
@@ -50,7 +51,7 @@
                         </a>
                         <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
-                            Logout
+                            Выйти
                         </a>
                     </div>
                 </li>
@@ -132,96 +133,57 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">Доставка</h4>
+                            <h4 class="font-weight-bold mb-0">Часто задаваемые вопросы</h4>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 grid-margin stretch-card">
+                <div class="col-md-7 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <p class="card-title">Все доставки</p>
-                            <h4 th:if="${shipments.getContent().size() == 0}">Доставок нет</h4>
-                            <div th:if="${shipments.getContent().size() > 0}">
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Область</th>
-                                            <th>Город</th>
-                                            <th>Стоимость</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="shipment : ${shipments.getContent()}">
-                                            <td th:text="${shipment.state}"></td>
-                                            <td th:text="${shipment.town}"></td>
-                                            <td th:text="${shipment.cost}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                        th:data-shipmentId="${shipment.id}"
-                                                        onclick="deleteShipment(this.getAttribute('data-shipmentId'))">
-                                                    Удалить
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="pagination-container">
-                                    <div class="pagination">
-                                        <input hidden id="page" th:value="${shipments.number}">
-                                        <ul>
-                                            <li th:if="${shipments.number > 0}" class="pagination-link"
-                                                th:attr="page=${0}">
-                                                <a><<</a>
-                                            </li>
-                                            <li th:if="${shipments.number > 0}" class="pagination-link"
-                                                th:attr="page=${shipments.number - 1}"><a
-                                                    th:text="${shipments.number}"></a>
-                                            </li>
-                                            <li class="current"><a th:text="${shipments.number + 1}"></a></li>
-                                            <li th:if="${shipments.number + 1 < shipments.totalPages}"
-                                                class="pagination-link"
-                                                th:attr="page=${shipments.number + 1}"><a
-                                                    th:text="${shipments.number + 2}"></a>
-                                            </li>
-                                            <li th:if="${shipments.number + 2 < shipments.totalPages}"
-                                                class="pagination-link"
-                                                th:attr="page=${shipments.number + 2}"><a
-                                                    th:text="${shipments.number + 3}"></a>
-                                            </li>
-                                            <li th:if="${shipments.number + 1< shipments.totalPages}"
-                                                class="pagination-link"
-                                                th:attr="page=${shipments.totalPages - 1}"><a>>></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <p class="card-title">Все вопросы</p>
+                            <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Вопрос</th>
+                                        <th>Ответ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="faq : ${faqs}">
+                                        <td th:text="${faq.question}"></td>
+                                        <td>
+                                            <div class="notification-text" th:text="${faq.answer}"></div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm deleteFaq"
+                                                    th:faqId="${faq.id}">
+                                                <i class="ti-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 grid-margin stretch-card">
+                <div class="col-md-5 grid-margin">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Новая доставка</h4>
-                            <form class="forms-sample">
-                                <div class="form-group">
-                                    <label for="state">Область</label>
-                                    <input type="text" name="state" class="form-control" id="state">
-                                </div>
-                                <div class="form-group">
-                                    <label for="town">Город</label>
-                                    <input type="text" name="town" class="form-control" id="town">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cost">Стоимость</label>
-                                    <input type="number" name="cost" class="form-control" id="cost">
-                                </div>
-                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                <button class="btn btn-light">Cancel</button>
+                            <h4 class="card-title">Новый часто задаваемый вопрос</h4>
+                            <form class="form-group" id="faqForm">
+                                <label class="sr-only" for="question">Вопрос</label>
+                                <input type="text" name="question" class="form-control mb-2 mr-sm-2"
+                                       id="question"
+                                       placeholder="Вопрос" required>
+                                <label class="sr-only" for="answer">Ответ</label>
+                                <textarea class="form-control" name="answer" id="answer"
+                                          rows="4"></textarea>
+                                <button type="submit" class="btn btn-primary mt-2">Создать</button>
                             </form>
                             <div id="progressModal" class="modal">
                                 <div class="modal-content">
@@ -245,10 +207,11 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/shipments/shipment.js"></script>
-<script src="/static/js/dashboard.js"></script>
 <script src="/static/js/notifications/notifications.js"></script>
+<script src="/static/js/faq/faq.js"></script>
+<script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->
 </body>
 
 </html>
+

@@ -28,7 +28,21 @@ public class PhotoService {
     @Value("${uploads_path}")
     private String uploadDir;
 
-    public String savePhoto(MultipartFile file) throws IOException {
+    public String saveProductPhotoWithoutResizing(MultipartFile file) throws IOException {
+        String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String extension = StringUtils.getFilenameExtension(originalFilename);
+        String filename = UUID.randomUUID().toString() + "_" + originalFilename;
+        Path filePath = Paths.get(uploadDir, filename);
+
+        File uploadDire = new File(uploadDir);
+        if(!uploadDire.exists())
+            uploadDire.mkdirs();
+
+        Files.copy(file.getInputStream(), filePath);
+
+        return filename;
+    }
+    public String saveProductPhoto(MultipartFile file) throws IOException {
         String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String extension = StringUtils.getFilenameExtension(originalFilename);
         String filename = UUID.randomUUID().toString() + "_" + originalFilename;

@@ -9327,6 +9327,10 @@ input {
   max-width: 100px;
   max-height: 200px;
 }
+.main-photo1 img {
+  max-width: 300px;
+  max-height: 400px;
+}
 
 .thumbnails {
   display: flex;
