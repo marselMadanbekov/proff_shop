@@ -248,15 +248,15 @@
                                     <p id="modalMessage"></p>
                                 </div>
                             </div>
-                            <table>
+                            <h3 th:if="${wishlist.products.size() == 0}">Нет избранных товаров</h3>
+                            <table th:if="${wishlist.products.size() > 0}">
                                 <thead>
                                 <tr>
-                                    <th class="product_remove">Delete</th>
-                                    <th class="product_thumb">Image</th>
-                                    <th class="product_name">Product</th>
-                                    <th class="product-price">Price</th>
-                                    <th class="product_quantity">Stock Status</th>
-                                    <th class="product_total">Add To Cart</th>
+                                    <th class="product_remove">Удалить</th>
+                                    <th class="product_thumb">Фото</th>
+                                    <th class="product_name">Товар</th>
+                                    <th class="product-price">Цена</th>
+                                    <th class="product_total">Добавить в корзину</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -267,8 +267,9 @@
                                             th:src="'/products/' + ${product.getPhotos().get(0)}" alt=""></a></td>
                                     <td class="product_name"><a href="#" th:text="${product.name}"></a></td>
                                     <td class="product-price" th:text="${product.price} + 'сом'"></td>
-                                    <td class="product_quantity">In Stock</td>
-                                    <td class="product_total"><a href="#">Add To Cart</a></td>
+                                    <td class="product_total"><a class="add_to_cart"
+                                                                 th:attr="productId=${product.id}">Добавить в
+                                        корзину</a></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -419,6 +420,7 @@
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
 <script src="/static/js/wishlist/wishlistpage.js"></script>
+<script src="/static/js/cart/cart.js"></script>
 <script src="/static/js/general/generalInfo.js"></script>
 
 <!-- Main JS -->

@@ -117,7 +117,7 @@ public class Text {
         data.put("ERROR_PASSWORD_DONT_MATCH","Новый пароль и подтверждение не совпадают");
 
         data.put("ERROR_TARGET_USER_NOT_EQUAL_REQUESTER","Вы не можете изменять данные другого пользователя");
-        data.put("ERROR_LOW_AUTHORITIES","У вас недостаточно прав для создания или изменения пользователя с такой ролью");
+        data.put("ERROR_LOW_AUTHORITIES","У вас недостаточно изменения пользователя с такой ролью");
 
         data.put("YES","Да");
         data.put("NO","Нет");

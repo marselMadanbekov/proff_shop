@@ -220,10 +220,10 @@
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb_content">
-                    <h3>My Account</h3>
+                    <h3>Личный кабинет</h3>
                     <ul>
-                        <li><a href="/home">home</a></li>
-                        <li>My account</li>
+                        <li><a href="/home">Главная</a></li>
+                        <li>Личный кабинет</li>
                     </ul>
                 </div>
             </div>
@@ -241,10 +241,10 @@
                     <!-- Nav tabs -->
                     <div class="dashboard_tab_button">
                         <ul role="tablist" class="nav flex-column dashboard-list">
-                            <li><a href="#dashboard" data-toggle="tab" class="nav-link active">Dashboard</a></li>
-                            <li><a href="#orders" data-toggle="tab" class="nav-link">Orders</a></li>
-                            <li><a href="#address" data-toggle="tab" class="nav-link">Addresses</a></li>
-                            <li><a href="#account-details" data-toggle="tab" class="nav-link">Account details</a>
+                            <li><a href="#dashboard" data-toggle="tab" class="nav-link active">Главная</a></li>
+                            <li><a href="#orders" data-toggle="tab" class="nav-link">Заказы</a></li>
+                            <li><a href="#address" data-toggle="tab" class="nav-link">Купоны</a></li>
+                            <li><a href="#account-details" data-toggle="tab" class="nav-link">Редактировать профиль</a>
                             </li>
                             <li><a href="/auth/logout" class="nav-link">Выйти</a></li>
                             <li th:if="${!user.role.toString().equals('ROLE_CUSTOMER')}"><a href="/admin/dashboard"
@@ -257,7 +257,7 @@
                     <!-- Tab panes -->
                     <div class="tab-content dashboard_content">
                         <div class="tab-pane fade show active" id="dashboard">
-                            <h3>Dashboard </h3>
+                            <h3>Главная </h3>
                             <p th:text="${user.firstname} + ' ' + ${user.lastname}"></p>
                         </div>
                         <div class="tab-pane fade" id="orders">
@@ -324,17 +324,11 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="account-details">
-                            <h3>Account details </h3>
+                            <h3>Редактировать профиль</h3>
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
                                         <form id="userEdit">
-                                            <div class="input-radio">
-                                                    <span class="custom-radio"><input type="radio" value="1"
-                                                                                      name="id_gender"> Mr.</span>
-                                                <span class="custom-radio"><input type="radio" value="1"
-                                                                                  name="id_gender"> Mrs.</span>
-                                            </div>
                                             <br>
                                             <label>Имя</label>
                                             <input type="text" name="firstname">

@@ -4,12 +4,18 @@ import com.profi_shop.model.User;
 import com.profi_shop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -32,5 +38,32 @@ public class UsersController {
         model.addAttribute("searchQuery", search.orElse(""));
         model.addAttribute("sort", sort.orElse(0));
         return "admin/users/users";
+    }
+
+    @PostMapping("/users/block")
+    public ResponseEntity<Map<String,String>> blockUser(@RequestParam Long userId,
+                                                        Principal principal){
+        Map<String,String> response = new HashMap<>();
+        try{
+            userService.blockUser(userId, principal.getName());
+            response.put("message", "Пользователь успешно заблокирован!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/users/unlock")
+    public ResponseEntity<Map<String,String>> unlockUser(@RequestParam Long userId,
+                                                        Principal principal){
+        Map<String,String> response = new HashMap<>();
+        try{
+            userService.unlockUser(userId, principal.getName());
+            response.put("message", "Пользователь успешно разблокирован!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 }

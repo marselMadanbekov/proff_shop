@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="/static/vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" href="/static/vendors/base/vendor.bundle.base.css">
     <!-- endinject -->
-    <!-- plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
     <link rel="stylesheet" href="/static/css1/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="/static/images/favicon.png"/>
@@ -31,115 +28,13 @@
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                 <span class="ti-view-list"></span>
             </button>
-            <ul class="navbar-nav mr-lg-2">
-                <li class="nav-item nav-search d-none d-lg-block">
-                    <div class="input-group">
-                        <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                                <span class="input-group-text" id="search">
-                                    <i class="ti-search"></i>
-                                </span>
-                        </div>
-                        <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-                               aria-label="search" aria-describedby="search">
-                    </div>
-                </li>
-            </ul>
             <ul class="navbar-nav navbar-nav-right">
-                <li class="nav-item dropdown mr-1">
-                    <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
-                       id="messageDropdown" href="#" data-toggle="dropdown">
-                        <i class="ti-email mx-0"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
-                         aria-labelledby="messageDropdown">
-                        <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-                        <a class="dropdown-item">
-                            <div class="item-thumbnail">
-                                <img src="/static/images/faces/face4.jpg" alt="image" class="profile-pic">
-                            </div>
-                            <div class="item-content flex-grow">
-                                <h6 class="ellipsis font-weight-normal">David Grey
-                                </h6>
-                                <p class="font-weight-light small-text text-muted mb-0">
-                                    The meeting is cancelled
-                                </p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="item-thumbnail">
-                                <img src="/static/images/faces/face2.jpg" alt="image" class="profile-pic">
-                            </div>
-                            <div class="item-content flex-grow">
-                                <h6 class="ellipsis font-weight-normal">Tim Cook
-                                </h6>
-                                <p class="font-weight-light small-text text-muted mb-0">
-                                    New product launch
-                                </p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="item-thumbnail">
-                                <img src="/static/images/faces/face3.jpg" alt="image" class="profile-pic">
-                            </div>
-                            <div class="item-content flex-grow">
-                                <h6 class="ellipsis font-weight-normal"> Johnson
-                                </h6>
-                                <p class="font-weight-light small-text text-muted mb-0">
-                                    Upcoming board meeting
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-                       data-toggle="dropdown">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown"
+                       href="/admin/notifications">
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
-                         aria-labelledby="notificationDropdown">
-                        <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                        <a class="dropdown-item">
-                            <div class="item-thumbnail">
-                                <div class="item-icon bg-success">
-                                    <i class="ti-info-alt mx-0"></i>
-                                </div>
-                            </div>
-                            <div class="item-content">
-                                <h6 class="font-weight-normal">Application Error</h6>
-                                <p class="font-weight-light small-text mb-0 text-muted">
-                                    Just now
-                                </p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="item-thumbnail">
-                                <div class="item-icon bg-warning">
-                                    <i class="ti-settings mx-0"></i>
-                                </div>
-                            </div>
-                            <div class="item-content">
-                                <h6 class="font-weight-normal">Settings</h6>
-                                <p class="font-weight-light small-text mb-0 text-muted">
-                                    Private message
-                                </p>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="item-thumbnail">
-                                <div class="item-icon bg-info">
-                                    <i class="ti-user mx-0"></i>
-                                </div>
-                            </div>
-                            <div class="item-content">
-                                <h6 class="font-weight-normal">New user registration</h6>
-                                <p class="font-weight-light small-text mb-0 text-muted">
-                                    2 days ago
-                                </p>
-                            </div>
-                        </a>
-                    </div>
                 </li>
                 <li class="nav-item nav-profile dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
@@ -151,7 +46,7 @@
                             <i class="ti-settings text-primary"></i>
                             Settings
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
                             Logout
                         </a>
@@ -170,49 +65,67 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/dashboard">
                         <i class="ti-shield menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title">Главная</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/products" aria-expanded="false" aria-controls="ui-basic">
                         <i class="ti-shopping-cart-full menu-icon"></i>
-                        <span class="menu-title">Products</span>
+                        <span class="menu-title">Товары</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/categories">
                         <i class="ti-layout-list-post menu-icon"></i>
-                        <span class="menu-title">Categories</span>
+                        <span class="menu-title">Категории</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/orders">
                         <i class="ti-pie-chart menu-icon"></i>
-                        <span class="menu-title">Orders</span>
+                        <span class="menu-title">Заказы</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/stores">
                         <i class="ti-home menu-icon"></i>
-                        <span class="menu-title">Stores</span>
+                        <span class="menu-title">Магазины</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/stocks">
                         <i class="ti-gift menu-icon"></i>
-                        <span class="menu-title">Stocks</span>
+                        <span class="menu-title">Акции</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/shipments">
                         <i class="ti-truck menu-icon"></i>
-                        <span class="menu-title">Shipments</span>
+                        <span class="menu-title">Доставки</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/coupons">
                         <i class="ti-medall menu-icon"></i>
-                        <span class="menu-title">Coupons</span>
+                        <span class="menu-title">Купоны</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/superAdmin/main-store">
+                        <i class="ti-direction menu-icon"></i>
+                        <span class="menu-title">Головной офис</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/faq">
+                        <i class="ti-help menu-icon"></i>
+                        <span class="menu-title">Частые вопросы</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users">
+                        <i class="ti-user menu-icon"></i>
+                        <span class="menu-title">Пользователи</span>
                     </a>
                 </li>
             </ul>
@@ -235,13 +148,13 @@
                             <div>
                                 <div class="form-group d-flex">
                                     <button class="btn btn-sm btn-primary"><i class="ti-search"></i></button>
-                                    <input type="search" style="width: 100%" th:value="${searchQuery}">
+                                    <input type="search" th:value="${searchQuery}">
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control" id="exampleFormControlSelect2">
-                                        <option value="0" th:selected="${sort == 0}">None sort</option>
-                                        <option value="1" th:selected="${sort == 1}">Sort by name</option>
-                                        <option value="2" th:selected="${sort == 2}">Sort by amount</option>
+                                    <select class="form-control" id="sortSelect">
+                                        <option value="0" th:selected="${sort == 0}">По дате регистрации</option>
+                                        <option value="1" th:selected="${sort == 1}">По имени от А до Я</option>
+                                        <option value="2" th:selected="${sort == 2}">По имени от Я до А</option>
                                     </select>
                                 </div>
                             </div>
@@ -250,19 +163,22 @@
                                     <thead>
                                     <tr>
                                         <th>
-                                            Username
+                                            Логин
                                         </th>
                                         <th>
-                                            Firstname
+                                            Имя
                                         </th>
                                         <th>
                                             email
                                         </th>
                                         <th>
-                                            phone number
+                                            Номер тел.
                                         </th>
                                         <th>
-                                            total amount
+                                            Роль
+                                        </th>
+                                        <th>
+                                            Дата регис-и
                                         </th>
                                     </tr>
                                     </thead>
@@ -272,7 +188,19 @@
                                         <td th:text="${user.firstname}"></td>
                                         <td th:text="${user.email}"></td>
                                         <td th:text="${user.phone_number}"></td>
-                                        <td th:text="${user.created_date}"></td>
+                                        <td th:text="${user.role}"></td>
+                                        <td th:text="${user.createdDate}"></td>
+                                        <td>
+                                            <div>
+                                                <button class="btn btn-sm btn-danger lock" th:hidden="${not user.active}"
+                                                        th:attr="userId=${user.id}">Заблок-ть
+                                                </button>
+                                                <button class="btn btn-sm btn-success unlock"
+                                                        th:hidden="${user.active}" th:attr="userId=${user.id}">
+                                                    Разблок-ть
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -295,7 +223,7 @@
                                             th:attr="page=${users.number + 2}"><a th:text="${users.number + 3}"></a>
                                         </li>
                                         <li th:if="${users.number + 1< users.totalPages}" class="pagination-link"
-                                            th:attr="page=${users.totalPages - 1}"><a >>></a>
+                                            th:attr="page=${users.totalPages - 1}"><a>>></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -316,9 +244,9 @@
 <script src="/static/js/off-canvas.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/shipments/shipment.js"></script>
-<!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
+<script src="/static/js/notifications/notifications.js"></script>
+<script src="/static/js/users/usersPage.js"></script>
 <!-- End custom js for this page-->
 </body>
 

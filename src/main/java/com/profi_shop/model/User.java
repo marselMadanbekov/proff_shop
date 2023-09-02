@@ -28,11 +28,11 @@ public class User implements UserDetails {
     private Role role;
     private boolean active;
 
-    private Date created_date;
+    private Date createdDate;
 
     @PrePersist
     private void onCreate(){
-        this.created_date = Date.valueOf(LocalDate.now());
+        this.createdDate = Date.valueOf(LocalDate.now());
     }
 
     public User() {

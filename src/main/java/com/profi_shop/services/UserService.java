@@ -2,6 +2,7 @@ package com.profi_shop.services;
 
 import com.profi_shop.auth.requests.AdminCreateRequest;
 import com.profi_shop.auth.requests.SignUpRequest;
+import com.profi_shop.exceptions.AccessDeniedException;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
@@ -103,16 +104,13 @@ public class UserService {
     }
 
     public Page<User> getUsersFilteredPage(Integer page, String search, Integer sort) {
-        Pageable pageable = null;
-        if (sort != 0) {
-            if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
-            else pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "name"));
-        } else {
-            pageable = PageRequest.of(page, 9);
-        }
-
+        Pageable pageable = switch (sort) {
+            case 0 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "createdDate"));
+            case 1 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "name"));
+            default -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "name"));
+        };
         if (search != null && !search.equals("")) {
-            return userRepository.findUserByFirstname(search, pageable);
+            return userRepository.findUserByFirstnameLike(search, pageable);
         }
         return userRepository.findAll(pageable);
     }
@@ -169,5 +167,26 @@ public class UserService {
 
     public User getSuperAdmin() {
         return userRepository.findByRole(Role.ROLE_SUPER_ADMIN).get(0);
+    }
+
+    public void blockUser(Long userId, String actorName) {
+        User user = getUserById(userId);
+        User actor = getUserByUsername(actorName);
+        if(user.getRole().ordinal() <= actor.getRole().ordinal())
+            throw new AccessDeniedException(AccessDeniedException.LOW_AUTHORITIES);
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    public void unlockUser(Long userId, String actorName){
+        User user = getUserById(userId);
+        User actor = getUserByUsername(actorName);
+        if(user.getRole().ordinal() <= actor.getRole().ordinal())
+            throw new AccessDeniedException(AccessDeniedException.LOW_AUTHORITIES);
+        user.setActive(true);
+        userRepository.save(user);
+    }
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
 }
