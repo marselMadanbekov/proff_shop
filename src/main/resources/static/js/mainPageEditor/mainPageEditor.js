@@ -22,13 +22,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -43,13 +49,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -64,13 +76,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -85,13 +103,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -106,13 +130,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -127,13 +157,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -148,13 +184,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })
@@ -169,13 +211,19 @@ document.addEventListener('DOMContentLoaded', function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                // Обработка успешного ответа от сервера
-                console.log('Успешно:', response);
-                // Здесь вы можете выполнить дополнительные действия после успешного запроса
+                window.location.reload();
             },
             error: function(error) {
-                // Обработка ошибки
-                console.error('Ошибка:', error);
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    if (errorData.hasOwnProperty("error")) {
+                        alert(errorData.error);
+                    } else {
+                        alert('An error occurred while processing the request.');
+                    }
+                } catch (e) {
+                    alert('An error occurred while processing the request.');
+                }
             }
         });
     })

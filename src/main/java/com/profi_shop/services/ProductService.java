@@ -7,6 +7,7 @@ import com.profi_shop.model.Category;
 import com.profi_shop.model.Product;
 import com.profi_shop.model.ProductVariation;
 import com.profi_shop.model.requests.ProductCreateRequest;
+import com.profi_shop.model.requests.ProductEditRequest;
 import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.repositories.ProductVariationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,5 +206,30 @@ public class ProductService {
 
     public List<String> getBrands() {
         return productRepository.findTop10DistinctBrands();
+    }
+
+    public void productEdit(ProductEditRequest productEditRequest) {
+        Product product = getProductById(productEditRequest.getTargetProductId());
+
+        if(productEditRequest.getPrimeCost() != null && productEditRequest.getPrimeCost() > 0)
+            product.setPrime_cost(productEditRequest.getPrimeCost());
+        if(productEditRequest.getPrice() != null && productEditRequest.getPrice() > 0)
+            product.setPrice(productEditRequest.getPrice());
+        if(productEditRequest.getName() != null && !productEditRequest.getName().equals(""))
+            product.setName(productEditRequest.getName());
+        if(productEditRequest.getBrand() != null && !productEditRequest.getBrand().equals(""))
+            product.setBrand(productEditRequest.getBrand());
+        if(productEditRequest.getColor() != null && !productEditRequest.getColor().equals(""))
+            product.setColor(productEditRequest.getColor());
+        if(!productEditRequest.getCategoryId().equals(product.getCategory().getId())){
+            Category category = categoryService.getCategoryById(productEditRequest.getCategoryId());
+            product.setCategory(category);
+        }
+        productRepository.save(product);
+    }
+
+    public List<ProductVariation> getProductVariations(Long productId) {
+        Product product = getProductById(productId);
+        return productVariationRepository.findByParent(product);
     }
 }

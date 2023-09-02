@@ -31,7 +31,7 @@ public class MainPageService {
 
     public void setFirstItemOnSlider(MultipartFile photo, String firstPhotoText) throws Exception {
         MainPage mainPage = getMainPage();
-        if (photo != null) {
+        if (photo != null && !photo.isEmpty()) {
             if (mainPage.getCarouselFirstPhoto() != null) {
                 try {
                     photoService.deletePhoto(mainPage.getCarouselFirstPhoto());
@@ -54,7 +54,7 @@ public class MainPageService {
 
     public void setSecondItemOnSlider(MultipartFile photo, String secondPhotoText) throws Exception {
         MainPage mainPage = getMainPage();
-        if (photo != null) {
+        if (photo != null && !photo.isEmpty()) {
             if (mainPage.getCarouselSecondPhoto() != null) {
                 try {
                     photoService.deletePhoto(mainPage.getCarouselSecondPhoto());
@@ -77,7 +77,7 @@ public class MainPageService {
 
     public void setThirdItemOnSlider(MultipartFile photo, String thirdPhotoText) throws Exception {
         MainPage mainPage = getMainPage();
-        if (photo != null) {
+        if (photo != null && !photo.isEmpty()) {
             if (mainPage.getCarouselThirdPhoto() != null) {
                 try {
                     photoService.deletePhoto(mainPage.getCarouselThirdPhoto());
@@ -100,7 +100,7 @@ public class MainPageService {
 
     public void setSalesItem(MultipartFile photo, String salesPhotoText) throws Exception {
         MainPage mainPage = getMainPage();
-        if (photo != null) {
+        if (photo != null && !photo.isEmpty()) {
             if (mainPage.getSalesPhoto() != null) {
                 try {
                     photoService.deletePhoto(mainPage.getSalesPhoto());
@@ -123,7 +123,7 @@ public class MainPageService {
 
     public void setTopProductItem(MultipartFile photo, String topProductText) throws Exception {
         MainPage mainPage = getMainPage();
-        if (photo != null) {
+        if (photo != null && !photo.isEmpty()) {
             if (mainPage.getTopProductsPhoto() != null) {
                 try {
                     photoService.deletePhoto(mainPage.getTopProductsPhoto());

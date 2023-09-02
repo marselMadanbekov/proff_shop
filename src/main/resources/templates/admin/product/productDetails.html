@@ -33,7 +33,8 @@
             </button>
             <ul class="navbar-nav navbar-nav-right">
                 <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="/admin/notifications">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown"
+                       href="/admin/notifications">
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
@@ -134,6 +135,9 @@
                         <div>
                             <h4 class="font-weight-bold mb-0" th:text="${product.name}"></h4>
                         </div>
+                        <div>
+                            <a th:href="'/admin/product-analytics?productId=' + ${product.id}" class="btn btn-sm btn-primary">Просмотреть аналитику</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,8 +148,10 @@
                         <div class="card-body">
                             <p class="card-title">Все размеры</p>
                             <div class="table-responsive mb-3 mb-md-0">
-                                <p class="card-title" th:if="${product.getProductVariations().size() == 0}">Размеры для товара не указаны</p>
-                                <table class="table table-borderless report-table" th:if="${product.getProductVariations().size() > 0}">
+                                <p class="card-title" th:if="${product.getProductVariations().size() == 0}">Размеры для
+                                    товара не указаны</p>
+                                <table class="table table-borderless report-table"
+                                       th:if="${product.getProductVariations().size() > 0}">
                                     <thead>
                                     <th>Размер</th>
                                     <th>Всего</th>
@@ -216,10 +222,12 @@
                                 <form class="form-inline" id="addVariationForm">
                                     <div class="d-flex flex-wrap justify-content-between">
                                         <div class="form-group">
-                                            <input class="form-control mb-2 mr-sm-3" id="newSize" name="size" placeholder="Размер" required>
+                                            <input class="form-control mb-2 mr-sm-3" id="newSize" name="size"
+                                                   placeholder="Размер" required>
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-control mb-2 mr-sm-3" id="sku" name="sku" placeholder="Штрихкод">
+                                            <input class="form-control mb-2 mr-sm-3" id="sku" name="sku"
+                                                   placeholder="Штрихкод">
                                         </div>
                                     </div>
                                     <input hidden name="productId" th:value="${product.id}">
@@ -300,8 +308,8 @@
                                         <td>
                                             Описание
                                         </td>
-                                        <td >
-                                            <p th:text="${product.description}" class="long-text"></p>
+                                        <td>
+                                            <div class="notification-text" th:text="${product.description}"></div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -403,10 +411,10 @@
                             <h4 class="card-title">Добавить спецификацию</h4>
                             <form class="form-inline" id="addSpec">
                                 <input type="text" class="form-control mb-2 mr-sm-2" name="key"
-                                       placeholder="Название">
+                                       placeholder="Название" required>
 
                                 <div class="input-group mb-2 mr-sm-2">
-                                    <input type="text" class="form-control" name="value" placeholder="Значение">
+                                    <input type="text" class="form-control" name="value" placeholder="Значение" required>
                                 </div>
                                 <input hidden th:value="${product.id}" name="productId">
                                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
@@ -419,56 +427,57 @@
                 <div class="col-md-12 grid-margin stretch-card">
                     <div class="card position-relative">
                         <div class="card-body">
-                            <p class="card-title">Edit product</p>
+                            <p class="card-title">Редактировать продукт</p>
                             <div class="row">
                                 <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
                                     <div class="ml-xl-4">
-                                        <h1>33500</h1>
-                                        <h3 class="font-weight-light mb-xl-4">Sales</h3>
-                                        <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date
-                                            range. It is the
-                                            period time a user is actively engaged with your website, page or app,
-                                            etc</p>
+                                        <h3 class="font-weight-light mb-xl-4">Изменить характеристики продукта</h3>
+                                        <p class="text-muted mb-2 mb-xl-0">Введите поля которые хотите изменить поля
+                                            которые вы оставите пустыми останутся прежними</p>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form class="forms-sample">
+                                    <form class="forms-sample" id="productEdit">
+                                        <input hidden th:value="${product.id}" name="targetProductId">
                                         <div class="form-group">
-                                            <label for="exampleInputUsername1">Name</label>
-                                            <input type="text" class="form-control" id="exampleInputUsername1"
-                                                   placeholder="Username">
+                                            <label for="name">Название</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                   placeholder="Название">
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Price</label>
-                                            <input type="email" class="form-control" id="exampleInputEmail1"
-                                                   placeholder="Email">
+                                            <label for="primeCost">Себестоимость</label>
+                                            <input type="number" class="form-control" id="primeCost" name="primeCost"
+                                                   placeholder="Себестоимость">
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputPassword1">SKU</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                                   placeholder="Password">
+                                            <label for="price">Цена на продажу</label>
+                                            <input type="number" class="form-control" id="price" name="price"
+                                                   placeholder="Цена">
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleSelectGender">Category</label>
-                                            <select class="form-control" id="exampleSelectGender">
-                                                <option>Male</option>
-                                                <option>Female</option>
+                                            <label for="brand">Бренд</label>
+                                            <input type="text" class="form-control" id="brand" name="brand"
+                                                   placeholder="Бренд">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="color">Цвет</label>
+                                            <input type="text" class="form-control" id="color" name="color"
+                                                   placeholder="Цвет">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category">Категория</label>
+                                            <select class="form-control" id="category" name="categoryId">
+                                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                                        th:selected="${category.id == product.category.id}" th:text="${category.name}"></option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputConfirmPassword1">Discount</label>
-                                            <input type="password" class="form-control"
-                                                   id="exampleInputConfirmPassword1"
-                                                   placeholder="Password">
+                                            <label for="description">Описание</label>
+                                            <textarea class="form-control" name="description"
+                                                      id="description"
+                                                      placeholder="Описание"></textarea>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputConfirmPassword1">Description</label>
-                                            <input type="password" class="form-control"
-                                                   id="exampleInputConfirmPassword2"
-                                                   placeholder="Password">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        <button class="btn btn-light">Cancel</button>
+                                        <button type="submit" class="btn btn-primary mr-2">Сохранить</button>
                                     </form>
                                 </div>
                             </div>
@@ -499,6 +508,7 @@
 <script src="/static/js/products/productSpecification.js"></script>
 <script src="/static/js/products/newProducts.js"></script>
 <script src="/static/js/notifications/notifications.js"></script>
+<script src="/static/js/products/productEdit.js"></script>
 
 <!-- endinject -->
 <!-- Custom js for this page-->

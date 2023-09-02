@@ -4,11 +4,9 @@ import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.dto.StockDTO;
 import com.profi_shop.model.Category;
+import com.profi_shop.model.MainPage;
 import com.profi_shop.model.MainStore;
-import com.profi_shop.services.CategoryService;
-import com.profi_shop.services.MainStoreService;
-import com.profi_shop.services.ProductService;
-import com.profi_shop.services.StockService;
+import com.profi_shop.services.*;
 import com.profi_shop.services.facade.ProductFacade;
 import com.profi_shop.services.facade.StockFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +29,17 @@ public class HomeController {
     private final CategoryService categoryService;
     private final MainStoreService mainStoreService;
     private final StockFacade stockFacade;
+    private final MainPageService mainPageService;
 
     @Autowired
-    public HomeController(ProductService productService, ProductFacade productFacade, StockService stockService, CategoryService categoryService, MainStoreService mainStoreService, StockFacade stockFacade) {
+    public HomeController(ProductService productService, ProductFacade productFacade, StockService stockService, CategoryService categoryService, MainStoreService mainStoreService, StockFacade stockFacade, MainPageService mainPageService) {
         this.productService = productService;
         this.productFacade = productFacade;
         this.stockService = stockService;
         this.categoryService = categoryService;
         this.mainStoreService = mainStoreService;
         this.stockFacade = stockFacade;
+        this.mainPageService = mainPageService;
     }
 
     @GetMapping("")
@@ -48,7 +48,9 @@ public class HomeController {
         List<Category> categories = categoryService.getMainCategories();
         StockDTO todayDeals = stockFacade.stockToStockDTO(stockService.getTodayDeals());
         MainStore mainStore = mainStoreService.getMainStore();
+        MainPage mainPage = mainPageService.getMainPage();
 
+        model.addAttribute("mainPage", mainPage);
         model.addAttribute("mainStore", mainStore);
         model.addAttribute("categories",categories);
         model.addAttribute("products", products);

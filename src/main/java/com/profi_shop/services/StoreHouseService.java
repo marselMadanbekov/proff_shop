@@ -16,12 +16,14 @@ import java.util.List;
 public class StoreHouseService {
     private final StoreHouseRepository storeHouseRepository;
     private final StoreRepository storeRepository;
+    private final ReceiptService receiptService;
 
     private final ProductVariationRepository productVariationRepository;
 
-    public StoreHouseService(StoreHouseRepository storeHouseRepository, StoreRepository storeRepository, ProductVariationRepository productVariationRepository) {
+    public StoreHouseService(StoreHouseRepository storeHouseRepository, StoreRepository storeRepository, ReceiptService receiptService, ProductVariationRepository productVariationRepository) {
         this.storeHouseRepository = storeHouseRepository;
         this.storeRepository = storeRepository;
+        this.receiptService = receiptService;
         this.productVariationRepository = productVariationRepository;
     }
 
@@ -36,12 +38,14 @@ public class StoreHouseService {
         }
     }
 
-    public void quantityUp(Long storeId, Long productId, int quantity) throws InvalidDataException {
+    public void quantityUp(Long storeId, Long productId, int quantity, String name) throws InvalidDataException {
         if(quantity <= 0 )  throw new InvalidDataException(InvalidDataException.INVALID_QUANTITY);
         ProductVariation product = getProductVariationById(productId);
         Store store = getStoreById(storeId);
         StoreHouse storeHouse = getStoreHouseByProductAndStore(product,store);
         storeHouse.setQuantity(storeHouse.getQuantity() + quantity);
+
+        receiptService.createReceipt(productId,quantity,storeId,name);
         storeHouseRepository.save(storeHouse);
     }
 

@@ -6,10 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -65,6 +67,36 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             " and (o.status = :status)")
     Page<Order> getPageOfflineSales(Store store, Pageable pageable, OrderStatus status);
 
+    @Query("SELECT FUNCTION('MONTH', o.date) AS month, SUM(oi.quantity) AS sales " +
+            "FROM Order o " +
+            "JOIN o.orderItems oi " +
+            "WHERE oi.product = :product " +
+            "AND o.date >= :date " +
+            "AND o.status = :status " +
+            "GROUP BY FUNCTION('MONTH', o.date)")
+    List<Object[]> getSalesDataForProductLast4Months(@Param("product") Product product, @Param("date") Date date, OrderStatus status);
+
+    @Query("SELECT SUM(oi.quantity) " +
+            "FROM Order o " +
+            "JOIN o.orderItems oi " +
+            "WHERE oi.productVariation = :product " +
+            "AND o.date >= :startDate " +
+            "AND o.date <= :endDate " +
+            "AND o.status = :status")
+    Optional<Integer> getCoundSoldProductBetweenDates(@Param("product") ProductVariation product, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("status") OrderStatus status);
+
+
+    @Query("SELECT SUM(oi.price) AS totalSales, SUM(oi.quantity) AS totalQuantity " +
+            "FROM Order o " +
+            "JOIN o.orderItems oi " +
+            "WHERE oi.productVariation = :product " +
+            "AND o.date >= :startDate " +
+            "AND o.date <= :endDate " +
+            "AND o.status = :status")
+    Map<String, Long> getTotalSalesAndQuantityForProductBetweenDates(@Param("product") ProductVariation product,
+                                                                        @Param("startDate") Date startDate,
+                                                                        @Param("endDate") Date endDate,
+                                                                        @Param("status") OrderStatus status);
     Order findByCoupon(Coupon coupon);
 
     List<Order> findTop10ByUserOrderByDateDesc(User user);

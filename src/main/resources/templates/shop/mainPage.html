@@ -213,12 +213,12 @@
 <!--slider area start-->
 <section class="slider_section">
     <div class="slider_area owl-carousel">
-        <div class="single_slider d-flex align-items-center" data-bgimg="/static/img/slider/slider1.jpg">
+        <div class="single_slider d-flex align-items-center" th:data-bgimg="'/products/' + ${mainPage.carouselFirstPhoto}">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="slider_content">
-                            <h1>Большая распродажа</h1>
+                            <h1 th:text="${mainPage.carouselFirstText}"></h1>
                             <p>Скидки <span>20%</span> для пользователей Proff-Shop </p>
                             <a class="button" href="/shop">Узнать</a>
                         </div>
@@ -226,12 +226,12 @@
                 </div>
             </div>
         </div>
-        <div class="single_slider d-flex align-items-center" data-bgimg="/static/img/slider/slider2.jpg">
+        <div class="single_slider d-flex align-items-center" th:data-bgimg="'/products/' + ${mainPage.carouselSecondPhoto}">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="slider_content">
-                            <h1>TOP SALE</h1>
+                            <h1 th:text="${mainPage.carouselSecondText}">TOP SALE</h1>
                             <p>Discount <span>20% Off </span> For Lukani Members </p>
                             <a class="button" href="/shop">Discover Now </a>
                         </div>
@@ -239,12 +239,12 @@
                 </div>
             </div>
         </div>
-        <div class="single_slider d-flex align-items-center" data-bgimg="/static/img/slider/slider3.jpg">
+        <div class="single_slider d-flex align-items-center" th:data-bgimg="'/products/' + ${mainPage.carouselThirdPhoto}">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="slider_content">
-                            <h1>Lovely Plants</h1>
+                            <h1 th:text="${mainPage.carouselThirdText}">Lovely Plants</h1>
                             <p>Discount <span>20% Off </span> For Lukani Members </p>
                             <a class="button" href="/shop">Discover Now </a>
                         </div>
@@ -266,8 +266,8 @@
                         <img src="/static/img/about/shipping1.png" alt="">
                     </div>
                     <div class="shipping_content">
-                        <h3>Free Delivery</h3>
-                        <p>Free shipping around the world for all <br> orders over $120</p>
+                        <h3>Доставка</h3>
+                        <p th:text="${mainPage.delivery}"></p>
                     </div>
                 </div>
             </div>
@@ -277,8 +277,8 @@
                         <img src="/static/img/about/shipping2.png" alt="">
                     </div>
                     <div class="shipping_content">
-                        <h3>Safe Payment</h3>
-                        <p>With our payment gateway, don’t worry <br> about your information</p>
+                        <h3>Оплата</h3>
+                        <p th:text="${mainPage.payment}"></p>
                     </div>
                 </div>
             </div>
@@ -288,8 +288,8 @@
                         <img src="/static/img/about/shipping3.png" alt="">
                     </div>
                     <div class="shipping_content">
-                        <h3>Friendly Services</h3>
-                        <p>You have 30-day return guarantee for <br> every single order</p>
+                        <h3>Дружелюбный сервис</h3>
+                        <p th:text="${mainPage.friendlyService}"></p>
                     </div>
                 </div>
             </div>
@@ -305,10 +305,10 @@
             <div class="col-lg-6 col-md-6">
                 <figure class="single_banner">
                     <div class="banner_thumb">
-                        <a href="/shop"><img src="/static/img/bg/banner1.jpg" alt=""></a>
+                        <a href="/shop"><img th:src="'/products/' + ${mainPage.salesPhoto}" alt=""></a>
                         <div class="banner_content">
-                            <h3>Товары в распродаже</h3>
-                            <h2>Plants <br> For Interior</h2>
+                            <h3 >Товары в распродаже</h3>
+                            <h2 th:text="${mainPage.salesText}"></h2>
                             <a href="/shop">Больше</a>
                         </div>
                     </div>
@@ -317,10 +317,10 @@
             <div class="col-lg-6 col-md-6">
                 <figure class="single_banner">
                     <div class="banner_thumb">
-                        <a href="/shop"><img src="/static/img/bg/banner2.jpg" alt=""></a>
+                        <a href="/shop"><img th:src="'/products/' + ${mainPage.topProductsPhoto}" alt=""></a>
                         <div class="banner_content">
                             <h3>Топ товары</h3>
-                            <h2>Plants <br> For Healthy</h2>
+                            <h2 th:text="${mainPage.topProductsText}">Plants <br> For Healthy</h2>
                             <a href="/shop">Больше</a>
                         </div>
                     </div>
