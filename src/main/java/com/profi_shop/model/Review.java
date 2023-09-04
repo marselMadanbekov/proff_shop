@@ -19,9 +19,9 @@ public class Review {
     private boolean approved;
     private String text;
 
-    private Date created_date;
+    private Date date;
     @PrePersist
     public void onCreate(){
-        this.created_date = Date.valueOf(LocalDate.now());
+        this.date = Date.valueOf(LocalDate.now());
     }
 }

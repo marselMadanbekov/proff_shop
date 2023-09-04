@@ -19,16 +19,7 @@
                         window.location.reload();
                     },
                     error: function (xhr, status, error) {
-                        try {
-                            const errorData = JSON.parse(xhr.responseText);
-                            if (errorData.hasOwnProperty("error")) {
-                                alert(errorData.error);
-                            } else {
-                                alert('An error occurred while processing the request.');
-                            }
-                        } catch (e) {
-                            alert('An error occurred while processing the request.');
-                        }
+                        alert("Ошибка при удалении магазина")
                     }
                 });
             }

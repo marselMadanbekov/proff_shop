@@ -32,7 +32,6 @@ public class CategoryService {
 
     public void deleteCategory(Long categoryId) {
         Category category = getCategoryById(categoryId);
-        System.out.println("deleting category" + category.getName());
         categoryRepository.delete(category);
     }
 

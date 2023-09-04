@@ -27,7 +27,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<String> findTop10DistinctBrands();
 
     @Query("SELECT DISTINCT p FROM Product p " +
-            "WHERE (:category IS NULL OR (p.category = :category OR p.category.parent = :category)) " +
+            "WHERE (:category IS NULL OR p.category = :category OR p.category.parent = :category) " +
             "AND (:query IS NULL OR (p.name LIKE %:query% OR EXISTS (SELECT 1 FROM ProductVariation pv WHERE pv.parent = p AND pv.sku = :query))) " +
             "AND (:brand IS NULL OR (p.brand = :brand)) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
@@ -44,6 +44,24 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             String brand,
             Pageable pageable
     );
+    @Query("SELECT DISTINCT p FROM Product p " +
+            "WHERE (:query IS NULL OR (p.name LIKE %:query% OR EXISTS (SELECT 1 FROM ProductVariation pv WHERE pv.parent = p AND pv.sku = :query))) " +
+            "AND (:brand IS NULL OR (p.brand = :brand)) " +
+            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+            "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
+            "AND (:size IS NULL OR EXISTS (SELECT 1 FROM ProductVariation pv WHERE pv.parent = p AND pv.size = :size))" +
+            "AND (:tag IS NULL OR :tag MEMBER OF p.tags)")
+    Page<Product> findAllByFiltersWithoutCategory(
+            String query,
+            Integer minPrice,
+            Integer maxPrice,
+            String size,
+            String tag,
+            String brand,
+            Pageable pageable
+    );
+
+
 
     @Query("SELECT p FROM Product p WHERE p IN (SELECT s.participants FROM Stock s WHERE s.startDate <= CURRENT_DATE AND s.endDate >= CURRENT_DATE)")
     Page<Product> findProductsInActiveStocks(Pageable pageable);

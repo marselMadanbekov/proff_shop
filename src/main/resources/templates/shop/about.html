@@ -68,8 +68,7 @@
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Поиск товара..." type="text" id="search-text1"
-                                       th:value="${query}">
+                                <input placeholder="Поиск товара..." type="text" id="search-text1">
                                 <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
@@ -241,29 +240,8 @@
                     <ul th:each="store : ${stores}">
                         <li><i class="fa fa-fax"></i><span th:text="|Адрес : ${store.address}, город ${store.town}|"></span></li>
                         <li><i class="fa fa-phone"></i> <a th:text="${store.phone_number}"></a></li>
-                        <li class="mb-3"><i class="fa fa-envelope-o"></i><a th:text="${store.admin.email}"></a></li>
+                        <li class="mb-3"><i class="fa fa-envelope-o"></i><a th:if="${store.admin != null}" th:text="${store.admin.email}"></a></li>
                     </ul>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-12">
-                <div class="contact_message form">
-                    <h3>Задайте вопрос</h3>
-                    <form id="contact-form">
-                        <p>
-                            <label> Ваше имя (обязательное поле)</label>
-                            <input name="name" placeholder="Name *" type="text">
-                        </p>
-                        <p>
-                            <label> Ваш email (обязательное поле)</label>
-                            <input name="email" placeholder="Email *" type="email">
-                        </p>
-                        <div class="contact_textarea">
-                            <label> Ваш вопрос</label>
-                            <textarea placeholder="Message *" name="message" class="form-control2"></textarea>
-                        </div>
-                        <button type="submit"> Send</button>
-                        <p class="form-messege"></p>
-                    </form>
                 </div>
             </div>
         </div>

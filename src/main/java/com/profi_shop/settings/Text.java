@@ -74,6 +74,7 @@ public class Text {
         data.put("ERROR_STORE_HOUSE_NOT_FOUND","Склад не найден!");
         data.put("ERROR_COUPON_NOT_FOUND","Купон не найден!");
         data.put("ERROR_FAQ_NOT_FOUND","Часто задаваемый вопрос не найден!");
+        data.put("ERROR_REVIEW_NOT_FOUND","Отзыв не найден!");
 
 
         data.put("ERROR_COUPON_ALREADY_USED","Купон ранее был использован и недоступен для повторного использования!");
@@ -117,7 +118,7 @@ public class Text {
         data.put("ERROR_PASSWORD_DONT_MATCH","Новый пароль и подтверждение не совпадают");
 
         data.put("ERROR_TARGET_USER_NOT_EQUAL_REQUESTER","Вы не можете изменять данные другого пользователя");
-        data.put("ERROR_LOW_AUTHORITIES","У вас недостаточно изменения пользователя с такой ролью");
+        data.put("ERROR_LOW_AUTHORITIES","У вас недостаточно прав изменения пользователя с такой ролью");
 
         data.put("YES","Да");
         data.put("NO","Нет");

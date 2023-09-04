@@ -41,12 +41,17 @@ public class ProductsAnalyticsController {
     @GetMapping("/product-analytics")
     public String productAnalytics(@RequestParam Long productId,
                                    Model model) {
-        Product product = productService.getProductById(productId);
-        List<ProductVariation> productVariations = productService.getProductVariations(productId);
-        List<Receipt> receipts = productsAnalytics.getMonthlyReceiptsByProduct(productId, 0);
-        model.addAttribute("product", product);
-        model.addAttribute("receipts", receipts);
-        model.addAttribute("productVariations", productVariations);
+        try {
+
+            Product product = productService.getProductById(productId);
+            List<ProductVariation> productVariations = productService.getProductVariations(productId);
+            List<Receipt> receipts = productsAnalytics.getMonthlyReceiptsByProduct(productVariations.get(0).getId(), 0);
+            model.addAttribute("product", product);
+            model.addAttribute("receipts", receipts);
+            model.addAttribute("productVariations", productVariations);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "admin/product/productAnalytics";
     }
 
@@ -79,7 +84,7 @@ public class ProductsAnalyticsController {
 
     @GetMapping("/product/sales/{productId}/{month}")
     public ResponseEntity<Map<String, Long>> getSalesAmount(@PathVariable Long productId,
-                                                               @PathVariable Integer month) {
+                                                            @PathVariable Integer month) {
         try {
             Map<String, Long> response = productsAnalytics.getSalesAmountForProductBetweenDates(productId, month);
             return new ResponseEntity<>(response, HttpStatus.OK);

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -82,14 +84,16 @@ public class CategoryController {
     }
 
     @PostMapping("/categories/delete")
-    public String deleteCategory(@RequestParam("categoryId") Long categoryId) {
+    public ResponseEntity<Map<String,String>> deleteCategory(@RequestParam("categoryId") Long categoryId) {
+        Map<String,String> response = new HashMap<>();
         try {
             System.out.println("deleting category " + categoryId);
             categoryService.deleteCategory(categoryId);
-            return "admin/category/categories";
+            response.put("message", "Категория успешно удалена");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
-            System.out.println(e.getMessage());
-            return "admin/category/categories";
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 }

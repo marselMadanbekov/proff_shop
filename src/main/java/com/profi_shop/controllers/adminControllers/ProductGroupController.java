@@ -72,9 +72,8 @@ public class ProductGroupController {
             response.put("message", "Карточка успешно создана");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             response.put("error", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("/products/removeFromGroup")

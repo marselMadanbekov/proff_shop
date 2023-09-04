@@ -92,4 +92,9 @@ public class CouponService {
     private User getUserByUsername(String name) {
         return userRepository.findUserByUsername(name).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
     }
+
+    public void deleteCoupon(Coupon coupon) {
+        if(coupon != null)
+            couponRepository.delete(coupon);
+    }
 }

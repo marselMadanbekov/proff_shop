@@ -7,6 +7,7 @@ import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.exceptions.InvalidDataException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
+import com.profi_shop.model.enums.OrderStatus;
 import com.profi_shop.model.enums.Role;
 import com.profi_shop.repositories.*;
 import com.profi_shop.services.email.EmailServiceImpl;
@@ -33,14 +34,16 @@ public class UserService {
     private final EmailServiceImpl emailService;
     private final PasswordEncoder bCryptPasswordEncoder;
 
+    private final OrderRepository orderRepository;
     @Autowired
-    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, WishlistRepository wishlistRepository, CartRepository cartRepository, StoreRepository storeRepository, EmailServiceImpl emailService, PasswordEncoder bCryptPasswordEncoder, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.wishlistRepository = wishlistRepository;
         this.cartRepository = cartRepository;
         this.storeRepository = storeRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.orderRepository = orderRepository;
     }
 
     public User signUp(SignUpRequest request) throws InvalidDataException, ExistException {
@@ -106,8 +109,8 @@ public class UserService {
     public Page<User> getUsersFilteredPage(Integer page, String search, Integer sort) {
         Pageable pageable = switch (sort) {
             case 0 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "createdDate"));
-            case 1 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "name"));
-            default -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "name"));
+            case 1 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "firstname"));
+            default -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "firstname"));
         };
         if (search != null && !search.equals("")) {
             return userRepository.findUserByFirstnameLike(search, pageable);
@@ -186,7 +189,11 @@ public class UserService {
         user.setActive(true);
         userRepository.save(user);
     }
-    private User getUserById(Long userId) {
+    public User getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new SearchException(SearchException.USER_NOT_FOUND));
+    }
+
+    public Integer getOrdersAmountByUser(User user) {
+        return orderRepository.getTotalPriceByStatusAndUser(OrderStatus.FINISHED, user).orElse(0);
     }
 }

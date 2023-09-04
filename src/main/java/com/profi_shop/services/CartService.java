@@ -346,7 +346,6 @@ public class CartService {
             couponService.applyCouponToCart(cart, coupon, true);
         } else
             throw new CouponException(CouponException.COUPON_NOT_APPLICABLE_TO_DISCOUNTED_PRODUCTS);
-
         return cart;
     }
 
@@ -373,5 +372,10 @@ public class CartService {
     public int getCartCount(String username){
         Cart cart = getCartByUsername(username);
         return cart.getCartItems().size();
+    }
+
+    public void clearCart(Cart cart) {
+        couponService.deleteCoupon(cart.getCoupon());
+        cartItemRepository.deleteAll(cart.getCartItems());
     }
 }

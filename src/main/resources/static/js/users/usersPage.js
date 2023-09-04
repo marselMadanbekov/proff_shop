@@ -3,7 +3,9 @@ $(document).ready(function () {
     const unlockLinks = document.querySelectorAll('.unlock');
     const paginationLinks = document.querySelectorAll('.pagination-link');
     const sortType = document.getElementById('sortSelect');
+    const searchButton = document.getElementById('searchButton');
 
+    let searchQuery = document.getElementById('searchQuery').value;
     let sort = sortType.value;
     let page = 0;
 
@@ -16,7 +18,14 @@ $(document).ready(function () {
     });
     sortType.addEventListener('change',function (e){
         e.preventDefault();
-        window.location.href = "/admin/users?sort=" + sort;
+        sort = sortType.value;
+        window.location.href = "/admin/users?sort=" + sort + "&searchQuery";
+    })
+
+    searchButton.addEventListener('click',function (e){
+        e.preventDefault();
+        searchQuery = document.getElementById('searchQuery').value;
+        window.location.href = "/admin/users?searchQuery=" + searchQuery;
     })
 
     blockLinks.forEach(function (item){

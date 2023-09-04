@@ -26,14 +26,19 @@ public class ProductGroupService {
         this.productRepository = productRepository;
     }
 
-    public void createProductGroup(ProductGroupRequest productGroupRequest) {
-        ProductGroup productGroup = new ProductGroup();
-        productGroup.setName(productGroupRequest.getName());
-        for (Long productId : productGroupRequest.getMembers().keySet()) {
-            Product product = getProductById(productId);
-            productGroup.addProduct(product);
+    public void createProductGroup(ProductGroupRequest productGroupRequest) throws Exception {
+        try {
+
+            ProductGroup productGroup = new ProductGroup();
+            productGroup.setName(productGroupRequest.getName());
+            for (Long productId : productGroupRequest.getMembers().keySet()) {
+                Product product = getProductById(productId);
+                productGroup.addProduct(product);
+            }
+            productGroupRepository.save(productGroup);
+        }catch (Exception e){
+            throw new Exception("Один из выбранных продуктов сотоит в других карточках. Продукт не может состоять в двух карточках одновременно!");
         }
-        productGroupRepository.save(productGroup);
     }
 
     public Page<ProductGroup> productGroupsFiltered(int page, String name, int sort) {
@@ -70,7 +75,7 @@ public class ProductGroupService {
             Product product = getProductById(productId);
             productGroup.addProduct(product);
             productGroupRepository.save(productGroup);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ExistException(ExistException.PRODUCT_IS_ALREADY_IN_GROUP);
         }
     }

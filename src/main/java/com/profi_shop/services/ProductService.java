@@ -86,7 +86,7 @@ public class ProductService {
         }
     }
 
-    public Page<Product> productsByActiveStocks(int page, int sort){
+    public Page<Product> productsByActiveStocks(int page, int sort) {
         Pageable pageable;
         if (sort != 0) {
             if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
@@ -101,21 +101,20 @@ public class ProductService {
     }
 
     public Page<Product> productsFilteredPage(int page, Long categoryId, String size, String query, int minPrice, int maxPrice, int sort, String tag, String brand) {
-        Pageable pageable;
-        if (sort != 0) {
-            if (sort == 1) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
-            else if (sort == 2) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "price"));
-            else if (sort == 3) pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "price"));
-            else pageable = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "name"));
-        } else {
-            pageable = PageRequest.of(page, 9);
-        }
-        Category category = (categoryId == 0) ? null : categoryService.getCategoryById(categoryId);
-        String targetQuery = (query.equals("")) ? null : query;
+        Pageable pageable = switch (sort) {
+            case 0 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "create_date"));
+            case 1 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "price"));
+            case 2 -> PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "price"));
+            default -> PageRequest.of(page, 9, Sort.by(Sort.Direction.ASC, "name"));
+        };
 
+        String targetQuery = (query.equals("")) ? null : query;
         Integer targetMinPrice = (minPrice == maxPrice) ? null : minPrice;
         Integer targetMaxPrice = (maxPrice == minPrice) ? null : maxPrice;
+        Category category = (categoryId == 0) ? null : categoryService.getCategoryById(categoryId);
 
+        if (category == null)
+            return productRepository.findAllByFiltersWithoutCategory(targetQuery, targetMinPrice, targetMaxPrice, size, tag, brand, pageable);
         return productRepository.findAllByFilters(category, targetQuery, targetMinPrice, targetMaxPrice, size, tag, brand, pageable);
     }
 
@@ -174,7 +173,8 @@ public class ProductService {
             }
             storeHouseService.createStoreHouseProduct(productVariation);
         } catch (DataIntegrityViolationException e) {
-            if(e.getRootCause().getMessage().contains("sku")) throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
+            if (e.getRootCause().getMessage().contains("sku"))
+                throw new ExistException(ExistException.PRODUCT_SKU_EXIST);
             throw new ExistException(ExistException.SIZE_OF_PRODUCT_EXIST);
         }
     }
@@ -211,17 +211,17 @@ public class ProductService {
     public void productEdit(ProductEditRequest productEditRequest) {
         Product product = getProductById(productEditRequest.getTargetProductId());
 
-        if(productEditRequest.getPrimeCost() != null && productEditRequest.getPrimeCost() > 0)
+        if (productEditRequest.getPrimeCost() != null && productEditRequest.getPrimeCost() > 0)
             product.setPrime_cost(productEditRequest.getPrimeCost());
-        if(productEditRequest.getPrice() != null && productEditRequest.getPrice() > 0)
+        if (productEditRequest.getPrice() != null && productEditRequest.getPrice() > 0)
             product.setPrice(productEditRequest.getPrice());
-        if(productEditRequest.getName() != null && !productEditRequest.getName().equals(""))
+        if (productEditRequest.getName() != null && !productEditRequest.getName().equals(""))
             product.setName(productEditRequest.getName());
-        if(productEditRequest.getBrand() != null && !productEditRequest.getBrand().equals(""))
+        if (productEditRequest.getBrand() != null && !productEditRequest.getBrand().equals(""))
             product.setBrand(productEditRequest.getBrand());
-        if(productEditRequest.getColor() != null && !productEditRequest.getColor().equals(""))
+        if (productEditRequest.getColor() != null && !productEditRequest.getColor().equals(""))
             product.setColor(productEditRequest.getColor());
-        if(!productEditRequest.getCategoryId().equals(product.getCategory().getId())){
+        if (product.getCategory() == null || !productEditRequest.getCategoryId().equals(product.getCategory().getId())) {
             Category category = categoryService.getCategoryById(productEditRequest.getCategoryId());
             product.setCategory(category);
         }

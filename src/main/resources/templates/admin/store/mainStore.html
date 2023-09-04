@@ -40,13 +40,13 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                          aria-labelledby="profileDropdown">
-                        <a class="dropdown-item">
-                            <i class="ti-settings text-primary"></i>
-                            Settings
+                        <a class="dropdown-item" href="/home">
+                            <i class="ti-arrow-circle-right text-primary"></i>
+                            В магазин
                         </a>
                         <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
-                            Logout
+                            Выйти
                         </a>
                     </div>
                 </li>
@@ -115,6 +115,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/admin/mainPageEditor">
+                        <i class="ti-announcement menu-icon"></i>
+                        <span class="menu-title">Главная страница</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/admin/faq">
                         <i class="ti-help menu-icon"></i>
                         <span class="menu-title">Частые вопросы</span>
@@ -124,6 +130,12 @@
                     <a class="nav-link" href="/admin/users">
                         <i class="ti-user menu-icon"></i>
                         <span class="menu-title">Пользователи</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/reviews">
+                        <i class="ti-comment menu-icon"></i>
+                        <span class="menu-title">Отзывы</span>
                     </a>
                 </li>
             </ul>
@@ -136,7 +148,7 @@
                         <div>
                             <h4 class="font-weight-bold mb-0">Головной офис</h4>
                         </div>
-                        <div th:text="${mainStore.balance}">
+                        <div th:text="${'Касса : ' + mainStore.balance}">
                             <i class="ti-clipboard btn-icon-prepend" style="margin-right: 5px;"></i>
                         </div>
                     </div>

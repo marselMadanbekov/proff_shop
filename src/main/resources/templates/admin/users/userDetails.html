@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <!-- Required meta tags -->
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>RoyalUI Admin</title>
@@ -150,109 +150,128 @@
                 <div class="col-md-12 grid-margin">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h4 class="font-weight-bold mb-0">Карточки товаров</h4>
+                            <h4 class="font-weight-bold mb-0"
+                                th:text="${'Пользователь : ' + user.firstname + ' ' + user.lastname}"></h4>
                         </div>
-                        <a href="/admin/create-productGroup" type="button"
-                           class="nav-link btn btn-primary btn-icon-text btn-rounded">
-                            <i class="ti-plus btn-icon-prepend"></i>Создать карточку
-                        </a>
+                        <div>
+                            <button class="btn btn-sm btn-danger" id="lock" th:attr="userId=${user.id}"
+                                    th:hidden="${not user.isActive()}">Заблокировать
+                            </button>
+                            <button class="btn btn-sm btn-success" id="unlock" th:attr="userId=${user.id}"
+                                    th:hidden="${user.isActive()}">Разблокировать
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-md-6 grid-margin stretch-card">
+                <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Фильтры</h4>
-                            <p class="card-description">Выберите параметры товаров</p>
-                            <div class="form-group">
-                                <label for="searchQuery">Название</label>
-                                <input class="form-control" id="searchQuery" type="text" th:value="${query}">
+                            <div class="d-flex flex-wrap justify-content-between"
+                                 style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div>
+                                    <h4 class="card-title mt-1">Данные пользователя</h4>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="sortSelect">Выберите способ сортировки</label>
-                                <select class="form-control form-control-sm" id="sortSelect">
-                                    <option value="0" th:selected="${selectedSort == 0}">
-                                        От А до Я
-                                    </option>
-                                    <option value="1" th:selected="${selectedSort == 1}">
-                                        От Я до А
-                                    </option>
-                                </select>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Имя
+                                        </td>
+                                        <td th:text="${user.firstname + ' ' + user.lastname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Логин
+                                        </td>
+                                        <td th:text="${user.username}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Номер тел.
+                                        </td>
+                                        <td th:text="${user.phone_number}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Email
+                                        </td>
+                                        <td th:text="${user.email}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Всего покупок на сумму
+                                        </td>
+                                        <td th:text="${orderAmount} + ' сом'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <button class="btn btn-primary mr-2" id="filter">Применить</button>
-                            <button class="btn btn-light" id="cancel">Сброс</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 grid-margin stretch-card">
+                <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <p class="card-title mb-0 mt-1">Все карточки</p>
-                            </div>
-                            <h4 th:if="${productGroups.getContent().size() == 0}">Карточек нет</h4>
-                            <div th:if="${productGroups.getContent().size() > 0}">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Фото</th>
-                                            <th>Название</th>
-                                            <th>Дата создания</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="productGroup : ${productGroups.getContent()}">
-                                            <td>
-                                                <img th:if="${not #lists.isEmpty(productGroup.products) }"
-                                                     th:src="@{'/products/' + ${productGroup.products.get(0).getPhotos().get(0)}}"/>
-                                            </td>
-                                            <td>
-                                                <a th:href="@{'/admin/productGroupDetails?groupId=' + ${productGroup.id}}">
-                                                    <span th:text="${productGroup.name}"></span>
-                                                </a>
-                                            </td>
-                                            <td th:text="${productGroup.create_date}"></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-danger delete"
-                                                        th:attr="groupId=${productGroup.id}"><i class="ti-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="d-flex flex-wrap justify-content-between"
+                                 style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                                <div>
+                                    <h4 class="card-title mt-1">Отзывы</h4>
                                 </div>
-                                <div class="pagination-container">
-                                    <div class="pagination">
-                                        <input hidden id="page" th:value="${productGroups.number}">
-                                        <ul>
-                                            <li th:if="${productGroups.number > 0}" class="pagination-link"
-                                                th:attr="page=${0}">
-                                                <a href="#"><<</a>
-                                            </li>
-                                            <li th:if="${productGroups.number > 0}" class="pagination-link"
-                                                th:attr="page=${productGroups.number - 1}"><a href="#"
-                                                                                              th:text="${productGroups.number}"></a>
-                                            </li>
-                                            <li class="current"><a href="#" th:text="${productGroups.number + 1}"></a>
-                                            </li>
-                                            <li th:if="${productGroups.number + 1 < productGroups.totalPages}"
-                                                class="pagination-link"
-                                                th:attr="page=${productGroups.number + 1}"><a href="#"
-                                                                                              th:text="${productGroups.number + 2}"></a>
-                                            </li>
-                                            <li th:if="${productGroups.number + 2 < productGroups.totalPages}"
-                                                class="pagination-link"
-                                                th:attr="page=${productGroups.number + 2}"><a href="#"
-                                                                                              th:text="${productGroups.number + 3}"></a>
-                                            </li>
-                                            <li th:if="${productGroups.number + 1< productGroups.totalPages}"
-                                                class="pagination-link"
-                                                th:attr="page=${productGroups.totalPages - 1}"><a href="#">>></a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th>Отзыв</th>
+                                        <th>Оценка</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="receiptsTableBody">
+                                    <tr th:each="review : ${reviews}">
+                                        <td th:text="${review.product.name}"></td>
+                                        <td>
+                                            <div class="notification-text" th:text="${review.text}"></div>
+                                        </td>
+                                        <td th:text="${review.mark}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-container">
+                                <div class="pagination">
+                                    <input hidden id="page" th:value="${reviews.number}">
+                                    <ul>
+                                        <li th:if="${reviews.number > 0}" class="pagination-link"
+                                            th:attr="page=${0}">
+                                            <a
+                                                    href="#"><<</a>
+                                        </li>
+                                        <li th:if="${reviews.number > 0}" class="pagination-link"
+                                            th:attr="page=${reviews.number - 1}"><a href="#"
+                                                                                     th:text="${reviews.number}"></a>
+                                        </li>
+                                        <li class="current"><a href="#" th:text="${reviews.number + 1}"></a></li>
+                                        <li th:if="${reviews.number + 1 < reviews.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${reviews.number + 1}"><a href="#"
+                                                                                     th:text="${reviews.number + 2}"></a>
+                                        </li>
+                                        <li th:if="${reviews.number + 2 < reviews.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${products.number + 2}"><a href="#"
+                                                                                     th:text="${reviews.number + 3}"></a>
+                                        </li>
+                                        <li th:if="${reviews.number + 1< reviews.totalPages}"
+                                            class="pagination-link"
+                                            th:attr="page=${reviews.totalPages - 1}"><a href="#">>></a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -272,11 +291,12 @@
 <!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="/static/js/off-canvas.js"></script>
+<script src="/static/js/file-upload.js"></script>
 <script src="/static/js/hoverable-collapse.js"></script>
 <script src="/static/js/template.js"></script>
-<script src="/static/js/products/productGroups.js"></script>
 <script src="/static/js/notifications/notifications.js"></script>
-
+<script src="/static/js/users/userDetails.js"></script>
+<!-- endinject -->
 <!-- Custom js for this page-->
 <script src="/static/js/dashboard.js"></script>
 <!-- End custom js for this page-->

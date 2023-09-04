@@ -99,5 +99,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                                                                         @Param("status") OrderStatus status);
     Order findByCoupon(Coupon coupon);
 
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.status = :status AND o.user = :user")
+    Optional<Integer> getTotalPriceByStatusAndUser(@Param("status") OrderStatus status, @Param("user") User user);
     List<Order> findTop10ByUserOrderByDateDesc(User user);
 }

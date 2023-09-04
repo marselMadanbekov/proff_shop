@@ -33,8 +33,7 @@
             </button>
             <ul class="navbar-nav navbar-nav-right">
                 <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown"
-                       href="/admin/notifications">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="/admin/notifications">
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
@@ -45,13 +44,13 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                          aria-labelledby="profileDropdown">
-                        <a class="dropdown-item">
-                            <i class="ti-settings text-primary"></i>
-                            Settings
+                        <a class="dropdown-item" href="/home">
+                            <i class="ti-arrow-circle-right text-primary"></i>
+                            В магазин
                         </a>
                         <a class="dropdown-item" href="/auth/logout">
                             <i class="ti-power-off text-primary"></i>
-                            Logout
+                            Выйти
                         </a>
                     </div>
                 </li>
@@ -120,6 +119,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/admin/mainPageEditor">
+                        <i class="ti-announcement menu-icon"></i>
+                        <span class="menu-title">Главная страница</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/admin/faq">
                         <i class="ti-help menu-icon"></i>
                         <span class="menu-title">Частые вопросы</span>
@@ -129,6 +134,12 @@
                     <a class="nav-link" href="/admin/users">
                         <i class="ti-user menu-icon"></i>
                         <span class="menu-title">Пользователи</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/reviews">
+                        <i class="ti-comment menu-icon"></i>
+                        <span class="menu-title">Отзывы</span>
                     </a>
                 </li>
             </ul>
@@ -304,11 +315,11 @@
                                         </td>
                                         <td th:text="${product.discount} + '%'"></td>
                                     </tr>
-                                    <tr th:if="${product.category != null}">
+                                    <tr >
                                         <td>
                                             Категория
                                         </td>
-                                        <td th:text="${product.category.name}"></td>
+                                        <td th:text="${product.category != null ? product.category.name : 'Нет'}"></td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -474,7 +485,7 @@
                                             <label for="category">Категория</label>
                                             <select class="form-control" id="category" name="categoryId">
                                                 <option th:each="category : ${categories}" th:value="${category.id}"
-                                                        th:selected="${category.id == product.category.id}" th:text="${category.name}"></option>
+                                                        th:selected="${product.category != null ? product.category.id == category.id : false}" th:text="${category.name}"></option>
                                             </select>
                                         </div>
                                         <div class="form-group">

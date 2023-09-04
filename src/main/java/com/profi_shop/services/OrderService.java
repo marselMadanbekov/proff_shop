@@ -96,8 +96,8 @@ public class OrderService {
         Order order = createBaseOrder(orderRequest, cart);
         order.setUser(user);
         orderRepository.save(order);
+        cartService.clearCart(cart);
         notificationService.createLocalNewOrderNotification(order.getStore().getAdmin(), order.getId());
-
     }
 
     private Order createBaseOrder(OrderRequest orderRequest, Cart cart) throws Exception {
@@ -141,8 +141,9 @@ public class OrderService {
         }
 
         if(cart.getCoupon() != null){
-            if(couponService.isCouponAvailable(cart.getCoupon()))
+            if(!couponService.isCouponAvailable(cart.getCoupon())) {
                 throw new CouponException(CouponException.COUPON_ALREADY_USED);
+            }
             order.setCoupon(cart.getCoupon());
         }
         totalPrice += cart.cartAmountWithDiscount();
@@ -326,10 +327,18 @@ public class OrderService {
             Store store = order.getStore();
             if (order.getShipment() == null) store.balanceDown(order.getTotalPrice());
             else store.balanceDown((order.getTotalPrice() - order.getShipment().getCost()));
+
+            for(OrderItem orderItem : order.getOrderItems()){
+                StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(orderItem.getProductVariation(), store);
+                storeHouse.quantityUp(orderItem.getQuantity());
+                storeHouseRepository.save(storeHouse);
+            }
         }
         order.setStatus(OrderStatus.values()[order.getStatus().ordinal() - 1]);
         orderRepository.save(order);
     }
+
+
 
     public void itemQuantityDown(Long orderItemId) throws Exception {
         OrderItem orderItem = getOrderItemById(orderItemId);
@@ -404,6 +413,8 @@ public class OrderService {
             throw new AccessDeniedException(AccessDeniedException.ONLY_ADMIN_OF_SHOP);
         }
     }
+
+
 
     private Store getStoreByAdmin(User admin) {
         return storeRepository.findByAdmin(admin).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
