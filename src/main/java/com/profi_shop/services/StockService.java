@@ -73,8 +73,8 @@ public class StockService {
         return stockRepository.findAll();
     }
 
-    public Stock getTodayDeals(){
-        return stockRepository.findStockWithMaxDiscount().orElse(null);
+    public List<Stock> getTodayDeals(){
+        return stockRepository.findStockWithMaxDiscount();
     }
 
     public void deleteStockById(Long stockId) {

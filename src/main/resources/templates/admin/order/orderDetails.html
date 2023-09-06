@@ -227,6 +227,12 @@
                                         </td>
                                         <td th:text="${order.email}"></td>
                                     </tr>
+                                    <tr th:if="${order.email != null}">
+                                        <td>
+                                            Скидка купона
+                                        </td>
+                                        <td th:text="${order.coupon != null ? order.coupon.discount + '%' : 0}"></td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

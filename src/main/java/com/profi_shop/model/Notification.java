@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -17,9 +18,9 @@ public class Notification {
     @ManyToOne
     private User user;
     private boolean viewed;
-    private LocalDateTime date;
+    private Timestamp date;
     @PrePersist
     public void onCreate(){
-        this.date = LocalDateTime.now();
+        this.date = new Timestamp(System.currentTimeMillis());
     }
 }

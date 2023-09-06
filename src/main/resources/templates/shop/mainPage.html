@@ -413,7 +413,7 @@
 <!--product area end-->
 
 <!--product area start-->
-<div class="product_area product_deals" th:if="${todayDeals != null}">
+<div class="product_area product_deals" th:if="${todayDeals.size() > 0}">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -423,31 +423,31 @@
             </div>
         </div>
         <div class="product_deals_container">
-            <div class="row" th:if="todayDeals != null">
+            <div class="row">
                 <div class="product_carousel product_column5 owl-carousel">
-                    <div class="col-lg-3" th:each="product: ${todayDeals.getParticipants()}">
+                    <div class="col-lg-3" th:each="product: ${todayDeals}">
                         <article class="single_product">
                             <figure>
                                 <div class="product_thumb">
                                     <a class="primary_img"
                                        th:href="'/shop/productDetails?productId=' + ${product.id}"><img
-                                            th:src="@{'/products/' + ${product.getPhotos().get(0)}}"
+                                            th:src="@{'/products/' + ${product.photo}}"
                                             alt=""></a>
-                                    <div class="label_product" th:if="${todayDeals.discount > 0}">
-                                        <span class="label_sale" th:text="'-' + ${todayDeals.discount} + '%'"></span>
+                                    <div class="label_product" th:if="${product.discount > 0}">
+                                        <span class="label_sale" th:text="'-' + ${product.discount} + '%'"></span>
                                     </div>
                                     <div class="product_timing">
-                                        <div th:data-countdown="${todayDeals.endDate}"></div>
+                                        <div th:data-countdown="${product.endDate}"></div>
                                     </div>
                                 </div>
                                 <figcaption class="product_content">
                                     <div class="product_rating">
                                         <ul>
-                                            <li><a href="#"><i th:class="${product.averageRating > 0 ? 'icon-star2' : 'icon-star'}"></i></a></li>
-                                            <li><a href="#"><i th:class="${product.averageRating > 1 ? 'icon-star2' : 'icon-star'}"></i></a></li>
-                                            <li><a href="#"><i th:class="${product.averageRating > 2 ? 'icon-star2' : 'icon-star'}"></i></a></li>
-                                            <li><a href="#"><i th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a></li>
-                                            <li><a href="#"><i th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.rating > 0 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.rating > 1 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.rating > 2 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.rating > 3 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.rating > 4 ? 'icon-star2' : 'icon-star'}"></i></a></li>
                                         </ul>
                                     </div>
                                     <h4 class="product_name"><a

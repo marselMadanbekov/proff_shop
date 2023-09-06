@@ -246,15 +246,15 @@
                 <div id="accordion" class="card__accordion">
                     <div class="card card_dipult" th:each="faq : ${faqs}">
                         <div class="card-header card_accor" id="headingOne">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                    aria-expanded="true" aria-controls="collapseOne" ><span th:text="${faq.question}"></span>
+                            <button class="btn btn-link" data-toggle="collapse" th:data-target="'#collapse' + ${faq.id}"
+                                    aria-expanded="false" th:aria-controls="'collapse' + ${faq.id}" ><span th:text="${faq.question}"></span>
                                 <i class="fa fa-plus"></i>
                                 <i class="fa fa-minus"></i>
 
                             </button>
                         </div>
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                        <div th:id="'collapse' + ${faq.id}" class="collapse show" aria-labelledby="headingOne"
                              data-parent="#accordion">
                             <div class="card-body">
                                 <p th:text="${faq.answer}"></p>
@@ -353,7 +353,6 @@
 <script src="/static/js/slinky.menu.js"></script>
 <!-- Plugins JS -->
 <script src="/static/js/jquery/plugins.js"></script>
-<script src="/static/js/auth/login.js"></script>
 <script src="/static/js/general/generalInfo.js"></script>
 <script src="/static/js/searchProduct.js"></script>
 

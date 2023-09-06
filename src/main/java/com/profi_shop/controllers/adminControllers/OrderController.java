@@ -104,10 +104,11 @@ public class OrderController {
     }
 
     @GetMapping("/order/removeShipment")
-    public ResponseEntity<Map<String,String>> removeShipment(@RequestParam("orderId") Long orderId){
+    public ResponseEntity<Map<String,String>> removeShipment(@RequestParam("orderId") Long orderId,
+                                                             Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.removeShipmentByOrderId(orderId);
+            orderService.removeShipmentByOrderId(orderId, principal.getName());
             response.put("message", "Доставка успешно удалена!");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e) {
@@ -118,10 +119,11 @@ public class OrderController {
     }
 
     @PostMapping("/order/itemCountDown")
-    public ResponseEntity<Map<String, String>> itemCountDown(@RequestParam Long orderItemId){
+    public ResponseEntity<Map<String, String>> itemCountDown(@RequestParam Long orderItemId,
+                                                             Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.itemQuantityDown(orderItemId);
+            orderService.itemQuantityDown(orderItemId, principal.getName());
             response.put("message", "Количество успешно уменьшено");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
@@ -132,10 +134,11 @@ public class OrderController {
 
     @PostMapping("/order/redirect")
     public ResponseEntity<Map<String,String>> redirectOrder(@RequestParam Long orderId,
-                                                            @RequestParam Long targetStoreId){
+                                                            @RequestParam Long targetStoreId,
+                                                            Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.redirectOrder(orderId, targetStoreId);
+            orderService.redirectOrder(orderId, targetStoreId, principal.getName());
             response.put("message", "Успешно перенаправлен");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
@@ -158,10 +161,11 @@ public class OrderController {
         }
     }
     @PostMapping("/order/itemCountUp")
-    public ResponseEntity<Map<String, String>> itemCountUp(@RequestParam Long orderItemId){
+    public ResponseEntity<Map<String, String>> itemCountUp(@RequestParam Long orderItemId,
+                                                           Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.itemQuantityUp(orderItemId);
+            orderService.itemQuantityUp(orderItemId,principal.getName());
             response.put("message", "Количество успешно увеличено");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
@@ -171,10 +175,11 @@ public class OrderController {
     }
 
     @PostMapping("/order/statusUp")
-    public ResponseEntity<Map<String,String>> statusUp(@RequestParam Long orderId){
+    public ResponseEntity<Map<String,String>> statusUp(@RequestParam Long orderId,
+                                                       Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.orderStatusUp(orderId);
+            orderService.orderStatusUp(orderId,principal.getName());
             response.put("message", "Статус успешно изменен");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
@@ -183,10 +188,11 @@ public class OrderController {
         }
     }
     @PostMapping("/order/statusDown")
-    public ResponseEntity<Map<String,String>> statusDown(@RequestParam Long orderId){
+    public ResponseEntity<Map<String,String>> statusDown(@RequestParam Long orderId,
+                                                         Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.orderStatusDown(orderId);
+            orderService.orderStatusDown(orderId,principal.getName());
             response.put("message", "Статус успешно изменен");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
@@ -196,10 +202,11 @@ public class OrderController {
     }
 
     @PostMapping("/order/removeItem")
-    public ResponseEntity<Map<String,String>> removeItemFromOrder(@RequestParam("orderItemId") Long orderItemId){
+    public ResponseEntity<Map<String,String>> removeItemFromOrder(@RequestParam("orderItemId") Long orderItemId,
+                                                                  Principal principal){
         Map<String, String> response = new HashMap<>();
         try{
-            orderService.deleteOrderItem(orderItemId);
+            orderService.deleteOrderItem(orderItemId,principal.getName());
             response.put("message", "Товар успешно удален из заказа!");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
@@ -209,10 +216,11 @@ public class OrderController {
     }
 
     @PostMapping("/order/update-order")
-    public ResponseEntity<Map<String,String>> updateOrder(@RequestBody List<OrderUpdateRequest> orderItems){
+    public ResponseEntity<Map<String,String>> updateOrder(@RequestBody List<OrderUpdateRequest> orderItems,
+                                                          Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.updateOrderItemSizes(orderItems);
+            orderService.updateOrderItemSizes(orderItems,principal.getName());
             response.put("message", "Детали заказа успешно обновлены");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e) {
@@ -224,10 +232,11 @@ public class OrderController {
     @PostMapping("/order/newShipment")
     public ResponseEntity<Map<String,String>> newShipmentToOrder(@RequestParam Long orderId,
                                                                  @RequestParam String state,
-                                                                 @RequestParam String town){
+                                                                 @RequestParam String town,
+                                                                 Principal principal){
         Map<String,String> response = new HashMap<>();
         try{
-            orderService.newShipmentToOrder(orderId,state,town);
+            orderService.newShipmentToOrder(orderId,state,town, principal.getName());
             response.put("message", "Доставка успешно сохранена");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){

@@ -48,6 +48,7 @@ public class OrderFacade {
         orderDetailsDTO.setPhone_number(order.getPhone_number());
         orderDetailsDTO.setStatus(order.getStatus());
         orderDetailsDTO.setStore(order.getStore());
+        orderDetailsDTO.setCoupon(order.getCoupon());
         orderDetailsDTO.setShipmentType(order.getShipmentType());
         orderDetailsDTO.setShipment(order.getShipment());
         orderDetailsDTO.setTotalPrice(order.getTotalPrice());

@@ -4,11 +4,12 @@ import com.profi_shop.settings.Text;
 
 import java.sql.Date;
 
-public class CouponException extends Exception{
+public class CouponException extends RuntimeException{
     public final static int COUPON_ALREADY_USED = 0;
     public final static int COUPON_EXPIRED = 1;
     public final static int COUPON_NOT_APPLICABLE_TO_DISCOUNTED_PRODUCTS = 2;
 
+    public final static int COUPON_ROOT_IS_INACTIVE = 3;
     private final int code;
     private final String message;
     public CouponException(int code){
@@ -26,6 +27,7 @@ public class CouponException extends Exception{
             case 0 -> Text.get("ERROR_COUPON_ALREADY_USED");
             case 1 -> Text.get("ERROR_COUPON_EXPIRED");
             case 2 -> Text.get("ERROR_COUPON_NOT_APPLICABLE_TO_DISCOUNTED_PRODUCTS");
+            case 3 -> Text.get("ERROR_COUPON_ROOT_INACTIVE");
             default -> "";
         };
     }

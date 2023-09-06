@@ -3,6 +3,7 @@ package com.profi_shop.controllers.generalControllers;
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.dto.ProductDetailsDTO;
 import com.profi_shop.dto.StockDTO;
+import com.profi_shop.dto.TodayDeals;
 import com.profi_shop.model.Category;
 import com.profi_shop.model.MainPage;
 import com.profi_shop.model.MainStore;
@@ -46,7 +47,7 @@ public class HomeController {
     public String mainPage(Model model){
         Page<ProductDetailsDTO> products = productFacade.mapToProductDetailsDTOPage(productService.getPagedProducts(0, 10));
         List<Category> categories = categoryService.getMainCategories();
-        StockDTO todayDeals = stockFacade.stockToStockDTO(stockService.getTodayDeals());
+        List<TodayDeals> todayDeals = productFacade.stocksToTodayDeals(stockService.getTodayDeals());
         MainStore mainStore = mainStoreService.getMainStore();
         MainPage mainPage = mainPageService.getMainPage();
 

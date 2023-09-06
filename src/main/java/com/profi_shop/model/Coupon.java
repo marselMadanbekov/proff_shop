@@ -16,7 +16,7 @@ public class Coupon {
     private Date start_date;
     private Date end_date;
     private int discount;
-
+    private boolean used;
     private String activationCode;
     @ManyToOne
     private User owner;
@@ -37,5 +37,9 @@ public class Coupon {
             return start_date.toLocalDate().compareTo(currentDate) <= 0 &&
                     end_date.toLocalDate().compareTo(currentDate) >= 0;
         }else return false;
+    }
+
+    public boolean isActiveRoot(){
+        return root.getStatus().ordinal() >= OrderStatus.PAID.ordinal();
     }
 }

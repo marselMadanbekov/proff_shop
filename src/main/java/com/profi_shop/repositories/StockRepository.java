@@ -20,7 +20,7 @@ import java.util.Optional;
 public interface StockRepository extends JpaRepository<Stock,Long> {
     Optional<Stock> findByParticipants(Product product);
     @Query("SELECT s FROM Stock s WHERE s.discount = (SELECT MAX(s2.discount) FROM Stock s2)")
-    Optional<Stock> findStockWithMaxDiscount();
+    List<Stock> findStockWithMaxDiscount();
 
     @Query("SELECT s FROM Stock s WHERE s.endDate > :currentDate AND s.startDate < :currentDate")
     Page<Stock> findActiveStocks(@Param("currentDate") LocalDate currentDate,Pageable pageable);

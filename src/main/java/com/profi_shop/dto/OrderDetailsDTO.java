@@ -1,9 +1,6 @@
 package com.profi_shop.dto;
 
-import com.profi_shop.model.OrderItem;
-import com.profi_shop.model.Shipment;
-import com.profi_shop.model.Store;
-import com.profi_shop.model.User;
+import com.profi_shop.model.*;
 import com.profi_shop.model.enums.OrderStatus;
 import com.profi_shop.model.enums.ShipmentType;
 import jakarta.persistence.*;
@@ -24,6 +21,7 @@ public class OrderDetailsDTO {
     private OrderStatus status;
     private ShipmentType shipmentType;
     private Store store;
+    private Coupon coupon;
     private List<OrderItemDTO> orderItems = new ArrayList<>();
     private Shipment shipment;
     private Timestamp date;

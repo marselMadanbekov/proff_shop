@@ -22,5 +22,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     Optional<Coupon> findByActivationCode(String couponCode);
 
-    List<Coupon> findByOwner(User user);
+    List<Coupon> findByOwnerAndUsed(User user,boolean used);
 }

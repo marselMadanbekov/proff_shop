@@ -100,6 +100,8 @@ public class CartService {
                 cartItemRepository.save(cartItem);
             }
         } else {
+            if (cart.getCoupon() != null)
+                cart.setCoupon(null);
             for (CartItem cartItem : cart.getCartItems()) {
                 Stock stock = getStockByProduct(cartItem.getProduct());
                 if (stock == null) {
@@ -125,7 +127,7 @@ public class CartService {
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
-            if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+            if (cartItem.getDiscount() == 0 && cart.getCoupon() != null && cart.getCoupon().isActive()) {
                 cartItem.setDiscount(cart.getCoupon().getDiscount());
             }
             List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
@@ -148,7 +150,7 @@ public class CartService {
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
         cartItem.setDiscount(priceService.getDiscountForProductForUser(product, true));
-        if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+        if (cartItem.getDiscount() == 0 && cart.getCoupon() != null && cart.getCoupon().isActive()) {
             cartItem.setDiscount(cart.getCoupon().getDiscount());
         }
         if (variationId > 0) {
@@ -175,7 +177,7 @@ public class CartService {
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
-            if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+            if (cartItem.getDiscount() == 0 && cart.getCoupon() != null && cart.getCoupon().isActive()) {
                 cartItem.setDiscount(cart.getCoupon().getDiscount());
             }
             List<ProductVariation> productVariations = productVariationRepository.findByParent(product);
@@ -196,7 +198,7 @@ public class CartService {
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
         cartItem.setDiscount(priceService.getDiscountForProductForUser(product, false));
-        if (cartItem.getDiscount() == 0 && cart.getCoupon() != null) {
+        if (cartItem.getDiscount() == 0 && cart.getCoupon() != null && cart.getCoupon().isActive()) {
             cartItem.setDiscount(cart.getCoupon().getDiscount());
         }
         if (variationId > 0) {
@@ -320,9 +322,11 @@ public class CartService {
 
     public Cart applyCoupon(HttpServletRequest request, String couponCode) throws Exception {
         Coupon coupon = getCouponByCode(couponCode);
-        if(!couponService.isCouponAvailable(coupon))
+        if (!couponService.isCouponAvailable(coupon))
             throw new CouponException(CouponException.COUPON_ALREADY_USED);
-        if(!coupon.isActive())
+        if (!coupon.isActiveRoot())
+            throw new CouponException(CouponException.COUPON_ROOT_IS_INACTIVE);
+        if (!coupon.isActive())
             throw new CouponException(coupon.getEnd_date());
         Cart cart = getCartByRequestCookies(request);
         if (cart.isCouponApplicable()) {
@@ -337,9 +341,11 @@ public class CartService {
 
     public Cart applyCoupon(String username, String couponCode) throws Exception {
         Coupon coupon = getCouponByCode(couponCode);
-        if(!couponService.isCouponAvailable(coupon))
+        if (!couponService.isCouponAvailable(coupon))
             throw new CouponException(CouponException.COUPON_ALREADY_USED);
-        if(!coupon.isActive())
+        if (!coupon.isActiveRoot())
+            throw new CouponException(CouponException.COUPON_ROOT_IS_INACTIVE);
+        if (!coupon.isActive())
             throw new CouponException(coupon.getEnd_date());
         Cart cart = getCartByUsername(username);
         if (cart.isCouponApplicable()) {
@@ -369,13 +375,17 @@ public class CartService {
         Cart cart = getCartByRequestCookies(request);
         return cart.getCartItems().size();
     }
-    public int getCartCount(String username){
+
+    public int getCartCount(String username) {
         Cart cart = getCartByUsername(username);
         return cart.getCartItems().size();
     }
 
     public void clearCart(Cart cart) {
-        couponService.deleteCoupon(cart.getCoupon());
+        if (cart.getCoupon() != null) {
+            cart.setCoupon(null);
+            cartRepository.save(cart);
+        }
         cartItemRepository.deleteAll(cart.getCartItems());
     }
 }

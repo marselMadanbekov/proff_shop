@@ -414,8 +414,9 @@
                                             <div class="d-flex justify-content-center">
                                                 <div class="spinner" id="spinner1"></div>
                                             </div>
+                                            <h4>Сначала выберите область и появятся доступные города.</h4>
                                             <div class="col-12 mb-20">
-                                                <label for="state">Region <span>*</span></label>
+                                                <label for="state">Область <span>*</span></label>
                                                 <select class="form-select form-select-sm" name="state" id="state">
                                                     <option value=""></option>
                                                     <option th:each="state: ${states}" th:value="${state}"
@@ -423,16 +424,12 @@
                                                 </select>
                                             </div>
                                             <div class="col-12 mb-20">
-                                                <label for="town">City <span>*</span></label>
+                                                <label for="town">Город, село <span>*</span></label>
                                                 <select class="form-select form-select-sm" name="town" id="town">
                                                     <option value=""></option>
                                                     <option th:each="town:${towns}" th:value="${town}"
                                                             th:text="${town}"></option>
                                                 </select>
-                                            </div>
-                                            <div class="col-12 mb-20">
-                                                <label>Street address<span>*</span></label>
-                                                <input placeholder="House number and street name" type="text">
                                             </div>
                                             <div class="order_button">
                                                 <button type="button" id="scost">Посчитать</button>

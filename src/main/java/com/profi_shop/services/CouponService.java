@@ -86,7 +86,7 @@ public class CouponService {
 
     public List<Coupon> findCouponsByUsername(String name) {
         User user = getUserByUsername(name);
-        return couponRepository.findByOwner(user);
+        return couponRepository.findByOwnerAndUsed(user,false);
     }
 
     private User getUserByUsername(String name) {
@@ -96,5 +96,10 @@ public class CouponService {
     public void deleteCoupon(Coupon coupon) {
         if(coupon != null)
             couponRepository.delete(coupon);
+    }
+
+    public void couponUsed(Coupon coupon) {
+        coupon.setUsed(true);
+        couponRepository.save(coupon);
     }
 }

@@ -3,6 +3,7 @@ package com.profi_shop.services;
 import com.profi_shop.exceptions.*;
 import com.profi_shop.model.*;
 import com.profi_shop.model.enums.OrderStatus;
+import com.profi_shop.model.enums.Role;
 import com.profi_shop.model.enums.ShipmentType;
 import com.profi_shop.model.requests.OrderRequest;
 import com.profi_shop.model.requests.OrderUpdateRequest;
@@ -140,11 +141,14 @@ public class OrderService {
             order.addOrderItem(orderItem);
         }
 
-        if(cart.getCoupon() != null){
-            if(!couponService.isCouponAvailable(cart.getCoupon())) {
+        if (cart.getCoupon() != null) {
+            if (!couponService.isCouponAvailable(cart.getCoupon())) {
                 throw new CouponException(CouponException.COUPON_ALREADY_USED);
             }
+            if(cart.getCoupon().isUsed())
+                throw new CouponException(CouponException.COUPON_ALREADY_USED);
             order.setCoupon(cart.getCoupon());
+            couponService.couponUsed(cart.getCoupon());
         }
         totalPrice += cart.cartAmountWithDiscount();
         order.setTotalPrice(totalPrice);
@@ -202,13 +206,17 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(() -> new SearchException(SearchException.ORDER_NOT_FOUND));
     }
 
-    public void deleteOrderItem(Long orderItemId) {
+    public void deleteOrderItem(Long orderItemId, String name) {
         OrderItem orderItem = getOrderItemById(orderItemId);
+        User user = getUserByUsername(name);
         Order order = getOrderByOrderItem(orderItem);
-        order.removeOrderItem(orderItem);
-        orderRepository.save(order);
-        updateOrderData(order);
-        orderItemRepository.delete(orderItem);
+        if(user.getRole().equals(Role.ROLE_SUPER_ADMIN) || order.getStore().getAdmin().equals(user)) {
+            order.removeOrderItem(orderItem);
+            orderRepository.save(order);
+            updateOrderData(order);
+            orderItemRepository.delete(orderItem);
+        }else
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
     }
 
     private Order getOrderByOrderItem(OrderItem orderItem) {
@@ -231,11 +239,12 @@ public class OrderService {
 
     private void checkOrderItemEnough(OrderItem orderItem) throws NotEnoughException {
         int countOnStore = countOfProductVariationInStore(orderItem.getProductVariation());
-        if(countOnStore >= orderItem.getQuantity()) return;
+        if (countOnStore >= orderItem.getQuantity()) return;
         throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + orderItem.getProductVariation().getSize() + " ) ", countOnStore);
     }
 
-    public void updateOrderItemSizes(List<OrderUpdateRequest> orderItems) throws NotEnoughException, ExistException {
+    public void updateOrderItemSizes(List<OrderUpdateRequest> orderItems, String name) throws NotEnoughException, ExistException {
+
         for (OrderUpdateRequest oi : orderItems) {
             if (oi.getOrderItemId() == null || oi.getProductVariationId() == null) continue;
             OrderItem orderItem = getOrderItemById(oi.getOrderItemId());
@@ -260,95 +269,114 @@ public class OrderService {
         return false;
     }
 
-    public void newShipmentToOrder(Long orderId, String state, String town) {
+    public void newShipmentToOrder(Long orderId, String state, String town, String name) {
         Shipment shipment = shipmentRepository.findByTownAndState(town, state).orElseThrow(() -> new SearchException(SearchException.SHIPMENT_NOT_FOUND));
         Order order = getOrderById(orderId);
-        order.setShipment(shipment);
-        orderRepository.save(order);
-        updateOrderData(order);
+        User user = getUserByUsername(name);
+        if(user.getRole().equals(Role.ROLE_SUPER_ADMIN) || order.getStore().getAdmin().equals(user)) {
+            order.setShipment(shipment);
+            orderRepository.save(order);
+            updateOrderData(order);
+        }else
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
     }
 
-    public void removeShipmentByOrderId(Long orderId) {
+    public void removeShipmentByOrderId(Long orderId, String name) {
+        User user = getUserByUsername(name);
         Order order = getOrderById(orderId);
-        order.setShipment(null);
-        orderRepository.save(order);
-        updateOrderData(order);
+        if (user.getRole().equals(Role.ROLE_SUPER_ADMIN) || order.getStore().getAdmin().equals(user)) {
+            order.setShipment(null);
+            orderRepository.save(order);
+            updateOrderData(order);
+        } else
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
     }
 
-    public void orderStatusUp(Long orderId) throws Exception {
+    public void orderStatusUp(Long orderId, String name) throws Exception {
         Order order = getOrderById(orderId);
-        if (order.getStatus().equals(OrderStatus.CANCELED))
-            throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
-        order.setStatus(OrderStatus.values()[order.getStatus().ordinal() + 1]);
-        if (order.getStatus().equals(OrderStatus.PAID)) {
-            Store store = order.getStore();
-            for (OrderItem orderItem : order.getOrderItems()) {
-                checkOrderItemEnough(orderItem);
-                ProductVariation productVariation = orderItem.getProductVariation();
-                if (productVariation == null)
-                    throw new Exception("Не указан размер для продукта " + orderItem.getProduct().getName() + " . Для воспроизведения оплаты выберите размер.");
-                StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(productVariation, order.getStore());
-                if (orderItem.getQuantity() <= storeHouse.getQuantity()) {
-                    storeHouse.quantityDown(orderItem.getQuantity());
-                } else {
-                    List<StoreHouse> donors = getOptimalStoreHousesByProductAndStore(productVariation, store, orderItem.getQuantity());
-                    int quantity = orderItem.getQuantity() - storeHouse.getQuantity();
+        User user = getUserByUsername(name);
+        if(user.getRole().equals(Role.ROLE_SUPER_ADMIN) || order.getStore().getAdmin().equals(user)) {
+            if (order.getStatus().equals(OrderStatus.CANCELED))
+                throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
+            order.setStatus(OrderStatus.values()[order.getStatus().ordinal() + 1]);
+            if (order.getStatus().equals(OrderStatus.PAID)) {
+                Store store = order.getStore();
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    checkOrderItemEnough(orderItem);
+                    ProductVariation productVariation = orderItem.getProductVariation();
+                    if (productVariation == null)
+                        throw new Exception("Не указан размер для продукта " + orderItem.getProduct().getName() + " . Для воспроизведения оплаты выберите размер.");
+                    StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(productVariation, order.getStore());
+                    if (orderItem.getQuantity() <= storeHouse.getQuantity()) {
+                        storeHouse.quantityDown(orderItem.getQuantity());
+                    } else {
+                        List<StoreHouse> donors = getOptimalStoreHousesByProductAndStore(productVariation, store, orderItem.getQuantity());
+                        int quantity = orderItem.getQuantity() - storeHouse.getQuantity();
 
-                    storeHouse.setQuantity(0);
-                    for (StoreHouse donor : donors) {
-                        if (quantity > donor.getQuantity()) {
-                            quantity -= donor.getQuantity();
-                            donor.setQuantity(0);
-                            notificationService.createNotEnoughNotificationInOneTargetStoreOfOrder(store, donor.getStore(), productVariation);
-                        } else {
-                            notificationService.createNotEnoughNotificationInOneTargetStoreOfOrder(store, donor.getStore(), productVariation);
-                            donor.quantityDown(quantity);
-                            break;
+                        storeHouse.setQuantity(0);
+                        for (StoreHouse donor : donors) {
+                            if (quantity > donor.getQuantity()) {
+                                quantity -= donor.getQuantity();
+                                donor.setQuantity(0);
+                                notificationService.createNotEnoughNotificationInOneTargetStoreOfOrder(store, donor.getStore(), productVariation, Math.min(quantity,donor.getQuantity()));
+                            } else {
+                                notificationService.createNotEnoughNotificationInOneTargetStoreOfOrder(store, donor.getStore(), productVariation, Math.min(quantity, donor.getQuantity()));
+                                donor.quantityDown(quantity);
+                                break;
+                            }
+                            storeHouseRepository.save(donor);
                         }
-                        storeHouseRepository.save(donor);
+                        storeHouseRepository.save(storeHouse);
                     }
+                }
+                if (order.getShipment() == null) store.balanceUp(order.getTotalPrice());
+                else store.balanceUp(order.getTotalPrice() - order.getShipment().getCost());
+                couponService.createCouponIfNeeded(order);
+            }
+            orderRepository.save(order);
+        }else
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
+    }
+
+
+    public void orderStatusDown(Long orderId, String name) throws Exception {
+        Order order = getOrderById(orderId);
+        User user = getUserByUsername(name);
+        if (user.getRole().equals(Role.ROLE_SUPER_ADMIN) || order.getStore().getAdmin().equals(user)) {
+
+            if (order.getStatus().equals(OrderStatus.CANCELED))
+                throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
+            if (order.getStatus().equals(OrderStatus.PAID)) {
+                Store store = order.getStore();
+                if (order.getShipment() == null) store.balanceDown(order.getTotalPrice());
+                else store.balanceDown((order.getTotalPrice() - order.getShipment().getCost()));
+
+                for (OrderItem orderItem : order.getOrderItems()) {
+                    StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(orderItem.getProductVariation(), store);
+                    storeHouse.quantityUp(orderItem.getQuantity());
                     storeHouseRepository.save(storeHouse);
                 }
             }
-            if (order.getShipment() == null) store.balanceUp(order.getTotalPrice());
-            else store.balanceUp(order.getTotalPrice() - order.getShipment().getCost());
-            couponService.createCouponIfNeeded(order);
-        }
-        orderRepository.save(order);
+            order.setStatus(OrderStatus.values()[order.getStatus().ordinal() - 1]);
+            orderRepository.save(order);
+        }else
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
     }
 
 
-
-    public void orderStatusDown(Long orderId) throws Exception {
-        Order order = getOrderById(orderId);
-        if (order.getStatus().equals(OrderStatus.CANCELED))
-            throw new Exception("MESSAGE_CHANGING_STATUS_OF_CANCELED_ORDER");
-        if (order.getStatus().equals(OrderStatus.PAID)) {
-            Store store = order.getStore();
-            if (order.getShipment() == null) store.balanceDown(order.getTotalPrice());
-            else store.balanceDown((order.getTotalPrice() - order.getShipment().getCost()));
-
-            for(OrderItem orderItem : order.getOrderItems()){
-                StoreHouse storeHouse = getStoreHouseByProductVariationAndStore(orderItem.getProductVariation(), store);
-                storeHouse.quantityUp(orderItem.getQuantity());
-                storeHouseRepository.save(storeHouse);
-            }
-        }
-        order.setStatus(OrderStatus.values()[order.getStatus().ordinal() - 1]);
-        orderRepository.save(order);
-    }
-
-
-
-    public void itemQuantityDown(Long orderItemId) throws Exception {
+    public void itemQuantityDown(Long orderItemId, String name) throws Exception {
+        User user = getUserByUsername(name);
         OrderItem orderItem = getOrderItemById(orderItemId);
         int priceOfOne = orderItem.getPrice() / orderItem.getQuantity();
         if (orderItem.getQuantity() > 1) {
-            orderItem.setQuantity(orderItem.getQuantity() - 1);
-            orderItem.setPrice(orderItem.getPrice() - priceOfOne);
-            orderItemRepository.save(orderItem);
             Order order = getOrderByOrderItem(orderItem);
-            updateOrderData(order);
+            if (user.getRole().equals(Role.ROLE_SUPER_ADMIN) || order.getStore().getAdmin().equals(user)) {
+                orderItem.setQuantity(orderItem.getQuantity() - 1);
+                orderItem.setPrice(orderItem.getPrice() - priceOfOne);
+                orderItemRepository.save(orderItem);
+                updateOrderData(order);
+            } else
+                throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
         } else {
             throw new Exception("Нельзя уменьшить количество товара оно минимально");
         }
@@ -380,8 +408,9 @@ public class OrderService {
         return donors;
     }
 
-    public void itemQuantityUp(Long orderItemId) throws Exception {
+    public void itemQuantityUp(Long orderItemId, String name) throws Exception {
         OrderItem orderItem = getOrderItemById(orderItemId);
+        User user = getUserByUsername(name);
         int priceOfOne = orderItem.getPrice() / orderItem.getQuantity();
         int count = 0;
         if (orderItem.getProductVariation() != null) {
@@ -390,11 +419,13 @@ public class OrderService {
             throw new Exception("Выберите размер товара перед увеличением количества");
         }
         if (orderItem.getQuantity() + 1 <= count) {
+            Order order = getOrderByOrderItem(orderItem);
+            if(!user.getRole().equals(Role.ROLE_SUPER_ADMIN) && !order.getStore().getAdmin().equals(user))
+                throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
+
             orderItem.setQuantity(orderItem.getQuantity() + 1);
             orderItem.setPrice(orderItem.getPrice() + priceOfOne);
             orderItemRepository.save(orderItem);
-            Order order = getOrderByOrderItem(orderItem);
-            updateOrderData(order);
         } else {
             throw new NotEnoughException(orderItem.getProduct().getName() + " ( " + orderItem.getProductVariation().getSize() + " ) ", count);
         }
@@ -415,7 +446,6 @@ public class OrderService {
     }
 
 
-
     private Store getStoreByAdmin(User admin) {
         return storeRepository.findByAdmin(admin).orElseThrow(() -> new SearchException(SearchException.STORE_NOT_FOUND));
     }
@@ -427,8 +457,8 @@ public class OrderService {
         if (countOfProductInStore(product) < 1) {
             throw new NotEnoughException(product.getName(), 0);
         }
-        int discount = priceService.getDiscountForProductForUser(product,orderOfAuthenticated);
-        if(discount == 0 && order.getCoupon() != null){
+        int discount = priceService.getDiscountForProductForUser(product, orderOfAuthenticated);
+        if (discount == 0 && order.getCoupon() != null) {
             discount = order.getCoupon().getDiscount();
         }
         OrderItem orderItem = new OrderItem();
@@ -450,8 +480,12 @@ public class OrderService {
         return productRepository.findById(productId).orElseThrow(() -> new SearchException(SearchException.PRODUCT_NOT_FOUND));
     }
 
-    public void redirectOrder(Long orderId, Long targetStoreId) {
+    public void redirectOrder(Long orderId, Long targetStoreId, String name) {
         Order order = getOrderById(orderId);
+        User user = getUserByUsername(name);
+        if(!user.getRole().equals(Role.ROLE_SUPER_ADMIN) && !order.getStore().getAdmin().equals(user))
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
+
         Store store = getStoreById(targetStoreId);
 
         if (!order.getStore().equals(store)) {
@@ -469,6 +503,9 @@ public class OrderService {
         User user = getUserByUsername(username);
 
         Order order = getOrderById(orderId);
+
+        if(!user.getRole().equals(Role.ROLE_SUPER_ADMIN) && !order.getStore().getAdmin().equals(user))
+            throw new AccessDeniedException(AccessDeniedException.FOREIGN_BRANCH);
         Store store = order.getStore();
 
         if (order.getStatus().ordinal() >= OrderStatus.PAID.ordinal()) {

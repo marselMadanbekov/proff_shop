@@ -33,7 +33,8 @@
             </button>
             <ul class="navbar-nav navbar-nav-right">
                 <li class="nav-item dropdown">
-                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="/admin/notifications">
+                    <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown"
+                       href="/admin/notifications">
                         <i class="ti-bell mx-0"></i>
                         <span class="count"></span>
                     </a>
@@ -268,17 +269,17 @@
                                 <label for="sortSelect">Выберите способ сортировки</label>
                                 <select class="form-control form-control-sm" id="sortSelect">
                                     <option value="0" th:selected="${sortType == 0}">
-                                        None sort
+                                        По умолчанию
                                     </option>
                                     <option value="1" th:selected="${sortType == 1}">
-                                        sort by newness
+                                        По дате : новые
                                     <option value="2" th:selected="${sortType == 2}">
-                                        Sort by price: low to high
+                                        По убыванию цены
                                     <option value="3" th:selected="${sortType == 3}">
-                                        Sort by price: high to low
+                                        По возрастанию цены
                                     </option>
                                     <option value="4" th:selected="${sortType == 4}">
-                                        Product Name: Z
+                                        По названию от А до Я
                                     </option>
                                 </select>
                             </div>

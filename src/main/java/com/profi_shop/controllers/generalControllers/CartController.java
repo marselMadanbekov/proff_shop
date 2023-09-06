@@ -1,5 +1,6 @@
 package com.profi_shop.controllers.generalControllers;
 
+import com.profi_shop.exceptions.CouponException;
 import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.Cart;
 import com.profi_shop.model.CartItem;
@@ -41,7 +42,7 @@ public class CartController {
     public String cart(Principal principal,
                        HttpServletRequest request,
                        HttpServletResponse response,
-                       Model model) throws ExistException {
+                       Model model) throws ExistException, CouponException {
         Cart cart;
         if (principal == null) {
             cart = cartService.getCartByRequestCookies(request);
@@ -162,7 +163,7 @@ public class CartController {
                                                               @RequestParam("size") String size,
                                                               HttpServletRequest request,
                                                               HttpServletResponse response,
-                                                              Principal principal) {
+                                                              Principal principal) throws CouponException {
         Map<String, String> responseMessage = new HashMap<>();
         Cart cart;
         if (principal == null) {
@@ -180,7 +181,6 @@ public class CartController {
             responseMessage.put("message", "Продукт успешно удален из корзины");
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
-
     }
 
     @PostMapping("update-cart")

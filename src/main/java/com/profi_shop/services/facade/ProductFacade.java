@@ -2,6 +2,7 @@ package com.profi_shop.services.facade;
 
 import com.profi_shop.dto.ProductDTO;
 import com.profi_shop.dto.ProductDetailsDTO;
+import com.profi_shop.dto.TodayDeals;
 import com.profi_shop.model.*;
 import com.profi_shop.repositories.ProductVariationRepository;
 import com.profi_shop.services.ReviewService;
@@ -24,7 +25,6 @@ public class ProductFacade {
     private final ReviewService reviewService;
     private final CategoryFacade categoryFacade;
     private final ProductVariationRepository productVariationRepository;
-
     private final StoreHouseService storeHouseService;
 
     @Autowired
@@ -34,6 +34,37 @@ public class ProductFacade {
         this.categoryFacade = categoryFacade;
         this.productVariationRepository = productVariationRepository;
         this.storeHouseService = storeHouseService;
+    }
+
+    public List<TodayDeals> stocksToTodayDeals(List<Stock> stocks){
+        List<TodayDeals> todayDeals = new ArrayList<>();
+        int count = 0;
+        while (count < 5){
+            for(Stock stock: stocks){
+                if(!stock.isActive()) continue;
+                for(Product product : stock.getParticipants()){
+                    TodayDeals todayDeals1 = new TodayDeals();
+                    todayDeals1.setName(product.getName());
+                    todayDeals1.setRating(reviewService.getAverageReviewByProduct(product));
+                    todayDeals1.setDiscount(stock.getDiscount());
+                    todayDeals1.setPhoto(product.getPhotos().get(0));
+                    todayDeals1.setStartDate(stock.getStartDate());
+                    todayDeals1.setEndDate(stock.getEndDate());
+                    todayDeals1.setNewPrice(getNewPriceByPriceAndDiscount(product.getPrice(),stock.getDiscount()));
+                    todayDeals1.setOldPrice(product.getPrice());
+                    todayDeals.add(todayDeals1);
+                    count++;
+                    if(count >= 5)
+                        break;
+                }
+                if(count == 5)
+                    break;
+            }
+            if(count == 5)
+                break;
+            count++;
+        }
+        return todayDeals;
     }
 
     public ProductDetailsDTO productToProductDetailsDTO(Product product) {

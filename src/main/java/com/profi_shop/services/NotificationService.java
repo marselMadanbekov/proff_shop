@@ -4,7 +4,6 @@ import com.profi_shop.exceptions.AccessDeniedException;
 import com.profi_shop.exceptions.SearchException;
 import com.profi_shop.model.*;
 import com.profi_shop.repositories.NotificationRepository;
-import com.profi_shop.repositories.ProductRepository;
 import com.profi_shop.services.email.EmailServiceImpl;
 import com.profi_shop.settings.Text;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,10 +120,10 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    public void createNotEnoughNotificationInOneTargetStoreOfOrder(Store acceptor, Store donor, ProductVariation productVariation) {
+    public void createNotEnoughNotificationInOneTargetStoreOfOrder(Store acceptor, Store donor, ProductVariation productVariation, int count) {
         String message = "В филиале - " + acceptor.getTown() + " , недостаточно товара " +
                 productVariation.getParent().getName() + " с размером ( " + productVariation.getSize() + " ). " +
-                "Товар будет вычтен из склада " + donor.getTown();
+                "Товар будет вычтен из склада " + donor.getTown() + " в количестве " + count;
 
         Notification acceptorNotification = new Notification();
         acceptorNotification.setViewed(false);
