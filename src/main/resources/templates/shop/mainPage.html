@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Lukani – Plant and Flower Shop eCommerce HTML Template </title>
+    <title>ProffShop – Добро пожаловать в мир Красоты и Здоровья: Лучший выбор продуктов для ухода</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
 
     <!-- CSS 
     ========================= -->
@@ -67,8 +67,7 @@
                                 </select>
                             </div>
                             <div class="search_box">
-                                <input placeholder="Поиск товара..." type="text" id="search-text1"
-                                       th:value="${query}">
+                                <input placeholder="Поиск товара..." type="text" id="search-text1">
                                 <button type="submit" id="search-button1"><i class="icon-search"></i></button>
                             </div>
                         </form>
@@ -112,7 +111,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-4">
                         <div class="logo">
-                            <a href="/home"><img src="/static/img/logo/proff_shop_logo.png" alt=""></a>
+                            <a href="/home"><img src="/static/img/logo/logo-main.jpg" alt=""></a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-6 col-6">
@@ -219,7 +218,6 @@
                     <div class="col-12">
                         <div class="slider_content">
                             <h1 th:text="${mainPage.carouselFirstText}"></h1>
-                            <p>Скидки <span>20%</span> для пользователей Proff-Shop </p>
                             <a class="button" href="/shop">Узнать</a>
                         </div>
                     </div>
@@ -232,7 +230,6 @@
                     <div class="col-12">
                         <div class="slider_content">
                             <h1 th:text="${mainPage.carouselSecondText}">TOP SALE</h1>
-                            <p>Discount <span>20% Off </span> For Lukani Members </p>
                             <a class="button" href="/shop">Discover Now </a>
                         </div>
                     </div>
@@ -245,7 +242,6 @@
                     <div class="col-12">
                         <div class="slider_content">
                             <h1 th:text="${mainPage.carouselThirdText}">Lovely Plants</h1>
-                            <p>Discount <span>20% Off </span> For Lukani Members </p>
                             <a class="button" href="/shop">Discover Now </a>
                         </div>
                     </div>
@@ -372,11 +368,11 @@
                                             <div class="action_links">
                                                 <ul>
                                                     <li class="add_to_cart" th:attr="productId=${product.id}"><a
-                                                            title="Add to cart"><i
+                                                            title="В корзину"><i
                                                             class="icon-shopping-bag"></i></a></li>
                                                     <li class="wishlist add_to_wishlist"
                                                         th:attr="productId=${product.id}"><a
-                                                            title="Add to Wishlist"><i
+                                                            title="В избранное"><i
                                                             class="icon-heart"></i></a>
                                                     </li>
                                                 </ul>
@@ -385,11 +381,11 @@
                                         <figcaption class="product_content">
                                             <div class="product_rating">
                                                 <ul>
-                                                    <li><a href="#"><i class="icon-star2"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
+                                                    <li><a href="#"><i th:class="${product.averageRating > 0 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                                    <li><a href="#"><i th:class="${product.averageRating > 1 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                                    <li><a href="#"><i th:class="${product.averageRating > 2 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                                    <li><a href="#"><i th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                                    <li><a href="#"><i th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a></li>
                                                 </ul>
                                             </div>
                                             <h4 class="product_name"><a
@@ -447,11 +443,11 @@
                                 <figcaption class="product_content">
                                     <div class="product_rating">
                                         <ul>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
-                                            <li><a href="#"><i class="icon-star"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.averageRating > 0 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.averageRating > 1 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.averageRating > 2 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.averageRating > 3 ? 'icon-star2' : 'icon-star'}"></i></a></li>
+                                            <li><a href="#"><i th:class="${product.averageRating > 4 ? 'icon-star2' : 'icon-star'}"></i></a></li>
                                         </ul>
                                     </div>
                                     <h4 class="product_name"><a
@@ -490,9 +486,8 @@
                         <div class="footer_menu">
                             <ul>
                                 <li><a href="/about">Контакты</a></li>
-                                <li><a href="/cart">Корзина</a></li>
-                                <li><a href="faq.html">Частые вопросы</a></li>
-                                <li><a href="/wishlist">Избранное</a></li>
+                                <li><a href="/shop">Каталог</a></li>
+                                <li><a href="/faq">Частые вопросы</a></li>
                             </ul>
                         </div>
                     </div>
@@ -500,7 +495,7 @@
                 <div class="col-lg-4 col-md-5">
                     <div class="widgets_container widget_app">
                         <div class="footer_logo">
-                            <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
+                            <a href="/home"><img src="/static/img/logo/logo1.png" alt=""></a>
                         </div>
                         <div>
                             <div class="justify-content-center d-flex mt-3">
@@ -521,7 +516,7 @@
                             <ul>
                                 <li><a href="/account">Личный кабинет</a></li>
                                 <li><a href="/cart">Корзина</a></li>
-                                <li><a href="/shop">Каталог</a></li>
+                                <li><a href="/wishlist">Избранное</a></li>
                             </ul>
                         </div>
                     </div>

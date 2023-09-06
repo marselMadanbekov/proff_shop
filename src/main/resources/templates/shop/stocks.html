@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Lukani - product details</title>
+    <title>Акции - ProffShop</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -111,7 +111,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-4">
                         <div class="logo">
-                            <a href="/home"><img src="/static/img/logo/proff_shop_logo.png" alt=""></a>
+                            <a href="/home"><img src="/static/img/logo/logo-main.jpg" alt=""></a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-6 col-6">
@@ -136,7 +136,8 @@
                                     <a href="/account"><i class="icon-users"></i></a>
                                 </div>
                                 <div class="header_account-list header_wishlist">
-                                    <a href="/wishlist"><i class="icon-heart"></i><span class="item_count" style="display: none"></span></a>
+                                    <a href="/wishlist"><i class="icon-heart"></i><span class="item_count"
+                                                                                        style="display: none"></span></a>
                                 </div>
                                 <div class="header_account-list  mini_cart_wrapper">
                                     <a href="/cart"><i class="icon-shopping-bag"></i><span
@@ -230,33 +231,22 @@
 <div class="shop_area shop_fullwidth mt-100 mb-100">
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <h3 th:if="${products.getContent().size() == 0}">Действующих акций нет</h3>
+            <div class="col-12" th:if="${products.getContent().size() > 0}">
                 <div class="shop_toolbar_wrapper">
                     <div class="shop_toolbar_btn">
                         <button data-role="grid_list" type="button" class="active btn-list" data-toggle="tooltip"
                                 title="List"></button>
                     </div>
-                    <div class=" niceselect_option">
-                        <form class="select_option" action="#">
-                            <select name="orderby" id="short">
-
-                                <option selected value="1">Sort by average rating</option>
-                                <option value="2">Sort by popularity</option>
-                                <option value="3">Sort by newness</option>
-                                <option value="4">Sort by price: low to high</option>
-                                <option value="5">Sort by price: high to low</option>
-                                <option value="6">Product Name: Z</option>
-                            </select>
-                        </form>
-                    </div>
                 </div>
                 <!--shop toolbar end-->
-                <div class="row shop_wrapper grid_list">
+                <div class="row shop_wrapper grid_list" >
                     <div class="col-12 ">
                         <article class="single_product" th:each="product : ${products}">
                             <figure>
                                 <div class="product_thumb">
-                                    <a class="primary_img" th:href="'/shop/productDetails?productId=' + ${product.id}"><img
+                                    <a class="primary_img"
+                                       th:href="'/shop/productDetails?productId=' + ${product.id}"><img
                                             th:src="'/products/' + ${product.photos.get(0)}" alt=""></a>
                                     <div class="label_product">
                                         <span class="label_sale" th:text="${product.discount + '%'}"></span>
@@ -295,7 +285,7 @@
                                     </h4>
                                     <div class="price_box">
                                         <span class="current_price" th:if="${product.discount > 0}"
-                                               th:text="${product.newPrice + 'сом'}"></span>
+                                              th:text="${product.newPrice + 'сом'}"></span>
                                         <span class="current_price" th:if="${not (product.discount > 0)}"
                                               th:text="${product.oldPrice + 'сом'}"></span>
                                         <span class="old_price" th:if="${product.discount > 0}"
@@ -341,39 +331,6 @@
     </div>
 </div>
 
-<!--brand area start-->
-<div class="brand_area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="brand_container owl-carousel">
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand1.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand2.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand3.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand4.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand5.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand6.png" alt=""></a>
-                    </div>
-                    <div class="single_brand">
-                        <a href="#"><img src="/static/img/brand/brand2.png" alt=""></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--brand area end-->
 
 <!--footer area start-->
 <footer class="footer_widgets">
@@ -390,9 +347,8 @@
                         <div class="footer_menu">
                             <ul>
                                 <li><a href="/about">Контакты</a></li>
-                                <li><a href="/cart">Корзина</a></li>
+                                <li><a href="/shop">Каталог</a></li>
                                 <li><a href="/faq">Частые вопросы</a></li>
-                                <li><a href="/wishlist">Избранное</a></li>
                             </ul>
                         </div>
                     </div>
@@ -400,7 +356,7 @@
                 <div class="col-lg-4 col-md-5">
                     <div class="widgets_container widget_app">
                         <div class="footer_logo">
-                            <a href="/home"><img src="/static/img/logo/logo.png" alt=""></a>
+                            <a href="/home"><img src="/static/img/logo/logo1.png" alt=""></a>
                         </div>
                         <div>
                             <div class="justify-content-center d-flex mt-3">
@@ -421,7 +377,7 @@
                             <ul>
                                 <li><a href="/account">Личный кабинет</a></li>
                                 <li><a href="/cart">Корзина</a></li>
-                                <li><a href="/shop">Каталог</a></li>
+                                <li><a href="/wishlist">Избранное</a></li>
                             </ul>
                         </div>
                     </div>

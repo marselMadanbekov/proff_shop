@@ -624,69 +624,6 @@
         $('.offcanvas_menu_wrapper,.off_canvars_overlay').removeClass('active')
     });
     
-    
-    /*instagram slider activation*/
-    $.instagramFeed({
-        'username': 'portfolio.devitems',
-        'container': "#instagramFeed2",
-        'display_profile': false,
-        'display_biography': false,
-        'display_gallery': true,
-        'styling': false,
-        'items': 12,
-        "image_size": "480",
-        'items_per_row': 4,
-        'margin': 2,
-    });
-    $('#instagramFeed').on("DOMNodeInserted", function (e) {
-        if (e.target.className == 'instagram_gallery') {
-            $("." + e.target.className).slick({
-                slidesToShow: 4,
-                
-                arrows: true,
-                prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-angle-left"></i></button>',
-                nextArrow: '<button type="button" class="slick-next"><i class="fa fa-angle-right"></i></button>',
-                 responsive: [
-                    {
-                      breakpoint: 992,
-                      settings: {
-                        slidesToShow: 3
-                      }
-                    },
-                    {
-                      breakpoint: 768,
-                      settings: {
-                        slidesToShow: 2
-                      }
-                    },
-                    {
-                      breakpoint: 480,
-                      settings: {
-                        slidesToShow: 1
-                      }
-                    }
-                ]
-            })
-        }
-    });
-    
-
-    
-   /*instagram grid activation*/
-    $.instagramFeed({
-        'username': 'portfolio.devitems',
-        'container': "#instagramFeed",
-        'display_profile': false,
-        'display_biography': false,
-        'display_gallery': true,
-        'styling': false,
-        'items': 10,
-        "image_size": "480",
-        'items_per_row': 4,
-        'margin': 0,
-    });
-
-    
 
     
     /*---Off Canvas Menu---*/
