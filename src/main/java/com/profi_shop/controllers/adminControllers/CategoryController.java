@@ -30,22 +30,28 @@ public class CategoryController {
     }
 
     @PostMapping("/create-category")
-    public String createCategory(@RequestParam("name") String name) {
+    public ResponseEntity<Map<String,String>> createCategory(@RequestParam("name") String name) {
+        Map<String,String> response = new HashMap<>();
         try {
             categoryService.createCategory(name);
-            return "redirect:/admin/categories";
+            response.put("message", "Категория успешно создана");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // Перенаправьте пользователя на нужную страницу после успешного создания продукта
         }
     }
     @PostMapping("/create-subcategory")
-    public String createSubCategory(@RequestParam("superCategory") Long superCategory,
+    public ResponseEntity<Map<String,String>> createSubCategory(@RequestParam("superCategory") Long superCategory,
                                     @RequestParam("subcategoryName") String subcategoryName) {
+        Map<String,String> response = new HashMap<>();
         try {
             categoryService.createSubcategory(superCategory,subcategoryName);
-            return "redirect:/admin/categories";
+            response.put("message", "Категория успешно создана!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return "redirect:/"; // Перенаправьте пользователя на нужную страницу после успешного создания продукта
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 

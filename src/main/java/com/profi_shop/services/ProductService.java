@@ -232,4 +232,18 @@ public class ProductService {
         Product product = getProductById(productId);
         return productVariationRepository.findByParent(product);
     }
+
+    public void deleteProduct(Long productId) throws Exception {
+        Product product = getProductById(productId);
+        for(String photo : product.getPhotos()){
+            try{
+                photoService.deletePhoto(photo);
+            }catch (Exception ignore){}
+        }
+        try{
+            productRepository.delete(product);
+        }catch (Exception e){
+            throw new Exception("Ошибка при удалении товара");
+        }
+    }
 }

@@ -45,13 +45,20 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    console.log('Request successful');
-                    alert('Форма успешно отправлена');
+                    alert(response.message);
                     window.location.reload();
                 },
                 error: function (xhr, status, error) {
-                    console.log('Request failed');
-                    alert('Ошибка при отправке формы');
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        if (errorData.hasOwnProperty("error")) {
+                            alert(errorData.error);
+                        } else {
+                            alert('An error occurred while processing the request.');
+                        }
+                    } catch (e) {
+                        alert('An error occurred while processing the request.');
+                    }
                 },
                 complete: function () {
                     submitButton.disabled = false;

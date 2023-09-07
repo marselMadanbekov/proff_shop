@@ -9,9 +9,6 @@
     <!-- plugins:css -->
     <link rel="stylesheet" href="/static/vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" href="/static/vendors/base/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- plugin css for this page -->
-    <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="/static/css1/style.css">
     <!-- endinject -->
@@ -190,6 +187,11 @@
                                             <td th:text="${product.category == null ? '': product.category.name}"></td>
                                             <td th:text="${product.oldPrice}"></td>
                                             <td th:text="${product.discount}"></td>
+                                            <td>
+                                                <div>
+                                                    <button class="btn btn-sm btn-danger deleteProduct" th:attr="productId=${product.id}"><i class="ti-trash"></i></button>
+                                                </div>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

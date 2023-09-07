@@ -202,6 +202,18 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/products/delete")
+    public ResponseEntity<Map<String,String>> deleteProduct(@RequestParam Long productId){
+        Map<String,String> response = new HashMap<>();
+        try{
+            productService.deleteProduct(productId);
+            response.put("message", "Товар успешно удален!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping("/productDetails")
     public String productDetails(@RequestParam("productId") Long productId, Model model) {
         ProductDetailsDTO product = productFacade.productToProductDetailsDTO(productService.getProductById(productId));

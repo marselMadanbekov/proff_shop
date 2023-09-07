@@ -91,6 +91,7 @@ public class Text {
         data.put("ERROR_SIZE_OF_PRODUCT_EXIST","Вариант продукта с таким размером уже существует!");
         data.put("ERROR_PRODUCT_SKU_EXIST","Продукт с таким штрихкодом уже существует!");
         data.put("ERROR_SPECIFICATION_EXISTS","Спецификация уже существует!");
+        data.put("ERROR_CATEGORY_EXISTS","Категория уже существует!");
         data.put("ERROR_ORDER_ITEM_EXISTS","Такой вариант товара уже существует в заказе!");
         data.put("ERROR_WISHLIST_CONTAINS_PRODUCT","Продукт уже в избранных!");
         data.put("ERROR_PRODUCT_IS_ALREADY_IN_STOCK","В списке присутствует продукт который уже участвует в другой акции!");

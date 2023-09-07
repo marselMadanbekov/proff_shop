@@ -18,6 +18,7 @@ public class ExistException extends Exception{
     public static final int SPECIFICATION_EXIST = 8;
     public static final int ORDER_ITEM_EXISTS = 9;
     public static final int PRODUCT_IS_ALREADY_IN_GROUP = 10;
+    public static final int CATEGORY_EXISTS = 11;
 
 
     private final int code;
@@ -39,6 +40,7 @@ public class ExistException extends Exception{
             case 8 -> Text.get("ERROR_SPECIFICATION_EXISTS");
             case 9 -> Text.get("ERROR_ORDER_ITEM_EXISTS");
             case 10 -> Text.get("ERROR_PRODUCT_IS_ALREADY_IN_GROUP");
+            case 11 -> Text.get("ERROR_CATEGORY_EXISTS");
             default -> "";
         };
     }

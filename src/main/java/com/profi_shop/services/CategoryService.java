@@ -1,5 +1,6 @@
 package com.profi_shop.services;
 
+import com.profi_shop.exceptions.ExistException;
 import com.profi_shop.model.Category;
 import com.profi_shop.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,17 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category createCategory(String name) {
-        Category category = new Category();
-        category.setName(name);
-        return categoryRepository.save(category);
+    public Category createCategory(String name) throws ExistException {
+        try {
+            Category category = new Category();
+            category.setName(name);
+            return categoryRepository.save(category);
+        }catch (Exception e){
+            throw new ExistException(ExistException.CATEGORY_EXISTS);
+        }
     }
 
-    public List<Category> getAllCategories(){
+    public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
@@ -36,7 +41,7 @@ public class CategoryService {
     }
 
     public Page<Category> getPagedCategories(Integer page) {
-        Pageable pageable = PageRequest.of(page, 15, Sort.by(Sort.Direction.ASC,"name"));
+        Pageable pageable = PageRequest.of(page, 15, Sort.by(Sort.Direction.ASC, "name"));
         return categoryRepository.findByParentIsNull(pageable);
     }
 
@@ -44,7 +49,7 @@ public class CategoryService {
         return categoryRepository.findById(categoryId).orElse(null);
     }
 
-    public void createSubcategory(Long superCat, String subcategoryName) {
+    public void createSubcategory(Long superCat, String subcategoryName) throws ExistException {
         Category superCategory = getCategoryById(superCat);
         Category sub = createCategory(subcategoryName);
 

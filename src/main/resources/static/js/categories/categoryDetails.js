@@ -16,9 +16,16 @@
                     // Дополнительные действия при успешном удалении категории
                 },
                 error: function (xhr, status, error) {
-                    // Обработка ошибки удаления
-                    alert('Ошибка при удалении категории');
-
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        if (errorData.hasOwnProperty("error")) {
+                            alert(errorData.error);
+                        } else {
+                            alert('An error occurred while processing the request.');
+                        }
+                    } catch (e) {
+                        alert('An error occurred while processing the request.');
+                    }
                 }
             });
         }
