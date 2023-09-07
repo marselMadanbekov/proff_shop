@@ -247,9 +247,8 @@
                             <li><a href="#account-details" data-toggle="tab" class="nav-link">Редактировать профиль</a>
                             </li>
                             <li><a href="/auth/logout" class="nav-link">Выйти</a></li>
-                            <li th:if="${!user.role.toString().equals('ROLE_CUSTOMER')}"><a href="/admin/dashboard"
-                                                                                            class="nav-link">Админ
-                                панель</a></li>
+                            <li th:if="${!user.role.toString().equals('ROLE_CUSTOMER')}"><a href="/admin/products"
+                                                                                            class="nav-link">Админ панель</a></li>
                         </ul>
                     </div>
                 </div>

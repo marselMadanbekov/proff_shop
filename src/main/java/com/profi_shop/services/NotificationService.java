@@ -84,7 +84,7 @@ public class NotificationService {
         return message.replace("SENDER", sender);
     }
 
-    @Scheduled(cron = "0 0/15 0-9 * * *")
+    @Scheduled(cron = "0 0/15 9-18 * * *")
     public void emailNotification() {
         List<User> admins = userService.getAdmins();
         for (User admin : admins) {
